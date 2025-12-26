@@ -1,0 +1,345 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   RECOLETA FONT - Self-hosted or via CDN
+   ======================================== */
+@font-face {
+    font-family: 'Recoleta';
+    src: url('/fonts/Recoleta-Bold.woff2') format('woff2'),
+        url('/fonts/Recoleta-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Recoleta';
+    src: url('/fonts/Recoleta-SemiBold.woff2') format('woff2'),
+        url('/fonts/Recoleta-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Recoleta';
+    src: url('/fonts/Recoleta-Medium.woff2') format('woff2'),
+        url('/fonts/Recoleta-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    @apply font-body text-brand-dark bg-white;
+    line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @apply font-heading font-bold;
+    line-height: 1.1;
+}
+
+/* ========================================
+   ORGANIC BORDER SYSTEM - The Signature Look
+   ======================================== */
+
+/* Main organic box - the "hand-drawn" effect */
+.border-organic {
+    border: 2px solid #1A1A1A;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    box-shadow: 3px 3px 0px 0px rgba(26, 26, 26, 0.15);
+}
+
+/* Variant with slightly different wobble */
+.border-organic-alt {
+    border: 2px solid #1A1A1A;
+    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+    box-shadow: 3px 3px 0px 0px rgba(26, 26, 26, 0.15);
+}
+
+/* Smaller organic radius for pills/tags */
+.border-organic-sm {
+    border: 2px solid #1A1A1A;
+    border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
+}
+
+/* Shadow variant for organic borders */
+.shadow-organic {
+    box-shadow: 4px 4px 0px 0px #1A1A1A;
+}
+
+.shadow-organic-sm {
+    box-shadow: 2px 2px 0px 0px #1A1A1A;
+}
+
+/* Organic input fields */
+.input-organic {
+    @apply bg-white/40 border-2 border-black px-6 py-4 text-lg w-full outline-none font-body;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.input-organic::placeholder {
+    @apply font-heading text-brand-dark/50;
+}
+
+.input-organic:focus {
+    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 4px 4px 0px 0px #1A1A1A;
+}
+
+/* Organic textarea */
+.textarea-organic {
+    @apply bg-white/40 border-2 border-black px-6 py-4 text-lg w-full outline-none font-body resize-none;
+    border-radius: 30px 10px 25px 10px / 10px 25px 10px 30px;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.textarea-organic::placeholder {
+    @apply font-heading text-brand-dark/50;
+}
+
+.textarea-organic:focus {
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 4px 4px 0px 0px #1A1A1A;
+}
+
+/* ========================================
+   BUTTON STYLES
+   ======================================== */
+.btn-organic {
+    @apply inline-flex items-center justify-center font-bold transition-all duration-200;
+    border: 2px solid #1A1A1A;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+.btn-organic:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0px 0px #1A1A1A;
+}
+
+.btn-organic:active {
+    transform: translateY(0);
+    box-shadow: 2px 2px 0px 0px #1A1A1A;
+}
+
+.btn-primary {
+    @apply btn-organic bg-brand-pink text-white px-6 py-3;
+}
+
+.btn-secondary {
+    @apply btn-organic bg-white text-brand-dark px-6 py-3;
+}
+
+.btn-lime {
+    @apply btn-organic bg-brand-lime text-brand-dark px-6 py-3;
+}
+
+/* ========================================
+   MARKER HIGHLIGHT EFFECT
+   ======================================== */
+.marker-highlight {
+    position: relative;
+    display: inline;
+}
+
+.marker-highlight::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    right: -4px;
+    bottom: 0;
+    height: 40%;
+    z-index: -1;
+    transform: rotate(-1deg);
+}
+
+.marker-yellow::before {
+    background: #FFDD00;
+}
+
+.marker-lime::before {
+    background: #C8F560;
+}
+
+.marker-pink::before {
+    background: #FF4D6D;
+    opacity: 0.3;
+}
+
+.marker-blue::before {
+    background: #A0C4FF;
+}
+
+/* ========================================
+   TAG/PILL STYLES
+   ======================================== */
+.tag {
+    @apply inline-flex items-center px-3 py-1 text-xs font-bold border-2 border-black;
+    border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
+}
+
+.tag-blue {
+    @apply tag bg-brand-blue text-brand-dark;
+}
+
+.tag-green,
+.tag-lime {
+    @apply tag bg-brand-lime text-brand-dark;
+}
+
+.tag-yellow {
+    @apply tag bg-brand-yellow text-brand-dark;
+}
+
+.tag-pink {
+    @apply tag bg-brand-pink text-white;
+}
+
+.tag-purple {
+    @apply tag bg-brand-purple text-brand-dark;
+}
+
+/* ========================================
+   CARD STYLES
+   ======================================== */
+.card-organic {
+    @apply bg-white p-6 border-organic;
+    transition: all 0.3s ease;
+}
+
+.card-organic:hover {
+    transform: translateY(-4px);
+    box-shadow: 6px 6px 0px 0px #1A1A1A;
+}
+
+/* ========================================
+   BLOB SHAPES FOR IMAGES
+   ======================================== */
+.blob-mask {
+    clip-path: url('#blob-mask-svg');
+}
+
+.blob-organic {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(-2deg);
+}
+
+.blob-organic-alt {
+    border-radius: 40% 60% 70% 30% / 30% 70% 40% 60%;
+    transform: rotate(2deg);
+}
+
+/* ========================================
+   DASHED BORDER CONTAINER
+   ======================================== */
+.dashed-organic {
+    border: 3px dashed #1A1A1A;
+    border-radius: 30px 10px 25px 10px / 10px 25px 10px 30px;
+}
+
+/* ========================================
+   CUSTOM SCROLLBAR
+   ======================================== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #FF4D6D;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #e6365a;
+}
+
+/* ========================================
+   LEAFLET MAP CUSTOMIZATION
+   ======================================== */
+.leaflet-container {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    border-radius: 1.5rem;
+}
+
+.custom-marker {
+    @apply flex items-center justify-center;
+}
+
+.custom-marker-dot {
+    @apply w-4 h-4 rounded-full border-2 border-white shadow-lg;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+
+    0%,
+    100% {
+        transform: rotate(-1deg);
+    }
+
+    50% {
+        transform: rotate(1deg);
+    }
+}
+
+.animate-wiggle {
+    animation: wiggle 2s ease-in-out infinite;
+}

@@ -1,0 +1,82 @@
+[
+    {
+        "id": 1,
+        "slug": "food-festival-paris-2026",
+        "title": {
+            "rendered": "Paris Food Festival 2026"
+        },
+        "excerpt": {
+            "rendered": "The biggest culinary celebration in Paris returns! Three days of food, wine, and entertainment."
+        },
+        "content": {
+            "rendered": "<p>Join us for the annual Paris Food Festival, a three-day celebration of gastronomy featuring the best chefs, restaurants, and food artisans from across France and beyond.</p><p>Experience cooking demonstrations by Michelin-starred chefs, taste exquisite dishes from over 100 vendors, attend wine and spirits masterclasses, and enjoy live music and entertainment throughout the festival.</p><h3>Festival Highlights:</h3><ul><li>Live cooking demonstrations by celebrity chefs</li><li>International food village with 100+ vendors</li><li>Wine and spirits pavilion</li><li>Street food market</li><li>Kids' cooking workshops</li><li>Live music and entertainment</li></ul><h3>Schedule:</h3><p><strong>Friday:</strong> 5 PM - 11 PM<br><strong>Saturday:</strong> 12 PM - 11 PM<br><strong>Sunday:</strong> 12 PM - 9 PM</p>"
+        },
+        "date": "2026-05-15T17:00:00",
+        "end_date": "2026-05-17T21:00:00",
+        "location": "Parc de la Villette, Paris",
+        "event_type": "Festival",
+        "ticket_price": "€25 (Day Pass) / €60 (Weekend Pass)",
+        "featured_media": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800",
+        "status": "upcoming"
+    },
+    {
+        "id": 2,
+        "slug": "wine-harvest-celebration",
+        "title": {
+            "rendered": "Burgundy Wine Harvest Celebration"
+        },
+        "excerpt": {
+            "rendered": "Celebrate the grape harvest season in the heart of Burgundy wine country."
+        },
+        "content": {
+            "rendered": "<p>Experience the magic of the grape harvest season at our annual Burgundy Wine Harvest Celebration. This special event brings together wine lovers, local winemakers, and food enthusiasts for a weekend of celebration.</p><p>Participate in traditional grape picking, tour historic wine cellars, enjoy wine tastings from prestigious Burgundy estates, and feast on regional specialties prepared by local chefs.</p><h3>Event Activities:</h3><ul><li>Guided vineyard tours and grape picking</li><li>Wine cellar visits and tastings</li><li>Traditional harvest feast</li><li>Meet the winemakers sessions</li><li>Live folk music and dancing</li><li>Local artisan market</li></ul><p>Transportation from Paris available. Accommodation packages can be arranged.</p>"
+        },
+        "date": "2026-09-26T09:00:00",
+        "end_date": "2026-09-27T18:00:00",
+        "location": "Beaune, Burgundy",
+        "event_type": "Celebration",
+        "ticket_price": "€150 (includes meals and tastings)",
+        "featured_media": "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=800",
+        "status": "upcoming"
+    },
+    {
+        "id": 3,
+        "slug": "chocolate-lovers-fair",
+        "title": {
+            "rendered": "Chocolate Lovers Fair"
+        },
+        "excerpt": {
+            "rendered": "Indulge in the finest chocolates from master chocolatiers across Europe."
+        },
+        "content": {
+            "rendered": "<p>Calling all chocolate enthusiasts! The Chocolate Lovers Fair is back with an even more decadent selection of artisanal chocolates, pralines, and confections.</p><p>Meet master chocolatiers, watch live chocolate-making demonstrations, participate in tasting workshops, and discover rare cacao varieties from around the world. This is a paradise for anyone with a sweet tooth!</p><h3>Fair Features:</h3><ul><li>50+ artisanal chocolate makers</li><li>Live chocolate sculpting demonstrations</li><li>Chocolate and wine pairing workshops</li><li>Bean-to-bar chocolate making sessions</li><li>Kids' chocolate workshop</li><li>Exclusive chocolate collections for purchase</li></ul><p>Free entry for children under 12.</p>"
+        },
+        "date": "2026-02-14T10:00:00",
+        "end_date": "2026-02-16T19:00:00",
+        "location": "Grand Palais, Paris",
+        "event_type": "Fair",
+        "ticket_price": "€18 (Day Pass) / €40 (3-Day Pass)",
+        "featured_media": "https://images.unsplash.com/photo-1511381939415-e44015466834?w=800",
+        "status": "upcoming"
+    },
+    {
+        "id": 4,
+        "slug": "street-food-night-market",
+        "title": {
+            "rendered": "Street Food Night Market"
+        },
+        "excerpt": {
+            "rendered": "A vibrant night market featuring the best street food from around the world."
+        },
+        "content": {
+            "rendered": "<p>Experience a global culinary adventure at our monthly Street Food Night Market! Every last Friday of the month, we transform the riverside into a bustling night market featuring diverse street food from around the world.</p><p>From Asian dumplings and tacos to Middle Eastern kebabs and French crepes, there's something to satisfy every craving. Enjoy your food with craft beers, cocktails, and live DJ sets.</p><h3>What to Expect:</h3><ul><li>30+ international street food vendors</li><li>Craft beer and cocktail bars</li><li>Live music and DJ performances</li><li>Outdoor seating with river views</li><li>Family-friendly atmosphere</li><li>Vegan and vegetarian options available</li></ul><p>Free entry. Pay as you eat and drink.</p>"
+        },
+        "date": "2026-01-31T18:00:00",
+        "end_date": "2026-01-31T23:00:00",
+        "location": "Quai de la Seine, Paris",
+        "event_type": "Market",
+        "ticket_price": "Free Entry",
+        "featured_media": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800",
+        "status": "upcoming"
+    }
+]

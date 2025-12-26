@@ -1,0 +1,191 @@
+{
+    "site": {
+        "name": "Eat Is Friday",
+        "tagline": "Celebrate Food, Every Friday and Beyond",
+        "description": "Your destination for culinary experiences, food events, and gastronomic adventures."
+    },
+    "home": {
+        "hero": {
+            "title": "Welcome to Eat Is Friday",
+            "subtitle": "Where Every Day Feels Like Friday",
+            "description": "Discover amazing culinary experiences, join exciting food events, and explore career opportunities in the food industry.",
+            "cta_primary": {
+                "text": "Explore Activities",
+                "link": "/apply-activities"
+            },
+            "cta_secondary": {
+                "text": "View Events",
+                "link": "/events"
+            },
+            "background_image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600"
+        },
+        "features": [
+            {
+                "id": 1,
+                "title": "Culinary Workshops",
+                "description": "Learn from expert chefs and master new cooking techniques in our hands-on workshops.",
+                "icon": "chef-hat",
+                "link": "/apply-activities"
+            },
+            {
+                "id": 2,
+                "title": "Food Events",
+                "description": "Join us for exciting food festivals, tastings, and culinary celebrations throughout the year.",
+                "icon": "calendar",
+                "link": "/events"
+            },
+            {
+                "id": 3,
+                "title": "Career Opportunities",
+                "description": "Build your career in the food industry with our exciting job openings and internships.",
+                "icon": "briefcase",
+                "link": "/careers"
+            },
+            {
+                "id": 4,
+                "title": "Food Blog",
+                "description": "Explore recipes, tips, and stories from the world of gastronomy on our blog.",
+                "icon": "book",
+                "link": "/blog"
+            }
+        ],
+        "stats": [
+            {
+                "number": "500+",
+                "label": "Happy Participants"
+            },
+            {
+                "number": "50+",
+                "label": "Workshops Hosted"
+            },
+            {
+                "number": "20+",
+                "label": "Expert Chefs"
+            },
+            {
+                "number": "100+",
+                "label": "Events Organized"
+            }
+        ]
+    },
+    "about": {
+        "hero": {
+            "title": "About Eat Is Friday",
+            "subtitle": "Our Story",
+            "image": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=1200"
+        },
+        "mission": {
+            "title": "Our Mission",
+            "content": "At Eat Is Friday, we believe that food brings people together. Our mission is to create memorable culinary experiences that celebrate the joy of cooking, eating, and sharing. We connect food enthusiasts with expert chefs, organize exciting events, and foster a community passionate about gastronomy."
+        },
+        "vision": {
+            "title": "Our Vision",
+            "content": "We envision a world where everyone has access to quality culinary education and experiences. Through our workshops, events, and community initiatives, we're making the culinary arts more accessible and enjoyable for all."
+        },
+        "values": [
+            {
+                "title": "Quality",
+                "description": "We partner with the best chefs and use premium ingredients in all our workshops."
+            },
+            {
+                "title": "Community",
+                "description": "We foster a welcoming environment where food lovers can connect and learn together."
+            },
+            {
+                "title": "Innovation",
+                "description": "We constantly explore new culinary trends and techniques to keep our offerings fresh."
+            },
+            {
+                "title": "Sustainability",
+                "description": "We're committed to sustainable practices and supporting local food producers."
+            }
+        ],
+        "team": [
+            {
+                "name": "Chef Marie Dubois",
+                "role": "Culinary Director",
+                "bio": "With 15 years of experience in Michelin-starred restaurants, Marie leads our culinary team.",
+                "image": "https://i.pravatar.cc/300?img=5"
+            },
+            {
+                "name": "Pierre Laurent",
+                "role": "Events Manager",
+                "bio": "Pierre has organized over 200 food events and brings creativity to every celebration.",
+                "image": "https://i.pravatar.cc/300?img=12"
+            },
+            {
+                "name": "Sophie Martin",
+                "role": "Head Pastry Chef",
+                "bio": "Sophie specializes in French pastry and has trained at Le Cordon Bleu.",
+                "image": "https://i.pravatar.cc/300?img=9"
+            }
+        ]
+    },
+    "contact": {
+        "hero": {
+            "title": "Get in Touch",
+            "subtitle": "We'd Love to Hear From You"
+        },
+        "info": {
+            "address": "123 Rue de la Gastronomie, 75001 Paris, France",
+            "phone": "+33 1 23 45 67 89",
+            "email": "contact@eatisfriday.com",
+            "hours": "Monday - Friday: 9:00 AM - 6:00 PM"
+        },
+        "social": {
+            "facebook": "https://facebook.com/eatisfriday",
+            "instagram": "https://instagram.com/eatisfriday",
+            "twitter": "https://twitter.com/eatisfriday",
+            "linkedin": "https://linkedin.com/company/eatisfriday"
+        },
+        "map": {
+            "latitude": 48.8566,
+            "longitude": 2.3522,
+            "zoom": 15
+        }
+    },
+    "footer": {
+        "about_text": "Eat Is Friday is your destination for culinary experiences, food events, and gastronomic adventures. Join us in celebrating the joy of food!",
+        "quick_links": [
+            {
+                "text": "About Us",
+                "link": "/about"
+            },
+            {
+                "text": "Activities",
+                "link": "/apply-activities"
+            },
+            {
+                "text": "Events",
+                "link": "/events"
+            },
+            {
+                "text": "Careers",
+                "link": "/careers"
+            },
+            {
+                "text": "Blog",
+                "link": "/blog"
+            },
+            {
+                "text": "Contact",
+                "link": "/contact"
+            }
+        ],
+        "legal_links": [
+            {
+                "text": "Privacy Policy",
+                "link": "/privacy"
+            },
+            {
+                "text": "Terms of Service",
+                "link": "/terms"
+            },
+            {
+                "text": "Cookie Policy",
+                "link": "/cookies"
+            }
+        ],
+        "copyright": "© 2025 Eat Is Friday. All rights reserved."
+    }
+}

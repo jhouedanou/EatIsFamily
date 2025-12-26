@@ -1,0 +1,101 @@
+[
+  {
+    "id": 1,
+    "slug": "senior-frontend-developer",
+    "title": {
+      "rendered": "Senior Frontend Developer"
+    },
+    "excerpt": {
+      "rendered": "Join our dynamic team as a Senior Frontend Developer and help build amazing web experiences."
+    },
+    "content": {
+      "rendered": "<p>We are looking for an experienced Senior Frontend Developer to join our growing team. You will be responsible for developing and maintaining high-quality web applications using modern frameworks and technologies.</p><p>As a Senior Frontend Developer, you will work closely with our design and backend teams to create seamless user experiences. You'll have the opportunity to mentor junior developers and contribute to our technical architecture decisions.</p>"
+    },
+    "location": "Paris, France (Remote possible)",
+    "job_type": "Full-time",
+    "salary": "€60,000 - €80,000",
+    "requirements": [
+      "5+ years of experience in frontend development",
+      "Expert knowledge of Vue.js, Nuxt.js, and modern JavaScript",
+      "Strong understanding of HTML5, CSS3, and responsive design",
+      "Experience with REST APIs and state management",
+      "Excellent problem-solving and communication skills"
+    ],
+    "benefits": [
+      "Competitive salary and benefits package",
+      "Remote work flexibility",
+      "Professional development opportunities",
+      "Health insurance",
+      "25 days paid vacation"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800",
+    "date": "2025-12-20T10:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 2,
+    "slug": "ux-ui-designer",
+    "title": {
+      "rendered": "UX/UI Designer"
+    },
+    "excerpt": {
+      "rendered": "Create beautiful and intuitive user interfaces that delight our customers."
+    },
+    "content": {
+      "rendered": "<p>We're seeking a talented UX/UI Designer to join our creative team. You will be responsible for designing user-centered digital experiences that are both beautiful and functional.</p><p>In this role, you'll conduct user research, create wireframes and prototypes, and work closely with developers to bring your designs to life. You'll have the opportunity to shape the visual identity of our products and contribute to our design system.</p>"
+    },
+    "location": "Lyon, France",
+    "job_type": "Full-time",
+    "salary": "€45,000 - €65,000",
+    "requirements": [
+      "3+ years of experience in UX/UI design",
+      "Proficiency in Figma, Sketch, or Adobe XD",
+      "Strong portfolio demonstrating user-centered design",
+      "Understanding of design systems and accessibility",
+      "Excellent communication and collaboration skills"
+    ],
+    "benefits": [
+      "Creative and collaborative work environment",
+      "Latest design tools and equipment",
+      "Flexible working hours",
+      "Health and wellness benefits",
+      "Career growth opportunities"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800",
+    "date": "2025-12-18T14:30:00",
+    "status": "publish"
+  },
+  {
+    "id": 3,
+    "slug": "backend-developer-nodejs",
+    "title": {
+      "rendered": "Backend Developer (Node.js)"
+    },
+    "excerpt": {
+      "rendered": "Build scalable and robust backend systems with Node.js and modern technologies."
+    },
+    "content": {
+      "rendered": "<p>We are looking for a skilled Backend Developer with expertise in Node.js to join our engineering team. You will design and implement scalable APIs and services that power our applications.</p><p>You'll work on challenging technical problems, optimize database performance, and ensure the security and reliability of our backend infrastructure. This is a great opportunity to work with cutting-edge technologies and contribute to architectural decisions.</p>"
+    },
+    "location": "Remote",
+    "job_type": "Full-time",
+    "salary": "€50,000 - €70,000",
+    "requirements": [
+      "4+ years of backend development experience",
+      "Strong proficiency in Node.js and Express.js",
+      "Experience with databases (PostgreSQL, MongoDB)",
+      "Knowledge of RESTful API design and microservices",
+      "Familiarity with Docker and cloud platforms (AWS, GCP)"
+    ],
+    "benefits": [
+      "100% remote work",
+      "Flexible schedule",
+      "Modern tech stack",
+      "Learning and development budget",
+      "Team retreats and events"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800",
+    "date": "2025-12-15T09:00:00",
+    "status": "publish"
+  }
+]
