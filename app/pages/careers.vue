@@ -41,11 +41,11 @@ const selectVenue = (venueId: string) => {
 </script>
 
 <template>
-  <div v-if="content" class="min-h-screen bg-brand-gray">
+  <div v-if="content" class="min-vh-100 bg-brand-gray">
     <!-- Hero Section with Map -->
-    <section class="relative h-[500px] md:h-[600px]">
+    <section class="position-relative hero-map-section">
       <!-- Interactive Map Background -->
-      <div class="absolute inset-0">
+      <div class="position-absolute top-0 start-0 end-0 bottom-0">
         <ClientOnly>
           <VenueMap
             :venues="content.venues.map(v => ({
@@ -60,54 +60,53 @@ const selectVenue = (venueId: string) => {
             @select-venue="selectVenue"
           />
           <template #fallback>
-            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-              <span class="text-gray-500">{{ content.map_loading }}</span>
+            <div class="w-100 h-100 bg-secondary d-flex align-items-center justify-content-center">
+              <span class="text-muted">{{ content.map_loading }}</span>
             </div>
           </template>
         </ClientOnly>
       </div>
 
       <!-- Gradient Overlay -->
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-brand-gray pointer-events-none"></div>
+      <div class="position-absolute top-0 start-0 end-0 bottom-0 gradient-overlay pe-none"></div>
 
       <!-- Close Button -->
-      <button class="absolute top-6 right-6 z-20 w-12 h-12 bg-brand-yellow rounded-full flex items-center justify-center border-2 border-black hover:scale-110 transition-transform shadow-organic">
-        <LucideX class="w-5 h-5" />
+      <button class="position-absolute top-0 end-0 mt-4 me-4 close-btn rounded-circle bg-brand-yellow d-flex align-items-center justify-content-center border border-2 border-dark shadow-organic">
+        <LucideX style="width: 1.25rem; height: 1.25rem;" />
       </button>
 
       <!-- Venue Info Card -->
-      <div v-if="currentVenue" class="absolute bottom-8 left-4 right-4 md:left-8 md:right-auto md:max-w-md z-10">
-        <div class="bg-white border-organic p-6 shadow-organic">
-          <span class="tag-lime text-xs mb-3 inline-block">{{ content.hero_section.tag }}</span>
+      <div v-if="currentVenue" class="position-absolute bottom-0 start-0 mb-4 ms-3 me-3 venue-info-card">
+        <div class="bg-white border-organic p-4 shadow-organic">
+          <span class="tag-lime small mb-3 d-inline-block">{{ content.hero_section.tag }}</span>
 
-          <h1 class="font-heading text-3xl md:text-4xl font-bold leading-tight mb-3">
+          <h1 class="font-heading fs-2 fw-bold lh-sm mb-3">
             {{ content.hero_section.title_template.replace('{venue_name}', currentVenue.name) }}
           </h1>
 
-          <div class="flex items-center gap-4 text-gray-600">
-            <div class="flex items-center gap-2">
-              <LucideMapPin class="w-4 h-4 text-brand-pink" />
-              <span class="text-sm">{{ currentVenue.location }}</span>
+          <div class="d-flex align-items-center gap-3 text-muted">
+            <div class="d-flex align-items-center gap-2">
+              <LucideMapPin class="text-brand-pink" style="width: 1rem; height: 1rem;" />
+              <span class="small">{{ currentVenue.location }}</span>
             </div>
-            <span class="w-1.5 h-1.5 rounded-full bg-brand-lime"></span>
-            <span class="text-sm font-bold">{{ currentVenue.open_positions }} {{ content.hero_section.open_positions_suffix }}</span>
+            <span class="rounded-circle bg-brand-lime" style="width: 0.375rem; height: 0.375rem;"></span>
+            <span class="small fw-bold">{{ currentVenue.open_positions }} {{ content.hero_section.open_positions_suffix }}</span>
           </div>
         </div>
       </div>
 
       <!-- Venue Pills -->
-      <div class="absolute top-6 left-4 md:left-8 z-20 flex gap-2 flex-wrap max-w-[60%]">
+      <div class="position-absolute top-0 start-0 mt-4 ms-3 d-flex gap-2 flex-wrap venue-pills">
         <button
           v-for="venue in content.venues"
           :key="venue.id"
           @click="selectVenue(venue.id)"
           :class="[
-            'px-4 py-2 text-sm font-bold border-2 border-black transition-all',
+            'px-3 py-2 small fw-bold border border-2 border-dark venue-pill',
             selectedVenue === venue.id
               ? 'bg-brand-pink text-white shadow-organic-sm'
-              : 'bg-white hover:bg-brand-lime'
+              : 'bg-white'
           ]"
-          style="border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;"
         >
           {{ venue.name }}
         </button>
@@ -115,48 +114,44 @@ const selectVenue = (venueId: string) => {
     </section>
 
     <!-- Search & Filter Bar -->
-    <section class="container mx-auto px-4 -mt-6 relative z-20">
-      <div class="bg-brand-dark border-organic p-4 flex flex-col md:flex-row gap-4 shadow-organic">
+    <section class="container search-bar-section position-relative">
+      <div class="bg-brand-dark border-organic p-3 d-flex flex-column flex-md-row gap-3 shadow-organic">
         <!-- Search Input -->
-        <div class="flex-1 relative">
-          <div class="flex items-center gap-3 px-4">
-            <LucideSearch class="w-5 h-5 text-white/70" />
+        <div class="flex-grow-1 position-relative">
+          <div class="d-flex align-items-center gap-3 px-3">
+            <LucideSearch class="text-white opacity-75" style="width: 1.25rem; height: 1.25rem;" />
             <input
               v-model="searchQuery"
               type="text"
               :placeholder="content.search_section.search_placeholder"
-              class="bg-transparent text-white placeholder:text-white/50 outline-none flex-1 py-3 font-body"
+              class="bg-transparent text-white border-0 flex-grow-1 py-2 font-body search-input"
             />
           </div>
         </div>
 
         <!-- Job Type Dropdown -->
-        <div class="relative">
+        <div class="position-relative">
           <button
             @click="showFilters = !showFilters"
-            class="bg-brand-dark border-l border-white/20 px-6 py-3 flex items-center gap-3 text-white hover:bg-white/5 transition-colors w-full md:w-auto justify-between"
+            class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn"
           >
             <span>{{ selectedJobType }}</span>
-            <LucideChevronDown class="w-4 h-4" :class="{ 'rotate-180': showFilters }" />
+            <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showFilters }" />
           </button>
 
           <!-- Dropdown Menu -->
           <Transition
-            enter-active-class="transition duration-200 ease-out"
-            enter-from-class="transform scale-95 opacity-0"
-            enter-to-class="transform scale-100 opacity-100"
-            leave-active-class="transition duration-150 ease-in"
-            leave-from-class="transform scale-100 opacity-100"
-            leave-to-class="transform scale-95 opacity-0"
+            enter-active-class="transition-fade-in"
+            leave-active-class="transition-fade-out"
           >
-            <div v-if="showFilters" class="absolute top-full right-0 mt-2 w-48 bg-white border-organic shadow-organic-lg z-30">
+            <div v-if="showFilters" class="position-absolute top-100 end-0 mt-2 bg-white border-organic shadow-organic-lg dropdown-menu-custom">
               <button
                 v-for="type in content.search_section.job_types"
                 :key="type"
                 @click="selectedJobType = type; showFilters = false"
                 :class="[
-                  'w-full text-left px-4 py-3 hover:bg-brand-lime/30 transition-colors font-medium',
-                  selectedJobType === type ? 'bg-brand-lime/50' : ''
+                  'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
+                  selectedJobType === type ? 'active' : ''
                 ]"
               >
                 {{ type }}
@@ -168,79 +163,81 @@ const selectVenue = (venueId: string) => {
     </section>
 
     <!-- Job Grid -->
-    <section class="container mx-auto px-4 py-12">
-      <div class="flex items-center justify-between mb-8">
-        <h2 class="font-heading text-2xl font-bold">
+    <section class="container py-5">
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <h2 class="font-heading fs-4 fw-bold">
           {{ filteredJobs.length }} {{ filteredJobs.length === 1 ? content.job_listing.positions_available_singular : content.job_listing.positions_available_plural }} {{ content.job_listing.positions_available_suffix }}
         </h2>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-8">
+      <div class="row row-cols-1 row-cols-md-2 g-4">
         <div
           v-for="job in filteredJobs"
           :key="job.id"
-          class="bg-white border-organic p-6 hover:shadow-organic transition-all duration-300 group"
+          class="col"
         >
-          <div class="flex flex-col h-full justify-between">
-            <!-- Header -->
-            <div>
-              <h3 class="font-heading font-bold text-xl leading-tight mb-1">{{ job.title }}</h3>
-              <p class="text-xs text-gray-500 font-medium mb-4">{{ content.job_listing.posted_prefix }} {{ job.posted_time }}</p>
+          <div class="bg-white border-organic p-4 h-100 job-card">
+            <div class="d-flex flex-column h-100 justify-content-between">
+              <!-- Header -->
+              <div>
+                <h3 class="font-heading fw-bold fs-5 lh-sm mb-1">{{ job.title }}</h3>
+                <p class="small text-muted fw-medium mb-3">{{ content.job_listing.posted_prefix }} {{ job.posted_time }}</p>
 
-              <!-- Tags Row -->
-              <div class="flex flex-wrap gap-2 mb-4">
-                <span class="tag-blue">{{ content.job_listing.department_prefix }} · {{ job.department }}</span>
-                <span class="tag-lime flex items-center gap-1">
-                  <span class="text-sm">🌿</span> {{ job.type }}
-                </span>
-                <span class="tag-yellow flex items-center gap-1">
-                  <span class="text-sm">💰</span> {{ job.salary }}
-                </span>
+                <!-- Tags Row -->
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                  <span class="tag-blue">{{ content.job_listing.department_prefix }} · {{ job.department }}</span>
+                  <span class="tag-lime d-flex align-items-center gap-1">
+                    <span class="small">🌿</span> {{ job.type }}
+                  </span>
+                  <span class="tag-yellow d-flex align-items-center gap-1">
+                    <span class="small">💰</span> {{ job.salary }}
+                  </span>
+                </div>
+
+                <!-- Description -->
+                <p class="small text-muted mb-4 line-clamp-3 font-body lh-lg">
+                  {{ job.description }}
+                </p>
               </div>
 
-              <!-- Description -->
-              <p class="text-sm text-gray-600 mb-6 line-clamp-3 font-body leading-relaxed">
-                {{ job.description }}
-              </p>
-            </div>
-
-            <!-- Buttons -->
-            <div class="flex gap-3 mt-auto">
-              <NuxtLink :to="`/jobs/${job.id}`" class="btn-primary flex-1 text-center text-sm">
-                {{ content.job_listing.apply_button }}
-              </NuxtLink>
-              <NuxtLink :to="`/jobs/${job.id}`" class="btn-secondary flex-1 text-center text-sm">
-                {{ content.job_listing.view_details_button }}
-              </NuxtLink>
+              <!-- Buttons -->
+              <div class="d-flex gap-3 mt-auto">
+                <NuxtLink :to="`/jobs/${job.id}`" class="btn-primary flex-grow-1 text-center small">
+                  {{ content.job_listing.apply_button }}
+                </NuxtLink>
+                <NuxtLink :to="`/jobs/${job.id}`" class="btn-secondary flex-grow-1 text-center small">
+                  {{ content.job_listing.view_details_button }}
+                </NuxtLink>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- No Results -->
-      <div v-if="filteredJobs.length === 0" class="text-center py-20 bg-white border-organic">
-        <p class="text-xl text-gray-500 mb-2">{{ content.no_results.title }}</p>
-        <p class="text-gray-400 mb-4">{{ content.no_results.description }}</p>
-        <button @click="searchQuery = ''; selectedJobType = content.search_section.job_types[0]" class="text-brand-pink font-bold hover:underline">
+      <div v-if="filteredJobs.length === 0" class="text-center py-5 bg-white border-organic">
+        <p class="fs-5 text-muted mb-2">{{ content.no_results.title }}</p>
+        <p class="text-secondary mb-3">{{ content.no_results.description }}</p>
+        <button @click="searchQuery = ''; selectedJobType = content.search_section.job_types[0]" class="text-brand-pink fw-bold btn btn-link text-decoration-none">
           {{ content.no_results.clear_filters_button }}
         </button>
       </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="bg-brand-dark py-16 text-center">
-      <div class="container mx-auto px-4">
-        <h2 class="font-heading text-3xl md:text-5xl font-bold text-white mb-6">
+    <section class="bg-brand-dark py-5 text-center">
+      <div class="container">
+        <h2 class="font-heading display-5 fw-bold text-white mb-4">
           {{ content.cta_section.title }}
         </h2>
-        <p class="text-gray-400 max-w-2xl mx-auto mb-8 font-body">
+        <p class="text-secondary mx-auto mb-4 font-body" style="max-width: 42rem;">
           {{ content.cta_section.description }}
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button class="btn-lime text-lg px-8 py-4">
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+          <button class="btn-lime fs-5 px-5 py-3">
             {{ content.cta_section.explore_venues_button }}
           </button>
-          <button class="btn-secondary text-lg px-8 py-4">
+          <button class="btn-secondary fs-5 px-5 py-3">
             {{ content.cta_section.general_application_button }}
           </button>
         </div>
@@ -248,3 +245,136 @@ const selectVenue = (venueId: string) => {
     </section>
   </div>
 </template>
+
+<style scoped>
+.hero-map-section {
+  height: 500px;
+}
+
+@media (min-width: 768px) {
+  .hero-map-section {
+    height: 600px;
+  }
+}
+
+.gradient-overlay {
+  background: linear-gradient(to bottom, transparent, transparent 50%, var(--brand-gray, #F5F5F0));
+}
+
+.close-btn {
+  width: 3rem;
+  height: 3rem;
+  z-index: 20;
+  transition: transform 0.3s ease;
+}
+
+.close-btn:hover {
+  transform: scale(1.1);
+}
+
+.venue-info-card {
+  z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .venue-info-card {
+    max-width: 28rem;
+    margin-right: auto;
+  }
+}
+
+.venue-pills {
+  max-width: 60%;
+  z-index: 20;
+}
+
+.venue-pill {
+  border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
+  transition: all 0.3s ease;
+}
+
+.venue-pill:hover {
+  background-color: var(--brand-lime, #C8F560);
+}
+
+.search-bar-section {
+  margin-top: -1.5rem;
+  z-index: 20;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+.dropdown-btn {
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu-custom {
+  width: 12rem;
+  z-index: 30;
+}
+
+.dropdown-item-custom {
+  background: transparent;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-item-custom:hover {
+  background-color: rgba(200, 245, 96, 0.3);
+}
+
+.dropdown-item-custom.active {
+  background-color: rgba(200, 245, 96, 0.5);
+}
+
+.job-card {
+  transition: all 0.3s ease;
+}
+
+.job-card:hover {
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+}
+
+.transition-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.transition-fade-out {
+  animation: fadeOut 0.15s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+</style>

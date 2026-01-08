@@ -50,6 +50,7 @@ export interface Partner {
 
 export interface HomepageContent {
   hero_section: {
+    bg: string
     tag: string
     title: HeroTitle
     description: string

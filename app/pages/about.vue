@@ -21,22 +21,26 @@
 
         <div v-if="pageContent" class="values-section">
           <h2>{{ pageContent.section_titles.values }}</h2>
-          <div class="grid grid-2">
-            <div v-for="value in siteContent.about.values" :key="value.title" class="value-card">
-              <h3>{{ value.title }}</h3>
-              <p>{{ value.description }}</p>
+          <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div v-for="value in siteContent.about.values" :key="value.title" class="col">
+              <div class="value-card h-100">
+                <h3>{{ value.title }}</h3>
+                <p>{{ value.description }}</p>
+              </div>
             </div>
           </div>
         </div>
 
         <div v-if="pageContent" class="team-section">
           <h2>{{ pageContent.section_titles.team }}</h2>
-          <div class="grid grid-3">
-            <div v-for="member in siteContent.about.team" :key="member.name" class="team-card">
-              <img :src="member.image" :alt="member.name" />
-              <h3>{{ member.name }}</h3>
-              <p class="role">{{ member.role }}</p>
-              <p>{{ member.bio }}</p>
+          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div v-for="member in siteContent.about.team" :key="member.name" class="col">
+              <div class="team-card h-100">
+                <img :src="member.image" :alt="member.name" />
+                <h3>{{ member.name }}</h3>
+                <p class="role">{{ member.role }}</p>
+                <p>{{ member.bio }}</p>
+              </div>
             </div>
           </div>
         </div>

@@ -27,53 +27,80 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="content" class="min-h-screen bg-white">
+  <div v-if="content" class="min-vh-100 bg-white">
     <!-- Close Button -->
-    <button class="fixed top-6 right-6 z-50 w-12 h-12 bg-brand-yellow rounded-full flex items-center justify-center border-2 border-black hover:scale-110 transition-transform shadow-organic">
-      <LucideX class="w-6 h-6" />
+    <button class="position-fixed top-0 end-0 mt-4 me-4 close-btn rounded-circle bg-brand-yellow d-flex align-items-center justify-content-center border border-2 border-dark shadow-organic">
+      <LucideX style="width: 1.5rem; height: 1.5rem;" />
     </button>
 
-    <article class="container mx-auto px-4 py-12 max-w-4xl">
+    <article class="container py-5 article-container">
       <!-- Header -->
-      <header class="mb-8">
-        <h1 class="font-heading text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
-          <span class="relative inline">
+      <header class="mb-4">
+        <h1 class="font-heading display-4 fw-bold lh-sm mb-3">
+          <span class="position-relative d-inline">
             {{ article.title.split(':')[0] }}:
           </span>
-          <span class="relative inline-block">
+          <span class="position-relative d-inline-block">
             {{ article.title.split(':')[1] }}
-            <span class="absolute -bottom-2 left-0 w-full h-4 bg-brand-yellow -z-10 transform -rotate-1"></span>
+            <span class="position-absolute bottom-0 start-0 w-100 bg-brand-yellow highlight-bar"></span>
           </span>
         </h1>
-        <p class="text-gray-500 font-body">{{ article.date }}</p>
+        <p class="text-muted font-body">{{ article.date }}</p>
       </header>
 
       <!-- Featured Image -->
-      <div class="mb-12 border-organic overflow-hidden">
+      <div class="mb-5 border-organic overflow-hidden">
         <NuxtImg
           :src="article.image"
-          class="w-full h-auto object-cover"
+          class="w-100 h-auto object-fit-cover"
           :alt="content.featured_image_alt"
         />
       </div>
 
       <!-- Content -->
-      <div class="prose prose-lg max-w-none font-body text-gray-700 leading-relaxed space-y-6" v-html="article.content">
+      <div class="article-content font-body text-muted lh-lg" v-html="article.content">
       </div>
 
       <!-- Share / Navigation -->
-      <div class="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
-        <NuxtLink to="/blog" class="text-brand-pink font-bold hover:underline flex items-center gap-2">
+      <div class="mt-5 pt-4 border-top d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+        <NuxtLink to="/blog" class="text-brand-pink fw-bold text-decoration-none d-flex align-items-center gap-2">
           ← {{ content.back_link }}
         </NuxtLink>
 
-        <div class="flex gap-4">
-          <button class="btn-secondary text-sm">{{ content.share_button }}</button>
-          <button class="btn-primary text-sm flex items-center gap-2">
-            {{ content.next_article_button }} <LucideArrowRight class="w-4 h-4" />
+        <div class="d-flex gap-3">
+          <button class="btn-secondary small">{{ content.share_button }}</button>
+          <button class="btn-primary small d-flex align-items-center gap-2">
+            {{ content.next_article_button }} <LucideArrowRight style="width: 1rem; height: 1rem;" />
           </button>
         </div>
       </div>
     </article>
   </div>
 </template>
+
+<style scoped>
+.close-btn {
+  width: 3rem;
+  height: 3rem;
+  z-index: 50;
+  transition: transform 0.3s ease;
+}
+
+.close-btn:hover {
+  transform: scale(1.1);
+}
+
+.article-container {
+  max-width: 56rem;
+}
+
+.highlight-bar {
+  height: 1rem;
+  z-index: -1;
+  transform: rotate(-1deg);
+}
+
+.article-content p {
+  margin-bottom: 1.5rem;
+}
+</style>

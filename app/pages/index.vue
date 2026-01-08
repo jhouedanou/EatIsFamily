@@ -44,125 +44,58 @@ onMounted(async () => {
 <template>
   <div class="overflow-hidden" v-if="content">
     <!-- Hero Section -->
-    <section class="relative min-h-[90vh] flex items-center bg-white overflow-hidden">
-      <!-- Background Pattern -->
-      <div class="absolute inset-0 opacity-5">
-        <div class="absolute top-20 left-10 w-40 h-40 border-2 border-black rounded-full"></div>
-        <div class="absolute bottom-20 right-20 w-60 h-60 border-2 border-black rounded-full"></div>
-      </div>
-
-      <div class="container mx-auto px-4 py-20">
-        <div class="flex flex-col lg:flex-row items-center gap-12">
-          <!-- Left: Text -->
-          <div class="lg:w-1/2">
-            <div class="inline-block relative mb-6">
-              <span class="tag-pink text-xs">{{ content.hero_section.tag }}</span>
-            </div>
-
-            <h1 ref="heroTitle" class="font-heading text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] text-brand-dark mb-8">
-              <span class="relative inline-block">
+    <section id="hero" class="container-fluid d-flex align-items-center min-vh-90 px-0 w-100">
+       <div class="d-flex flex-row row w-100">
+            <!-- image de la nourriture -->
+      <div id="marr" class="col-lg-6 col-md-6 p-0 min-vh-100" :style="{ position: 'relative', backgroundImage: `url('${content.hero_section.bg}')`, backgroundSize: 'cover', backgroundPosition: 'center' }">
+        <span></span>
+       </div>
+        <!-- right: Text -->
+          <div id="blue" class="col-lg-6 col-md-6 blue flex-row p-0 d-flex align-items-center">
+            <h1 ref="heroTitle" class="font-heading display-1 fw-bold lh-1 text-brand-dark mb-4 p-4">
+              <p class="position-relative d-inline-block">
                 {{ content.hero_section.title.line_1 }}
-                <span class="absolute -bottom-2 left-0 w-full h-3 bg-brand-yellow -z-10 transform -rotate-1"></span>
-              </span><br/>
-              {{ content.hero_section.title.line_2_prefix }} <span class="italic">{{ content.hero_section.title.line_2_highlight }}</span><br/>
-              {{ content.hero_section.title.line_3 }}<br/>
-              <span class="text-brand-pink">{{ content.hero_section.title.line_4 }}</span>
+              </p>
             </h1>
-
-            <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-lg font-body leading-relaxed">
-              {{ content.hero_section.description }}
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-4">
-              <BaseButton :to="content.hero_section.cta_primary.link" variant="primary" size="lg">
-                {{ content.hero_section.cta_primary.text }}
-              </BaseButton>
-              <BaseButton :to="content.hero_section.cta_secondary.link" variant="secondary" size="lg">
-                {{ content.hero_section.cta_secondary.text }}
-              </BaseButton>
-            </div>
-          </div>
-
-          <!-- Right: Image Grid -->
-          <div class="lg:w-1/2 relative">
-            <div class="grid grid-cols-2 gap-4">
-              <div class="space-y-4">
-                <div class="border-organic overflow-hidden h-48">
-                  <NuxtImg
-                    :src="content.hero_section.images[0]?.src"
-                    class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                    :alt="content.hero_section.images[0]?.alt"
-                  />
-                </div>
-                <div class="border-organic overflow-hidden h-64">
-                  <NuxtImg
-                    :src="content.hero_section.images[1]?.src"
-                    class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                    :alt="content.hero_section.images[1]?.alt"
-                  />
-                </div>
-              </div>
-              <div class="space-y-4 pt-8">
-                <div class="border-organic overflow-hidden h-64">
-                  <NuxtImg
-                    :src="content.hero_section.images[2]?.src"
-                    class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                    :alt="content.hero_section.images[2]?.alt"
-                  />
-                </div>
-                <div class="border-organic overflow-hidden h-48 bg-brand-blue flex items-center justify-center">
-                  <div class="text-center p-4">
-                    <p class="font-heading text-4xl font-bold">{{ content.hero_section.experience_badge.number }}</p>
-                    <p class="font-body text-sm">{{ content.hero_section.experience_badge.label }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Floating Badge -->
-            <div class="absolute -bottom-4 -left-4 bg-brand-lime border-organic px-6 py-3 animate-float">
-              <span class="font-heading font-bold">🍴 {{ content.hero_section.floating_badge }}</span>
-            </div>
           </div>
         </div>
-      </div>
     </section>
 
     <!-- Map Preview Section -->
-    <section class="py-20 bg-brand-gray overflow-hidden">
-      <div class="container mx-auto px-4">
-        <div class="flex flex-col lg:flex-row items-center gap-12">
-          <div class="lg:w-1/3">
-            <span class="tag-blue mb-4 inline-block">{{ content.locations_section.tag }}</span>
-            <h2 class="font-heading text-4xl md:text-5xl font-bold mb-6">
+    <section class="py-5 bg-brand-gray overflow-hidden">
+      <div class="container">
+        <div class="d-flex flex-column flex-lg-row align-items-center gap-5">
+          <div class="col-lg-4">
+            <span class="tag-blue mb-3 d-inline-block">{{ content.locations_section.tag }}</span>
+            <h2 class="font-heading display-4 fw-bold mb-4">
               {{ content.locations_section.title.line_1 }}<br/>
-              <span class="relative inline-block">
+              <span class="position-relative d-inline-block">
                 {{ content.locations_section.title.line_2_highlight }}
-                <span class="absolute -bottom-1 left-0 w-full h-3 bg-brand-lime -z-10"></span>
+                <span class="position-absolute bottom-0 start-0 w-100 bg-brand-lime highlight-bar"></span>
               </span>
             </h2>
-            <p class="text-gray-600 font-body mb-8 leading-relaxed">
+            <p class="text-muted font-body mb-4 lh-lg">
               {{ content.locations_section.description }}
             </p>
 
-            <ul class="space-y-3">
-              <li v-for="loc in content.locations_section.locations" :key="loc.name" class="flex items-center justify-between p-4 bg-white border-organic hover:shadow-organic transition-all cursor-pointer group">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full bg-brand-pink flex items-center justify-center border-2 border-black group-hover:scale-110 transition-transform">
-                    <LucideMapPin class="w-5 h-5 text-white" />
+            <ul class="list-unstyled d-flex flex-column gap-3">
+              <li v-for="loc in content.locations_section.locations" :key="loc.name" class="d-flex align-items-center justify-content-between p-3 bg-white border-organic location-item">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="location-icon rounded-circle bg-brand-pink d-flex align-items-center justify-content-center border border-2 border-dark">
+                    <LucideMapPin class="text-white" style="width: 1.25rem; height: 1.25rem;" />
                   </div>
-                  <span class="font-bold text-lg">{{ loc.name }}</span>
+                  <span class="fw-bold fs-5">{{ loc.name }}</span>
                 </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-brand-pink font-bold">{{ loc.count }} {{ content.locations_section.jobs_suffix }}</span>
-                  <LucideArrowRight class="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
+                <div class="d-flex align-items-center gap-2">
+                  <span class="text-brand-pink fw-bold">{{ loc.count }} {{ content.locations_section.jobs_suffix }}</span>
+                  <LucideArrowRight class="text-secondary" style="width: 1rem; height: 1rem;" />
                 </div>
               </li>
             </ul>
           </div>
 
-          <div class="lg:w-2/3 h-[500px]">
-            <div class="w-full h-full border-organic shadow-organic overflow-hidden">
+          <div class="col-lg-8 map-container">
+            <div class="w-100 h-100 border-organic shadow-organic overflow-hidden">
               <ClientOnly>
                 <VenueMap :venues="content.locations_section.map_venues.map(v => ({
                   id: v.id,
@@ -180,48 +113,50 @@ onMounted(async () => {
     </section>
 
     <!-- Services Section -->
-    <section class="py-20 bg-white">
-      <div class="container mx-auto px-4">
-        <div class="text-center mb-16">
-          <span class="tag-yellow mb-4 inline-block">{{ content.services_section.tag }}</span>
-          <h2 class="font-heading text-4xl md:text-6xl font-bold">
+    <section class="py-5 bg-white">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="tag-yellow mb-3 d-inline-block">{{ content.services_section.tag }}</span>
+          <h2 class="font-heading display-4 fw-bold">
             {{ content.services_section.title.line_1 }}<br/>
-            <span class="relative inline-block">
+            <span class="position-relative d-inline-block">
               {{ content.services_section.title.highlight }}
-              <span class="absolute -bottom-1 left-0 w-full h-3 bg-brand-blue -z-10 transform rotate-1"></span>
+              <span class="position-absolute bottom-0 start-0 w-100 bg-brand-blue highlight-bar"></span>
             </span> {{ content.services_section.title.line_2 }}
           </h2>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
           <div
             v-for="(service, i) in content.services_section.services"
             :key="i"
-            :class="['card-organic relative overflow-hidden group', bgColorMap[service.bg_color || 'pink'], textColorMap[service.text_color || 'white']]"
+            class="col"
           >
-            <component :is="iconMap[service.icon]" class="w-12 h-12 mb-6 transform group-hover:scale-110 transition-transform duration-300" />
-            <h3 class="font-heading text-2xl font-bold mb-4">{{ service.title }}</h3>
-            <p class="opacity-90 font-body">{{ service.description }}</p>
+            <div :class="['card-organic position-relative overflow-hidden h-100 service-card', bgColorMap[service.bg_color || 'pink'], textColorMap[service.text_color || 'white']]">
+              <component :is="iconMap[service.icon]" class="service-icon mb-4" style="width: 3rem; height: 3rem;" />
+              <h3 class="font-heading fs-3 fw-bold mb-3">{{ service.title }}</h3>
+              <p class="opacity-75 font-body">{{ service.description }}</p>
 
-            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-black/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+              <div class="service-circle position-absolute rounded-circle"></div>
 
-            <button class="mt-6 flex items-center gap-2 font-bold group-hover:gap-4 transition-all">
-              {{ content.services_section.learn_more_button }} <LucideArrowRight class="w-4 h-4" />
-            </button>
+              <button class="mt-4 d-flex align-items-center gap-2 fw-bold border-0 bg-transparent service-btn">
+                {{ content.services_section.learn_more_button }} <LucideArrowRight style="width: 1rem; height: 1rem;" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Partners Section -->
-    <section class="py-16 bg-brand-gray border-y-2 border-black">
-      <div class="container mx-auto px-4">
-        <p class="text-center font-heading text-xl mb-8">
+    <section class="py-5 bg-brand-gray border-top border-bottom border-dark border-2">
+      <div class="container">
+        <p class="text-center font-heading fs-4 mb-4">
           {{ content.partners_section.intro_text }}
         </p>
-        <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-          <div v-for="(partner, i) in content.partners_section.partners" :key="i" class="text-3xl font-heading font-bold text-gray-400 hover:text-brand-dark transition-colors cursor-pointer">
-            <img v-if="partner.logo_url" :src="partner.logo_url" :alt="partner.name" class="h-12" />
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 gap-md-5">
+          <div v-for="(partner, i) in content.partners_section.partners" :key="i" class="fs-2 font-heading fw-bold text-secondary partner-item">
+            <img v-if="partner.logo_url" :src="partner.logo_url" :alt="partner.name" style="height: 3rem;" />
             <span v-else>{{ partner.name }}</span>
           </div>
         </div>
@@ -229,18 +164,18 @@ onMounted(async () => {
     </section>
 
     <!-- CTA Section -->
-    <section class="py-20 bg-brand-pink text-white text-center relative overflow-hidden">
-      <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 left-1/4 w-80 h-80 border-2 border-white rounded-full"></div>
-        <div class="absolute bottom-0 right-1/4 w-60 h-60 border-2 border-white rounded-full"></div>
+    <section class="py-5 bg-brand-pink text-white text-center position-relative overflow-hidden">
+      <div class="position-absolute top-0 start-0 end-0 bottom-0 opacity-10">
+        <div class="position-absolute top-0 cta-circle-1 border border-2 border-white rounded-circle"></div>
+        <div class="position-absolute bottom-0 cta-circle-2 border border-2 border-white rounded-circle"></div>
       </div>
 
-      <div class="container mx-auto px-4 relative z-10">
-        <h2 class="font-heading text-4xl md:text-6xl font-bold mb-6">{{ content.cta_section.title }}</h2>
-        <p class="text-white/80 max-w-2xl mx-auto mb-10 text-lg font-body">
+      <div class="container position-relative" style="z-index: 10;">
+        <h2 class="font-heading display-4 fw-bold mb-4">{{ content.cta_section.title }}</h2>
+        <p class="text-white-50 mx-auto mb-5 fs-5 font-body" style="max-width: 42rem;">
           {{ content.cta_section.description }}
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
           <BaseButton :to="content.cta_section.cta_primary.link" variant="lime" size="lg">{{ content.cta_section.cta_primary.text }}</BaseButton>
           <BaseButton :to="content.cta_section.cta_secondary.link" variant="secondary" size="lg">{{ content.cta_section.cta_secondary.text }}</BaseButton>
         </div>
@@ -248,15 +183,17 @@ onMounted(async () => {
     </section>
 
     <!-- Food Gallery Section -->
-    <section class="py-20 bg-brand-dark">
-      <div class="container mx-auto px-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div v-for="(image, i) in content.gallery_section.images" :key="i" class="border-organic overflow-hidden aspect-square">
-            <NuxtImg
-              :src="image.src"
-              class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-              :alt="image.alt"
-            />
+    <section class="py-5 bg-brand-dark">
+      <div class="container">
+        <div class="row row-cols-2 row-cols-md-4 g-3">
+          <div v-for="(image, i) in content.gallery_section.images" :key="i" class="col">
+            <div class="border-organic overflow-hidden gallery-item">
+              <NuxtImg
+                :src="image.src"
+                class="w-100 h-100 object-fit-cover gallery-img"
+                :alt="image.alt"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -266,7 +203,104 @@ onMounted(async () => {
 
 <style scoped>
 .tag-pink {
-  @apply inline-flex items-center px-3 py-1 text-xs font-bold border-2 border-black bg-brand-pink text-white;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 2px solid black;
+  background-color: var(--brand-pink, #FF4D6D);
+  color: white;
   border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
+}
+
+.min-vh-90 {
+  min-height: 90vh;
+}
+
+.highlight-bar {
+  height: 0.75rem;
+  z-index: -1;
+}
+
+.location-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.location-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.location-item:hover {
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+}
+
+.map-container {
+  height: 500px;
+}
+
+.service-card:hover .service-icon {
+  transform: scale(1.1);
+}
+
+.service-icon {
+  transition: transform 0.3s ease;
+}
+
+.service-circle {
+  width: 8rem;
+  height: 8rem;
+  background: rgba(0, 0, 0, 0.1);
+  bottom: -2.5rem;
+  right: -2.5rem;
+  transition: transform 0.5s ease;
+}
+
+.service-card:hover .service-circle {
+  transform: scale(1.5);
+}
+
+.service-btn {
+  color: inherit;
+  transition: gap 0.3s ease;
+}
+
+.service-card:hover .service-btn {
+  gap: 1rem !important;
+}
+
+.partner-item {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.partner-item:hover {
+  color: var(--brand-dark, #0d0a00) !important;
+}
+
+.cta-circle-1 {
+  width: 20rem;
+  height: 20rem;
+  left: 25%;
+}
+
+.cta-circle-2 {
+  width: 15rem;
+  height: 15rem;
+  right: 25%;
+}
+
+.gallery-item {
+  aspect-ratio: 1;
+}
+
+.gallery-img {
+  transition: transform 0.5s ease;
+}
+
+.gallery-img:hover {
+  transform: scale(1.1);
 }
 </style>

@@ -89,11 +89,11 @@ watch(() => props.selectedVenue, (newId) => {
 </script>
 
 <template>
-  <div class="relative w-full h-full">
-    <div ref="mapContainer" class="w-full h-full rounded-3xl overflow-hidden"></div>
-    
+  <div class="position-relative w-100 h-100">
+    <div ref="mapContainer" class="w-100 h-100 rounded-4 overflow-hidden"></div>
+
     <!-- Map Overlay Gradient -->
-    <div class="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
+    <div class="position-absolute top-0 start-0 end-0 bottom-0 pe-none map-overlay rounded-4"></div>
   </div>
 </template>
 
@@ -160,5 +160,9 @@ watch(() => props.selectedVenue, (newId) => {
 
 .leaflet-popup-tip {
   background: white;
+}
+
+.map-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.2), transparent);
 }
 </style>

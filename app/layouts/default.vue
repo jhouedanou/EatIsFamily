@@ -3,10 +3,10 @@
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen bg-brand-gray overflow-x-hidden">
+  <div class="d-flex flex-column min-vh-100 bg-brand-gray overflow-hidden">
     <LayoutHeader />
-    
-    <main class="flex-grow pt-20">
+
+    <main class="flex-grow-1 pt-0">
       <slot />
     </main>
 

@@ -20,9 +20,14 @@
         <nav class="nav-left desktop-only">
           <NuxtLink to="/careers" class="nav-link">{{ content.nav_links.careers }}</NuxtLink>
           <NuxtLink to="/blog" class="nav-link">{{ content.nav_links.blogs }}</NuxtLink>
-          <OrganicButton variant="primary" @click="openContactModal">
-            {{ content.nav_links.get_in_touch }}
-          </OrganicButton>
+          <div class="contact-button-wrapper" @click="openContactModal">
+            <span class="contact-label">Get in touch</span>
+            <NuxtImg
+              src="/images/Button.svg"
+              alt="Get in touch"
+              class="contact-image"
+            />
+          </div>
         </nav>
 
         <!-- Mobile Menu Toggle -->
@@ -56,27 +61,31 @@ const closeContactModal = () => {
 
 <style scoped lang="scss">
 .header {
-  padding: 1.5rem 0;
-  position: sticky;
+  padding: 0;
+  position: absolute;
   top: 0;
   z-index: 1000;
+  left:0;
+  right:0;
 }
 
 .header-grid {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding:1em;
+  height:103px;
+  background:url(images/headerBg.png) no-repeat center;
+  background-size: contain;
     a{
-    font-family: "Recoleta",sans-serif;
+      font-family: "Recoleta",sans-serif;
       font-size: 18px;
-  font-weight: 600;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: left;
-  color: #0d0a00;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: left;
+      color: #0d0a00;
   }
 }
 
@@ -105,6 +114,31 @@ const closeContactModal = () => {
   color: var(--color-primary-blue);
 }
 
+.contact-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.contact-button-wrapper:hover {
+  transform: scale(1.05);
+  opacity: 0.8;
+}
+
+.contact-label {
+  font-weight: 500;
+  color: var(--color-text-dark);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+}
+
+.contact-image {
+  height: 68px;
+}
+
 .logo {
   font-family: var(--font-heading);
   font-size: 2rem;
@@ -117,7 +151,18 @@ const closeContactModal = () => {
 .mobile-toggle {
   display: none;
 }
-
+.contact-button-wrapper{
+  position: relative;
+  display: flex;align-items:center;justify-content: center;flex-direction: column;
+  span{
+    font-family: "Recoleta",sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color:white;
+      position:absolute;
+      
+  }
+}
 @media (max-width: 968px) {
   .header-grid {
     display: flex;

@@ -12,6 +12,19 @@
 @import 'bootstrap/scss/utilities';
 @import 'bootstrap/scss/utilities/api';
 
+// CSS Custom Properties for brand colors
+:root {
+  --brand-pink: #{$brand-pink};
+  --brand-lime: #{$brand-lime};
+  --brand-yellow: #{$brand-yellow};
+  --brand-blue: #{$brand-blue};
+  --brand-purple: #{$brand-purple};
+  --brand-dark: #{$brand-dark};
+  --brand-gray: #{$brand-gray};
+  --font-heading: #{$font-family-heading};
+  --font-body: #{$font-family-body};
+}
+
 // Custom Font Face
 @font-face {
   font-family: 'Recoleta';
@@ -391,4 +404,36 @@ body {
     18% 86%, 15% 82%, 12% 85%, 8% 81%, 5% 84%, 
     2% 80%, 0% 83%
   );
+}
+
+.blue {
+    background-color: #93cbff;
+}
+body {
+  p, span{
+white-space: pre-line; /* conserve retours à la ligne */
+}}
+.blue {
+background-image:url(images/heroBg.svg);
+background-repeat: no-repeat;
+background-size:auto;
+background-position: 100% 102%;
+&::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(147, 203, 255, 0.5); /* Couleur bleue avec opacité */
+    pointer-events: none; /* Permet de cliquer à travers l'overlay */
+
+}
+}
+#hero{
+    background-color: #93cbff;
+    p {
+        white-space: pre-line; /* conserve retours à la ligne */
+        line-height: 1.25em;
+    }
 }

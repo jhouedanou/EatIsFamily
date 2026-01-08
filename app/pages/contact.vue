@@ -27,63 +27,63 @@ const submitForm = () => {
 </script>
 
 <template>
-  <div v-if="content" class="min-h-screen bg-brand-lime">
+  <div v-if="content" class="min-vh-100 bg-brand-lime">
     <!-- Close Button (for modal context) -->
-    <button class="fixed top-6 right-6 z-50 w-12 h-12 bg-brand-yellow rounded-full flex items-center justify-center border-2 border-black hover:scale-110 transition-transform shadow-organic">
-      <LucideX class="w-6 h-6" />
+    <button class="position-fixed top-0 end-0 mt-4 me-4 close-btn rounded-circle bg-brand-yellow d-flex align-items-center justify-content-center border border-2 border-dark shadow-organic">
+      <LucideX style="width: 1.5rem; height: 1.5rem;" />
     </button>
 
     <!-- Decorative Arrow -->
-    <div class="absolute top-20 left-8 hidden lg:block">
+    <div class="position-absolute decorative-arrow d-none d-lg-block">
       <svg width="80" height="80" viewBox="0 0 80 80" fill="none" class="animate-wiggle">
         <path d="M20 10 C 30 30, 50 40, 70 60" stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round"/>
         <path d="M60 55 L 70 60 L 65 50" stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
 
-    <div class="container mx-auto px-4 py-12 lg:py-20">
+    <div class="container py-5 py-lg-5">
       <!-- Hero Section -->
-      <div class="flex flex-col lg:flex-row items-start justify-between gap-12 mb-16">
+      <div class="d-flex flex-column flex-lg-row align-items-start justify-content-between gap-5 mb-5">
         <!-- Left: Heading -->
-        <div class="lg:w-1/2">
-          <h1 class="font-heading text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] text-brand-dark">
-            {{ content.hero_section.title.line_1 }} <span class="relative inline-block">
+        <div class="col-lg-6">
+          <h1 class="font-heading display-2 fw-bold lh-1 text-brand-dark">
+            {{ content.hero_section.title.line_1 }} <span class="position-relative d-inline-block">
               {{ content.hero_section.title.line_1_highlight }}
-              <span class="absolute -bottom-2 left-0 w-full h-4 bg-brand-blue/60 -z-10 transform -rotate-1"></span>
+              <span class="position-absolute bottom-0 start-0 w-100 bg-brand-blue highlight-bar opacity-75"></span>
             </span> {{ content.hero_section.title.line_2 }}<br/>
-            {{ content.hero_section.title.line_3 }} <span class="italic">{{ content.hero_section.title.line_3_highlight }}</span>
+            {{ content.hero_section.title.line_3 }} <span class="fst-italic">{{ content.hero_section.title.line_3_highlight }}</span>
           </h1>
 
-          <p class="mt-8 text-lg text-brand-dark/80 max-w-md font-body">
+          <p class="mt-4 fs-5 text-brand-dark opacity-75 font-body" style="max-width: 28rem;">
             {{ content.hero_section.description }}
           </p>
         </div>
 
         <!-- Right: Image in Blob Shape -->
-        <div class="lg:w-1/2 flex justify-center lg:justify-end">
-          <div class="relative w-72 h-72 md:w-80 md:h-80 lg:w-[450px] lg:h-[450px]">
+        <div class="col-lg-6 d-flex justify-content-center justify-content-lg-end">
+          <div class="position-relative blob-container">
             <!-- The actual blob shaped image -->
-            <div class="absolute inset-0 blob-mask overflow-hidden border-4 border-black group">
+            <div class="position-absolute top-0 start-0 end-0 bottom-0 blob-mask overflow-hidden border border-4 border-dark image-group">
               <NuxtImg
                 :src="content.hero_section.image.src"
-                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                class="w-100 h-100 object-fit-cover blob-image"
                 :alt="content.hero_section.image.alt"
               />
             </div>
 
             <!-- Floating accent circles -->
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-yellow rounded-full -z-10 animate-float"></div>
-            <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-brand-blue rounded-full -z-10 animate-float" style="animation-delay: 1.5s"></div>
+            <div class="position-absolute floating-circle-1 bg-brand-yellow rounded-circle animate-float"></div>
+            <div class="position-absolute floating-circle-2 bg-brand-blue rounded-circle animate-float" style="animation-delay: 1.5s"></div>
           </div>
         </div>
       </div>
 
       <!-- Form Section -->
-      <div class="dashed-organic p-8 lg:p-12 bg-brand-lime/30">
-        <form @submit.prevent="submitForm" class="space-y-6">
+      <div class="dashed-organic p-4 p-lg-5 form-container">
+        <form @submit.prevent="submitForm" class="d-flex flex-column gap-4">
           <!-- Row 1: Name & Email -->
-          <div class="grid md:grid-cols-2 gap-6">
-            <div>
+          <div class="row g-4">
+            <div class="col-md-6">
               <input
                 v-model="form.name"
                 type="text"
@@ -91,7 +91,7 @@ const submitForm = () => {
                 class="input-organic"
               />
             </div>
-            <div>
+            <div class="col-md-6">
               <input
                 v-model="form.email"
                 type="email"
@@ -102,8 +102,8 @@ const submitForm = () => {
           </div>
 
           <!-- Row 2: Event Type & Location -->
-          <div class="grid md:grid-cols-2 gap-6">
-            <div>
+          <div class="row g-4">
+            <div class="col-md-6">
               <input
                 v-model="form.eventType"
                 type="text"
@@ -111,7 +111,7 @@ const submitForm = () => {
                 class="input-organic"
               />
             </div>
-            <div>
+            <div class="col-md-6">
               <input
                 v-model="form.location"
                 type="text"
@@ -122,8 +122,8 @@ const submitForm = () => {
           </div>
 
           <!-- Row 3: Date & Guests -->
-          <div class="grid md:grid-cols-2 gap-6">
-            <div>
+          <div class="row g-4">
+            <div class="col-md-6">
               <input
                 v-model="form.date"
                 type="text"
@@ -131,7 +131,7 @@ const submitForm = () => {
                 class="input-organic"
               />
             </div>
-            <div>
+            <div class="col-md-6">
               <input
                 v-model="form.guests"
                 type="text"
@@ -152,8 +152,8 @@ const submitForm = () => {
           </div>
 
           <!-- Submit Button -->
-          <div class="pt-4">
-            <button type="submit" class="btn-primary text-lg px-10 py-4">
+          <div class="pt-3">
+            <button type="submit" class="btn-primary fs-5 px-5 py-3">
               {{ content.form.submit_button }}
             </button>
           </div>
@@ -162,3 +162,74 @@ const submitForm = () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.close-btn {
+  width: 3rem;
+  height: 3rem;
+  z-index: 50;
+  transition: transform 0.3s ease;
+}
+
+.close-btn:hover {
+  transform: scale(1.1);
+}
+
+.decorative-arrow {
+  top: 5rem;
+  left: 2rem;
+}
+
+.highlight-bar {
+  height: 1rem;
+  z-index: -1;
+  transform: rotate(-1deg);
+}
+
+.blob-container {
+  width: 18rem;
+  height: 18rem;
+}
+
+@media (min-width: 768px) {
+  .blob-container {
+    width: 20rem;
+    height: 20rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .blob-container {
+    width: 450px;
+    height: 450px;
+  }
+}
+
+.blob-image {
+  transition: transform 0.7s ease;
+}
+
+.image-group:hover .blob-image {
+  transform: scale(1.1);
+}
+
+.floating-circle-1 {
+  width: 8rem;
+  height: 8rem;
+  top: -2.5rem;
+  right: -2.5rem;
+  z-index: -1;
+}
+
+.floating-circle-2 {
+  width: 6rem;
+  height: 6rem;
+  bottom: -2.5rem;
+  left: -2.5rem;
+  z-index: -1;
+}
+
+.form-container {
+  background-color: rgba(200, 245, 96, 0.3);
+}
+</style>

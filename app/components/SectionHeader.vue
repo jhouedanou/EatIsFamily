@@ -16,15 +16,15 @@ defineProps({
 </script>
 
 <template>
-  <div :class="['mb-12', centered ? 'text-center' : '']">
-    <h2 class="font-serif text-4xl md:text-5xl font-bold mb-4 relative inline-block">
+  <div :class="['mb-5', centered ? 'text-center' : '']">
+    <h2 class="font-heading display-5 fw-bold mb-3 position-relative d-inline-block">
       {{ title }}
       <!-- Playful underline decoration could go here -->
-      <svg v-if="centered" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-3 text-brand-mint z-[-1]" viewBox="0 0 100 10" preserveAspectRatio="none">
+      <svg v-if="centered" class="position-absolute bottom-0 start-50 translate-middle-x text-brand-mint" style="width: 6rem; height: 0.75rem; z-index: -1;" viewBox="0 0 100 10" preserveAspectRatio="none">
          <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="8" fill="none" />
       </svg>
     </h2>
-    <p v-if="subtitle" class="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mt-2">
+    <p v-if="subtitle" class="text-muted fs-5 mx-auto mt-2" style="max-width: 42rem;">
       {{ subtitle }}
     </p>
   </div>

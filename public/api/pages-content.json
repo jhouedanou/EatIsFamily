@@ -1,10 +1,11 @@
 {
   "homepage": {
     "hero_section": {
+      "bg":"images/unsplash_6vfYbDwOuMo.jpg",
       "tag": "NEW LOCATIONS",
       "title": {
-        "line_1": "Bursting",
-        "line_2_prefix": "With",
+        "line_1": "Feeding\nExperiences.\nServing\nMoments",
+        "line_2_prefix": "Exe",
         "line_2_highlight": "Flavour.",
         "line_3": "Built With",
         "line_4": "Passion."
