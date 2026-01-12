@@ -448,10 +448,15 @@ background-position: 100% 102%;
   background-size: contain;
   background-position: right 45vh;
 }
-
+.txtWrapper {
+  position: relative;
+  z-index: 1;
+}
 #heroTitle {
   position: relative;
+  z-index: 21;
   &::before{
+    z-index:-1;
     position: absolute;
     content:"";
     background:url(images/decoHeaderBg.svg);
@@ -463,5 +468,16 @@ background-position: 100% 102%;
     background-repeat: no-repeat;
     top:15vh;
     left:-1vw;
+  }
+  p{
+  font-family: "Recoleta";
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.44;
+  letter-spacing: normal;
+  text-align: left;
+  color: #161616;
   }
 }

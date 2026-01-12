@@ -53,11 +53,16 @@ onMounted(async () => {
         <!-- right: Text -->
           <div id="blusy" class="col-lg-6 col-md-6 p-4 d-flex flex-wrap
           flex-column  justify-content-center align-items-start min-vh-90">
-            <h1 id="heroTitle" ref="heroTitle" class="font-heading display-1 fw-bold lh-1 text-brand-dark m-0">
-              <p class="position-relative d-inline-block m-0">
+            
+              <div class="txtwrapper">
+                <h1 id="heroTitle" ref="heroTitle" class="font-heading display-1 fw-bold lh-1 text-brand-dark m-0">
                 {{ content.hero_section.title.line_1 }}
-              </p>
             </h1>
+              <p class="position-relative d-inline-block m-0">
+                {{ content.hero_section.title.line_2 }}
+              </p>
+              </div>
+          
             <NuxtLink to="/contact" aria-label="Contactez-nous" class="d-inline-block mt-4 m-0">
               <NuxtImg id="btnExplore" src="/images/btnExplore.svg" alt="Contact" />
             </NuxtLink>

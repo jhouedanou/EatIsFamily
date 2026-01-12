@@ -33,7 +33,7 @@ onMounted(async () => {
 })
 
 useHead(() => ({
-  title: content.value?.seo?.title || 'Activities - Eat Is Friday',
+  title: content.value?.seo?.title || 'Activities - Eat Is Family',
   meta: [
     { name: 'description', content: content.value?.seo?.meta_description || '' }
   ]

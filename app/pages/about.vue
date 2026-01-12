@@ -64,9 +64,9 @@ onMounted(async () => {
 })
 
 useHead(() => ({
-  title: pageContent.value?.seo?.title || 'About Us - Eat Is Friday',
+  title: pageContent.value?.seo?.title || 'About Us - Eat Is Family',
   meta: [
-    { name: 'description', content: pageContent.value?.seo?.meta_description || 'Learn about Eat Is Friday, our mission, vision, and the team behind our culinary experiences.' }
+    { name: 'description', content: pageContent.value?.seo?.meta_description || 'Learn about Eat Is Family, our mission, vision, and the team behind our culinary experiences.' }
   ]
 }))
 </script>

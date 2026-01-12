@@ -5,10 +5,7 @@
       "tag": "NEW LOCATIONS",
       "title": {
         "line_1": "Feeding\nExperiences.\nServing\nMoments",
-        "line_2_prefix": "Exe",
-        "line_2_highlight": "Flavour.",
-        "line_3": "Built With",
-        "line_4": "Passion."
+        "line_2": "From intimate gatherings to grand celebrations, we craft\nunforgettable culinary experiences that bring people\n together and create lasting memories."
       },
       "description": "We don't just serve food — we create experiences. From the bustling concessions at your favorite stadium to the elegant spreads at VIP events, we craft culinary moments that bring people together.",
       "cta_primary": {
@@ -292,7 +289,7 @@
     },
     "loading_text": "Loading events...",
     "seo": {
-      "title": "Events - Eat Is Friday",
+      "title": "Events - Eat Is Family",
       "meta_description": "Join our food festivals, tastings, and culinary celebrations. Discover upcoming events and book your spot."
     }
   },
@@ -447,7 +444,7 @@
     },
     "loading_text": "Loading activities...",
     "seo": {
-      "title": "Activities - Eat Is Friday",
+      "title": "Activities - Eat Is Family",
       "meta_description": "Explore our culinary workshops, cooking classes, and food experiences. Learn from expert chefs and discover new skills."
     }
   },
@@ -458,7 +455,7 @@
     },
     "loading_text": "Loading jobs...",
     "seo": {
-      "title": "Job Opportunities - Eat Is Friday",
+      "title": "Job Opportunities - Eat Is Family",
       "meta_description": "Explore career opportunities in the food industry. Join our team and build your culinary career."
     }
   },
@@ -468,8 +465,8 @@
       "team": "Meet Our Team"
     },
     "seo": {
-      "title": "About Us - Eat Is Friday",
-      "meta_description": "Learn about Eat Is Friday, our mission, vision, and the team behind our culinary experiences."
+      "title": "About Us - Eat Is Family",
+      "meta_description": "Learn about Eat Is Family, our mission, vision, and the team behind our culinary experiences."
     }
   },
   "components": {
@@ -524,7 +521,7 @@
       "back_to_top": "Back to top"
     },
     "footer_alt": {
-      "brand_title": "Eat Is Friday",
+      "brand_title": "Eat Is Family",
       "quick_links_title": "Quick Links",
       "contact_title": "Contact",
       "follow_us_title": "Follow Us",

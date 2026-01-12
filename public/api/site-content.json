@@ -1,12 +1,12 @@
 {
     "site": {
-        "name": "Eat Is Friday",
+        "name": "Eat Is Family",
         "tagline": "Celebrate Food, Every Friday and Beyond",
         "description": "Your destination for culinary experiences, food events, and gastronomic adventures."
     },
     "home": {
         "hero": {
-            "title": "Welcome to Eat Is Friday",
+            "title": "Welcome to Eat Is Family",
             "subtitle": "Where Every Day Feels Like Friday",
             "description": "Discover amazing culinary experiences, join exciting food events, and explore career opportunities in the food industry.",
             "cta_primary": {
@@ -70,13 +70,13 @@
     },
     "about": {
         "hero": {
-            "title": "About Eat Is Friday",
+            "title": "About Eat Is Family",
             "subtitle": "Our Story",
             "image": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=1200"
         },
         "mission": {
             "title": "Our Mission",
-            "content": "At Eat Is Friday, we believe that food brings people together. Our mission is to create memorable culinary experiences that celebrate the joy of cooking, eating, and sharing. We connect food enthusiasts with expert chefs, organize exciting events, and foster a community passionate about gastronomy."
+            "content": "At Eat Is Family, we believe that food brings people together. Our mission is to create memorable culinary experiences that celebrate the joy of cooking, eating, and sharing. We connect food enthusiasts with expert chefs, organize exciting events, and foster a community passionate about gastronomy."
         },
         "vision": {
             "title": "Our Vision",
@@ -145,7 +145,7 @@
         }
     },
     "footer": {
-        "about_text": "Eat Is Friday is your destination for culinary experiences, food events, and gastronomic adventures. Join us in celebrating the joy of food!",
+        "about_text": "Eat Is Family is your destination for culinary experiences, food events, and gastronomic adventures. Join us in celebrating the joy of food!",
         "quick_links": [
             {
                 "text": "About Us",
@@ -186,6 +186,6 @@
                 "link": "/cookies"
             }
         ],
-        "copyright": "© 2025 Eat Is Friday. All rights reserved."
+        "copyright": "© 2025 Eat Is Family. All rights reserved."
     }
 }

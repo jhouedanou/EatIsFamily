@@ -3,7 +3,7 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-section">
-          <h3>Eat Is Friday</h3>
+          <h3>Eat Is Family</h3>
           <p v-if="content">{{ content.footer.about_text }}</p>
         </div>
         

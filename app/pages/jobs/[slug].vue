@@ -68,7 +68,7 @@ onMounted(async () => {
 })
 
 useHead(() => ({
-  title: job.value ? `${job.value.title.rendered} - Eat Is Friday` : 'Job Details',
+  title: job.value ? `${job.value.title.rendered} - Eat Is Family` : 'Job Details',
   meta: [
     { name: 'description', content: job.value?.excerpt.rendered || '' }
   ]
