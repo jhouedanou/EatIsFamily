@@ -204,7 +204,17 @@
         "logo":"images/LOGO.svg",
         "alt":"Golden Coast Logo"
       }
-     ]
+     ],
+     "homepageCTA":{
+      "title":"Ready to Make an Impact?",
+      "image":"images/image4.jpg",
+      "description":"Explore all available positions and join a team that's redefining event\nfood experiences across France",
+      "link":"/careers",
+      "button":"images/btnGetInouchConsult.svg",
+      "additionalText":"Your attention to detail? Entrust it to us, that's our added value!\n\nAs an event caterer , we offer a personalized, homemade, seasonal and balanced catering service for your technical teams, the general public and the guests at your reception.\n\nOpt for stress free restaurant management, and your fingers will tell you: \"Mmm, that's delicious...\"",
+      "button2":"images/btnContactUS.svg",
+      "link2":"/contact"
+    }
      
   },
   "careers": {
