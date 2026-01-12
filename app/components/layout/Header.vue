@@ -21,9 +21,9 @@
           <NuxtLink to="/careers" class="nav-link">{{ content.nav_links.careers }}</NuxtLink>
           <NuxtLink to="/blog" class="nav-link">{{ content.nav_links.blogs }}</NuxtLink>
           <div class="contact-button-wrapper" @click="openContactModal">
-            <span class="contact-label">Get in touch</span>
+            <!-- <span class="contact-label">Get in touch</span> -->
             <NuxtImg
-              src="/images/Button.svg"
+              src="/images/btnGetInTouch.svg"
               alt="Get in touch"
               class="contact-image"
             />

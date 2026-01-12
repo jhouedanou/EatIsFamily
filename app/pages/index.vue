@@ -44,27 +44,23 @@ onMounted(async () => {
 <template>
   <div class="overflow-hidden" v-if="content">
     <!-- Hero Section -->
-    <section id="hero" class="container-fluid d-flex align-items-center min-vh-90 px-0 w-100">
+    <section id="hero" class="container-fluid d-flex align-items-center v-90 px-0 w-100">
        <div class="d-flex flex-row row w-100">
             <!-- image de la nourriture -->
       <div id="marr" class="col-lg-6 col-md-6 p-0 min-vh-100" :style="{ position: 'relative', backgroundImage: `url('${content.hero_section.bg}')`, backgroundSize: 'cover', backgroundPosition: 'center' }">
         <span></span>
        </div>
         <!-- right: Text -->
-          <div id="blue" class="col-lg-6 col-md-6 blue flex-row p-0 d-flex align-items-center">
-            <h1 ref="heroTitle" class="font-heading display-1 fw-bold lh-1 text-brand-dark mb-4 p-4">
-              <p class="position-relative d-inline-block">
+          <div id="blusy" class="col-lg-6 col-md-6 p-4 d-flex flex-wrap
+          flex-column  justify-content-center align-items-start min-vh-90">
+            <h1 id="heroTitle" ref="heroTitle" class="font-heading display-1 fw-bold lh-1 text-brand-dark m-0">
+              <p class="position-relative d-inline-block m-0">
                 {{ content.hero_section.title.line_1 }}
               </p>
             </h1>
-             <div class="contact-button-wrapper" @click="">
-            <span class="contact-label">Explore interactive map</span>
-            <NuxtImg
-              src="/images/btnXL.svg"
-              alt="Get in touch"
-              class="contact-image"
-            />
-          </div>
+            <NuxtLink to="/contact" aria-label="Contactez-nous" class="d-inline-block mt-4 m-0">
+              <NuxtImg id="btnExplore" src="/images/btnExplore.svg" alt="Contact" />
+            </NuxtLink>
           </div>
         </div>
     </section>

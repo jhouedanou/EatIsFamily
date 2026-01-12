@@ -437,3 +437,31 @@ background-position: 100% 102%;
         line-height: 1.25em;
     }
 }
+#btnExplore {
+    width: 299px;
+  height:70px;
+}
+
+#blusy {
+
+  background: url(images/heroBg.svg) no-repeat;
+  background-size: contain;
+  background-position: right 45vh;
+}
+
+#heroTitle {
+  position: relative;
+  &::before{
+    position: absolute;
+    content:"";
+    background:url(images/decoHeaderBg.svg);
+    background-size:contain;
+    width:100vw;
+    max-width:400px;
+    height:100vh;
+    max-height: 80px;
+    background-repeat: no-repeat;
+    top:15vh;
+    left:-1vw;
+  }
+}
