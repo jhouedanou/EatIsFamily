@@ -448,10 +448,7 @@ background-position: 100% 102%;
   background-size: contain;
   background-position: right 45vh;
 }
-.txtWrapper {
-  position: relative;
-  z-index: 1;
-}
+
 #heroTitle {
   position: relative;
   z-index: 21;
@@ -469,7 +466,13 @@ background-position: 100% 102%;
     top:15vh;
     left:-1vw;
   }
-  p{
+
+}
+
+.txtWrapper {
+  position: relative;
+  z-index: 1;
+    p{
   font-family: "Recoleta";
   font-size: 18px;
   font-weight: normal;
@@ -480,4 +483,18 @@ background-position: 100% 102%;
   text-align: left;
   color: #161616;
   }
+}
+.recoletaTitle {
+  font-family: "Recoleta";
+  font-size: 48px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: left;
+  color: #161616;
+}
+.recoleta{
+  font-family: "Recoleta" !important;
 }
