@@ -36,6 +36,9 @@
       },
       "floating_badge": "Open for Events"
     },
+    "intro_section":{
+"texte":"<strong>We Are Eat Is Family!</strong>&nbsp;We create&nbsp;<span>food experiences</span>&nbsp;where people gather, celebrate, and connect. From kitchen operations to service delivery, our teams bring passion, precision, and genuine hospitality to every venue we support."
+    },
     "locations_section": {
       "tag": "LOCATIONS",
       "title": {

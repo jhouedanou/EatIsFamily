@@ -6,9 +6,9 @@
     },
     "home": {
         "hero": {
-            "title": "Welcome to Eat Is Family",
+            "title": "We Are Eat Is Family",
             "subtitle": "Where Every Day Feels Like Friday",
-            "description": "Discover amazing culinary experiences, join exciting food events, and explore career opportunities in the food industry.",
+            "description": "We Are Eat Is Family! We create <span>food experiences</span> where people gather, celebrate, and connect. From kitchen operations to service delivery, our teams bring passion, precision, and genuine hospitality to every venue we support.",
             "cta_primary": {
                 "text": "Explore Activities",
                 "link": "/apply-activities"

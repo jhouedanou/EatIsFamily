@@ -69,7 +69,12 @@ onMounted(async () => {
           </div>
         </div>
     </section>
+<section id="presentationEatIsFamily" class="py-5 bg-white">
+<div class="container">
+  <div class="kemiseba" v-html="content.intro_section.texte"></div>
+</div>
 
+</section>
     <!-- Map Preview Section -->
     <section class="py-5 bg-brand-gray overflow-hidden">
       <div class="container">

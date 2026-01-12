@@ -498,3 +498,26 @@ background-position: 100% 102%;
 .recoleta{
   font-family: "Recoleta" !important;
 }
+.kemiseba {
+  max-width: 910px;
+  flex-wrap:wrap;
+  flex-direction: row;
+  text-align: center;
+  margin:0 auto;
+  display: flex;
+  align-items:center;
+  justify-content: center;
+  font-family: "Recoleta";
+  font-size: 34px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.59;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000000;
+  strong{
+    font-weight: normal;
+    color: #f9375b;
+  }
+} 
