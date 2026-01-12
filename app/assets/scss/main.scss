@@ -533,7 +533,7 @@ body {
 }
 
 #blusy {
-  background: url(images/heroBg.svg) no-repeat;
+  background: url(/images/heroBg.svg) no-repeat;
   background-size: contain;
   background-position: right 45vh;
 }
@@ -547,7 +547,7 @@ body {
     z-index: -1;
     position: absolute;
     content: "";
-    background: url(images/decoHeaderBg.svg);
+    background: url(/images/decoHeaderBg.svg);
     background-size: contain;
     width: 100vw;
     max-width: 400px;
@@ -594,7 +594,7 @@ body {
   align-items: center;
   justify-content: center;
   background-color: #ffffff;
-  background: url(images/slide1.svg) no-repeat center center;
+  background: url(/images/slide1.svg) no-repeat center center;
   -webkit-background-size: contain;
   -moz-background-size: contain;
   -o-background-size: contain;
@@ -725,7 +725,7 @@ body {
       z-index: -1;
       position: absolute;
       content: "";
-      background: url(images/decoHeaderBg.svg);
+      background: url(/images/decoHeaderBg.svg);
       background-size: contain;
       width: 100vw;
       max-width: 400px;

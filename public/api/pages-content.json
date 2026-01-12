@@ -1,12 +1,12 @@
 {
   "homepage": {
     "hero_section": {
-      "bg":"images/unsplash_6vfYbDwOuMo.jpg",
+      "bg": "images/unsplash_6vfYbDwOuMo.jpg",
       "tag": "NEW LOCATIONS",
       "title": {
         "line_1": "Feeding\nExperiences.\n",
         "line_2": "Serving\nMoments",
-           "line_3": "From intimate gatherings to grand celebrations, we craft\nunforgettable culinary experiences that bring people\n together and create lasting memories."
+        "line_3": "From intimate gatherings to grand celebrations, we craft\nunforgettable culinary experiences that bring people\n together and create lasting memories."
       },
       "description": "We don't just serve food — we create experiences. From the bustling concessions at your favorite stadium to the elegant spreads at VIP events, we craft culinary moments that bring people together.",
       "cta_primary": {
@@ -37,8 +37,8 @@
       },
       "floating_badge": "Open for Events"
     },
-    "intro_section":{
-"texte":"<strong>We Are Eat Is Family!</strong>&nbsp;We create&nbsp;<span>food experiences</span>&nbsp;where people gather, celebrate, and connect. From kitchen operations to service delivery, our teams bring passion, precision, and genuine hospitality to every venue we support."
+    "intro_section": {
+      "texte": "<strong>We Are Eat Is Family!</strong>&nbsp;We create&nbsp;<span>food experiences</span>&nbsp;where people gather, celebrate, and connect. From kitchen operations to service delivery, our teams bring passion, precision, and genuine hospitality to every venue we support."
     },
     "locations_section": {
       "tag": "LOCATIONS",
@@ -49,10 +49,22 @@
       "description": "From Paris to Marseille, we bring exceptional culinary experiences to the biggest venues in France. Discover our presence in your city.",
       "jobs_suffix": "jobs",
       "locations": [
-        { "name": "Paris", "count": 12 },
-        { "name": "Lyon", "count": 8 },
-        { "name": "Marseille", "count": 6 },
-        { "name": "Bordeaux", "count": 4 }
+        {
+          "name": "Paris",
+          "count": 12
+        },
+        {
+          "name": "Lyon",
+          "count": 8
+        },
+        {
+          "name": "Marseille",
+          "count": 6
+        },
+        {
+          "name": "Bordeaux",
+          "count": 4
+        }
       ],
       "map_venues": [
         {
@@ -92,16 +104,15 @@
         {
           "title": "Feeding the Energy of \nEvery Moment",
           "description": "We operate food and beverage programs inside stadiums, arenas, and large-scale cultural events—managing everything from kitchen production to guest service. \n\nOur teams are trained for fast-paced environments where quality, timing, and atmosphere matter. Whether it’s matchday energy or festival crowds, we create experiences that feel human, organized, and memorable.",
-          "thumbnail":"images/unsplash_6vfYbDwOuMo.jpg",
-          "btnImage":"images/btnGetInouchPartner.svg",
+          "thumbnail": "images/unsplash_6vfYbDwOuMo.jpg",
+          "btnImage": "images/btnGetInouchPartner.svg",
           "linkTo": "/"
-
         },
         {
           "title": "Consulting Rooted in\nReal World Expertisery Moment",
           "description": "We  support venue operators through operational consulting—helping optimize kitchen workflows, staffing structures, logistics, and service delivery. \n\nOur approach is grounded in real field expertise: the way teams communicate, how meals are prepared at scale, and how service truly runs when the pressure is high..",
-          "btnImage":"images/btnGetInouchConsult.svg",
-          "thumbnail":"images/unsplash_6vfYbDwOuMo.png",
+          "btnImage": "images/btnGetInouchConsult.svg",
+          "thumbnail": "images/unsplash_6vfYbDwOuMo.png",
           "linkTo": "/"
         }
       ],
@@ -109,7 +120,7 @@
     },
     "cta_section": {
       "title": "Ready to Make an Impact?",
-    "description": "<strong>We deliver end to end catering experiences designed for every stage of your event — before, during, and after.</strong> From pre event planning that includes technical diagnosis, resource strategy, logistics, setup, and branding, to on-site moments filled with vibrant service, entertainment, and cocktails, and finally post event disassembly, we handle every detail with precision and flair."
+      "description": "<strong>We deliver end to end catering experiences designed for every stage of your event — before, during, and after.</strong> From pre event planning that includes technical diagnosis, resource strategy, logistics, setup, and branding, to on-site moments filled with vibrant service, entertainment, and cocktails, and finally post event disassembly, we handle every detail with precision and flair."
     },
     "gallery_section": {
       "images": [
@@ -126,7 +137,24 @@
           "alt": "Plat gastronomique"
         }
       ]
-    }
+    },
+    "sustainable_service": [
+      {
+        "icone":"images/🔄.svg",
+        "title":"Reusable Service\nSolutions at the core",
+        "description":"Implementing reusable containers and serviceware wherever possible to reduce single-use plastics.We minimize waste and source ingredients"
+      },
+      {
+        "icone":"images/♻️.svg",
+        "title":"Our Responsible Sourcing\nand Waste Reduction",
+        "description":"We minimize waste and source ingredients responsibly to reduce environmental impact. We minimize waste and source ingredients responsibly to reduce environmental impact."
+      },
+      {
+        "icone":"images/📦.svg",
+        "title":"we practise Eco\nConscious Packaging",
+        "description":"Biodegradable and compostable packaging options for all our service operations. We minimize waste and source ingredients responsibly to reduce environmental impact."
+      }
+     ]
   },
   "careers": {
     "map_loading": "Loading map...",
@@ -137,7 +165,13 @@
     },
     "search_section": {
       "search_placeholder": "Search job title and category...",
-      "job_types": ["All job types", "Full time", "Part time", "Contract", "Freelance"]
+      "job_types": [
+        "All job types",
+        "Full time",
+        "Part time",
+        "Contract",
+        "Freelance"
+      ]
     },
     "job_listing": {
       "positions_available_singular": "Position",
@@ -460,10 +494,22 @@
       "brand_name": "Eat is",
       "brand_highlight": "Family",
       "nav_links": [
-        { "text": "About Us", "to": "/about" },
-        { "text": "Activities", "to": "/activities" },
-        { "text": "Careers", "to": "/careers" },
-        { "text": "Blog", "to": "/blog" }
+        {
+          "text": "About Us",
+          "to": "/about"
+        },
+        {
+          "text": "Activities",
+          "to": "/activities"
+        },
+        {
+          "text": "Careers",
+          "to": "/careers"
+        },
+        {
+          "text": "Blog",
+          "to": "/blog"
+        }
       ],
       "cta_desktop": "Get in touch",
       "cta_mobile": "Contact"
@@ -479,18 +525,45 @@
       "contact_phone": "+33 1 23 5 67 89",
       "company_title": "Company",
       "company_links": [
-        { "text": "About us", "to": "/about" },
-        { "text": "Activities", "to": "/activities" },
-        { "text": "Our Events", "to": "/events" },
-        { "text": "Careers", "to": "/careers" },
-        { "text": "Blogs", "to": "/blog" },
-        { "text": "Contact us", "to": "/contact" }
+        {
+          "text": "About us",
+          "to": "/about"
+        },
+        {
+          "text": "Activities",
+          "to": "/activities"
+        },
+        {
+          "text": "Our Events",
+          "to": "/events"
+        },
+        {
+          "text": "Careers",
+          "to": "/careers"
+        },
+        {
+          "text": "Blogs",
+          "to": "/blog"
+        },
+        {
+          "text": "Contact us",
+          "to": "/contact"
+        }
       ],
       "policy_title": "Policy Info",
       "policy_links": [
-        { "text": "Privacy Statement", "to": "/privacy" },
-        { "text": "Terms and condition", "to": "/terms" },
-        { "text": "Cookies policy", "to": "/cookies" }
+        {
+          "text": "Privacy Statement",
+          "to": "/privacy"
+        },
+        {
+          "text": "Terms and condition",
+          "to": "/terms"
+        },
+        {
+          "text": "Cookies policy",
+          "to": "/cookies"
+        }
       ],
       "copyright_template": "© {year} Eat is Family. All Rights Reserved.",
       "back_to_top": "Back to top"
