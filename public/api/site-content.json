@@ -131,7 +131,21 @@
         },
         "mission": {
             "title": "Where Food Becomes Art  and Moments\nBecome Magic",
-            "content": "At Eat Is Family, we believe that food brings people together. Our mission is to create memorable culinary experiences that celebrate the joy of cooking, eating, and sharing. We connect food enthusiasts with expert chefs, organize exciting events, and foster a community passionate about gastronomy."
+            "image":"images/image3.jpg",
+            "encadres": [
+                {
+                    "title": "what we do and our promise to you",
+                    "desc": "We cater events of all sizes with a balance of professional service and artistic presentation. From intimate dinners to big celebrations, our dishes are carefully prepared, beautifully plated. \n\nWhether it’s a wedding, corporate event, birthday, or private dining, we deliver catering that feels fresh, exciting, and full of character. We don’t just serve food — we bring the experience.\n\nAt Eat Is Family, food isn’t just served.It’s celebrated. It’s shared. It’s remembered.",
+                    "btn":"",
+                    "link":""
+                },
+                {
+                    "title": "Our Philosophy and why we’re different",
+                    "desc": "Good food. Good people. Good vibes. We show up with passion, precision, and personality. Every meal tells a story. Every plate gets treated like a canvas. Every client becomes part of our family.\n\nWe are different because we blend traditional flavours with modern, bold presentations,  we focus on family style warmth with high quality service  and we make your event feel alive, vibrant, and unforgettable",
+                    "btn":"images/btnGetInTouchAlt.svg",
+                    "link":"/contact"
+                }
+            ]
         },
         "vision": {
             "title": "Our Vision",

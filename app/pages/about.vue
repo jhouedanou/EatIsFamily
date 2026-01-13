@@ -125,6 +125,12 @@
 
       <h4 class="timeline-subtitle white-text recoleta preserve-lines">{{ siteContent.about.timeline.subtitle }}</h4>
     </section>
+    <section v-if="siteContent?.about?.mission" id="mission">
+    <div class="container-fluid">
+      <h3 class="font-heading preserve-lines">{{ siteContent.about.mission.title }}</h3>
+
+    </div>
+    </section>
   </div>
 </template>
 
