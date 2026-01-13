@@ -367,12 +367,8 @@ onMounted(async () => {
         </div>
       </div>
     </section>
-    <section class="py-5 bg-white">
-      <h3 class="font-header center text-center preserve-lines">{{ content.partners_title }}</h3>
-      <ClientOnly>
-        <PartnersCarousel :partners="content.partners" />
-      </ClientOnly>
-    </section>
+    <!-- clients -->
+    <PartnersSection :title="content.partners_title" :partners="content.partners.map(p => ({ ...p, name: p.alt }))" />
     <!--  ready to make an impact -->
       <section id="ready-to-make-an-impact" class="py-5 bg-white position-relative">
         <div class="container-fluid position-relative d-flex justify-content-center align-items-center">
@@ -385,12 +381,12 @@ onMounted(async () => {
               </nuxt-link>
           </div>
         </div>
-        <div class="alain d-flex flex-column justify-content-center align-items-center text-center p-4 mx-auto mt-4">
-          <p v-html="content.homepageCTA.additionalText" class="preservelines"></p>
-           <nuxt-link :to="content.homepageCTA.link">
-                <nuxt-img :src="content.homepageCTA.button2" :alt="content.homepageCTA.title"></nuxt-img>
-              </nuxt-link>
-        </div>
+        <CtaBlock
+          :text="content.homepageCTA.additionalText"
+          :link="content.homepageCTA.link"
+          :button-image="content.homepageCTA.button2"
+          :button-alt="content.homepageCTA.title"
+        />
       </section>
   </div>
 </template>
@@ -715,22 +711,7 @@ nuxt-link:has(img) {
   margin-bottom:20px;
 }
 }
-.alain{
-  max-width: 800px;
-  margin: 4em auto ;
-  p{
-      font-family: FONTSPRINGDEMO-RecoletaMedium;
-  font-size: 34px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.59;
-  letter-spacing: normal;
-  text-align: center;
-  color: #000;
 
-  }
-}
 
 /* Explore Where We Operate Section */
 .explore-section {

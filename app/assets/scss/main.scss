@@ -124,7 +124,7 @@ body {
   background-color: $brand-dark;
 }
 .bg-brand-gray {
-  background-color: $brand-gray;
+  background-color: white;
 }
 
 // Organic Shadows
@@ -864,13 +864,14 @@ body {
   background: url(images/backgroundBgAbout.svg) no-repeat center;
   background-size: contain;
   justify-content: space-around;
-  a{
+  a {
     display: inline-block;
 
-      width:163px; 
-      height:24px;
-    img{
-      width:100%;}
+    width: 163px;
+    height: 24px;
+    img {
+      width: 100%;
+    }
   }
   h2 {
     font-family: FONTSPRINGDEMO-RecoletaBold;
@@ -895,56 +896,148 @@ body {
     color: #000;
   }
 }
-#timeline{
-  margin-top:-20px;
+#timeline {
+  margin-top: -20px;
   z-index: 1;
-  background:url(images/timelineBg.svg) ;
-  padding:1em;
-  h3
-  {
-     font-family: FONTSPRINGDEMO-RecoletaBold;
-  font-size: 50px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.48;
-  letter-spacing: normal;
-  text-align: center;
-  color: #fff;
-  }
-
-}
-#timeline{
-  h4 {
-  opacity: 0.7;
-  font-family: FONTSPRINGDEMO-RecoletaMedium;
-  font-size: 18px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.13;
-  letter-spacing: normal;
-  text-align: center;
-  color: #fff;
-    }
-}
-.sound-wave-container {
-  position: relative;
-  width: 100%;
-  height: 150px;
-  overflow: hidden;
-}
-
-
-.font-heading {
-
-    font-weight: 700 !important;
-    font-family: FONTSPRINGDEMO-RecoletaBold, Georgia, serif;
-     text-align: left;
+  background: url(images/timelineBg.svg);
+  padding: 1em;
+  h3 {
+    font-family: FONTSPRINGDEMO-RecoletaBold;
     font-size: 50px;
+    font-weight: normal;
     font-stretch: normal;
     font-style: normal;
-    line-height: normal;
+    line-height: 1.48;
     letter-spacing: normal;
-    text-align: left;
-    color: #000;}
+    text-align: center;
+    color: #fff;
+  }
+}
+#timeline {
+  h4 {
+    opacity: 0.7;
+    font-family: FONTSPRINGDEMO-RecoletaMedium;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.13;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+  }
+}
+// .sound-wave-container {
+//   position: relative;
+//   width: 100%;
+//   min-height: 150px;
+//   overflow: hidden;
+// }
+
+.font-heading {
+  position: relative;
+
+  font-weight: 700 !important;
+  font-family: FONTSPRINGDEMO-RecoletaBold, Georgia, serif;
+  text-align: left;
+  font-size: 50px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+}
+.decradr {
+  position: relative;
+
+  .inner-encadre {
+    position: relative;
+
+    padding: 5px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    padding: 4em;
+    min-height: 705px;
+    h3 {
+      font-family: FONTSPRINGDEMO-RecoletaBold;
+      font-size: 50px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: left;
+      color: #000b0f;
+      text-transform: capitalize;
+
+    position: relative;
+    z-index: 0;    }
+    p {
+      font-family:FONTSPRINGDEMO-Recoleta-Regular!important;
+      font-size: 18px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.56;
+      letter-spacing: normal;
+      text-align: left;
+      color: #000b0f;
+    }
+  }
+  &:nth-of-type(1) {
+    .inner-encadre {
+      background: url(images/bgRE2.svg);
+    }
+    h3 {
+      &::after {
+        background: url(images/line6.svg);
+        background-repeat: no-repeat;
+        background-size: contain;
+        content: "";
+        height: 100vh;
+        left: -1vw;
+        max-height: 80px;
+        max-width: 400px;
+        position: absolute;
+        top: 1vh;
+        width: 100vw;
+        z-index: -1;
+      }
+    }
+  }
+  &:nth-of-type(2) {
+    .inner-encadre {
+      background: url(images/bgRE.svg);
+      &::after {
+        content: "";
+        position: absolute;
+        top: 71%;
+        right: 0;
+        width: 180px;
+        min-height: 100%;
+        background: url(/images/concession.svg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        pointer-events: none;
+      }
+    }
+  }
+}
+.alain{
+  max-width: 800px;
+  margin: 4em auto ;
+  p{
+      font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 34px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.59;
+  letter-spacing: normal;
+  text-align: center;
+  color: #000;
+
+  }
+}

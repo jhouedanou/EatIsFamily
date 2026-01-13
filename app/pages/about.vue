@@ -10,8 +10,9 @@
                 <h2 class="heroSubtitle">{{ siteContent.about.hero.subtitle }}</h2>
                 <p class="heroDescription">{{ siteContent.about.hero.description }}</p>
                 <nuxt-link to="/">
-                  <nuxt-img :src="siteContent.about.hero.buttonContact" alt="Contact Us" class="contactButton img-fluid fluid-img" />
-                  
+                  <nuxt-img :src="siteContent.about.hero.buttonContact" alt="Contact Us"
+                    class="contactButton img-fluid fluid-img" />
+
                 </nuxt-link>
               </div>
             </div>
@@ -31,13 +32,8 @@
         <!-- Sound Wave with Playhead -->
         <div ref="soundWaveContainer" class="sound-wave-container">
           <!-- Playhead (moves horizontally like a cursor) -->
-          <div
-            class="playhead"
-            :class="{ 'dragging': isDragging }"
-            :style="{ left: playheadX + '%' }"
-            @mousedown="startDrag"
-            @touchstart="startDrag"
-          >
+          <div class="playhead" :class="{ 'dragging': isDragging }" :style="{ left: playheadX + '%' }"
+            @mousedown="startDrag" @touchstart="startDrag">
             <!-- Top square -->
             <div class="playhead-top-marker" :style="{ background: playheadColor }"></div>
             <!-- Vertical line -->
@@ -45,7 +41,8 @@
             <!-- Circle on the wave line -->
             <div class="playhead-circle" :style="{ background: playheadColor }"></div>
             <!-- Year label at bottom -->
-            <div class="playhead-year" :style="{ background: playheadColor }">{{ selectedEvent ? getYearFromDate(selectedEvent.year) : '2015' }}</div>
+            <div class="playhead-year" :style="{ background: playheadColor }">{{ selectedEvent ?
+              getYearFromDate(selectedEvent.year) : '2015' }}</div>
 
             <!-- Event Card (positioned relative to playhead) -->
             <div v-if="selectedEvent && isCardVisible" class="event-card" :class="{ 'event-card-left': isLastEvent }">
@@ -53,11 +50,13 @@
                 <!-- Close button -->
                 <button class="event-card-close" @click.stop="closeEventCard">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
                   </svg>
                 </button>
                 <div class="event-card-image">
-                  <nuxt-img v-if="selectedEvent.eventImage" :src="selectedEvent.eventImage" :alt="selectedEvent.title" />
+                  <nuxt-img v-if="selectedEvent.eventImage" :src="selectedEvent.eventImage"
+                    :alt="selectedEvent.title" />
                 </div>
                 <div class="event-card-info">
                   <h4 class="event-card-title">{{ selectedEvent.title }}</h4>
@@ -65,10 +64,16 @@
                   <p class="event-card-description">{{ selectedEvent.event }}</p>
                   <button class="share-button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 5.5C13.1046 5.5 14 4.60457 14 3.5C14 2.39543 13.1046 1.5 12 1.5C10.8954 1.5 10 2.39543 10 3.5C10 4.60457 10.8954 5.5 12 5.5Z" stroke="currentColor" stroke-width="1.5"/>
-                      <path d="M4 10C5.10457 10 6 9.10457 6 8C6 6.89543 5.10457 6 4 6C2.89543 6 2 6.89543 2 8C2 9.10457 2.89543 10 4 10Z" stroke="currentColor" stroke-width="1.5"/>
-                      <path d="M12 14.5C13.1046 14.5 14 13.6046 14 12.5C14 11.3954 13.1046 10.5 12 10.5C10.8954 10.5 10 11.3954 10 12.5C10 13.6046 10.8954 14.5 12 14.5Z" stroke="currentColor" stroke-width="1.5"/>
-                      <path d="M5.7 9L10.3 11.5M10.3 4.5L5.7 7" stroke="currentColor" stroke-width="1.5"/>
+                      <path
+                        d="M12 5.5C13.1046 5.5 14 4.60457 14 3.5C14 2.39543 13.1046 1.5 12 1.5C10.8954 1.5 10 2.39543 10 3.5C10 4.60457 10.8954 5.5 12 5.5Z"
+                        stroke="currentColor" stroke-width="1.5" />
+                      <path
+                        d="M4 10C5.10457 10 6 9.10457 6 8C6 6.89543 5.10457 6 4 6C2.89543 6 2 6.89543 2 8C2 9.10457 2.89543 10 4 10Z"
+                        stroke="currentColor" stroke-width="1.5" />
+                      <path
+                        d="M12 14.5C13.1046 14.5 14 13.6046 14 12.5C14 11.3954 13.1046 10.5 12 10.5C10.8954 10.5 10 11.3954 10 12.5C10 13.6046 10.8954 14.5 12 14.5Z"
+                        stroke="currentColor" stroke-width="1.5" />
+                      <path d="M5.7 9L10.3 11.5M10.3 4.5L5.7 7" stroke="currentColor" stroke-width="1.5" />
                     </svg>
                     Share This Story
                   </button>
@@ -86,38 +91,25 @@
           </div>
 
           <!-- Event markers (dots on the center line) -->
-          <div
-            v-for="(event, index) in allEvents"
-            :key="'marker-' + event.id"
-            class="wave-marker"
+          <div v-for="(event, index) in allEvents" :key="'marker-' + event.id" class="wave-marker"
             :class="{ active: selectedEvent?.id === event.id }"
-            :style="{ left: getMarkerPosition(index as number) + '%' }"
-            @click="selectEvent(event, index as number)"
-          >
+            :style="{ left: getMarkerPosition(index as number) + '%' }" @click="selectEvent(event, index as number)">
             <div class="wave-marker-dot" :style="{ background: getMarkerColor(index as number) }"></div>
           </div>
 
           <!-- Navigation arrows for prev/next event -->
-          <button
-            v-if="allEvents.length > 1"
-            class="timeline-nav timeline-nav-prev"
-            :class="{ disabled: !canGoPrev }"
-            :disabled="!canGoPrev"
-            @click="goToPrevEvent"
-          >
+          <button v-if="allEvents.length > 1" class="timeline-nav timeline-nav-prev" :class="{ disabled: !canGoPrev }"
+            :disabled="!canGoPrev" @click="goToPrevEvent">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
             </svg>
           </button>
-          <button
-            v-if="allEvents.length > 1"
-            class="timeline-nav timeline-nav-next"
-            :class="{ disabled: !canGoNext }"
-            :disabled="!canGoNext"
-            @click="goToNextEvent"
-          >
+          <button v-if="allEvents.length > 1" class="timeline-nav timeline-nav-next" :class="{ disabled: !canGoNext }"
+            :disabled="!canGoNext" @click="goToNextEvent">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
             </svg>
           </button>
         </div>
@@ -126,22 +118,52 @@
       <h4 class="timeline-subtitle white-text recoleta preserve-lines">{{ siteContent.about.timeline.subtitle }}</h4>
     </section>
     <section v-if="siteContent?.about?.mission" id="mission">
-    <div class="container-fluid">
-      <h3 class="font-heading preserve-lines">{{ siteContent.about.mission.title }}</h3>
-
-    </div>
+      <div class="container-fluid">
+        <h3 class="font-heading preserve-lines mt-5">{{ siteContent.about.mission.title }}</h3>
+        <img :src="siteContent.about.mission.image" :alt="siteContent.about.mission.image.alt" class="img-fluid my-4" />
+      </div>
+      <div id="lasalle" class="row mt-4 p-3">
+        <div v-for="(encadre, index) in siteContent.about.mission.encadres" :key="index" :id="`encadres-${index}`"
+          class="col-md-6 decradr">
+          <div class="inner-encadre">
+            <h3 class="mb-2">{{ encadre.title }}</h3>
+            <p class="mt-5 mb-5">{{ encadre.desc }}</p>
+            <a v-if="encadre.link" :href="encadre.link" class="btn"><img :src="encadre.btn" alt=""></a>
+          </div>
+        </div>
+      </div>
     </section>
+    <section v-if="siteContent?.about?.chiffresCles" id="chiffres-cles" ref="chiffresSection">
+      <div class="container-fluid">
+        <div class="chiffres-grid">
+          <div v-for="(stat, index) in siteContent.about.chiffresCles.stats" :key="index" class="chiffre-card">
+            <span class="chiffre-number" :data-target="parseNumber(stat.number)"
+              :data-suffix="parseSuffix(stat.number)">
+              0{{ parseSuffix(stat.number) }}
+            </span>
+            <span class="chiffre-label preserve-lines">{{ stat.label }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <PartnersSection
+      v-if="homepageContent?.partners"
+      :title="homepageContent.partners_title"
+      :partners="homepageContent.partners.map((p: any) => ({ ...p, name: p.alt }))"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { gsap } from 'gsap'
 
 const { getSiteContent } = useSiteContent()
-const { getContentByPath } = usePageContent()
+const { getContentByPath, getHomepageContent } = usePageContent()
 
 const siteContent = ref<any>(null)
 const pageContent = ref<any>(null)
+const homepageContent = ref<any>(null)
 const selectedEvent = ref<any>(null)
 const playheadX = ref<number>(10) // Initial position at first event
 const isLastEvent = ref<boolean>(false) // To position card on left for last event
@@ -153,6 +175,10 @@ const isCardVisible = ref<boolean>(false) // Control card visibility
 const isDragging = ref<boolean>(false)
 const soundWaveContainer = ref<HTMLElement | null>(null)
 
+// Chiffres clés
+const chiffresSection = ref<HTMLElement | null>(null)
+const chiffresAnimated = ref<boolean>(false)
+
 // All events (no pagination)
 const allEvents = computed(() => siteContent.value?.about?.timeline?.events || [])
 
@@ -160,9 +186,52 @@ const allEvents = computed(() => siteContent.value?.about?.timeline?.events || [
 const canGoNext = computed(() => selectedEventIndex.value < allEvents.value.length - 1)
 const canGoPrev = computed(() => selectedEventIndex.value > 0)
 
+// Parse number from string like "250+" or "300,000" or "100%"
+const parseNumber = (str: string): number => {
+  // Remove all non-numeric characters except dots
+  const numStr = str.replace(/[^0-9.]/g, '')
+  return parseFloat(numStr) || 0
+}
+
+// Get suffix like "+", "%", or nothing
+const parseSuffix = (str: string): string => {
+  if (str.includes('%')) return '%'
+  if (str.includes('+')) return '+'
+  return ''
+}
+
+// Format number with commas
+const formatNumber = (num: number): string => {
+  return num.toLocaleString('en-US', { maximumFractionDigits: 0 })
+}
+
+// Animate chiffres when section is visible
+const animateChiffres = () => {
+  if (chiffresAnimated.value || !chiffresSection.value) return
+  chiffresAnimated.value = true
+
+  const numberElements = chiffresSection.value.querySelectorAll('.chiffre-number')
+
+  numberElements.forEach((el) => {
+    const target = parseFloat(el.getAttribute('data-target') || '0')
+    const suffix = el.getAttribute('data-suffix') || ''
+    const obj = { value: 0 }
+
+    gsap.to(obj, {
+      value: target,
+      duration: 2,
+      ease: 'power2.out',
+      onUpdate: () => {
+        el.textContent = formatNumber(Math.round(obj.value)) + suffix
+      }
+    })
+  })
+}
+
 onMounted(async () => {
   siteContent.value = await getSiteContent()
   pageContent.value = await getContentByPath('about')
+  homepageContent.value = await getHomepageContent()
 
   // Initialize playhead position to first event (but don't show card)
   if (siteContent.value?.about?.timeline?.events?.length > 0) {
@@ -179,6 +248,22 @@ onMounted(async () => {
   document.addEventListener('mouseup', handleMouseUp)
   document.addEventListener('touchmove', handleTouchMove)
   document.addEventListener('touchend', handleTouchEnd)
+
+  // Intersection Observer for chiffres clés animation
+  if (chiffresSection.value) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateChiffres()
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.3 }
+    )
+    observer.observe(chiffresSection.value)
+  }
 })
 
 onUnmounted(() => {
@@ -472,7 +557,8 @@ useHead(() => ({
 /* Event Card - positioned relative to playhead */
 .event-card {
   position: absolute;
-  left: 30px; /* Right of the playhead line */
+  left: 30px;
+  /* Right of the playhead line */
   top: 30px;
   display: flex;
   align-items: flex-start;
@@ -780,6 +866,7 @@ useHead(() => ({
     opacity: 0;
     transform: translateY(-50%) translateX(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(-50%) translateX(0);
@@ -946,6 +1033,94 @@ useHead(() => ({
 
   .timeline-nav-next {
     right: 5px;
+  }
+}
+
+/* Chiffres Clés Section */
+#chiffres-cles {
+  background: #f9375b;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 350px;
+}
+
+.chiffres-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.chiffre-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  &:hover {
+    transform: translateY(-10px);
+  }
+}
+
+.chiffre-number {
+  font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 70px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fff;
+}
+
+.chiffre-label {
+  font-family: FONTSPRINGDEMO-RecoletaSemiBold;
+  font-size: 24px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.85)
+}
+
+/* Responsive Chiffres Clés */
+@media (max-width: 1200px) {
+  .chiffres-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .chiffre-number {
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  #chiffres-cles {
+    padding: 60px 20px;
+  }
+
+  .chiffres-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .chiffre-card {
+    padding: 30px 20px;
+  }
+
+  .chiffre-number {
+    font-size: 48px;
+  }
+
+  .chiffre-label {
+    font-size: 16px;
   }
 }
 </style>

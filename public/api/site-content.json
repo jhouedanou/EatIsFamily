@@ -147,48 +147,31 @@
                 }
             ]
         },
-        "vision": {
-            "title": "Our Vision",
-            "content": "We envision a world where everyone has access to quality culinary education and experiences. Through our workshops, events, and community initiatives, we're making the culinary arts more accessible and enjoyable for all."
+        "chiffresCles": {
+            "stats": [
+                {
+                    "number": "250+",
+                    "label": "Food & Beverage Events\n in 2024"
+                },
+                {
+                    "number": "300,000",
+                    "label": "People fed in 2024"
+                },
+                {
+                    "number": "100%",
+                    "label": "Homemade"
+                },
+                {
+                    "number": "250+",
+                    "label": "B2B clients &\n dealerships"
+                }
+            ]
         },
-        "values": [
-            {
-                "title": "Quality",
-                "description": "We partner with the best chefs and use premium ingredients in all our workshops."
-            },
-            {
-                "title": "Community",
-                "description": "We foster a welcoming environment where food lovers can connect and learn together."
-            },
-            {
-                "title": "Innovation",
-                "description": "We constantly explore new culinary trends and techniques to keep our offerings fresh."
-            },
-            {
-                "title": "Sustainability",
-                "description": "We're committed to sustainable practices and supporting local food producers."
-            }
-        ],
-        "team": [
-            {
-                "name": "Chef Marie Dubois",
-                "role": "Culinary Director",
-                "bio": "With 15 years of experience in Michelin-starred restaurants, Marie leads our culinary team.",
-                "image": "https://i.pravatar.cc/300?img=5"
-            },
-            {
-                "name": "Pierre Laurent",
-                "role": "Events Manager",
-                "bio": "Pierre has organized over 200 food events and brings creativity to every celebration.",
-                "image": "https://i.pravatar.cc/300?img=12"
-            },
-            {
-                "name": "Sophie Martin",
-                "role": "Head Pastry Chef",
-                "bio": "Sophie specializes in French pastry and has trained at Le Cordon Bleu.",
-                "image": "https://i.pravatar.cc/300?img=9"
-            }
-        ]
+        "vision": {
+            "title": "The Brains Behind Eat\nis family",
+            "content": "Founded by Adrien Clerc and Jimmy Herbaux, two restaurateurs and event caterers convinced that a comprehensive food service would greatly facilitate the organization of events."
+        }
+       
     },
     "contact": {
         "hero": {
