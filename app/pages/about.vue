@@ -5,7 +5,7 @@
         <h1 class="heroTitle">{{ siteContent.about.hero.title }}</h1>
         <div class="d-flex">
           <div class="row">
-            <div class="col-5 d-flex flex-column">
+            <div class="col-6 col-xs-12 d-flex flex-column">
               <div class="heroTextContainer d-flex flex-column">
                 <h2 class="heroSubtitle">{{ siteContent.about.hero.subtitle }}</h2>
                 <p class="heroDescription">{{ siteContent.about.hero.description }}</p>
@@ -16,7 +16,7 @@
                 </nuxt-link>
               </div>
             </div>
-            <div class="col-7">
+            <div class="col-6 col-xs-12 d-flex justify-content-center align-items-center">
               <img :src="siteContent.about.hero.image.src" :alt="siteContent.about.hero.image.alt"
                 class="img-fluid heroImage" />
             </div>

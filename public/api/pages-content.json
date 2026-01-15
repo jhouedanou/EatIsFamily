@@ -626,8 +626,18 @@
   },
   "apply_activities": {
     "page_hero": {
-      "title": "Culinary Activities",
-      "subtitle": "Join our exciting cooking workshops and food experiences"
+      "title": "Bursting With Flavour.\nBuilt With Passion.",
+      "image": {
+        "src": "images/bgActivities.jpg",
+        "alt": "Team working in kitchen"
+      }
+    },
+    "section2":{
+      "text":"Eat Is Family runs a streamlined, scalable operational structure designed to support events, venues, and high-volume food experiences.\n\nWe combine efficiency, creativity, and bold execution to deliver consistent quality across every location.",
+      "btn1":"images/btnApplyJobs.svg",
+      "link1":"/activities",
+      "btn2":"images/btnExploreMaps.svg",
+      "link2":"/careers"
     },
     "loading_text": "Loading activities...",
     "seo": {
