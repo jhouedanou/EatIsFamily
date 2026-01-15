@@ -27,6 +27,14 @@
 
 // Custom Font Face
 @font-face {
+  font-family: FONTSPRINGDEMO-Recoleta;
+  src: url("/fonts/Recoleta-Regular.woff2") format("woff2"),
+    url("/fonts/Recoleta-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
   font-family: FONTSPRINGDEMO-Recoleta-Regular;
   src: url("/fonts/Recoleta-Regular.woff2") format("woff2"),
     url("/fonts/Recoleta-Regular.woff") format("woff");
@@ -52,7 +60,14 @@
   font-style: normal;
   font-display: swap;
 }
-
+@font-face {
+  font-family: FONTSPRINGDEMO-RecoletaSemiBold;
+  src: url("/fonts/Recoleta-SemiBold.woff2") format("woff2"),
+    url("/fonts/Recoleta-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
 @font-face {
   font-family: FONTSPRINGDEMO-RecoletaBold;
   src: url("/fonts/Recoleta-Bold.woff2") format("woff2"),
@@ -724,10 +739,10 @@ body {
   a {
     margin-top: 70px !important;
   }
-  a{
+  a {
     width: 291px;
     height: 74px;
-    img{
+    img {
       width: 100%;
     }
   }
@@ -795,11 +810,11 @@ body {
 }
 
 #lasalle {
-  a{
-    width:271px;
-    height:74px;
-    img{
-      width:100%;
+  a {
+    width: 271px;
+    height: 74px;
+    img {
+      width: 100%;
     }
   }
   .example {
@@ -835,19 +850,19 @@ body {
   }
   #example-0 {
     .inner-example {
-      background:url(/images/bgRE2.svg);
+      background: url(/images/bgRE2.svg);
       background-repeat: no-repeat;
       background-position: right bottom;
-      position:relative;
-      &::before{
-        content:"";
-              background-image: url(/images/concession.svg);
-        width:221px;
-        height:195px;
+      position: relative;
+      &::before {
+        content: "";
+        background-image: url(/images/concession.svg);
+        width: 221px;
+        height: 195px;
         display: block;
         position: absolute;
-        bottom:0;
-        right:0;
+        bottom: 0;
+        right: 0;
         background-size: contain;
       }
     }
@@ -872,8 +887,8 @@ body {
   }
   #example-1 {
     .inner-example {
-      background:url(/images/bgRE.svg);        background-repeat: no-repeat;
-
+      background: url(/images/bgRE.svg);
+      background-repeat: no-repeat;
     }
   }
 }
@@ -895,7 +910,6 @@ body {
     width: 264px;
     height: 73px;
     img {
-      
       width: 100%;
       height: 100%;
       object-fit: contain;
@@ -998,10 +1012,11 @@ body {
       color: #000b0f;
       text-transform: capitalize;
 
-    position: relative;
-    z-index: 0;    }
+      position: relative;
+      z-index: 0;
+    }
     p {
-      font-family:FONTSPRINGDEMO-Recoleta-Regular!important;
+      font-family: FONTSPRINGDEMO-Recoleta-Regular !important;
       font-size: 18px;
       font-weight: normal;
       font-stretch: normal;
@@ -1051,59 +1066,172 @@ body {
     }
   }
 }
-.alain{
+.alain {
   max-width: 800px;
-  margin: 4em auto ;
-  p{
-      font-family: FONTSPRINGDEMO-RecoletaMedium;
-  font-size: 34px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.59;
-  letter-spacing: normal;
-  text-align: center;
-  color: #000;
-
+  margin: 4em auto;
+  p {
+    font-family: FONTSPRINGDEMO-RecoletaMedium;
+    font-size: 34px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.59;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000;
   }
 }
 .damsnt {
-  
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    margin-bottom: .5rem;
-    margin-top: 0;
-    font-family: FONTSPRINGDEMO-RecoletaBold;
-    font-size: 50px;
-    line-height: normal;
-    color: #000;
-    font-stretch: normal;
-    font-style: normal;
-    font-weight: 800;
-    letter-spacing: normal;
-    text-align: left;}
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+  font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 50px;
+  line-height: normal;
+  color: #000;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: normal;
+  text-align: left;
+}
 
-    .kemi{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    margin-bottom: 1rem;
-    margin-top: 0;
-    white-space: pre-line;
-    color: #000;
-    font-stretch: normal;
-    font-style: normal;
-    font-weight: 400;
-    letter-spacing: normal;
-    text-align: left;
-    font-family: FONTSPRINGDEMO-Recoleta-Regular!important;
-    font-size: 18px;
-    line-height: 1.56;
+.kemi {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1rem;
+  margin-top: 0;
+  white-space: pre-line;
+  color: #000;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-align: left;
+  font-family: FONTSPRINGDEMO-Recoleta-Regular !important;
+  font-size: 18px;
+  line-height: 1.56;
+}
+
+#future {
+  img {
+    width: 100% !important;
+  }
+}
+#ludacris {
+  p {
+    &:nth-of-type(1) {
+      color: #f9375b !important;
     }
 
-#future{
-  img{
-width:100% !important 
+    font-family: FONTSPRINGDEMO-Recoleta-Regular !important;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.56;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+  }
+}
+#baks {
+  margin-bottom: 7em !important;
+  h3 {
+    position: relative;
+    z-index: 0;
+    &::before {
+      z-index: -1;
+      position: absolute;
+      content: "";
+      background: url(/images/decoHeaderBg.svg);
+      background-size: contain;
+      width: 100vw;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 80px;
+      background-repeat: no-repeat;
+      top: 1vh;
+      left: -1vw;
+    }
+  }
+}
+
+#weHelpwith {
+  position: relative;
+  #seeAboutYa {
+    background: url(/images/bgContainer.svg);
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 10px;
+    top: 11px;
+    min-height: 614px;
+    padding: 2em;
+    width: 100%;
+    max-width: 463px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    p {
+      font-family: FONTSPRINGDEMO-Recoleta;
+      margin: 9px 0 0 0;
+      opacity: 0.7;
+      font-family: FONTSPRINGDEMO-Recoleta;
+      font-size: 16px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.35;
+      letter-spacing: normal;
+      text-align: left;
+      color: #1a1a1a;
+    }
+    ul {
+      margin-top: 1em;
+      list-style: none;
+      padding-left: 0;
+      border-bottom: solid 2px #d1d5dc;
+      li {
+        font-family: FONTSPRINGDEMO-Recoleta-Regular;
+        font-size: 18px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.56;
+        letter-spacing: normal;
+        text-align: left;
+        color: #000;
+        padding-left: 2rem;
+        position: relative;
+        margin-bottom: 1em;
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0.25em;
+          width: 1.5rem;
+          height: 1.5rem;
+          background-image: url(/images/Icon.svg);
+          background-size: contain;
+          background-repeat: no-repeat;
+        }
+      }
+    }
+    h3 {
+      font-family: FONTSPRINGDEMO-RecoletaBold;
+      text-transform: uppercase;
+      font-size: 30px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.6;
+      letter-spacing: 1.6px;
+      text-align: left;
+      color: #1a1a1a;
+      border-bottom: solid 2.7px #ffe600;
+    }
   }
 }

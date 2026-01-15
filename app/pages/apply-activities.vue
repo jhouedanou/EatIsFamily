@@ -6,6 +6,9 @@
         <img :src="content.page_hero.image.src" :alt="content.page_hero.image.alt">
       </div>
     </section>
+        <section v-if="activities" class="explore-section">
+      <HomeExploreSection />
+    </section>
     <section v-if="content" id="mouf" class="booba">
       <div id="denzel" class="container">
         <h1 class="preserve-lines">{{ content.section2.text }}</h1>
@@ -19,25 +22,32 @@
         </div>
       </div>
     </section>
-    <section v-if="activities && content?.textedelapage">
-      <div class="row container-fluid p-0 m-0 d-flex align-items-center">
-        <div class="col-5">
-          <h3 class="font-header">{{ content.textedeapage.title }}</h3>
+    <section class="mb-5" v-if="activities && content?.textedelapage">
+      <div id="baks" class="row container-fluid p-0 m-0 d-flex align-items-center">
+        <div id="ludacris" class="col-6 p-5">
+          <h3 class="font-header">{{ content.textedelapage.title }}</h3>
           <p>{{ content.textedelapage.subtitle }}</p>
-
-          <ul>
-            <li v-for="(item, index) in content.textedelapage.liste" :key="index">{{ item }}</li>
-          </ul>
+          <p>{{ content.textedelapage.description }}</p>
+           <nuxtlink :to="content.textedelapage.link">
+            <img :src="content.textedelapage.btn">
+          </nuxtlink>
         </div>
-        <div class="col-7">
-          <img :src="content.textedeapage.image" alt="Services illustration" class="img-fluid">
+        <div class="col-6 p-0 m-0">
+          <img :src="content.textedelapage.image" alt="Services illustration" class="img-fluid">
         </div>
       </div>
     </section>
-    <section v-if="activities" class="explore-section">
-      <HomeExploreSection />
-    </section>
-    <section>
+<section v-if="content?.weHelpWith" id="weHelpwith">
+  <img :src="content.weHelpWith.image" alt="" class="img-fluid">
+  <div id="seeAboutYa">
+    <h3>{{ content.weHelpWith.title }}</h3>
+    <ul>
+      <li v-for="(item, index) in content.weHelpWith.items" :key="index">{{ item }}</li> 
+    </ul>
+    <p>{{ content.weHelpWith.sous }}</p>
+  </div>
+</section>
+    <section class="mt-4">
       <!-- parteners  -->
       <PartnersSection v-if="homepageContent?.partners" :title="homepageContent.partners_title"
         :partners="homepageContent.partners.map((p: any) => ({ ...p, name: p.alt }))" />
@@ -45,10 +55,12 @@
       <GalleryGrid v-if="siteContent?.about?.gallery_section2?.images"
         :images="siteContent.about.gallery_section2.images" />
       <!--  ready to make an impact -->
-      <HomepageCTA v-if="content?.homepageCTA" :image="content.homepageCTA.image" :title="content.homepageCTA.title"
-        :description="content.homepageCTA.description" :link="content.homepageCTA.link"
-        :button-image="content.homepageCTA.button" :additional-text="content.homepageCTA.additionalText"
-        :button-image2="content.homepageCTA.button2" />
+      <HomepageCTA v-if="homepageContent?.homepageCTA" :image="homepageContent.homepageCTA.image" :title="homepageContent.homepageCTA.title"
+        :description="homepageContent.homepageCTA.description" :link="homepageContent.homepageCTA.link"
+        :button-image="homepageContent.homepageCTA.button" :additional-text="homepageContent.homepageCTA.additionalText"
+        :button-image2="homepageContent.homepageCTA.button2" />
+            <GalleryGrid v-if="siteContent?.about?.gallery_section?.images"
+      :images="siteContent.about.gallery_section.images" />
     </section>
   </div>
 </template>
@@ -66,6 +78,8 @@ const content = ref<any>(null)
 
 onMounted(async () => {
   content.value = await getContentByPath('apply_activities')
+  console.log('Content loaded:', content.value)
+  console.log('weHelpWith exists:', content.value?.weHelpWith)
   activities.value = await getActivities()
   homepageContent.value = await getHomepageContent()
   siteContent.value = await getSiteContent()
@@ -190,4 +204,5 @@ useHead(() => ({
   margin-top: 15px;
   padding: 20px 0;
 }
+
 </style>

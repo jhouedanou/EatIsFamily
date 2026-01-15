@@ -659,6 +659,19 @@
       "btn":"images/btnContacts.svg",
       "link":"/contact"
     },
+    "weHelpWith":{
+      "title":"We help with:",
+      "items":[
+        "Streamlining kitchen and service operations",
+        "Launching or revamping food concepts",
+        "Staff training  workflow alignment",
+        "Menu structure and production systems",
+        "Event scale food service setup",
+        "Cost control, quality control process optimisation"
+      ],
+      "image":"images/unsplash_6vfYbDwOuMos.jpg",
+      "sous":"Custom solutions tailored to your specific needs and challenges."
+    },
     "locations_section": {
       "title": "Explore Where We Operate",
       "description": "Tap any marker on the map to discover the story behind that event. Each marker clicked unlocks a snapshot of the venue, the experience we delivered, and the flavours we brought to life.",
