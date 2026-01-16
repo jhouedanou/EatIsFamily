@@ -52,7 +52,7 @@ useHead({
     <!-- Intro Section -->
     <section v-if="content?.section2" class="intro-section">
       <div class="container">
-        <p class="intro-text">{{ content.section2 }}</p>
+        <p class="intro-text preserve-lines">{{ content.section2 }}</p>
       </div>
     </section>
 
@@ -60,7 +60,8 @@ useHead({
     <section class="events-section">
       <div class="container">
         <div v-if="content?.eventslist" class="section-header">
-          <p class="section-description">{{ content.eventslist.description }}</p>
+          <p class="section-description preserve-lines
+          ">{{ content.eventslist.description }}</p>
         </div>
 
         <div v-if="loading" class="loading">
@@ -143,16 +144,24 @@ height: 70px;
 
 .intro-section {
   padding: 4rem 0;
-  background: #fafafa;
-
+  background-color:white;
+background-image: url('/images/vectorBgAbout.svg');
+background-repeat: no-repeat;
+background-position: center;
+background-size: contain;
+ .container {
+    max-width: 1100px;
+    margin: 0 auto;}
   .intro-text {
-    max-width: 800px;
-    margin: 0 auto;
-    font-size: 1.125rem;
-    line-height: 1.8;
-    color: #4a5568;
-    text-align: center;
-    white-space: pre-line;
+     font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 34px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.59;
+  letter-spacing: normal;
+  text-align: center;
+  color: #000;
   }
 }
 
@@ -165,9 +174,15 @@ height: 70px;
   }
 
   .section-description {
-    font-size: 1.25rem;
-    color: #2d3748;
-    font-family: 'Recoleta', serif;
+    font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 50px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
   }
 }
 
