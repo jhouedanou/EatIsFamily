@@ -3,60 +3,87 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-section">
-          <h3>Eat Is Family</h3>
-          <p v-if="content">{{ content.footer.about_text }}</p>
-        </div>
-        
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <ul v-if="content">
-            <li v-for="link in content.footer.quick_links" :key="link.link">
-              <NuxtLink :to="link.link">{{ link.text }}</NuxtLink>
+          <div v-if="content" class="titlewrapper d-flex align-items-center justify-content-start mb-4">
+            <img :src="content.logoFooter" alt="Logo" />
+            <h3 class="mb-0">{{ content.brand_name }}</h3>
+          </div>
+          <p v-if="content">{{ content.brand_description }}</p>
+          <p v-if="content">{{ content.contact_email }}</p>
+          <p v-if="content">{{ content.contact_phone }}</p>
+          <ul class="d-flex flex-row gap-2">
+            <li v-for="(item, index) in content?.social_links || []" :key="index" class="social-links">
+              <a :href="item.url" target="_blank" rel="noopener noreferrer">
+                <img :src="item.icon" :alt="item.name" width="40" height="40" />
+              </a>
             </li>
           </ul>
         </div>
-        
         <div class="footer-section">
-          <h4>Contact</h4>
-          <ul v-if="content">
-            <li>{{ content.contact.info.address }}</li>
-            <li>{{ content.contact.info.phone }}</li>
-            <li>{{ content.contact.info.email }}</li>
+          <h3 class="mb-4" v-if="content">{{ content.company_title }}</h3>
+          <ul>
+            <li v-for="(item, index) in content?.company_links || []" :key="index">
+              <NuxtLink :to="item.to">{{ item.text }}</NuxtLink>
+            </li>
           </ul>
         </div>
-        
         <div class="footer-section">
-          <h4>Follow Us</h4>
-          <div class="social-links" v-if="content">
-            <a :href="content.contact.social.facebook" target="_blank" rel="noopener">Facebook</a>
-            <a :href="content.contact.social.instagram" target="_blank" rel="noopener">Instagram</a>
-            <a :href="content.contact.social.twitter" target="_blank" rel="noopener">Twitter</a>
-          </div>
+          <h3 class="mb-4"
+          v-if="content">{{ content.policy_title }}</h3>
+          <ul>
+            <li v-for="(item, index) in content?.policy_links || []" :key="index">
+              <NuxtLink :to="item.to">{{ item.text }}</NuxtLink>
+            </li>
+          </ul>
         </div>
       </div>
-      
-      <div class="footer-bottom">
-        <p v-if="content">{{ content.footer.copyright }}</p>
+      <div class="cpyright">
+        <div v-if="content">{{ content.copyright_template }}</div>
       </div>
     </div>
   </footer>
 </template>
 
 <script setup lang="ts">
-const { getSiteContent } = useSiteContent()
+const { getFooterContent } = usePageContent()
 const content = ref<any>(null)
 
 onMounted(async () => {
-  content.value = await getSiteContent()
+  content.value = await getFooterContent()
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .footer {
-  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  background: black;
   color: white;
   padding: 3rem 0 1rem;
   margin-top: 4rem;
+  li{
+    
+  font-family: FONTSPRINGDEMO-Recoleta;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fff !important;
+  a{
+    color: #fff !important;
+  }
+ }
+ h3 {
+  font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fff;
+}
 }
 
 .container {
@@ -72,14 +99,7 @@ onMounted(async () => {
   margin-bottom: 2rem;
 }
 
-.footer-section h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+
 
 .footer-section h4 {
   font-size: 1.125rem;
@@ -88,8 +108,15 @@ onMounted(async () => {
 }
 
 .footer-section p {
-  line-height: 1.6;
-  color: #cbd5e0;
+  font-family: FONTSPRINGDEMO-Recoleta;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fff;
 }
 
 .footer-section ul {
@@ -130,5 +157,19 @@ onMounted(async () => {
   .footer-grid {
     grid-template-columns: 1fr;
   }
+}
+.cpyright {
+  padding-top: 1rem;
+  border-top:1px solid rgba(255, 255, 255, 1);
+  text-align: center;
+  font-family: FONTSPRINGDEMO-Recoleta;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.43;
+  letter-spacing: normal;
+  text-align: center;
+  color: #fff;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="event-card" :class="[colorClass, { 'is-even': isEven, 'is-odd': !isEven }]">
+  <div class="event-card" :class="[colorClass, { 'is-even': !isEven, 'is-odd': isEven }]">
     <div class="card-image">
       <img :src="event.image" :alt="event.title" loading="lazy" />
       <span class="event-type-badge">{{ event.event_type }}</span>
@@ -12,8 +12,8 @@
       }"
     >
       <div class="torn-edge" :class="{ 'torn-edge-right': isEven, 'torn-edge-left': !isEven }"></div>
-      <h3>{{ event.title }}</h3>
-      <p class="description">{{ event.description }}</p>
+      <h3 class="preserve-lines">{{ event.title }}</h3>
+      <p class="description preserve-lines">{{ event.description }}</p>
       <NuxtLink :to="`/contacts`">
         <img
           :src="isEven ? '/images/contact-even.svg' : '/images/contact-odd.svg'"
@@ -124,7 +124,16 @@ const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
   border: 3px solid;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
+  h3{
+    position: relative;
+  }
+  a{ width: 287px;
+  height: 70px;
+    img {
+ width: 100%;
+  height: 100%;  }
+}
 }
 
 .is-even .card-content {
@@ -199,10 +208,6 @@ const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
   color: #000;
 }
 
-.contact-image {
-  max-width: 150px;
-  height: auto;
-}
 
 /* Responsive: stack on mobile */
 @media (max-width: 768px) {
@@ -293,14 +298,14 @@ const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
  z-index: -1;
       position: absolute;
       content: "";
-      background: url(/images/decoHeaderBg.svg);
+      background: url(/images/events/02.svg);
       background-size: contain;
       width: 100vw;
       max-width: 400px;
       height: 100vh;
       max-height: 80px;
       background-repeat: no-repeat;
-      top: 1vh;
+      top: 2vh;
       left: -1vw;
     }
   }
@@ -351,7 +356,7 @@ const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
  z-index: -1;
       position: absolute;
       content: "";
-      background: url(/images/decoHeaderBg.svg);
+      background: url(/images/events/03.svg);
       background-size: contain;
       width: 100vw;
       max-width: 400px;
@@ -364,10 +369,14 @@ const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
   }
 }
 .color-red{
+    .description  {
+      color:white !important;
+    }
   h3{
     z-index:1;
     color:white !important;
     &::before{
+      display:none !important;
  z-index: -1;
       position: absolute;
       content: "";
@@ -381,9 +390,7 @@ const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
       top: 1vh;
       left: -1vw;
     }
-    .description  {
-      color:white !important;
-    }
+  
   }
 }
 </style>

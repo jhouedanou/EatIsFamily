@@ -224,6 +224,7 @@ export interface NavbarContent {
 }
 
 export interface FooterContent {
+  logoFooter: string
   brand_name: string
   brand_description: string
   contact_email: string
@@ -232,6 +233,7 @@ export interface FooterContent {
   company_links: Array<{ text: string; to: string }>
   policy_title: string
   policy_links: Array<{ text: string; to: string }>
+  social_links: Array<{ icon: string; url: string }>
   copyright_template: string
   back_to_top: string
 }

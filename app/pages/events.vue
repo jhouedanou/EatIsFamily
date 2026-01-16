@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import type { Event } from '~/composables/useEvents'
 const { getSiteContent } = useSiteContent()
 const { getContentByPath, getHomepageContent } = usePageContent()
+const homepageContent = ref<any>(null)
 const siteContent = ref<any>(null)
 const pageContent = ref<any>(null)
 const content = ref<any>(null)
@@ -12,10 +13,10 @@ const loading = ref(true)
 onMounted(async () => {
   // Charger le contenu de la page
   content.value = await getContentByPath('events')
-
   // Charger le site content pour la galerie
   siteContent.value = await getSiteContent()
-
+  //charger le contenu pour les différents composant 
+  homepageContent.value = await getHomepageContent()
   // Charger les événements depuis events.json
   try {
     const response = await fetch('/api/events.json')
@@ -93,6 +94,15 @@ useHead({
           No events found. ({{ events.length }} events)
         </div>
       </div>
+    </section>
+    <section class="mt-4">
+      <PartnersSection v-if="homepageContent?.partners" :title="homepageContent.partners_title"
+        :partners="homepageContent.partners.map((p: any) => ({ ...p, name: p.alt }))" />
+    </section>
+    <section class="mt-4">
+      
+      <GalleryGrid v-if="siteContent?.about?.gallery_section2?.images"
+        :images="siteContent.about.gallery_section2.images" />
     </section>
   </div>
 </template>

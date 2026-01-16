@@ -982,6 +982,7 @@
       "subtitle": "We'd love to hear from you!"
     },
     "footer": {
+      "logoFooter":"/images/logoEIF.svg",
       "brand_name": "Eat is Family",
       "brand_description": "Creating unforgettable culinary experiences that bring people together and celebrate life's special moments.",
       "contact_email": "hello@eatsfamily.fr",
@@ -1028,7 +1029,21 @@
           "to": "/cookies"
         }
       ],
-      "copyright_template": "© {year} Eat is Family. All Rights Reserved.",
+      "social_links": [
+        {
+          "icon": "/images/linkedin.svg",
+          "url": "https://linkedin.com/eatisfamily"
+        },
+        {
+          "icon": "/images/instagram.svg",
+          "url": "https://instagram.com/eatisfamily"
+        },
+        {
+          "icon": "/images/twitter.svg",
+          "url": "https://twitter.com/eatisfamily"
+        }
+      ],
+      "copyright_template": "© 2025 Eat is Family. All Rights Reserved.",
       "back_to_top": "Back to top"
     },
     "footer_alt": {
