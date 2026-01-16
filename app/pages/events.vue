@@ -37,12 +37,15 @@ useHead({
   <div class="events-page">
     <!-- Hero Section -->
     <section v-if="content" class="page-hero">
-      <div class="container">
-        <h1>{{ content.page_hero.title }}</h1>
-        <p class="subtitle">{{ content.page_hero.subtitle }}</p>
-        <NuxtLink v-if="content.page_hero.link" :to="content.page_hero.link" class="btn-primary">
-          Contact Us
-        </NuxtLink>
+      <div class="container d-flex">
+        <div class="loris">
+          <h1>{{ content.page_hero.title }}</h1>
+          <p class="subtitle">{{ content.page_hero.subtitle }}</p>
+          <NuxtLink v-if="content.page_hero.link" :to="content.page_hero.link">
+            <nuxt-img :src="content.page_hero.btn" />
+          </NuxtLink>
+        </div>
+
       </div>
     </section>
 
@@ -82,24 +85,51 @@ useHead({
 }
 
 .page-hero {
-  background: linear-gradient(135deg, #FF4D6D 0%, #ff6b88 100%);
-  color: white;
-  padding: 6rem 0 4rem;
-  text-align: center;
+  background: url('/images/events-hero.jpg') center/cover no-repeat;
+  height: 90vh;
+  margin: 0 0 57px;
+  justify-content: flex-end;
+  display: flex;
+  align-items: flex-end;
+
+  .loris {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    background: url("/images/loris.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-width: 915px;
+    max-height: 472px;
+    padding: 3em;
+    height: 100vh;
+    width: 100vw;
+  }
 
   h1 {
-    font-family: 'Recoleta', serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    margin-bottom: 1rem;
-    white-space: pre-line;
+    font-family: FONTSPRINGDEMO-RecoletaBold;
+    font-size: 75px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+
   }
 
   .subtitle {
-    font-size: 1.125rem;
-    opacity: 0.9;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    white-space: pre-line;
+    font-family: FONTSPRINGDEMO-Recoleta;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.44;
+    letter-spacing: normal;
+    text-align: left;
+    color: #161616;
   }
 
   .btn-primary {
