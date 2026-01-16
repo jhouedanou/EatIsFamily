@@ -41,7 +41,7 @@ useHead({
         <div class="loris">
           <h1>{{ content.page_hero.title }}</h1>
           <p class="subtitle">{{ content.page_hero.subtitle }}</p>
-          <NuxtLink v-if="content.page_hero.link" :to="content.page_hero.link">
+          <NuxtLink v-if="content.page_hero.link" :to="content.page_hero.link" class="mt-4">
             <nuxt-img :src="content.page_hero.btn" />
           </NuxtLink>
         </div>
@@ -87,11 +87,18 @@ useHead({
 .page-hero {
   background: url('/images/events-hero.jpg') center/cover no-repeat;
   height: 90vh;
-  margin: 0 0 57px;
+  margin: 0 0 0 0;
   justify-content: flex-end;
   display: flex;
   align-items: flex-end;
-
+  a{  
+     width: 250px;
+  height: 70px;
+    img{
+    width: 250px;
+height: 70px;
+  }
+  }
   .loris {
     display: flex;
     flex-direction: column;
@@ -132,22 +139,6 @@ useHead({
     color: #161616;
   }
 
-  .btn-primary {
-    display: inline-block;
-    background: white;
-    color: #FF4D6D;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
-
-    &:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
-    }
-  }
 }
 
 .intro-section {
