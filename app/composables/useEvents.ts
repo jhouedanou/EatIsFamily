@@ -1,22 +1,10 @@
 export interface Event {
     id: number
     slug: string
-    title: {
-        rendered: string
-    }
-    excerpt: {
-        rendered: string
-    }
-    content: {
-        rendered: string
-    }
-    date: string
-    end_date: string
-    location: string
+    title: string
+    image: string
+    description: string
     event_type: string
-    ticket_price: string
-    featured_media: string
-    status: string
 }
 
 export const useEvents = () => {

@@ -1,5 +1,15 @@
 {
   "homepage": {
+    "seo": {
+      "title": "Eat Is Family - Event Catering & Culinary Experiences",
+      "description": "We create food experiences where people gather, celebrate, and connect. From stadiums to festivals, discover our passion for exceptional catering across France.",
+      "keywords": "event catering, food experiences, stadium catering, festival food, VIP hospitality, France, Paris",
+      "og_title": "Eat Is Family - Where Every Day Feels Like Friday",
+      "og_description": "Creating unforgettable culinary experiences at stadiums, arenas, and festivals across France.",
+      "og_image": "/images/og-home.jpg",
+      "twitter_card": "summary_large_image",
+      "canonical": "/"
+    },
     "hero_section": {
       "bg": "images/unsplash_6vfYbDwOuMo.jpg",
       "tag": "NEW LOCATIONS",
@@ -330,10 +340,26 @@
     },
     "seo": {
       "title": "About Us - Eat Is Family",
-      "meta_description": "Learn about Eat Is Family, our mission, vision, and the team behind our culinary experiences."
+      "description": "Learn about Eat Is Family, our mission, vision, and the team behind our culinary experiences.",
+      "keywords": "about Eat Is Family, event catering company, catering team, food service history, France catering",
+      "og_title": "About Eat Is Family - Bursting With Flavour, Built With Passion",
+      "og_description": "Discover our journey from a single food truck to France's leading event catering company.",
+      "og_image": "/images/og-about.jpg",
+      "twitter_card": "summary_large_image",
+      "canonical": "/about"
     }
   },
   "careers": {
+    "seo": {
+      "title": "Careers - Join Our Team | Eat Is Family",
+      "description": "Build your career in event catering. Explore job opportunities at stadiums, arenas, and festivals across France. Join a passionate team making food magic happen.",
+      "keywords": "catering jobs, food service careers, chef jobs France, stadium jobs, event staff, hospitality careers, culinary jobs Paris",
+      "og_title": "Careers at Eat Is Family - Join Our Team",
+      "og_description": "Explore exciting career opportunities in event catering across France's top venues.",
+      "og_image": "/images/og-careers.jpg",
+      "twitter_card": "summary_large_image",
+      "canonical": "/careers"
+    },
     "map_loading": "Loading map...",
     "hero_section": {
       "tag": "NOW HIRING",
@@ -443,6 +469,16 @@
     ]
   },
   "contact": {
+    "seo": {
+      "title": "Contact Us - Eat Is Family",
+      "description": "Get in touch with Eat Is Family. Ready to elevate your event with exceptional catering? Share your vision and we'll bring it to life.",
+      "keywords": "contact catering, event catering quote, catering inquiry, food service contact, Paris catering",
+      "og_title": "Contact Eat Is Family - Let's Create Something Amazing",
+      "og_description": "Ready to elevate your event? Get in touch and let's create unforgettable food experiences together.",
+      "og_image": "/images/og-contact.jpg",
+      "twitter_card": "summary_large_image",
+      "canonical": "/contact"
+    },
     "hero_section": {
       "title": {
         "line_1": "Reach",
@@ -476,10 +512,26 @@
     "loading_text": "Loading events...",
     "seo": {
       "title": "Events - Eat Is Family",
-      "meta_description": "Join our food festivals, tastings, and culinary celebrations. Discover upcoming events and book your spot."
+      "description": "Join our food festivals, tastings, and culinary celebrations. Discover upcoming events and book your spot.",
+      "keywords": "food events, culinary events, food festivals, tastings, cooking events, France events",
+      "og_title": "Food Events - Eat Is Family",
+      "og_description": "Discover and join our upcoming culinary events and celebrations across France.",
+      "og_image": "/images/og-events.jpg",
+      "twitter_card": "summary_large_image",
+      "canonical": "/events"
     }
   },
   "blog": {
+    "seo": {
+      "title": "Blog - Insights From The Kitchen | Eat Is Family",
+      "description": "Stories about food, events, and the people who make it happen. Read about industry trends, behind-the-scenes insights, and culinary inspiration.",
+      "keywords": "food blog, catering blog, culinary insights, event catering trends, stadium food, chef stories",
+      "og_title": "Insightful Stories From The Kitchen - Eat Is Family Blog",
+      "og_description": "Explore recipes, tips, and stories from the world of event catering.",
+      "og_image": "/images/og-blog.jpg",
+      "twitter_card": "summary_large_image",
+      "canonical": "/blog"
+    },
     "index": {
       "section_title": "Our Blog",
       "section_subtitle": "Stories about food, events, and the people who make it happen.",
@@ -538,6 +590,15 @@
     }
   },
   "job_detail": {
+    "seo": {
+      "title_template": "{job_title} - Careers | Eat Is Family",
+      "description_template": "Apply for {job_title} at {location}. Join our team and be part of creating unforgettable food experiences.",
+      "keywords": "job opening, career opportunity, catering job, food service position, France employment",
+      "og_title_template": "{job_title} at {location} - Eat Is Family",
+      "og_description_template": "Join our team as {job_title}. Build your career in event catering.",
+      "og_image": "/images/og-careers.jpg",
+      "twitter_card": "summary_large_image"
+    },
     "cta_banner": {
       "title": "Ready To Join Our Team?",
       "subtitle": "Apply now and be part of something special",
@@ -612,6 +673,13 @@
     }
   },
   "job_detail_slug": {
+    "seo": {
+      "title_template": "{job_title} - Careers | Eat Is Family",
+      "description_template": "Apply for {job_title} position. Join Eat Is Family and be part of France's leading event catering team.",
+      "keywords": "job application, career, catering position, food service job",
+      "og_image": "/images/og-careers.jpg",
+      "twitter_card": "summary_large_image"
+    },
     "section_titles": {
       "about_position": "About the Position",
       "requirements": "Requirements",
@@ -624,6 +692,16 @@
     "loading_text": "Loading job details..."
   },
   "apply_activities": {
+    "seo": {
+      "title": "Activities & Consulting Services - Eat Is Family",
+      "description": "Discover our consulting services for restaurants, event venues, and food businesses. We help optimize workflows, scale operations, and launch new concepts.",
+      "keywords": "food consulting, restaurant consulting, catering consulting, kitchen operations, food business optimization, event catering expertise",
+      "og_title": "Consulting Services Rooted in Real World Expertise - Eat Is Family",
+      "og_description": "We don't just cook - we help teams build systems that work. Professional consulting for food businesses.",
+      "og_image": "/images/og-activities.jpg",
+      "twitter_card": "summary_large_image",
+      "canonical": "/apply-activities"
+    },
     "page_hero": {
       "title": "Bursting With Flavour.\nBuilt With Passion.",
       "image": {
@@ -831,10 +909,38 @@
     "loading_text": "Loading jobs...",
     "seo": {
       "title": "Job Opportunities - Eat Is Family",
-      "meta_description": "Explore career opportunities in the food industry. Join our team and build your culinary career."
+      "description": "Explore career opportunities in the food industry. Join our team and build your culinary career.",
+      "keywords": "job opportunities, culinary careers, food industry jobs, catering positions, chef jobs, hospitality careers",
+      "og_title": "Job Opportunities - Eat Is Family",
+      "og_description": "Find your next career opportunity in the food industry. Join our passionate team.",
+      "og_image": "/images/og-careers.jpg",
+      "twitter_card": "summary_large_image",
+      "canonical": "/apply-jobs"
     }
   },
-
+"events": {
+    "page_hero": {
+      "title": "Memorable Events,\nUnforgettable Food",
+      "subtitle": "From high energy festivals to intimate VIP lounges, explore how we bring scale,\ncreativity, and operational excellence to every event.",
+      "btn":"images/btnContacts.svg",
+      "link":"/contact"
+    },
+    "section2":"At our event catering company , we see every event as an opportunity to create memorable moments around the table. With over 50 events per year, our dedicated team uses its culinary expertise to ensure that every gathering is a gastronomic success.\n\nAt Eat is Family, we believe in the importance of trusted partnerships. Our strong relationships with our clients and suppliers are the secret to our success. We work closely with you to understand your needs and are committed to exceeding them at every event.",
+    "loading_text": "Loading events...",
+    "eventslist":{
+      "description":"Dive into our portfolio of unforgettable events"
+    },
+    "seo": {
+      "title": "Our Events - Eat Is Family",
+      "description": "Explore our portfolio of memorable events. From high-energy festivals to intimate VIP lounges, see how we deliver food excellence across France.",
+      "keywords": "event catering, stadium events, festival catering, concert food, sports events catering, VIP hospitality France",
+      "og_title": "Memorable Events, Unforgettable Food - Eat Is Family",
+      "og_description": "From stadiums to festivals, discover how we bring flavour and operational excellence to every event.",
+      "og_image": "/images/og-events.jpg",
+      "twitter_card": "summary_large_image",
+      "canonical": "/events"
+    }
+  },
   "components": {
     "header": {
       "logo": "LOGO",

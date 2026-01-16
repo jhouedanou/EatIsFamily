@@ -1,17 +1,15 @@
 <template>
   <div class="event-card">
     <div class="card-image">
-      <img :src="event.featured_media" :alt="event.title.rendered" loading="lazy" />
+      <img :src="event.image" :alt="event.title" loading="lazy" />
       <span class="event-type-badge">{{ event.event_type }}</span>
     </div>
     <div class="card-content">
-      <h3>{{ event.title.rendered }}</h3>
-      <div class="excerpt" v-html="event.excerpt.rendered"></div>
-      <div class="event-meta">
-        <span>📅 {{ formatDate(event.date) }}</span>
-        <span>📍 {{ event.location }}</span>
-        <span>🎫 {{ event.ticket_price }}</span>
-      </div>
+      <h3>{{ event.title }}</h3>
+      <p class="description">{{ event.description }}</p>
+      <NuxtLink :to="`/events/${event.slug}`" class="btn-view">
+        View Event
+      </NuxtLink>
     </div>
   </div>
 </template>
@@ -22,14 +20,6 @@ import type { Event } from '~/composables/useEvents'
 defineProps<{
   event: Event
 }>()
-
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('fr-FR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
-}
 </script>
 
 <style scoped>
@@ -37,13 +27,13 @@ const formatDate = (dateString: string) => {
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .event-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 1);
 }
 
 .card-image {
@@ -67,7 +57,7 @@ const formatDate = (dateString: string) => {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(237, 100, 166, 0.9);
+  background: #FF4D6D;
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 20px;
@@ -80,26 +70,31 @@ const formatDate = (dateString: string) => {
 }
 
 .card-content h3 {
+  font-family: 'Recoleta', serif;
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
   color: #2d3748;
 }
 
-.excerpt {
+.description {
   color: #4a5568;
   line-height: 1.6;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
 }
 
-.excerpt :deep(p) {
-  margin: 0;
+.btn-view {
+  display: inline-block;
+  background: #FF4D6D;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
 }
 
-.event-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: #718096;
+.btn-view:hover {
+  background: #e63956;
 }
 </style>
