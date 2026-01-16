@@ -161,16 +161,15 @@ const closeVenueDetails = () => {
               @click="toggleEventFilter(eventType.id)"
             >
               <div class="event-filter-image" :style="{ backgroundImage: `url('${eventType.image}')` }"></div>
-              <span class="event-filter-name">{{ eventType.name }}</span>
             </button>
           </div>
 
           <!-- Statistics -->
-          <div class="explore-stats">
+          <div class="explore-stats row gap-0">
             <div
               v-for="(stat, index) in locationsData.stats"
               :key="index"
-              class="stat-item"
+              class="stat-item col-3 d-flex flex-column align-items-center justify-content-start"
             >
               <span class="stat-value">{{ stat.value }}</span>
               <span class="stat-label">{{ stat.label }}</span>
@@ -193,12 +192,12 @@ const closeVenueDetails = () => {
 .explore-container {
   display: flex;
   flex-direction: row;
-  min-height: 500px;
+  min-height: 80vh;
 }
 
 .explore-map {
   flex: 0 0 55%;
-  min-height: 500px;
+  min-height: 80vh;
   position: relative;
 }
 
@@ -208,34 +207,46 @@ const closeVenueDetails = () => {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: #f5f5f0;
-  overflow-y: auto;
-  max-height: 500px;
 }
 
 .explore-title {
-  font-family: FONTSPRINGDEMO-RecoletaBold, Georgia, serif;
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #FF4D6D;
-  margin-bottom: 1rem;
-  line-height: 1.2;
+   font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 50px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fe002f;
+  margin-top: 1em;
+
 }
 
 .explore-description {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.95rem;
-  color: #333;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  margin:1em 0;
+  font-family: FONTSPRINGDEMO-Recoleta;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.56;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+
 }
 
-.filter-label {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.85rem;
-  color: #666;
-  margin-bottom: 1rem;
-  font-weight: 500;
+.filter-label {  font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 20px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;  margin:1em 0;
+
 }
 
 .event-filters {
@@ -265,28 +276,22 @@ const closeVenueDetails = () => {
 }
 
 .event-filter-image {
-  width: 100px;
-  height: 70px;
+  width: 180px;
+  height: 185px;
   border-radius: 12px;
   background-size: cover;
   background-position: center;
-  border: 3px solid transparent;
+  background-repeat:no-repeat;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.event-filter-name {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.85rem;
-  color: #333;
-  margin-top: 0.5rem;
-  font-weight: 500;
-}
+
 
 .explore-stats {
   display: flex;
   gap: 1.5rem;
   flex-wrap: wrap;
+  justify-content: center;
   padding-top: 1rem;
   border-top: 1px solid #e0e0e0;
 }
@@ -297,20 +302,33 @@ const closeVenueDetails = () => {
   min-width: 80px;
 }
 
-.stat-value {
-  font-family: FONTSPRINGDEMO-RecoletaBold, Georgia, serif;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #FF4D6D;
-  line-height: 1.2;
+.stat-value { font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 30px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #ff004e;
+  display: flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .stat-label {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.7rem;
-  color: #666;
-  line-height: 1.3;
-  max-width: 100px;
+  font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #000;
+  display: flex;
+  align-items:center;
+  justify-content:center;
 }
 
 /* Responsive */
