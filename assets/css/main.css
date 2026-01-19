@@ -220,6 +220,11 @@ h6 {
     @apply tag bg-brand-purple text-brand-dark;
 }
 
+.tag-outline {
+    @apply tag bg-transparent text-brand-dark;
+    border-color: rgba(0, 0, 0, 0.3);
+}
+
 /* ========================================
    CARD STYLES
    ======================================== */

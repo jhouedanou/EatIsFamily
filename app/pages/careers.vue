@@ -1,42 +1,127 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { LucideSearch, LucideMapPin, LucideX, LucideChevronDown } from 'lucide-vue-next'
+import { ref, computed, onMounted, watch } from 'vue'
+import { LucideSearch, LucideMapPin, LucideX, LucideChevronDown, LucideChevronLeft, LucideChevronRight } from 'lucide-vue-next'
 import type { CareersContent } from '~/composables/usePageContent'
+import type { Job } from '~/composables/useJobs'
 
 const { getCareersContent } = usePageContent()
+const { getJobs } = useJobs()
 const content = ref<CareersContent | null>(null)
+const allJobs = ref<Job[]>([])
 
 const searchQuery = ref('')
 const selectedJobType = ref('')
 const selectedVenue = ref('')
-const showFilters = ref(false)
+const showJobTypeDropdown = ref(false)
+const showVenueDropdown = ref(false)
+
+// Pagination
+const currentPage = ref(1)
+const itemsPerPage = 6
 
 onMounted(async () => {
   content.value = await getCareersContent()
+  const fetchedJobs = await getJobs()
+  if (fetchedJobs) {
+    allJobs.value = fetchedJobs
+  }
   if (content.value) {
     selectedJobType.value = content.value.search_section.job_types[0]
-    selectedVenue.value = content.value.venues[0]?.id || ''
+    // Ne pas pré-sélectionner de venue - afficher tous les jobs par défaut
+    selectedVenue.value = ''
   }
 })
 
-const currentVenue = computed(() => {
-  if (!content.value) return null
-  return content.value.venues.find(v => v.id === selectedVenue.value) || content.value.venues[0]
+// Extraire toutes les venues uniques des jobs
+const venueOptions = computed(() => {
+  const locations = new Set<string>()
+  allJobs.value.forEach(job => {
+    if (job.location) {
+      locations.add(job.location)
+    }
+  })
+  return ['All locations', ...Array.from(locations)]
 })
+
+const currentVenue = computed(() => {
+  if (!content.value || !selectedVenue.value) return null
+  return content.value.venues.find(v => v.id === selectedVenue.value) || null
+})
+
+// Helper pour obtenir le titre du job
+const getJobTitle = (job: Job) => {
+  return typeof job.title === 'string' ? job.title : job.title?.rendered || ''
+}
+
+// Helper pour obtenir l'extrait du job
+const getJobExcerpt = (job: Job) => {
+  return typeof job.excerpt === 'string' ? job.excerpt : job.excerpt?.rendered || ''
+}
+
+// Helper pour formater la date relative
+const getPostedTime = (dateString: string) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+  
+  if (diffHours < 1) return 'Just now'
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
+  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
 
 const filteredJobs = computed(() => {
   if (!content.value) return []
-  return content.value.jobs.filter(job => {
-    const matchesSearch = job.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                          job.description.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchesType = selectedJobType.value === content.value!.search_section.job_types[0] || job.type === selectedJobType.value
-    const matchesVenue = job.venue_id === selectedVenue.value
-    return matchesSearch && matchesType && matchesVenue
+  return allJobs.value.filter(job => {
+    const title = getJobTitle(job)
+    const excerpt = getJobExcerpt(job)
+
+    const matchesSearch = !searchQuery.value ||
+                          title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+                          excerpt.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+                          job.location.toLowerCase().includes(searchQuery.value.toLowerCase())
+
+    // Normaliser les types de job pour la comparaison
+    const normalizedJobType = job.job_type.toLowerCase().replace('-', ' ')
+    const normalizedSelectedType = selectedJobType.value.toLowerCase().replace('-', ' ')
+    
+    const matchesType = selectedJobType.value === content.value!.search_section.job_types[0] ||
+                        normalizedJobType.includes(normalizedSelectedType)
+
+    // Filtre par venue/location depuis le dropdown
+    const matchesVenueFilter = selectedVenue.value === '' || 
+                               selectedVenue.value === 'All locations' ||
+                               job.location.toLowerCase().includes(selectedVenue.value.toLowerCase())
+
+    return matchesSearch && matchesType && matchesVenueFilter
   })
 })
 
+// Pagination computed
+const totalPages = computed(() => Math.ceil(filteredJobs.value.length / itemsPerPage))
+
+const paginatedJobs = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredJobs.value.slice(start, end)
+})
+
+// Reset to page 1 when filters change
+watch([searchQuery, selectedJobType, selectedVenue], () => {
+  currentPage.value = 1
+})
+
+const goToPage = (page: number) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
 const selectVenue = (venueId: string) => {
-  selectedVenue.value = venueId
+  // Toggle: si on clique sur la même venue, désélectionner
+  selectedVenue.value = selectedVenue.value === venueId ? '' : venueId
 }
 </script>
 
@@ -129,14 +214,46 @@ const selectVenue = (venueId: string) => {
           </div>
         </div>
 
+        <!-- Venue Dropdown -->
+        <div class="position-relative">
+          <button
+            @click="showVenueDropdown = !showVenueDropdown; showJobTypeDropdown = false"
+            class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn"
+          >
+            <LucideMapPin style="width: 1rem; height: 1rem;" class="opacity-75" />
+            <span>{{ selectedVenue || 'All locations' }}</span>
+            <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showVenueDropdown }" />
+          </button>
+
+          <!-- Venue Dropdown Menu -->
+          <Transition
+            enter-active-class="transition-fade-in"
+            leave-active-class="transition-fade-out"
+          >
+            <div v-if="showVenueDropdown" class="position-absolute top-100 end-0 mt-2 bg-white border-organic shadow-organic-lg dropdown-menu-custom dropdown-menu-venue">
+              <button
+                v-for="venue in venueOptions"
+                :key="venue"
+                @click="selectedVenue = venue === 'All locations' ? '' : venue; showVenueDropdown = false"
+                :class="[
+                  'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
+                  (selectedVenue === venue || (venue === 'All locations' && !selectedVenue)) ? 'active' : ''
+                ]"
+              >
+                {{ venue }}
+              </button>
+            </div>
+          </Transition>
+        </div>
+
         <!-- Job Type Dropdown -->
         <div class="position-relative">
           <button
-            @click="showFilters = !showFilters"
+            @click="showJobTypeDropdown = !showJobTypeDropdown; showVenueDropdown = false"
             class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn"
           >
             <span>{{ selectedJobType }}</span>
-            <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showFilters }" />
+            <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showJobTypeDropdown }" />
           </button>
 
           <!-- Dropdown Menu -->
@@ -144,11 +261,11 @@ const selectVenue = (venueId: string) => {
             enter-active-class="transition-fade-in"
             leave-active-class="transition-fade-out"
           >
-            <div v-if="showFilters" class="position-absolute top-100 end-0 mt-2 bg-white border-organic shadow-organic-lg dropdown-menu-custom">
+            <div v-if="showJobTypeDropdown" class="position-absolute top-100 end-0 mt-2 bg-white border-organic shadow-organic-lg dropdown-menu-custom">
               <button
                 v-for="type in content.search_section.job_types"
                 :key="type"
-                @click="selectedJobType = type; showFilters = false"
+                @click="selectedJobType = type; showJobTypeDropdown = false"
                 :class="[
                   'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
                   selectedJobType === type ? 'active' : ''
@@ -168,11 +285,14 @@ const selectVenue = (venueId: string) => {
         <h2 class="font-heading fs-4 fw-bold">
           {{ filteredJobs.length }} {{ filteredJobs.length === 1 ? content.job_listing.positions_available_singular : content.job_listing.positions_available_plural }} {{ content.job_listing.positions_available_suffix }}
         </h2>
+        <p v-if="totalPages > 1" class="text-muted small mb-0">
+          Page {{ currentPage }} of {{ totalPages }}
+        </p>
       </div>
 
-      <div class="row row-cols-1 row-cols-md-2 g-4">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <div
-          v-for="job in filteredJobs"
+          v-for="job in paginatedJobs"
           :key="job.id"
           class="col"
         >
@@ -180,14 +300,19 @@ const selectVenue = (venueId: string) => {
             <div class="d-flex flex-column h-100 justify-content-between">
               <!-- Header -->
               <div>
-                <h3 class="font-heading fw-bold fs-5 lh-sm mb-1">{{ job.title }}</h3>
-                <p class="small text-muted fw-medium mb-3">{{ content.job_listing.posted_prefix }} {{ job.posted_time }}</p>
+                <h3 class="font-heading fw-bold fs-5 lh-sm mb-1">{{ getJobTitle(job) }}</h3>
+                <p class="small text-muted fw-medium mb-3">{{ content.job_listing.posted_prefix }} {{ getPostedTime(job.date) }}</p>
 
                 <!-- Tags Row -->
                 <div class="d-flex flex-wrap gap-2 mb-3">
-                  <span class="tag-blue">{{ content.job_listing.department_prefix }} · {{ job.department }}</span>
+                  <span class="tag-blue">🍳 {{ job.department }}</span>
+                  <span class="tag-outline d-flex align-items-center gap-1">
+                    <LucideMapPin style="width: 0.75rem; height: 0.75rem;" /> {{ job.location }}
+                  </span>
+                </div>
+                <div class="d-flex flex-wrap gap-2 mb-3">
                   <span class="tag-lime d-flex align-items-center gap-1">
-                    <span class="small">🌿</span> {{ job.type }}
+                    {{ job.job_type }}
                   </span>
                   <span class="tag-yellow d-flex align-items-center gap-1">
                     <span class="small">💰</span> {{ job.salary }}
@@ -196,16 +321,16 @@ const selectVenue = (venueId: string) => {
 
                 <!-- Description -->
                 <p class="small text-muted mb-4 line-clamp-3 font-body lh-lg">
-                  {{ job.description }}
+                  {{ getJobExcerpt(job) }}
                 </p>
               </div>
 
               <!-- Buttons -->
               <div class="d-flex gap-3 mt-auto">
-                <NuxtLink :to="`/jobs/${job.id}`" class="btn-primary flex-grow-1 text-center small">
+                <NuxtLink :to="`/jobs/${job.slug}`" class="btn-primary flex-grow-1 text-center small">
                   {{ content.job_listing.apply_button }}
                 </NuxtLink>
-                <NuxtLink :to="`/jobs/${job.id}`" class="btn-secondary flex-grow-1 text-center small">
+                <NuxtLink :to="`/jobs/${job.slug}`" class="btn-secondary flex-grow-1 text-center small">
                   {{ content.job_listing.view_details_button }}
                 </NuxtLink>
               </div>
@@ -218,8 +343,41 @@ const selectVenue = (venueId: string) => {
       <div v-if="filteredJobs.length === 0" class="text-center py-5 bg-white border-organic">
         <p class="fs-5 text-muted mb-2">{{ content.no_results.title }}</p>
         <p class="text-secondary mb-3">{{ content.no_results.description }}</p>
-        <button @click="searchQuery = ''; selectedJobType = content.search_section.job_types[0]" class="text-brand-pink fw-bold btn btn-link text-decoration-none">
+        <button @click="searchQuery = ''; selectedJobType = content.search_section.job_types[0]; selectedVenue = ''" class="text-brand-pink fw-bold btn btn-link text-decoration-none">
           {{ content.no_results.clear_filters_button }}
+        </button>
+      </div>
+
+      <!-- Pagination -->
+      <div v-if="totalPages > 1" class="d-flex justify-content-center align-items-center gap-2 mt-5">
+        <button 
+          @click="goToPage(currentPage - 1)" 
+          :disabled="currentPage === 1"
+          class="pagination-btn"
+          :class="{ 'disabled': currentPage === 1 }"
+        >
+          <LucideChevronLeft style="width: 1.25rem; height: 1.25rem;" />
+        </button>
+        
+        <template v-for="page in totalPages" :key="page">
+          <button 
+            v-if="page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)"
+            @click="goToPage(page)"
+            class="pagination-btn"
+            :class="{ 'active': currentPage === page }"
+          >
+            {{ page }}
+          </button>
+          <span v-else-if="page === currentPage - 2 || page === currentPage + 2" class="pagination-dots">...</span>
+        </template>
+        
+        <button 
+          @click="goToPage(currentPage + 1)" 
+          :disabled="currentPage === totalPages"
+          class="pagination-btn"
+          :class="{ 'disabled': currentPage === totalPages }"
+        >
+          <LucideChevronRight style="width: 1.25rem; height: 1.25rem;" />
         </button>
       </div>
     </section>
@@ -327,6 +485,12 @@ const selectVenue = (venueId: string) => {
   z-index: 30;
 }
 
+.dropdown-menu-venue {
+  width: 16rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 .dropdown-item-custom {
   background: transparent;
   transition: background-color 0.3s ease;
@@ -346,6 +510,42 @@ const selectVenue = (venueId: string) => {
 
 .job-card:hover {
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+}
+
+/* Pagination styles */
+.pagination-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #1a1a1a;
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(.disabled) {
+  background: var(--brand-lime, #C8F560);
+}
+
+.pagination-btn.active {
+  background: var(--brand-pink, #FF4D6D);
+  color: #fff;
+  border-color: var(--brand-pink, #FF4D6D);
+}
+
+.pagination-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-dots {
+  padding: 0 0.5rem;
+  color: #666;
 }
 
 .transition-fade-in {

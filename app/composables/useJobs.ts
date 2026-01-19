@@ -11,6 +11,7 @@ export interface Job {
         rendered: string
     }
     location: string
+    department: string
     job_type: string
     salary: string
     requirements: string[]

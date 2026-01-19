@@ -66,17 +66,17 @@
         {
           "id": "s1",
           "name": "Le Gourmet Corner",
-          "image": "/images/shops/shop-gourmet.svg"
+          "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&h=200&fit=crop"
         },
         {
           "id": "s2",
           "name": "Quick Bites Express",
-          "image": "/images/shops/shop-quickbites.svg"
+          "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=200&h=200&fit=crop"
         },
         {
           "id": "s3",
           "name": "Drinks & More",
-          "image": "/images/shops/shop-drinks.svg"
+          "image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=200&h=200&fit=crop"
         }
       ],
       "menu_items": [
@@ -85,35 +85,35 @@
           "name": "Classic Stadium Burger",
           "price": "12.50",
           "description": "Juicy beef patty with cheddar, lettuce, and special sauce",
-          "thumbnail": "/images/menu/burger.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=300&fit=crop"
         },
         {
           "id": "m2",
           "name": "Crispy Chicken Wings",
           "price": "9.00",
           "description": "Golden fried wings with your choice of dipping sauce",
-          "thumbnail": "/images/menu/wings.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=300&h=300&fit=crop"
         },
         {
           "id": "m3",
           "name": "Loaded Nachos",
           "price": "8.50",
           "description": "Tortilla chips topped with cheese, jalapeños, and guacamole",
-          "thumbnail": "/images/menu/nachos.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=300&h=300&fit=crop"
         },
         {
           "id": "m4",
           "name": "Hot Dog Deluxe",
           "price": "7.00",
           "description": "All-beef hot dog with caramelized onions and mustard",
-          "thumbnail": "/images/menu/hotdog.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1612392062126-67662f65ee39?w=300&h=300&fit=crop"
         },
         {
           "id": "m5",
           "name": "Fresh Caesar Salad",
           "price": "10.00",
           "description": "Crisp romaine with parmesan and house-made dressing",
-          "thumbnail": "/images/menu/salad.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1546793665-c74683f339c1?w=300&h=300&fit=crop"
         }
       ]
     },
@@ -148,42 +148,42 @@
         {
           "id": "s1",
           "name": "Lyon Gourmet",
-          "image": "/images/shops/shop-gourmet.svg"
+          "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&h=200&fit=crop"
         },
         {
           "id": "s2",
           "name": "Pizza Express",
-          "image": "/images/shops/shop-pizza.svg"
+          "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&h=200&fit=crop"
         },
         {
           "id": "s3",
           "name": "Burger Station",
-          "image": "/images/shops/shop-burger.svg"
+          "image": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=200&h=200&fit=crop"
         },
         {
           "id": "s4",
           "name": "Fresh Drinks Bar",
-          "image": "/images/shops/shop-drinks.svg"
+          "image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=200&h=200&fit=crop"
         },
         {
           "id": "s5",
           "name": "Sweet Corner",
-          "image": "/images/shops/shop-sweets.svg"
+          "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&h=200&fit=crop"
         },
         {
           "id": "s6",
           "name": "Local Delights",
-          "image": "/images/shops/shop-local.svg"
+          "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop"
         },
         {
           "id": "s7",
           "name": "Quick Snacks",
-          "image": "/images/shops/shop-quickbites.svg"
+          "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=200&h=200&fit=crop"
         },
         {
           "id": "s8",
           "name": "Coffee & Tea House",
-          "image": "/images/shops/shop-coffee.svg"
+          "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop"
         }
       ],
       "menu_items": [
@@ -192,84 +192,84 @@
           "name": "Lyonnaise Sausage",
           "price": "11.00",
           "description": "Traditional Lyon sausage with Dijon mustard",
-          "thumbnail": "/images/menu/sausage.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1601628828688-632f38a5a7d0?w=300&h=300&fit=crop"
         },
         {
           "id": "m2",
           "name": "Quenelle Lyonnaise",
           "price": "14.00",
           "description": "Classic Lyon dumpling with creamy sauce",
-          "thumbnail": "/images/menu/quenelle.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1544025162-d76694265947?w=300&h=300&fit=crop"
         },
         {
           "id": "m3",
           "name": "Artisan Pizza Margherita",
           "price": "12.00",
           "description": "Wood-fired pizza with fresh mozzarella and basil",
-          "thumbnail": "/images/menu/pizza.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=300&h=300&fit=crop"
         },
         {
           "id": "m4",
           "name": "Gourmet Burger OL",
           "price": "13.50",
           "description": "Premium beef burger with blue cheese and bacon",
-          "thumbnail": "/images/menu/burger.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=300&fit=crop"
         },
         {
           "id": "m5",
           "name": "Salade Lyonnaise",
           "price": "10.50",
           "description": "Frisée salad with poached egg and lardons",
-          "thumbnail": "/images/menu/salad.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=300&fit=crop"
         },
         {
           "id": "m6",
           "name": "Croque Monsieur",
           "price": "9.00",
           "description": "Grilled ham and cheese sandwich with béchamel",
-          "thumbnail": "/images/menu/croque.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=300&h=300&fit=crop"
         },
         {
           "id": "m7",
           "name": "Praline Tart",
           "price": "6.50",
           "description": "Traditional Lyon pink praline dessert",
-          "thumbnail": "/images/menu/tart.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=300&h=300&fit=crop"
         },
         {
           "id": "m8",
           "name": "French Fries Basket",
           "price": "5.00",
           "description": "Crispy golden fries with aioli dipping sauce",
-          "thumbnail": "/images/menu/fries.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300&h=300&fit=crop"
         },
         {
           "id": "m9",
           "name": "Craft Beer Selection",
           "price": "7.00",
           "description": "Local Lyon craft beers on tap",
-          "thumbnail": "/images/menu/beer.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=300&h=300&fit=crop"
         },
         {
           "id": "m10",
           "name": "Soft Pretzel",
           "price": "4.50",
           "description": "Warm pretzel with cheese dip",
-          "thumbnail": "/images/menu/pretzel.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=300&h=300&fit=crop"
         },
         {
           "id": "m11",
           "name": "Ice Cream Cup",
           "price": "5.50",
           "description": "Artisan ice cream with choice of toppings",
-          "thumbnail": "/images/menu/icecream.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=300&h=300&fit=crop"
         },
         {
           "id": "m12",
           "name": "Fresh Fruit Cup",
           "price": "6.00",
           "description": "Seasonal fresh fruits with mint",
-          "thumbnail": "/images/menu/fruit.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=300&h=300&fit=crop"
         }
       ]
     },
@@ -306,52 +306,52 @@
         {
           "id": "s1",
           "name": "Marseille Flavors",
-          "image": "/images/shops/shop-local.svg"
+          "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop"
         },
         {
           "id": "s2",
           "name": "Pizza Napoletana",
-          "image": "/images/shops/shop-pizza.svg"
+          "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&h=200&fit=crop"
         },
         {
           "id": "s3",
           "name": "Seafood Stand",
-          "image": "/images/shops/shop-seafood.svg"
+          "image": "https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=200&h=200&fit=crop"
         },
         {
           "id": "s4",
           "name": "Le Burger House",
-          "image": "/images/shops/shop-burger.svg"
+          "image": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=200&h=200&fit=crop"
         },
         {
           "id": "s5",
           "name": "Pastis Bar",
-          "image": "/images/shops/shop-drinks.svg"
+          "image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=200&h=200&fit=crop"
         },
         {
           "id": "s6",
           "name": "Mediterranean Grill",
-          "image": "/images/shops/shop-grill.svg"
+          "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=200&fit=crop"
         },
         {
           "id": "s7",
           "name": "Ice Cream Paradise",
-          "image": "/images/shops/shop-sweets.svg"
+          "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&h=200&fit=crop"
         },
         {
           "id": "s8",
           "name": "Quick Bites",
-          "image": "/images/shops/shop-quickbites.svg"
+          "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=200&h=200&fit=crop"
         },
         {
           "id": "s9",
           "name": "Coffee Corner",
-          "image": "/images/shops/shop-coffee.svg"
+          "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop"
         },
         {
           "id": "s10",
           "name": "Provençal Delights",
-          "image": "/images/shops/shop-gourmet.svg"
+          "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&h=200&fit=crop"
         }
       ],
       "menu_items": [
@@ -360,105 +360,105 @@
           "name": "Bouillabaisse Bowl",
           "price": "16.00",
           "description": "Traditional Marseille fish stew with rouille",
-          "thumbnail": "/images/menu/bouillabaisse.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1534939561126-855b8675edd7?w=300&h=300&fit=crop"
         },
         {
           "id": "m2",
           "name": "Panisse Fries",
           "price": "6.50",
           "description": "Crispy chickpea flour fries, Marseille specialty",
-          "thumbnail": "/images/menu/panisse.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300&h=300&fit=crop"
         },
         {
           "id": "m3",
           "name": "Navette Cookies",
           "price": "4.00",
           "description": "Traditional boat-shaped biscuits",
-          "thumbnail": "/images/menu/navette.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=300&h=300&fit=crop"
         },
         {
           "id": "m4",
           "name": "Pizza OM Special",
           "price": "13.00",
           "description": "Loaded pizza with local toppings",
-          "thumbnail": "/images/menu/pizza.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=300&h=300&fit=crop"
         },
         {
           "id": "m5",
           "name": "Grilled Sardines",
           "price": "11.00",
           "description": "Fresh Mediterranean sardines with herbs",
-          "thumbnail": "/images/menu/sardines.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=300&h=300&fit=crop"
         },
         {
           "id": "m6",
           "name": "Fougasse Bread",
           "price": "5.00",
           "description": "Provençal flatbread with olives",
-          "thumbnail": "/images/menu/fougasse.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300&h=300&fit=crop"
         },
         {
           "id": "m7",
           "name": "Aioli Platter",
           "price": "12.00",
           "description": "Vegetables and cod with garlic mayo",
-          "thumbnail": "/images/menu/aioli.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=300&fit=crop"
         },
         {
           "id": "m8",
           "name": "Classic Burger",
           "price": "11.50",
           "description": "House burger with secret sauce",
-          "thumbnail": "/images/menu/burger.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=300&fit=crop"
         },
         {
           "id": "m9",
           "name": "Pastis Cocktail",
           "price": "8.00",
           "description": "Refreshing anise-flavored drink",
-          "thumbnail": "/images/menu/pastis.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=300&fit=crop"
         },
         {
           "id": "m10",
           "name": "Tapenade Toast",
           "price": "6.00",
           "description": "Olive spread on crusty bread",
-          "thumbnail": "/images/menu/tapenade.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=300&h=300&fit=crop"
         },
         {
           "id": "m11",
           "name": "Fresh Lemonade",
           "price": "4.50",
           "description": "House-made with Provençal lemons",
-          "thumbnail": "/images/menu/lemonade.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=300&h=300&fit=crop"
         },
         {
           "id": "m12",
           "name": "Calisson Sweets",
           "price": "5.00",
           "description": "Almond candy from Provence",
-          "thumbnail": "/images/menu/calisson.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1548848221-0c2e497ed557?w=300&h=300&fit=crop"
         },
         {
           "id": "m13",
           "name": "Grilled Octopus",
           "price": "15.00",
           "description": "Tender octopus with olive oil",
-          "thumbnail": "/images/menu/octopus.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=300&h=300&fit=crop"
         },
         {
           "id": "m14",
           "name": "Ratatouille Cup",
           "price": "8.00",
           "description": "Classic Provençal vegetable stew",
-          "thumbnail": "/images/menu/ratatouille.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1572453800999-e8d2d1589b7c?w=300&h=300&fit=crop"
         },
         {
           "id": "m15",
           "name": "Gelato Selection",
           "price": "5.50",
           "description": "Italian-style ice cream",
-          "thumbnail": "/images/menu/gelato.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=300&h=300&fit=crop"
         }
       ]
     },
@@ -497,127 +497,127 @@
         {
           "id": "s1",
           "name": "Hell's Kitchen",
-          "image": "/images/shops/shop-grill.svg"
+          "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=200&fit=crop"
         },
         {
           "id": "s2",
           "name": "Metal Burger",
-          "image": "/images/shops/shop-burger.svg"
+          "image": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=200&h=200&fit=crop"
         },
         {
           "id": "s3",
           "name": "Rock Pizza",
-          "image": "/images/shops/shop-pizza.svg"
+          "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&h=200&fit=crop"
         },
         {
           "id": "s4",
           "name": "Devil's Drinks",
-          "image": "/images/shops/shop-drinks.svg"
+          "image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=200&h=200&fit=crop"
         },
         {
           "id": "s5",
           "name": "Mosh Pit Nachos",
-          "image": "/images/shops/shop-quickbites.svg"
+          "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=200&h=200&fit=crop"
         },
         {
           "id": "s6",
           "name": "Vegan Fury",
-          "image": "/images/shops/shop-vegan.svg"
+          "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=200&h=200&fit=crop"
         },
         {
           "id": "s7",
           "name": "Breakfast of Champions",
-          "image": "/images/shops/shop-coffee.svg"
+          "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop"
         },
         {
           "id": "s8",
           "name": "Asian Thunder",
-          "image": "/images/shops/shop-asian.svg"
+          "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=200&h=200&fit=crop"
         },
         {
           "id": "s9",
           "name": "BBQ Inferno",
-          "image": "/images/shops/shop-bbq.svg"
+          "image": "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=200&h=200&fit=crop"
         },
         {
           "id": "s10",
           "name": "Sweet Skull",
-          "image": "/images/shops/shop-sweets.svg"
+          "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&h=200&fit=crop"
         },
         {
           "id": "s11",
           "name": "French Connection",
-          "image": "/images/shops/shop-local.svg"
+          "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop"
         },
         {
           "id": "s12",
           "name": "Seafood Satan",
-          "image": "/images/shops/shop-seafood.svg"
+          "image": "https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=200&h=200&fit=crop"
         },
         {
           "id": "s13",
           "name": "Gourmet Graveyard",
-          "image": "/images/shops/shop-gourmet.svg"
+          "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&h=200&fit=crop"
         },
         {
           "id": "s14",
           "name": "Ice Cream Asylum",
-          "image": "/images/shops/shop-icecream.svg"
+          "image": "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=200&h=200&fit=crop"
         },
         {
           "id": "s15",
           "name": "Taco Tornado",
-          "image": "/images/shops/shop-mexican.svg"
+          "image": "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=200&h=200&fit=crop"
         },
         {
           "id": "s16",
           "name": "Pasta Paradise",
-          "image": "/images/shops/shop-pasta.svg"
+          "image": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=200&h=200&fit=crop"
         },
         {
           "id": "s17",
           "name": "Sushi Stage",
-          "image": "/images/shops/shop-sushi.svg"
+          "image": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=200&h=200&fit=crop"
         },
         {
           "id": "s18",
           "name": "Crepe Chaos",
-          "image": "/images/shops/shop-crepe.svg"
+          "image": "https://images.unsplash.com/photo-1519676867240-f03562e64548?w=200&h=200&fit=crop"
         },
         {
           "id": "s19",
           "name": "Falafel Frenzy",
-          "image": "/images/shops/shop-falafel.svg"
+          "image": "https://images.unsplash.com/photo-1593001874117-c99c800e3eb7?w=200&h=200&fit=crop"
         },
         {
           "id": "s20",
           "name": "Wok & Roll",
-          "image": "/images/shops/shop-wok.svg"
+          "image": "https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=200&h=200&fit=crop"
         },
         {
           "id": "s21",
           "name": "Bagel Brutality",
-          "image": "/images/shops/shop-bagel.svg"
+          "image": "https://images.unsplash.com/photo-1585445490387-f47934b73b54?w=200&h=200&fit=crop"
         },
         {
           "id": "s22",
           "name": "Salad Slayer",
-          "image": "/images/shops/shop-salad.svg"
+          "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&h=200&fit=crop"
         },
         {
           "id": "s23",
           "name": "Juice Joint",
-          "image": "/images/shops/shop-juice.svg"
+          "image": "https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=200&h=200&fit=crop"
         },
         {
           "id": "s24",
           "name": "Churros Circle",
-          "image": "/images/shops/shop-churros.svg"
+          "image": "https://images.unsplash.com/photo-1624371414361-e670edf4892b?w=200&h=200&fit=crop"
         },
         {
           "id": "s25",
           "name": "Midnight Munchies",
-          "image": "/images/shops/shop-latenight.svg"
+          "image": "https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=200&h=200&fit=crop"
         }
       ],
       "menu_items": [
@@ -626,140 +626,140 @@
           "name": "Hell Burger",
           "price": "14.00",
           "description": "Spicy double patty with ghost pepper sauce",
-          "thumbnail": "/images/menu/hellburger.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=300&h=300&fit=crop"
         },
         {
           "id": "m2",
           "name": "Vegan Metal Bowl",
           "price": "12.00",
           "description": "Plant-based protein with quinoa and veggies",
-          "thumbnail": "/images/menu/veganbowl.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=300&h=300&fit=crop"
         },
         {
           "id": "m3",
           "name": "BBQ Ribs Platter",
           "price": "18.00",
           "description": "Slow-cooked ribs with smoky BBQ glaze",
-          "thumbnail": "/images/menu/ribs.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1544025162-d76694265947?w=300&h=300&fit=crop"
         },
         {
           "id": "m4",
           "name": "Festival Fries XL",
           "price": "7.00",
           "description": "Loaded fries with cheese and bacon",
-          "thumbnail": "/images/menu/loadedfries.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1585109649139-366815a0d713?w=300&h=300&fit=crop"
         },
         {
           "id": "m5",
           "name": "Rock & Roll Burrito",
           "price": "11.00",
           "description": "Massive burrito stuffed with everything",
-          "thumbnail": "/images/menu/burrito.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=300&h=300&fit=crop"
         },
         {
           "id": "m6",
           "name": "Mosh Pit Nachos",
           "price": "9.50",
           "description": "Shareable nachos with all toppings",
-          "thumbnail": "/images/menu/nachos.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=300&h=300&fit=crop"
         },
         {
           "id": "m7",
           "name": "Asian Noodle Box",
           "price": "10.00",
           "description": "Stir-fried noodles with vegetables",
-          "thumbnail": "/images/menu/noodles.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop"
         },
         {
           "id": "m8",
           "name": "Pizza Slice XL",
           "price": "6.00",
           "description": "Giant pizza slice, multiple flavors",
-          "thumbnail": "/images/menu/pizzaslice.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=300&h=300&fit=crop"
         },
         {
           "id": "m9",
           "name": "Craft Beer Selection",
           "price": "8.00",
           "description": "Local and international craft brews",
-          "thumbnail": "/images/menu/craftbeer.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=300&h=300&fit=crop"
         },
         {
           "id": "m10",
           "name": "Energy Breakfast",
           "price": "9.00",
           "description": "Eggs, bacon, toast and coffee combo",
-          "thumbnail": "/images/menu/breakfast.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=300&h=300&fit=crop"
         },
         {
           "id": "m11",
           "name": "Churros & Chocolate",
           "price": "6.50",
           "description": "Hot churros with dark chocolate dip",
-          "thumbnail": "/images/menu/churros.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1624371414361-e670edf4892b?w=300&h=300&fit=crop"
         },
         {
           "id": "m12",
           "name": "Fresh Fruit Smoothie",
           "price": "7.00",
           "description": "Blended fruits for festival energy",
-          "thumbnail": "/images/menu/smoothie.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=300&h=300&fit=crop"
         },
         {
           "id": "m13",
           "name": "Pulled Pork Sandwich",
           "price": "12.00",
           "description": "Slow-cooked pork with coleslaw",
-          "thumbnail": "/images/menu/pulledpork.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1550547660-d9450f859349?w=300&h=300&fit=crop"
         },
         {
           "id": "m14",
           "name": "Greek Gyros",
           "price": "10.50",
           "description": "Lamb gyros with tzatziki in pita",
-          "thumbnail": "/images/menu/gyros.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1561651823-34feb02250e4?w=300&h=300&fit=crop"
         },
         {
           "id": "m15",
           "name": "Ice Cold Lemonade",
           "price": "4.00",
           "description": "Refreshing citrus drink",
-          "thumbnail": "/images/menu/lemonade.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=300&h=300&fit=crop"
         },
         {
           "id": "m16",
           "name": "Hot Dog Supreme",
           "price": "8.00",
           "description": "Foot-long dog with all toppings",
-          "thumbnail": "/images/menu/hotdog.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1612392062126-67662f65ee39?w=300&h=300&fit=crop"
         },
         {
           "id": "m17",
           "name": "Falafel Wrap",
           "price": "9.00",
           "description": "Crispy falafel with hummus and salad",
-          "thumbnail": "/images/menu/falafel.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1593001874117-c99c800e3eb7?w=300&h=300&fit=crop"
         },
         {
           "id": "m18",
           "name": "Chicken Tenders",
           "price": "10.00",
           "description": "Crispy tenders with dipping sauces",
-          "thumbnail": "/images/menu/tenders.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1562967914-608f82629710?w=300&h=300&fit=crop"
         },
         {
           "id": "m19",
           "name": "Açaí Bowl",
           "price": "11.00",
           "description": "Healthy açaí with granola and fruits",
-          "thumbnail": "/images/menu/acai.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1590301157890-4810ed352733?w=300&h=300&fit=crop"
         },
         {
           "id": "m20",
           "name": "Midnight Grilled Cheese",
           "price": "7.50",
           "description": "Triple cheese melt for late night cravings",
-          "thumbnail": "/images/menu/grilledcheese.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=300&h=300&fit=crop"
         }
       ]
     },
@@ -792,32 +792,32 @@
         {
           "id": "s1",
           "name": "Arena Gourmet",
-          "image": "/images/shops/shop-gourmet.svg"
+          "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&h=200&fit=crop"
         },
         {
           "id": "s2",
           "name": "Fast Bites",
-          "image": "/images/shops/shop-quickbites.svg"
+          "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=200&h=200&fit=crop"
         },
         {
           "id": "s3",
           "name": "Parisian Café",
-          "image": "/images/shops/shop-coffee.svg"
+          "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop"
         },
         {
           "id": "s4",
           "name": "Drinks & Cocktails",
-          "image": "/images/shops/shop-drinks.svg"
+          "image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=200&h=200&fit=crop"
         },
         {
           "id": "s5",
           "name": "Sweet Moments",
-          "image": "/images/shops/shop-sweets.svg"
+          "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&h=200&fit=crop"
         },
         {
           "id": "s6",
           "name": "Pizza Point",
-          "image": "/images/shops/shop-pizza.svg"
+          "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&h=200&fit=crop"
         }
       ],
       "menu_items": [
@@ -826,56 +826,56 @@
           "name": "Premium Charcuterie Board",
           "price": "22.00",
           "description": "Selection of French cured meats and cheeses",
-          "thumbnail": "/images/menu/charcuterie.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1541529086526-db283c563270?w=300&h=300&fit=crop"
         },
         {
           "id": "m2",
           "name": "Champagne Flute",
           "price": "15.00",
           "description": "French champagne for special occasions",
-          "thumbnail": "/images/menu/champagne.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1594372365401-3b5ff14eaaed?w=300&h=300&fit=crop"
         },
         {
           "id": "m3",
           "name": "Gourmet Hot Dog",
           "price": "10.00",
           "description": "Premium sausage with truffle mayo",
-          "thumbnail": "/images/menu/gourmetdog.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1612392062126-67662f65ee39?w=300&h=300&fit=crop"
         },
         {
           "id": "m4",
           "name": "Parisian Croque",
           "price": "11.00",
           "description": "Classic ham and cheese with béchamel",
-          "thumbnail": "/images/menu/croque.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=300&h=300&fit=crop"
         },
         {
           "id": "m5",
           "name": "Fresh Oysters (6pc)",
           "price": "24.00",
           "description": "Premium oysters with mignonette",
-          "thumbnail": "/images/menu/oysters.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1510130387422-82bed34b37e9?w=300&h=300&fit=crop"
         },
         {
           "id": "m6",
           "name": "Truffle Fries",
           "price": "12.00",
           "description": "Crispy fries with truffle oil and parmesan",
-          "thumbnail": "/images/menu/trufflefries.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300&h=300&fit=crop"
         },
         {
           "id": "m7",
           "name": "Macarons Box",
           "price": "14.00",
           "description": "Assortment of 6 French macarons",
-          "thumbnail": "/images/menu/macarons.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=300&h=300&fit=crop"
         },
         {
           "id": "m8",
           "name": "Espresso Martini",
           "price": "16.00",
           "description": "Classic cocktail with French espresso",
-          "thumbnail": "/images/menu/espressomartini.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=300&fit=crop"
         }
       ]
     },
@@ -917,77 +917,77 @@
         {
           "id": "s1",
           "name": "Wembley Grill",
-          "image": "/images/shops/shop-grill.svg"
+          "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=200&fit=crop"
         },
         {
           "id": "s2",
           "name": "Fish & Chips",
-          "image": "/images/shops/shop-fish.svg"
+          "image": "https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=200&h=200&fit=crop"
         },
         {
           "id": "s3",
           "name": "British Pies",
-          "image": "/images/shops/shop-pies.svg"
+          "image": "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=200&h=200&fit=crop"
         },
         {
           "id": "s4",
           "name": "Burger Corner",
-          "image": "/images/shops/shop-burger.svg"
+          "image": "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=200&h=200&fit=crop"
         },
         {
           "id": "s5",
           "name": "Pizza Express",
-          "image": "/images/shops/shop-pizza.svg"
+          "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&h=200&fit=crop"
         },
         {
           "id": "s6",
           "name": "The Pub",
-          "image": "/images/shops/shop-drinks.svg"
+          "image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=200&h=200&fit=crop"
         },
         {
           "id": "s7",
           "name": "Asian Flavours",
-          "image": "/images/shops/shop-asian.svg"
+          "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=200&h=200&fit=crop"
         },
         {
           "id": "s8",
           "name": "Mexican Fiesta",
-          "image": "/images/shops/shop-mexican.svg"
+          "image": "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=200&h=200&fit=crop"
         },
         {
           "id": "s9",
           "name": "Coffee & Tea",
-          "image": "/images/shops/shop-coffee.svg"
+          "image": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200&h=200&fit=crop"
         },
         {
           "id": "s10",
           "name": "Sweet Treats",
-          "image": "/images/shops/shop-sweets.svg"
+          "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&h=200&fit=crop"
         },
         {
           "id": "s11",
           "name": "Sandwich Bar",
-          "image": "/images/shops/shop-sandwich.svg"
+          "image": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=200&h=200&fit=crop"
         },
         {
           "id": "s12",
           "name": "Healthy Options",
-          "image": "/images/shops/shop-salad.svg"
+          "image": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&h=200&fit=crop"
         },
         {
           "id": "s13",
           "name": "Ice Cream Stand",
-          "image": "/images/shops/shop-icecream.svg"
+          "image": "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=200&h=200&fit=crop"
         },
         {
           "id": "s14",
           "name": "Premium Deli",
-          "image": "/images/shops/shop-gourmet.svg"
+          "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200&h=200&fit=crop"
         },
         {
           "id": "s15",
           "name": "Match Day Specials",
-          "image": "/images/shops/shop-local.svg"
+          "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop"
         }
       ],
       "menu_items": [
@@ -996,175 +996,175 @@
           "name": "Fish & Chips",
           "price": "14.00",
           "description": "Classic battered cod with chunky chips",
-          "thumbnail": "/images/menu/fishandchips.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1579208030886-b1a5764bac5e?w=300&h=300&fit=crop"
         },
         {
           "id": "m2",
           "name": "Beef & Ale Pie",
           "price": "12.00",
           "description": "Traditional British pie with mash",
-          "thumbnail": "/images/menu/beefpie.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=300&h=300&fit=crop"
         },
         {
           "id": "m3",
           "name": "Full English Breakfast",
           "price": "15.00",
           "description": "Eggs, bacon, sausage, beans, toast",
-          "thumbnail": "/images/menu/fullenglish.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=300&h=300&fit=crop"
         },
         {
           "id": "m4",
           "name": "Wembley Burger",
           "price": "13.50",
           "description": "Double patty with British cheddar",
-          "thumbnail": "/images/menu/wembleyburger.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=300&fit=crop"
         },
         {
           "id": "m5",
           "name": "Cornish Pasty",
           "price": "8.00",
           "description": "Traditional beef and vegetable pasty",
-          "thumbnail": "/images/menu/pasty.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1607478900766-efe13248b125?w=300&h=300&fit=crop"
         },
         {
           "id": "m6",
           "name": "Chicken Tikka Masala",
           "price": "14.00",
           "description": "British Indian curry with rice",
-          "thumbnail": "/images/menu/tikkamasala.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=300&h=300&fit=crop"
         },
         {
           "id": "m7",
           "name": "Sunday Roast",
           "price": "16.00",
           "description": "Roast beef with Yorkshire pudding",
-          "thumbnail": "/images/menu/sundayroast.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1544025162-d76694265947?w=300&h=300&fit=crop"
         },
         {
           "id": "m8",
           "name": "Bangers & Mash",
           "price": "11.00",
           "description": "Cumberland sausages with onion gravy",
-          "thumbnail": "/images/menu/bangersandmash.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1601628828688-632f38a5a7d0?w=300&h=300&fit=crop"
         },
         {
           "id": "m9",
           "name": "Pint of Lager",
           "price": "7.00",
           "description": "Selection of British and imported beers",
-          "thumbnail": "/images/menu/pint.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=300&h=300&fit=crop"
         },
         {
           "id": "m10",
           "name": "Sticky Toffee Pudding",
           "price": "8.00",
           "description": "Warm sponge with toffee sauce",
-          "thumbnail": "/images/menu/stickytoffee.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=300&h=300&fit=crop"
         },
         {
           "id": "m11",
           "name": "Scotch Egg",
           "price": "6.00",
           "description": "Sausage-wrapped egg, pub classic",
-          "thumbnail": "/images/menu/scotchegg.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1608039829572-ded31b378dc1?w=300&h=300&fit=crop"
         },
         {
           "id": "m12",
           "name": "Afternoon Tea Box",
           "price": "18.00",
           "description": "Sandwiches, scones, and petit fours",
-          "thumbnail": "/images/menu/afternoontea.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=300&h=300&fit=crop"
         },
         {
           "id": "m13",
           "name": "Prawn Cocktail",
           "price": "10.00",
           "description": "Classic starter with Marie Rose sauce",
-          "thumbnail": "/images/menu/prawncocktail.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=300&h=300&fit=crop"
         },
         {
           "id": "m14",
           "name": "Welsh Rarebit",
           "price": "9.00",
           "description": "Cheese toast with ale and mustard",
-          "thumbnail": "/images/menu/welshrarebit.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=300&h=300&fit=crop"
         },
         {
           "id": "m15",
           "name": "Eton Mess",
           "price": "7.00",
           "description": "Meringue, cream, and strawberries",
-          "thumbnail": "/images/menu/etonmess.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&h=300&fit=crop"
         },
         {
           "id": "m16",
           "name": "Jacket Potato",
           "price": "8.50",
           "description": "Baked potato with cheese and beans",
-          "thumbnail": "/images/menu/jacketpotato.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1568482291331-dcaa631b35eb?w=300&h=300&fit=crop"
         },
         {
           "id": "m17",
           "name": "Ploughman's Lunch",
           "price": "12.00",
           "description": "Cheese, pickle, bread, and salad",
-          "thumbnail": "/images/menu/ploughmans.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1541529086526-db283c563270?w=300&h=300&fit=crop"
         },
         {
           "id": "m18",
           "name": "Curry Chips",
           "price": "6.00",
           "description": "Chips smothered in curry sauce",
-          "thumbnail": "/images/menu/currychips.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300&h=300&fit=crop"
         },
         {
           "id": "m19",
           "name": "Gin & Tonic",
           "price": "10.00",
           "description": "Premium British gin selection",
-          "thumbnail": "/images/menu/gandtonic.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300&h=300&fit=crop"
         },
         {
           "id": "m20",
           "name": "Apple Crumble",
           "price": "7.50",
           "description": "Warm crumble with custard",
-          "thumbnail": "/images/menu/applecrumble.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?w=300&h=300&fit=crop"
         },
         {
           "id": "m21",
           "name": "Sausage Roll",
           "price": "5.00",
           "description": "Flaky pastry with seasoned pork",
-          "thumbnail": "/images/menu/sausageroll.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1607478900766-efe13248b125?w=300&h=300&fit=crop"
         },
         {
           "id": "m22",
           "name": "Tea & Biscuits",
           "price": "4.00",
           "description": "English breakfast tea with shortbread",
-          "thumbnail": "/images/menu/teabiscuits.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=300&h=300&fit=crop"
         },
         {
           "id": "m23",
           "name": "Black Pudding Bites",
           "price": "7.00",
           "description": "Crispy black pudding with apple",
-          "thumbnail": "/images/menu/blackpudding.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1601628828688-632f38a5a7d0?w=300&h=300&fit=crop"
         },
         {
           "id": "m24",
           "name": "Chips & Gravy",
           "price": "5.50",
           "description": "Thick-cut chips with beef gravy",
-          "thumbnail": "/images/menu/chipsgravy.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300&h=300&fit=crop"
         },
         {
           "id": "m25",
           "name": "Victoria Sponge",
           "price": "6.00",
           "description": "Classic British cake with jam",
-          "thumbnail": "/images/menu/victoriasponge.jpg"
+          "thumbnail": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=300&h=300&fit=crop"
         }
       ]
     }

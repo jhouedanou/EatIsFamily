@@ -16,8 +16,7 @@ export default <RouterConfig>{
       }
     }
 
-    // Pour les actualisations de page ou nouvelles navigations
-    // Ne pas remonter en haut, rester à la position actuelle
-    return false
+    // Pour les nouvelles navigations, remonter en haut de la page
+    return { top: 0, behavior: 'smooth' }
   },
 }
