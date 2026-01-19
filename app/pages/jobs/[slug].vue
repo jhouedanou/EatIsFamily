@@ -1,43 +1,26 @@
 <script setup lang="ts">
-import { LucideMapPin, LucideBriefcase, LucideDollarSign, LucideCalendar, LucideCheck, LucideStar, LucideArrowLeft, LucideShare2, LucideHeart } from 'lucide-vue-next'
+import { LucideX, LucideMapPin, LucideBriefcase, LucideClock, LucideDollarSign, LucideHeart, LucideShare2, LucideChevronRight } from 'lucide-vue-next'
 import type { Job } from '~/composables/useJobs'
 
-// IMMEDIATE LOG - should appear when script loads
-console.log('!!!!! [slug].vue SCRIPT SETUP EXECUTING !!!!!')
-
 const route = useRoute()
+const router = useRouter()
 const { getJobBySlug, getJobs } = useJobs()
 
 const job = ref<Job | null>(null)
-const relatedJobs = ref<Job[]>([])
 const isLoading = ref(true)
 const showApplyModal = ref(false)
 
-// Add click listener to entire document to debug
-if (typeof window !== 'undefined') {
-  console.log('Adding global click listener...')
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement
-    console.log('CLICK DETECTED on:', target.tagName, target.className, target.textContent?.substring(0, 30))
-  })
-}
+// Gallery images for "Life at" section
+const galleryImages = [
+  '/images/gallery/stadium.jpg',
+  '/images/gallery/team.jpg',
+  '/images/gallery/kitchen.jpg',
+  '/images/gallery/venue.jpg'
+]
 
 onMounted(async () => {
-  console.log('=== [slug].vue PAGE MOUNTED ===')
-  alert('Page [slug].vue mounted!') // This should show a popup!
   const slug = route.params.slug as string
-  console.log('Loading job with slug:', slug)
   job.value = await getJobBySlug(slug)
-  console.log('Job loaded:', job.value?.title)
-
-  // Get related jobs (same job_type, excluding current)
-  const allJobs = await getJobs()
-  if (allJobs && job.value) {
-    relatedJobs.value = allJobs
-      .filter(j => j.id !== job.value!.id && j.job_type === job.value!.job_type)
-      .slice(0, 3)
-  }
-
   isLoading.value = false
 })
 
@@ -45,36 +28,42 @@ const getJobTitle = (j: Job) => {
   return typeof j.title === 'string' ? j.title : j.title?.rendered || ''
 }
 
-const getJobContent = (j: Job) => {
-  return typeof j.content === 'string' ? j.content : j.content?.rendered || ''
-}
-
 const getJobExcerpt = (j: Job) => {
   return typeof j.excerpt === 'string' ? j.excerpt : j.excerpt?.rendered || ''
 }
 
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-}
-
 const openApplyModal = () => {
-  console.log('========== OPEN APPLY MODAL ==========')
-  console.log('showApplyModal BEFORE:', showApplyModal.value)
   showApplyModal.value = true
-  console.log('showApplyModal AFTER:', showApplyModal.value)
-  console.log('=======================================')
 }
-
-// Debug watcher
-watch(showApplyModal, (newVal) => {
-  console.log('>>> showApplyModal CHANGED TO:', newVal)
-})
 
 const closeApplyModal = () => {
-  console.log('closeApplyModal called')
   showApplyModal.value = false
 }
+
+const goBack = () => {
+  router.push('/careers')
+}
+
+const shareJob = () => {
+  if (navigator.share) {
+    navigator.share({
+      title: job.value ? getJobTitle(job.value) : 'Job Opening',
+      url: window.location.href
+    })
+  } else {
+    navigator.clipboard.writeText(window.location.href)
+    alert('Link copied to clipboard!')
+  }
+}
+
+// What you'll do - responsibilities
+const responsibilities = [
+  'Lead daily operations and ensure quality standards',
+  'Collaborate with team members to deliver excellence',
+  'Maintain safety and hygiene protocols',
+  'Contribute to menu planning and innovation',
+  'Train and mentor junior staff members'
+]
 
 useHead(() => ({
   title: job.value ? `${getJobTitle(job.value)} - Careers | Eat Is Family` : 'Job Details',
@@ -96,189 +85,169 @@ useHead(() => ({
     <div v-else-if="!job" class="not-found-container">
       <h1>Job Not Found</h1>
       <p>The position you're looking for doesn't exist or has been filled.</p>
-      <NuxtLink to="/jobs" class="btn-back">
-        <LucideArrowLeft class="btn-icon" />
+      <NuxtLink to="/careers" class="btn-back">
         Browse All Jobs
       </NuxtLink>
     </div>
 
     <!-- Job Details -->
-    <template v-else>
-      <!-- Hero Section -->
-      <section class="job-hero">
-        <div class="hero-image">
-          <img :src="job.featured_media" :alt="getJobTitle(job)" />
-          <div class="hero-overlay"></div>
+    <div v-else class="job-detail-content">
+      <!-- Header Bar -->
+      <header class="detail-header">
+        <div class="header-inner">
+          <div class="location-info">
+            <LucideMapPin class="location-icon" />
+            <span>{{ job.location }}</span>
+          </div>
+          <button class="close-btn" @click="goBack" aria-label="Close">
+            <LucideX :size="20" :stroke-width="2.5" />
+          </button>
         </div>
-        <div class="container hero-content">
-          <NuxtLink to="/jobs" class="back-link">
-            <LucideArrowLeft class="back-icon" />
-            Back to Jobs
-          </NuxtLink>
+        <div class="header-divider"></div>
+      </header>
 
-          <div class="job-header">
-            <span class="job-type-tag" :class="job.job_type.toLowerCase().replace('-', '')">
-              {{ job.job_type }}
-            </span>
+      <!-- Main Content -->
+      <main class="detail-main">
+        <div class="container">
+          <!-- Job Title & Tags -->
+          <section class="job-intro">
             <h1 class="job-title">{{ getJobTitle(job) }}</h1>
 
-            <div class="job-meta-grid">
-              <div class="meta-card">
-                <LucideMapPin class="meta-icon" />
-                <div class="meta-text">
-                  <span class="meta-label">Location</span>
-                  <span class="meta-value">{{ job.location }}</span>
-                </div>
-              </div>
-              <div class="meta-card">
-                <LucideDollarSign class="meta-icon" />
-                <div class="meta-text">
-                  <span class="meta-label">Salary</span>
-                  <span class="meta-value">{{ job.salary }}</span>
-                </div>
-              </div>
-              <div class="meta-card">
-                <LucideBriefcase class="meta-icon" />
-                <div class="meta-text">
-                  <span class="meta-label">Job Type</span>
-                  <span class="meta-value">{{ job.job_type }}</span>
-                </div>
-              </div>
-              <div class="meta-card">
-                <LucideCalendar class="meta-icon" />
-                <div class="meta-text">
-                  <span class="meta-label">Posted</span>
-                  <span class="meta-value">{{ formatDate(job.date) }}</span>
-                </div>
-              </div>
+            <div class="job-tags">
+              <span class="tag tag-blue">
+                Department - {{ job.department || 'Culinary' }}
+              </span>
+              <span class="tag tag-lime">
+                <LucideBriefcase :size="14" />
+                {{ job.job_type }}
+              </span>
+              <span class="tag tag-yellow">
+                <LucideDollarSign :size="14" />
+                {{ job.salary }}
+              </span>
             </div>
 
-            <div class="hero-actions">
-              <button class="btn-apply-hero" @click="openApplyModal">
-                Apply for This Position
-              </button>
-              <button class="btn-icon-action" aria-label="Save job">
-                <LucideHeart />
-              </button>
-              <button class="btn-icon-action" aria-label="Share job">
-                <LucideShare2 />
-              </button>
+            <p class="job-excerpt">{{ getJobExcerpt(job) }}</p>
+          </section>
+
+          <!-- CTA Banner - Ready To Join -->
+          <div class="cta-banner">
+            <div class="cta-content">
+              <h3>Ready To Join Our Team?</h3>
+              <p>Apply now and be part of something special</p>
             </div>
+            <button class="btn-apply-pink" @click="openApplyModal">
+              Apply for this position
+            </button>
           </div>
-        </div>
-      </section>
 
-      <!-- Content Section -->
-      <section class="job-content-section">
-        <div class="container">
-          <div class="content-grid">
-            <!-- Main Content -->
-            <div class="main-content">
-              <!-- About the Position -->
-              <div class="content-card">
-                <h2 class="section-title">About the Position</h2>
-                <div class="prose" v-html="getJobContent(job)"></div>
+          <!-- Life at Location Section -->
+          <section class="life-section">
+            <h2 class="section-title">Life at {{ job.location }}</h2>
+            <div class="gallery-grid">
+              <div v-for="(img, index) in galleryImages" :key="index" class="gallery-item">
+                <img :src="job.featured_media || `/images/placeholder-${index + 1}.jpg`" :alt="`Life at ${job.location}`" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Job Description And Requirement -->
+          <section class="description-section">
+            <h2 class="section-title">Job Description And Requirement</h2>
+
+            <div class="description-grid">
+              <!-- What You'll Do -->
+              <div class="description-card">
+                <h3>What You'll Do</h3>
+                <p class="card-intro">You'll do the following:</p>
+                <ul class="description-list">
+                  <li v-for="(item, index) in responsibilities" :key="index">
+                    <LucideChevronRight :size="16" class="list-icon" />
+                    <span>{{ item }}</span>
+                  </li>
+                </ul>
               </div>
 
-              <!-- Requirements -->
-              <div class="content-card">
-                <h2 class="section-title">Requirements</h2>
-                <ul class="requirements-list">
+              <!-- What We're Looking For -->
+              <div class="description-card">
+                <h3>What We're Looking For</h3>
+                <p class="card-intro">The following requirement is what we are looking for</p>
+                <ul class="description-list">
                   <li v-for="(req, index) in job.requirements" :key="index">
-                    <div class="list-icon requirements-icon">
-                      <LucideCheck />
-                    </div>
+                    <LucideChevronRight :size="16" class="list-icon" />
                     <span>{{ req }}</span>
                   </li>
                 </ul>
               </div>
+            </div>
+          </section>
 
-              <!-- Benefits -->
-              <div class="content-card">
-                <h2 class="section-title">What We Offer</h2>
-                <ul class="benefits-list">
-                  <li v-for="(benefit, index) in job.benefits" :key="index">
-                    <div class="list-icon benefits-icon">
-                      <LucideStar />
-                    </div>
-                    <span>{{ benefit }}</span>
-                  </li>
-                </ul>
+          <!-- Three Cards Row -->
+          <div class="info-cards-grid">
+            <!-- Why Join Us - Pink Card -->
+            <div class="info-card card-pink">
+              <div class="card-header">
+                <LucideHeart :size="20" class="card-icon" />
+                <h3>Why Join Us</h3>
+              </div>
+              <ul class="benefits-list">
+                <li v-for="(benefit, index) in job.benefits" :key="index">
+                  <LucideChevronRight :size="14" class="list-icon" />
+                  <span>{{ benefit }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Quick Facts - White Card -->
+            <div class="info-card card-white">
+              <h3>Quick Facts</h3>
+              <div class="facts-list">
+                <div class="fact-item">
+                  <span class="fact-label">LOCATION</span>
+                  <span class="fact-value">{{ job.location }}</span>
+                </div>
+                <div class="fact-item">
+                  <span class="fact-label">DEPARTMENT</span>
+                  <span class="fact-value">{{ job.department || 'Culinary' }}</span>
+                </div>
+                <div class="fact-item">
+                  <span class="fact-label">EMPLOYMENT TYPE</span>
+                  <span class="fact-value">{{ job.job_type }}</span>
+                </div>
+                <div class="fact-item">
+                  <span class="fact-label">AVAILABLE POSITIONS</span>
+                  <span class="fact-value fact-highlight">{{ job.positions || '2 Slots' }}</span>
+                </div>
               </div>
             </div>
 
-            <!-- Sidebar -->
-            <aside class="sidebar">
-              <!-- Apply Card -->
-              <div id="apply" class="apply-card">
-                <h3 class="apply-title">Ready to Join Us?</h3>
-                <p class="apply-subtitle">Take the next step in your career journey.</p>
+            <!-- Share Job - Blue Card -->
+            <div class="info-card card-blue">
+              <h3>Do You Know Someone That Is Perfect For This Position?</h3>
+              <p>Kindly Share This Job To The Person</p>
+              <button class="btn-share" @click="shareJob">
+                Share this job
+              </button>
+            </div>
+          </div>
 
-                <button class="btn-apply-sidebar" @click="openApplyModal">
-                  Apply Now
+          <!-- Bottom CTA Section -->
+          <section class="bottom-cta">
+            <div class="bottom-cta-content">
+              <h2>Ready To Make An Impact?</h2>
+              <p>Join our team and be part of creating unforgettable experiences at one of France's most exciting venues.</p>
+              <div class="bottom-cta-buttons">
+                <button class="btn-apply-bottom" @click="openApplyModal">
+                  Apply for this position
+                </button>
+                <button class="btn-back-jobs" @click="goBack">
+                  Go back to jobs
                 </button>
               </div>
-
-              <!-- Quick Info -->
-              <div class="quick-info-card">
-                <h4>Quick Info</h4>
-                <div class="info-item">
-                  <span class="info-label">Department</span>
-                  <span class="info-value">{{ job.department || 'Culinary & Hospitality' }}</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Experience</span>
-                  <span class="info-value">See Requirements</span>
-                </div>
-                <div class="info-item">
-                  <span class="info-label">Remote</span>
-                  <span class="info-value">{{ job.location.toLowerCase().includes('remote') ? 'Yes' : 'On-site' }}</span>
-                </div>
-              </div>
-            </aside>
-          </div>
+            </div>
+          </section>
         </div>
-      </section>
-
-      <!-- Related Jobs -->
-      <section v-if="relatedJobs.length > 0" class="related-section">
-        <div class="container">
-          <h2 class="related-title">Similar Positions</h2>
-          <div class="related-grid">
-            <NuxtLink
-              v-for="relatedJob in relatedJobs"
-              :key="relatedJob.id"
-              :to="`/jobs/${relatedJob.slug}`"
-              class="related-card"
-            >
-              <div class="related-image">
-                <img :src="relatedJob.featured_media" :alt="getJobTitle(relatedJob)" loading="lazy" />
-              </div>
-              <div class="related-content">
-                <span class="related-type">{{ relatedJob.job_type }}</span>
-                <h3>{{ getJobTitle(relatedJob) }}</h3>
-                <div class="related-meta">
-                  <LucideMapPin class="related-icon" />
-                  <span>{{ relatedJob.location }}</span>
-                </div>
-              </div>
-            </NuxtLink>
-          </div>
-        </div>
-      </section>
-
-      <!-- Bottom CTA -->
-      <section class="bottom-cta">
-        <div class="container">
-          <div class="cta-content">
-            <h2>Interested in This Role?</h2>
-            <p>Don't miss this opportunity to join our team.</p>
-            <button class="btn-apply-bottom" @click="openApplyModal">
-              Apply Now
-            </button>
-          </div>
-        </div>
-      </section>
+      </main>
 
       <!-- Apply Modal -->
       <JobApplyModal
@@ -288,14 +257,14 @@ useHead(() => ({
         :job-slug="job.slug"
         @close="closeApplyModal"
       />
-    </template>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .job-detail-page {
   min-height: 100vh;
-  background: var(--brand-gray, #F5F5F5);
+  background: #FAFAFA;
 }
 
 // Loading & Not Found
@@ -313,7 +282,7 @@ useHead(() => ({
 .loading-spinner {
   width: 48px;
   height: 48px;
-  border: 4px solid var(--brand-gray);
+  border: 4px solid #E5E5E5;
   border-top-color: var(--brand-pink);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -323,22 +292,7 @@ useHead(() => ({
   to { transform: rotate(360deg); }
 }
 
-.loading-container p,
-.not-found-container p {
-  margin-top: 1rem;
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.not-found-container h1 {
-  font-family: var(--font-heading);
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
 .btn-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
   margin-top: 1.5rem;
   padding: 0.875rem 1.5rem;
   background: var(--brand-pink);
@@ -346,7 +300,167 @@ useHead(() => ({
   border-radius: 0.5rem;
   text-decoration: none;
   font-weight: 600;
+}
+
+// Header - White background like design
+.detail-header {
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.location-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--brand-dark);
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+.location-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--brand-pink);
+}
+
+.close-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand-yellow);
+  border: 2px solid var(--brand-dark);
+  border-radius: 8px;
+  cursor: pointer;
   transition: all 0.2s ease;
+
+  &:hover {
+    transform: rotate(90deg);
+  }
+}
+
+.header-divider {
+  height: 3px;
+  background: var(--brand-blue);
+}
+
+// Main Content
+.detail-main {
+  padding: 2.5rem 0 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+// Job Intro Section
+.job-intro {
+  margin-bottom: 2rem;
+}
+
+.job-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--brand-dark);
+  margin: 0 0 1rem;
+  line-height: 1.2;
+}
+
+.job-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tag {
+  padding: 0.5rem 0.875rem;
+  border-radius: 100px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border: 2px solid var(--brand-dark);
+}
+
+.tag-blue {
+  background: var(--brand-blue);
+  color: var(--brand-dark);
+}
+
+.tag-lime {
+  background: var(--brand-lime);
+  color: var(--brand-dark);
+}
+
+.tag-yellow {
+  background: var(--brand-yellow);
+  color: var(--brand-dark);
+}
+
+.job-excerpt {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0;
+}
+
+// CTA Banner
+.cta-banner {
+  background: var(--brand-blue);
+  border-radius: 1rem;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.cta-content {
+  h3 {
+    font-family: var(--font-heading);
+    font-size: 1.375rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+    color: var(--brand-dark);
+  }
+
+  p {
+    margin: 0;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 0.9375rem;
+  }
+}
+
+.btn-apply-pink {
+  background: var(--brand-pink);
+  color: white;
+  border: none;
+  padding: 0.875rem 1.75rem;
+  border-radius: 100px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 
   &:hover {
     transform: translateY(-2px);
@@ -354,23 +468,30 @@ useHead(() => ({
   }
 }
 
-.btn-icon {
-  width: 1.25rem;
-  height: 1.25rem;
+// Section Title
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+  margin: 0 0 1.25rem;
 }
 
-// Hero Section
-.job-hero {
-  position: relative;
-  min-height: 500px;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 3rem;
+// Life at Section - Gallery
+.life-section {
+  margin-bottom: 2.5rem;
 }
 
-.hero-image {
-  position: absolute;
-  inset: 0;
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.gallery-item {
+  aspect-ratio: 1;
+  border-radius: 1rem;
+  overflow: hidden;
 
   img {
     width: 100%;
@@ -379,318 +500,75 @@ useHead(() => ({
   }
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
-}
-
-.hero-content {
-  position: relative;
-  z-index: 1;
-  color: white;
-  width: 100%;
-}
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: white;
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-bottom: 2rem;
-  opacity: 0.9;
-  transition: opacity 0.2s ease;
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
-.back-icon {
-  width: 1rem;
-  height: 1rem;
-}
-
-.job-header {
-  max-width: 800px;
-}
-
-.job-type-tag {
-  display: inline-block;
-  padding: 0.375rem 1rem;
-  background: var(--brand-lime);
-  color: var(--brand-dark);
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-radius: 50px;
-  margin-bottom: 1rem;
-
-  &.fulltime {
-    background: var(--brand-lime);
-  }
-
-  &.parttime {
-    background: var(--brand-blue);
-  }
-}
-
-.job-title {
-  font-family: var(--font-heading);
-  font-size: 3rem;
-  font-weight: 700;
-  line-height: 1.1;
-  margin: 0 0 2rem;
-}
-
-.job-meta-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
+// Description Section
+.description-section {
   margin-bottom: 2rem;
 }
 
-.meta-card {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.meta-icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--brand-lime);
-  flex-shrink: 0;
-}
-
-.meta-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.meta-label {
-  font-size: 0.75rem;
-  opacity: 0.7;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.meta-value {
-  font-weight: 600;
-  font-size: 0.9375rem;
-}
-
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.btn-apply-hero {
-  padding: 1rem 2rem;
-  background: var(--brand-pink);
-  color: white;
-  border: 2px solid white;
-  border-radius: 0.5rem;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: white;
-    color: var(--brand-pink);
-    transform: translateY(-2px);
-  }
-}
-
-.btn-icon-action {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  svg {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
-  }
-}
-
-// Content Section
-.job-content-section {
-  padding: 3rem 0;
-}
-
-.content-grid {
+.description-grid {
   display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 2rem;
-  align-items: start;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
 }
 
-.main-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.content-card {
+.description-card {
   background: white;
-  border: 2px solid var(--brand-dark);
+  border: 2px dashed rgba(0, 0, 0, 0.2);
   border-radius: 1rem;
-  padding: 2rem;
-}
+  padding: 1.5rem;
 
-.section-title {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--brand-dark);
-  margin: 0 0 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid var(--brand-gray);
-}
+  h3 {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    color: var(--brand-dark);
+  }
 
-.prose {
-  color: rgba(0, 0, 0, 0.75);
-  line-height: 1.8;
-
-  :deep(p) {
+  .card-intro {
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.6);
     margin: 0 0 1rem;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
   }
 }
 
-.requirements-list,
-.benefits-list {
+.description-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.625rem;
 
   li {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.5rem;
+    font-size: 0.875rem;
     color: rgba(0, 0, 0, 0.75);
-    line-height: 1.5;
+    line-height: 1.4;
+  }
+
+  .list-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: rgba(0, 0, 0, 0.4);
   }
 }
 
-.list-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 0.125rem;
-
-  svg {
-    width: 14px;
-    height: 14px;
-  }
+// Three Info Cards
+.info-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
 }
 
-.requirements-icon {
-  background: var(--brand-lime);
-  color: var(--brand-dark);
-}
-
-.benefits-icon {
-  background: var(--brand-pink);
-  color: white;
-}
-
-// Sidebar
-.sidebar {
-  position: sticky;
-  top: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.apply-card {
-  background: white;
-  border: 2px solid var(--brand-dark);
-  border-radius: 1rem;
-  padding: 2rem;
-  box-shadow: 4px 4px 0 var(--brand-pink);
-}
-
-.apply-title {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--brand-dark);
-  margin: 0 0 0.5rem;
-}
-
-.apply-subtitle {
-  color: rgba(0, 0, 0, 0.6);
-  margin: 0 0 1.5rem;
-}
-
-.btn-apply-sidebar {
-  width: 100%;
-  padding: 1rem 2rem;
-  background: var(--brand-pink);
-  color: white;
-  border: 2px solid var(--brand-dark);
-  border-radius: 0.75rem;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: var(--brand-lime);
-    color: var(--brand-dark);
-    transform: translateY(-2px);
-    box-shadow: 4px 4px 0 var(--brand-dark);
-  }
-}
-
-.quick-info-card {
-  background: white;
-  border: 2px solid var(--brand-dark);
+.info-card {
   border-radius: 1rem;
   padding: 1.5rem;
 
-  h4 {
+  h3 {
     font-family: var(--font-heading);
     font-size: 1rem;
     font-weight: 700;
@@ -699,198 +577,233 @@ useHead(() => ({
   }
 }
 
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--brand-gray);
+.card-pink {
+  background: var(--brand-pink);
 
-  &:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
+  h3, .benefits-list li {
+    color: white;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  .card-icon {
+    color: white;
   }
 }
 
-.info-label {
-  color: rgba(0, 0, 0, 0.5);
-  font-size: 0.875rem;
-}
-
-.info-value {
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--brand-dark);
-}
-
-// Related Section
-.related-section {
-  padding: 4rem 0;
-  background: white;
-  border-top: 2px solid var(--brand-dark);
-}
-
-.related-title {
-  font-family: var(--font-heading);
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--brand-dark);
-  margin: 0 0 2rem;
-}
-
-.related-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.related-card {
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  background: var(--brand-gray);
+  flex-direction: column;
+  gap: 0.5rem;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .list-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    opacity: 0.8;
+  }
+}
+
+.card-white {
+  background: white;
   border: 2px solid var(--brand-dark);
-  border-radius: 0.75rem;
-  overflow: hidden;
-  text-decoration: none;
+}
+
+.facts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.fact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.fact-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fact-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brand-dark);
+}
+
+.fact-highlight {
+  color: var(--brand-pink);
+}
+
+.card-blue {
+  background: var(--brand-blue);
+
+  h3 {
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.8125rem;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 0 0 1rem;
+    line-height: 1.4;
+  }
+}
+
+.btn-share {
+  background: var(--brand-pink);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
   transition: all 0.2s ease;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 1);
+    transform: translateY(-2px);
   }
-}
-
-.related-image {
-  width: 120px;
-  flex-shrink: 0;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-.related-content {
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.related-type {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--brand-pink);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.related-content h3 {
-  font-family: var(--font-heading);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--brand-dark);
-  margin: 0.25rem 0 0.5rem;
-  line-height: 1.3;
-}
-
-.related-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: 0.8125rem;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.related-icon {
-  width: 0.875rem;
-  height: 0.875rem;
 }
 
 // Bottom CTA
 .bottom-cta {
-  background: var(--brand-dark);
-  padding: 4rem 0;
+  background: #2D3748;
+  border-radius: 1.5rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
-.cta-content {
-  text-align: center;
+.bottom-cta-content {
   max-width: 500px;
   margin: 0 auto;
+
+  h2 {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 0.75rem;
+  }
+
+  p {
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 1.5rem;
+    line-height: 1.5;
+  }
 }
 
-.cta-content h2 {
-  font-family: var(--font-heading);
-  font-size: 2rem;
-  color: white;
-  margin: 0 0 0.5rem;
-}
-
-.cta-content p {
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0 0 1.5rem;
+.bottom-cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .btn-apply-bottom {
-  padding: 1rem 3rem;
-  background: var(--brand-lime);
-  color: var(--brand-dark);
-  border: 2px solid var(--brand-dark);
-  border-radius: 0.5rem;
-  font-weight: 700;
-  font-size: 1rem;
+  background: var(--brand-pink);
+  color: white;
+  border: none;
+  padding: 0.875rem 1.75rem;
+  border-radius: 100px;
+  font-size: 0.9375rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
-    box-shadow: 4px 4px 0 rgba(255, 255, 255, 0.3);
-    transform: translate(-2px, -2px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 77, 109, 0.3);
+  }
+}
+
+.btn-back-jobs {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  padding: 0.875rem 1.75rem;
+  border-radius: 100px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 }
 
 // Responsive
-@media (max-width: 1024px) {
-  .content-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 900px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .sidebar {
-    position: static;
+  .info-cards-grid {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .job-hero {
-    min-height: 400px;
-  }
-
-  .job-title {
-    font-size: 2rem;
-  }
-
-  .job-meta-grid {
+  .description-grid {
     grid-template-columns: 1fr;
   }
+}
 
-  .hero-actions {
-    flex-wrap: wrap;
-  }
-
-  .btn-apply-hero {
-    width: 100%;
-    order: 1;
-  }
-
-  .content-card {
+@media (max-width: 640px) {
+  .cta-banner {
+    flex-direction: column;
+    text-align: center;
     padding: 1.5rem;
   }
 
-  .related-card {
-    flex-direction: column;
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
   }
 
-  .related-image {
-    width: 100%;
-    height: 140px;
+  .detail-main {
+    padding: 2rem 0 0;
+  }
+
+  .job-title {
+    font-size: 1.5rem;
+  }
+
+  .bottom-cta {
+    padding: 2rem 1.5rem;
+  }
+
+  .bottom-cta-content h2 {
+    font-size: 1.5rem;
   }
 }
 </style>
