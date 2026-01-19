@@ -68,7 +68,7 @@ onMounted(async () => {
             </p>
           </div>
 
-          <NuxtLink to="/contact" aria-label="Contactez-nous" class="d-inline-block mt-4 m-0 sanga">
+          <NuxtLink to="#mapPreview" aria-label="Contactez-nous" class="d-inline-block mt-4 m-0 sanga">
             <NuxtImg id="btnExplore" src="/images/btnExplore.svg" alt="Contact" />
           </NuxtLink>
         </div>
