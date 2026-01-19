@@ -4,7 +4,9 @@
       "Bash(npm install:*)",
       "mcp__ide__getDiagnostics",
       "Bash(curl:*)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "Bash(pkill:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }

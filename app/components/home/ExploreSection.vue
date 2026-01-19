@@ -143,6 +143,14 @@ const closeVenueDetails = () => {
             <h4 class="venue-about-title">ABOUT THIS VENUE</h4>
             <p class="venue-about-text">{{ selectedVenue.description }}</p>
           </div>
+
+          <!-- Join Now Button -->
+          <NuxtLink
+            :to="`/jobs?location=${encodeURIComponent(selectedVenue.location)}`"
+            class="venue-join-btn"
+          >
+        view positions
+          </NuxtLink>
         </div>
 
         <!-- Default content -->
@@ -634,5 +642,31 @@ const closeVenueDetails = () => {
   color: #666;
   line-height: 1.5;
   margin: 0;
+}
+
+/* Join Now Button */
+.venue-join-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 0.875rem 2rem;
+  background-color: #FF4D6D;
+  color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 50px;
+  border: 2px solid #1A1A1A;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.venue-join-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 1);
+  background-color: #e63956;
 }
 </style>

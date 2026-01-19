@@ -263,18 +263,10 @@ nuxt-link:has(img) {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  width: 90%;
-  max-width: 520px;
   padding: 1rem;
 }
 
 .job-search-form-placeholder {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  border-radius: 1.5rem;
-  padding: 2.5rem;
-  text-align: center;
-  color: rgba(26, 26, 26, 0.6);
 }
 
 @media (max-width: 768px) {
