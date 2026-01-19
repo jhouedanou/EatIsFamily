@@ -49,8 +49,7 @@ onMounted(async () => {
         <!-- image de la nourriture avec formulaire de recherche d'emploi -->
         <div id="marr" class="col-lg-6 col-md-6 p-0 min-vh-100 position-relative"
           :style="{ backgroundImage: `url('${content.hero_section.bg}')`, backgroundSize: 'cover', backgroundPosition: 'center' }">
-          <!-- Blur overlay -->
-          <div class="hero-blur-overlay"></div>
+         
           <!-- Job Search Form -->
           <div class="job-search-form-wrapper">
             <FormsJobSearchForm />
@@ -239,7 +238,11 @@ nuxt-link:has(img) {
 .min-vh-90 {
   min-height: 90vh;
 }
-
+#marr {
+  min-height: 100vh !important;
+  padding: 0 !important;
+  position: relative;
+}
 .hero-blur-overlay {
   position: absolute;
   inset: 0;
@@ -256,7 +259,7 @@ nuxt-link:has(img) {
 
 .job-search-form-wrapper {
   position: absolute;
-  top: 50%;
+  bottom: 0%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;

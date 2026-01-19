@@ -100,7 +100,6 @@ onUnmounted(() => {
           :class="{ 'is-open': showJobTitleDropdown, 'has-value': selectedJobTitle }"
           @click.stop="toggleJobTitleDropdown"
         >
-          <LucideBriefcase class="field-icon" />
           <span class="field-text">{{ selectedJobTitle || 'Select job title' }}</span>
           <svg class="chevron-icon" :class="{ 'rotated': showJobTitleDropdown }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 9l6 6 6-6"/>
@@ -137,7 +136,6 @@ onUnmounted(() => {
           :class="{ 'is-open': showSiteDropdown, 'has-value': selectedSite }"
           @click.stop="toggleSiteDropdown"
         >
-          <LucideMapPin class="field-icon" />
           <span class="field-text">{{ selectedSite || 'Select sites' }}</span>
           <svg class="chevron-icon" :class="{ 'rotated': showSiteDropdown }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 9l6 6 6-6"/>
@@ -173,7 +171,7 @@ onUnmounted(() => {
         @click="handleSearch"
         aria-label="Search jobs"
       >
-        <LucideArrowRight class="search-icon" />
+        <img src="/images/btnSearchForm.svg" alt="Search" class="search-icon" />
       </button>
     </div>
   </div>
@@ -181,17 +179,12 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .job-search-form {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
+  padding: 31px 22px 35px;
+  border-radius: 20px;
   -webkit-backdrop-filter: blur(20px);
-  border-radius: 1.5rem;
-  padding: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.05);
-  max-width: 520px;
-  width: 100%;
+  backdrop-filter: blur(20px);
+  border: solid 3px rgba(253, 250, 248, 0.3);
+  background-color: rgba(47, 47, 47, 0.4);
 }
 
 .form-header {
@@ -199,20 +192,27 @@ onUnmounted(() => {
 }
 
 .form-title {
-  font-family: var(--font-heading);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--brand-dark);
-  margin: 0 0 0.5rem 0;
-  line-height: 1.2;
+    font-family: FONTSPRINGDEMO-RecoletaBold;
+  font-size: 34px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fff;
 }
 
-.form-subtitle {
-  font-family: var(--font-body);
-  font-size: 1rem;
-  color: rgba(26, 26, 26, 0.7);
-  margin: 0;
-  line-height: 1.5;
+.form-subtitle {  font-family: FONTSPRINGDEMO-Recoleta;
+
+   font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.44;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fff;
 }
 
 .form-fields {
@@ -227,20 +227,22 @@ onUnmounted(() => {
 }
 
 .select-field {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1.5px solid rgba(255, 255, 255, 0.8);
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 56px;
+      display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 30px;
+    background: url(images/bgInputForm.svg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    max-height: 74px;
+    max-width: 270px;
 
   &:hover {
-    border-color: rgba(255, 77, 109, 0.3);
-    background: white;
+    border-color: var(--brand-pink);
+  opacity: 0.9;
   }
 
   &.is-open {
@@ -265,8 +267,16 @@ onUnmounted(() => {
   flex: 1;
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  color: rgba(26, 26, 26, 0.5);
-  white-space: nowrap;
+  font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -293,12 +303,12 @@ onUnmounted(() => {
   box-shadow:
     0 10px 40px rgba(0, 0, 0, 0.12),
     0 2px 10px rgba(0, 0, 0, 0.08);
-  border: 2px solid var(--brand-dark, #1a1a1a);
+  border: 1px solid var(--brand-dark, #1a1a1a);
   overflow: hidden;
   z-index: 9999;
   max-height: 240px;
   overflow-y: auto;
-
+width:34vw;
   // Caché par défaut
   display: none;
 
@@ -343,23 +353,14 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  background: var(--brand-pink);
   border: none;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
-
-  &:hover {
-    background: darken(#FF4D6D, 8%);
-    transform: scale(1.05);
-    box-shadow: 0 4px 16px rgba(255, 77, 109, 0.4);
-  }
-
-  &:active {
-    transform: scale(0.98);
+  img{
+    width: 60px;
+    height: 60px;
   }
 }
 
