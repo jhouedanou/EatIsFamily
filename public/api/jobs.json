@@ -308,5 +308,315 @@
     "featured_media": "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800",
     "date": "2026-01-08T08:30:00",
     "status": "publish"
+  },
+  {
+    "id": 11,
+    "slug": "chef-de-partie-groupama-stadium-lyon",
+    "title": { "rendered": "Chef de Partie – Groupama Stadium" },
+    "excerpt": {
+      "rendered": "Lead a station in one of France's largest stadiums during major football matches and concerts."
+    },
+    "content": {
+      "rendered": "<p>Join our culinary team at Groupama Stadium in Lyon! As Chef de Partie, you will manage your station during high-profile Olympique Lyonnais matches and large-scale events.</p><p>You will prepare dishes to the highest standards, coordinate with sous chefs, and ensure smooth service for thousands of guests.</p>"
+    },
+    "location": "Groupama Stadium, Lyon",
+    "job_type": "Full-time",
+    "salary": "€35,000 - €45,000",
+    "requirements": [
+      "3+ years as commis or chef de partie",
+      "Experience in high-volume event catering",
+      "Strong station management skills",
+      "HACCP certification",
+      "Flexibility for evening and weekend work"
+    ],
+    "benefits": [
+      "Work at France's 3rd largest stadium",
+      "Match day meals included",
+      "Career progression opportunities",
+      "Dynamic team environment",
+      "Transport allowance"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=800",
+    "date": "2026-01-18T09:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 12,
+    "slug": "bar-manager-groupama-stadium-lyon",
+    "title": { "rendered": "Bar Manager – Groupama Stadium" },
+    "excerpt": {
+      "rendered": "Lead beverage operations across multiple bars during major sporting and entertainment events."
+    },
+    "content": {
+      "rendered": "<p>We're looking for an experienced Bar Manager to oversee beverage service at Groupama Stadium. You'll manage bar teams, stock levels, and service quality across VIP and public areas.</p><p>Ensure fast, efficient service while maintaining premium standards for 59,000+ spectators.</p>"
+    },
+    "location": "Groupama Stadium, Lyon",
+    "job_type": "Full-time",
+    "salary": "€38,000 - €48,000",
+    "requirements": [
+      "4+ years bar management experience",
+      "Experience managing teams of 15+",
+      "Strong inventory and cost control skills",
+      "Knowledge of French alcohol regulations",
+      "Excellent leadership abilities"
+    ],
+    "benefits": [
+      "Premium venue environment",
+      "Performance bonuses",
+      "Staff training budget",
+      "Free parking on event days",
+      "Team building events"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800",
+    "date": "2026-01-17T14:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 13,
+    "slug": "executive-chef-stade-velodrome-marseille",
+    "title": { "rendered": "Executive Chef – Stade Vélodrome" },
+    "excerpt": {
+      "rendered": "Lead culinary operations at France's second largest stadium, home of Olympique de Marseille."
+    },
+    "content": {
+      "rendered": "<p>An exceptional opportunity to lead the culinary team at the iconic Stade Vélodrome in Marseille. As Executive Chef, you'll oversee all food operations for 67,000+ capacity events.</p><p>Manage menus, kitchen teams, and premium hospitality while bringing Mediterranean flavors to match days and concerts.</p>"
+    },
+    "location": "Stade Vélodrome, Marseille",
+    "job_type": "Full-time",
+    "salary": "€55,000 - €75,000",
+    "requirements": [
+      "7+ years executive chef or senior culinary experience",
+      "Stadium, arena, or large-scale event experience preferred",
+      "Strong P&L and budget management skills",
+      "Team leadership of 50+ staff",
+      "Passion for Mediterranean cuisine"
+    ],
+    "benefits": [
+      "Leadership of iconic venue culinary program",
+      "Competitive salary package",
+      "Relocation support available",
+      "Season tickets for family",
+      "Annual bonus structure"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=800",
+    "date": "2026-01-18T10:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 14,
+    "slug": "concession-team-leader-stade-velodrome-marseille",
+    "title": { "rendered": "Concession Team Leader – Stade Vélodrome" },
+    "excerpt": {
+      "rendered": "Supervise concession stands and ensure fast, quality service during OM matches."
+    },
+    "content": {
+      "rendered": "<p>Join the Stade Vélodrome team as a Concession Team Leader! You'll supervise food and beverage kiosks, manage staff schedules, and ensure excellent guest experience during events.</p><p>Fast-paced role perfect for someone who thrives in high-energy environments.</p>"
+    },
+    "location": "Stade Vélodrome, Marseille",
+    "job_type": "Part-time",
+    "salary": "€18 - €25 / hour",
+    "requirements": [
+      "2+ years supervisory experience in F&B",
+      "Comfortable managing teams of 5-10",
+      "Strong customer service orientation",
+      "Ability to work match days and events",
+      "Basic cash handling and POS experience"
+    ],
+    "benefits": [
+      "Work iconic Ligue 1 matches",
+      "Free match day meals",
+      "Flexible scheduling",
+      "Path to full-time management",
+      "Team merchandise discounts"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=800",
+    "date": "2026-01-16T11:30:00",
+    "status": "publish"
+  },
+  {
+    "id": 15,
+    "slug": "event-chef-accor-arena-paris",
+    "title": { "rendered": "Event Chef – Accor Arena" },
+    "excerpt": {
+      "rendered": "Create memorable dining experiences for concerts and shows at Paris's premier indoor arena."
+    },
+    "content": {
+      "rendered": "<p>Accor Arena is seeking talented Event Chefs to deliver exceptional food for concerts, sports events, and shows. You'll prepare dishes for VIP suites, artist hospitality, and premium guest areas.</p><p>Work with world-class artists and athletes while showcasing your culinary skills.</p>"
+    },
+    "location": "Accor Arena, Paris",
+    "job_type": "Full-time",
+    "salary": "€40,000 - €52,000",
+    "requirements": [
+      "4+ years professional kitchen experience",
+      "Event or banquet catering background",
+      "Creative menu development skills",
+      "Ability to work late nights and weekends",
+      "Strong organization under pressure"
+    ],
+    "benefits": [
+      "Access to world-class events",
+      "Artist meet opportunities",
+      "Premium kitchen equipment",
+      "Career development programs",
+      "Central Paris location"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800",
+    "date": "2026-01-18T08:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 16,
+    "slug": "vip-server-accor-arena-paris",
+    "title": { "rendered": "VIP Server – Accor Arena" },
+    "excerpt": {
+      "rendered": "Deliver premium hospitality service in VIP lounges during concerts and events."
+    },
+    "content": {
+      "rendered": "<p>Join our VIP service team at Accor Arena! You'll provide exceptional table service in premium lounges, corporate suites, and backstage areas during major events.</p><p>Perfect role for hospitality professionals who want to work exciting events while delivering five-star service.</p>"
+    },
+    "location": "Accor Arena, Paris",
+    "job_type": "Part-time",
+    "salary": "€20 - €30 / hour",
+    "requirements": [
+      "2+ years fine dining or premium hospitality experience",
+      "Excellent presentation and communication",
+      "Wine and beverage knowledge",
+      "Discretion when working around celebrities",
+      "Flexible evening availability"
+    ],
+    "benefits": [
+      "Access to exclusive events",
+      "High tip potential",
+      "Networking opportunities",
+      "Uniform provided",
+      "Late night transport support"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=800",
+    "date": "2026-01-15T16:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 17,
+    "slug": "festival-kitchen-manager-hellfest-clisson",
+    "title": { "rendered": "Festival Kitchen Manager – Hellfest" },
+    "excerpt": {
+      "rendered": "Lead food operations at Europe's biggest metal festival, serving 180,000+ guests over 4 days."
+    },
+    "content": {
+      "rendered": "<p>Hellfest is looking for an experienced Kitchen Manager to oversee festival food operations. You'll manage multiple food stations, coordinate with vendors, and ensure quality across the festival grounds.</p><p>This is a unique seasonal opportunity to feed the metal community at one of Europe's legendary festivals.</p>"
+    },
+    "location": "Hellfest, Clisson",
+    "job_type": "Seasonal",
+    "salary": "€4,000 - €6,000 (festival period)",
+    "requirements": [
+      "5+ years kitchen management experience",
+      "Festival or large outdoor event experience essential",
+      "Ability to manage teams of 30+",
+      "Strong logistics and planning skills",
+      "Passion for live music events"
+    ],
+    "benefits": [
+      "Full festival access pass",
+      "Accommodation provided",
+      "Unique festival experience",
+      "Artist area access",
+      "Post-festival bonus"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800",
+    "date": "2026-01-17T12:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 18,
+    "slug": "food-vendor-crew-hellfest-clisson",
+    "title": { "rendered": "Food Vendor Crew – Hellfest" },
+    "excerpt": {
+      "rendered": "Join the festival food team and serve hungry metalheads at France's biggest rock festival."
+    },
+    "content": {
+      "rendered": "<p>Be part of the Hellfest experience! We're hiring energetic crew members to work food stalls during the festival. You'll prepare and serve food, handle cash, and keep the metal community fed.</p><p>Perfect for students or anyone wanting a unique summer job at an unforgettable event.</p>"
+    },
+    "location": "Hellfest, Clisson",
+    "job_type": "Seasonal",
+    "salary": "€15 - €20 / hour",
+    "requirements": [
+      "Previous food service experience helpful",
+      "High energy and positive attitude",
+      "Ability to work long festival hours",
+      "Team player mentality",
+      "Love of live music a plus!"
+    ],
+    "benefits": [
+      "Full festival pass included",
+      "Camping accommodation",
+      "Meals during shifts",
+      "Festival merchandise",
+      "Unforgettable experience"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800",
+    "date": "2026-01-14T10:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 19,
+    "slug": "head-chef-wembley-stadium-london",
+    "title": { "rendered": "Head Chef – Wembley Stadium" },
+    "excerpt": {
+      "rendered": "Lead VIP culinary operations at the UK's most iconic stadium with 90,000 capacity."
+    },
+    "content": {
+      "rendered": "<p>An exceptional opportunity to join Wembley Stadium as Head Chef for VIP hospitality. You'll oversee premium dining for England international matches, FA Cup finals, and major concerts.</p><p>Lead a team of 25+ chefs and deliver world-class cuisine to corporate guests and VIP visitors.</p>"
+    },
+    "location": "Wembley Stadium, London",
+    "job_type": "Full-time",
+    "salary": "£55,000 - £70,000",
+    "requirements": [
+      "7+ years in premium hospitality or event catering",
+      "Strong leadership and team management",
+      "Experience with high-volume fine dining",
+      "Knowledge of diverse dietary requirements",
+      "Right to work in UK"
+    ],
+    "benefits": [
+      "Work at England's national stadium",
+      "Premium benefits package",
+      "Pension contribution",
+      "Event tickets for family",
+      "Career development programs"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=800",
+    "date": "2026-01-19T09:00:00",
+    "status": "publish"
+  },
+  {
+    "id": 20,
+    "slug": "hospitality-runner-wembley-stadium-london",
+    "title": { "rendered": "Hospitality Runner – Wembley Stadium" },
+    "excerpt": {
+      "rendered": "Support VIP service operations during world-class events at Wembley Stadium."
+    },
+    "content": {
+      "rendered": "<p>Join the Wembley hospitality team as a Runner! You'll support service in VIP boxes, transport food and beverages, and help create memorable experiences for premium guests.</p><p>Great entry-level opportunity to work at iconic events while building your hospitality career.</p>"
+    },
+    "location": "Wembley Stadium, London",
+    "job_type": "Part-time",
+    "salary": "£12 - £16 / hour",
+    "requirements": [
+      "Previous hospitality experience preferred",
+      "Strong physical fitness (lots of walking!)",
+      "Professional presentation",
+      "Reliable and punctual",
+      "Right to work in UK"
+    ],
+    "benefits": [
+      "Work major sporting and music events",
+      "Meals during shifts",
+      "Flexible scheduling",
+      "Path to server/bartender roles",
+      "Staff events and socials"
+    ],
+    "featured_media": "https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=800",
+    "date": "2026-01-18T15:00:00",
+    "status": "publish"
   }
 ]

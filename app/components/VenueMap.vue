@@ -49,18 +49,46 @@ const createMarkers = (maplibregl: any) => {
 
   // Ajouter les marqueurs pour chaque lieu
   filteredVenues.forEach((venue) => {
-    const markerImage = venue.image || 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=200&auto=format&fit=crop'
-
-    // Créer l'élément HTML pour le marqueur
+    // Créer l'élément HTML pour le marqueur (DOM construit pour éviter l'injection)
     const el = document.createElement('div')
     el.className = 'custom-venue-marker'
-    el.innerHTML = `
-      <div class="venue-marker-container">
-        <div class="venue-marker-image" style="background-image: url('${markerImage}')"></div>
-      </div>
-    `
 
-    // Ajouter l'événement click
+    const wrapper = document.createElement('div')
+    wrapper.className = 'venue-marker-wrapper'
+
+    // Tooltip (nom du stade) — sécurisé via textContent
+    const tooltip = document.createElement('div')
+    tooltip.className = 'venue-marker-tooltip'
+    tooltip.textContent = venue.name || ''
+
+    // Conteneur principal du marqueur
+    const containerDiv = document.createElement('div')
+    containerDiv.className = 'venue-marker-container'
+
+    // Icône du stade (stadiumIcon.svg)
+    const stadiumIcon = document.createElement('img')
+    stadiumIcon.className = 'venue-marker-icon'
+    stadiumIcon.src = '/images/stadiumIcon.svg'
+    stadiumIcon.alt = venue.name || 'Stadium'
+
+    containerDiv.appendChild(stadiumIcon)
+
+    // Logo de la venue en exposant (en haut à droite)
+    if (venue.logo) {
+      const logoDiv = document.createElement('div')
+      logoDiv.className = 'venue-marker-logo'
+      const logoImg = document.createElement('img')
+      logoImg.src = venue.logo
+      logoImg.alt = `${venue.name} logo`
+      logoDiv.appendChild(logoImg)
+      containerDiv.appendChild(logoDiv)
+    }
+
+    wrapper.appendChild(tooltip)
+    wrapper.appendChild(containerDiv)
+    el.appendChild(wrapper)
+
+    // Click: selectionner le lieu et centrer la carte
     el.addEventListener('click', () => {
       emit('select-venue', venue.id)
       emit('venue-clicked', venue)
@@ -163,33 +191,86 @@ watch(() => props.selectedVenue, (newId) => {
   overflow: hidden;
 }
 
-/* Marqueur personnalisé avec image */
+/* Marqueur personnalisé avec icône stade */
 .custom-venue-marker {
   cursor: pointer;
 }
 
 .venue-marker-container {
+  position: relative;
   width: 56px;
   height: 56px;
-  border-radius: 50%;
-  border: 3px solid #FFFFFF;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 0 2px #333333;
-  overflow: hidden;
-  background: #FFFFFF;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
 }
 
 .venue-marker-container:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 2px #333333;
+  transform: scale(1.5);
 }
 
-.venue-marker-image {
+/* Icône du stade */
+.venue-marker-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+  transition: transform 0.25s ease;
+}
+
+/* Logo de la venue en exposant (haut droite) */
+.venue-marker-logo {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.venue-marker-logo img {
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  object-fit: contain;
+}
+
+/* Wrapper pour tooltip + marker */
+.venue-marker-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.venue-marker-tooltip {
+  position: absolute;
+  bottom: 100%;
+  transform: translateY(-8px);
+  background: rgba(13,10,0,0.95);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+/* Afficher le tooltip au survol */
+.venue-marker-wrapper:hover .venue-marker-tooltip {
+  opacity: 1;
+  transform: translateY(-12px);
 }
 
 /* Style des contrôles de navigation MapLibre */
