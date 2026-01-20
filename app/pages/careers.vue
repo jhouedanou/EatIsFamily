@@ -3,24 +3,16 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { LucideSearch, LucideMapPin, LucideChevronDown, LucideChevronLeft, LucideChevronRight } from 'lucide-vue-next'
 import type { CareersContent } from '~/composables/usePageContent'
 import type { Job } from '~/composables/useJobs'
-
-interface Venue {
-  id: string
-  name: string
-  location: string
-  image?: string
-  image2?: string
-}
-
-interface LocationsData {
-  map_venues: Venue[]
-}
+import type { LocationsData, Venue } from '~/composables/useLocations'
 
 const route = useRoute()
 const { getCareersContent } = usePageContent()
 const { getJobs } = useJobs()
+const { getLocations } = useLocations()
+
 const content = ref<CareersContent | null>(null)
 const allJobs = ref<Job[]>([])
+const locationsData = ref<LocationsData | null>(null)
 
 const searchQuery = ref('')
 const selectedJobType = ref('')
@@ -31,9 +23,6 @@ const showVenueDropdown = ref(false)
 // Pagination
 const currentPage = ref(1)
 const itemsPerPage = 6
-
-// Load venues data for dynamic header
-const { data: locationsData } = await useFetch<LocationsData>('/api/locations.json')
 
 // Find the venue matching the selected location
 const activeVenue = computed(() => {
@@ -47,12 +36,13 @@ const activeVenue = computed(() => {
 
 onMounted(async () => {
   content.value = await getCareersContent()
+  locationsData.value = await getLocations()
   const fetchedJobs = await getJobs()
   if (fetchedJobs) {
     allJobs.value = fetchedJobs
   }
   if (content.value) {
-    selectedJobType.value = content.value.search_section.job_types[0]
+    selectedJobType.value = content.value.search_section.job_types[0] || ''
   }
 
   // Apply URL query parameters
@@ -151,7 +141,8 @@ const goToPage = (page: number) => {
 </script>
 
 <template>
-  <div v-if="content" class="min-vh-100 bg-brand-gray">
+  <div class="careers-page">
+    <div v-if="content" class="min-vh-100 bg-brand-gray">
     <!-- Dynamic Hero Section -->
     <section class="hero-section" :class="{ 'has-venue': activeVenue }">
       <!-- Background with venue image or gradient -->
@@ -353,7 +344,7 @@ const goToPage = (page: number) => {
       <div v-if="filteredJobs.length === 0" class="text-center py-5 bg-white border-organic">
         <p class="fs-5 text-muted mb-2">{{ content.no_results.title }}</p>
         <p class="text-secondary mb-3">{{ content.no_results.description }}</p>
-        <button @click="searchQuery = ''; selectedJobType = content.search_section.job_types[0]; selectedVenue = ''" class="text-brand-pink fw-bold btn btn-link text-decoration-none">
+        <button @click="searchQuery = ''; selectedJobType = content.search_section.job_types[0] || ''; selectedVenue = ''" class="text-brand-pink fw-bold btn btn-link text-decoration-none">
           {{ content.no_results.clear_filters_button }}
         </button>
       </div>
@@ -412,6 +403,16 @@ const goToPage = (page: number) => {
       </div>
     </section>
   </div>
+
+  <!-- Loading state -->
+  <div v-else class="min-vh-100 bg-brand-gray d-flex align-items-center justify-content-center">
+    <div class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+</div>
 </template>
 
 <style scoped>
@@ -478,16 +479,15 @@ const goToPage = (page: number) => {
 }
 
 .hero-tag {
-  display: inline-block;
-  padding: 0.5rem 1.25rem;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border-radius: 50px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
+  font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.68px;
+  text-align: left;
+  color: #000;
 }
 
 .hero-title {

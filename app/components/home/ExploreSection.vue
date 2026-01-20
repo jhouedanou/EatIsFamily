@@ -1,65 +1,17 @@
 <script setup lang="ts">
-export interface Shop {
-  id: string
-  name: string
-  image: string
-}
+import type { LocationsData, Venue } from '~/composables/useLocations'
 
-export interface MenuItem {
-  id: string
-  name: string
-  price: string
-  description: string
-  thumbnail: string
-}
-
-export interface Venue {
-  id: string
-  name: string
-  location: string
-  type?: string
-  lat: number
-  lng: number
-  image?: string
-  image2?: string
-  logo?: string
-  capacity?: string
-  staff_members?: number
-  recent_event?: string
-  guests_served?: string
-  shops_count?: number
-  menus_count?: number
-  description?: string
-  services?: string[]
-  shops?: Shop[]
-  menu_items?: MenuItem[]
-}
-
-export interface EventType {
-  id: string
-  name: string
-  image: string
-}
-
-export interface Stat {
-  value: string
-  label: string
-}
-
-export interface LocationsData {
-  title: string
-  description: string
-  filter_label: string
-  event_types: EventType[]
-  stats: Stat[]
-  map_venues: Venue[]
-}
-
-const { data: locationsData } = await useFetch<LocationsData>('/api/locations.json')
+const { getLocations } = useLocations()
+const locationsData = ref<LocationsData | null>(null)
 
 const activeEventFilter = ref<string | undefined>(undefined)
 const selectedVenue = ref<Venue | null>(null)
 const activeTab = ref<'overview' | 'shops' | 'menus'>('overview')
+
+// Load locations data
+onMounted(async () => {
+  locationsData.value = await getLocations()
+})
 
 // Shops carousel state
 const shopsPage = ref(0)
