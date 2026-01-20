@@ -198,7 +198,7 @@ const goToPage = (page: number) => {
           Join Our Team At {{ activeVenue.name }}
         </h1>
         <p class="hero-subtitle">
-          <LucideMapPin class="subtitle-icon" /> {{ activeVenue.location }}
+          <LucideMapPin style="width: 1.25rem; height: 1.25rem;" /> {{ activeVenue.location }}
           <span class="subtitle-divider">•</span>
           {{ filteredJobs.length }} Open Position{{ filteredJobs.length !== 1 ? 's' : '' }}
         </p>
@@ -562,6 +562,8 @@ const goToPage = (page: number) => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  display:flex;
+  justify-content:center;
 }
 
 .hero-section.has-venue .hero-background::before {
@@ -639,8 +641,6 @@ const goToPage = (page: number) => {
   opacity: 0.9;
   margin: 0 0 2.5rem;
   max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
   display: flex;
   align-items: center;
   justify-content: center;
