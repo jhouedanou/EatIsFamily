@@ -550,6 +550,7 @@ const goToPage = (page: number) => {
   position: relative;
   padding: 8rem 0 6rem;
   overflow: hidden;
+  min-height:80vh;
 }
 
 .hero-section.has-venue {
@@ -574,8 +575,6 @@ const goToPage = (page: number) => {
 .hero-section.has-venue .hero-title {
   font-size: 2.75rem;
   max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .hero-background {
@@ -600,11 +599,15 @@ const goToPage = (page: number) => {
   background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%);
 }
 
-.hero-content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  color: white;
+.hero-content {    position: relative;
+    z-index: 1;
+    color: white;
+    text-align: left;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .hero-tag {
@@ -620,6 +623,7 @@ const goToPage = (page: number) => {
   letter-spacing: 0.68px;
   text-align: left;
   color: #000;
+  margin-bottom:2em;
 }
 
 .hero-title {
