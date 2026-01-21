@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { LucideSearch, LucideMapPin, LucideChevronDown, LucideChevronLeft, LucideChevronRight } from 'lucide-vue-next'
+import { LucideSearch, LucideMapPin, LucideChevronLeft, LucideChevronRight } from 'lucide-vue-next'
 import type { CareersContent } from '~/composables/usePageContent'
 import type { Job } from '~/composables/useJobs'
 import type { LocationsData, Venue } from '~/composables/useLocations'
@@ -185,7 +185,7 @@ const goToPage = (page: number) => {
         </div>
         <p class="careers-hero-subtitle">
           {{ content.hero_with_venue.subtitle }}
-        </p>
+        </p><!-- 
         <div class="careers-hero-stats">
           <div class="stat-box">
             <span class="stat-number">{{ allJobs.length }}</span>
@@ -195,7 +195,7 @@ const goToPage = (page: number) => {
             <span class="stat-number">{{ venueOptions.length - 1 }}</span>
             <span class="stat-label">{{ content.hero_with_venue.stats.locations_label }}</span>
           </div>
-        </div>
+        </div> -->
         <!-- Hero Content -->
         <div class="container hero-content">
           <span class="hero-tag">{{ content.hero_with_venue.tag }}</span>
@@ -211,25 +211,25 @@ const goToPage = (page: number) => {
       </section>
 
       <!-- Search & Filter Bar -->
-      <section class="search-bar-section position-relative" :class="{ 'has-active-venue': activeVenue }">
-        <div class="p-3 d-flex flex-column flex-md-row gap-3 shadow-organic">
+      <section class="search-bar-section position-relative d-flex flex-column" :class="{ 'has-active-venue': activeVenue }">
+        <div id="rallah" class="p-3 d-flex flex-column flex-md-row gap-3">
           <!-- Search Input -->
-          <div class="flex-grow-1 position-relative">
-        <div class="d-flex align-items-center gap-3 px-3">
-          <LucideSearch class="text-white opacity-75" style="width: 1.25rem; height: 1.25rem;" />
-          <input v-model="searchQuery" type="text" :placeholder="content.search_section.search_placeholder"
-            class="bg-transparent text-white border-0 flex-grow-1 py-2 font-body search-input" />
-        </div>
+          <div class="flex-grow-1 position-relative musuc">
+            <div id="neilcruz" class="d-flex align-items-center gap-3 px-3">
+              <LucideSearch class="text-white opacity-75" style="width: 1.25rem; height: 1.25rem;" />
+              <input v-model="searchQuery" type="text" :placeholder="content.search_section.search_placeholder"
+                class="bg-transparent text-white border-0 flex-grow-1 py-2 font-body search-input" />
+            </div>
           </div>
 
           <!-- Venue Dropdown -->
-          <div class="position-relative">
-        <button @click="showVenueDropdown = !showVenueDropdown; showJobTypeDropdown = false"
-          class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
-          <LucideMapPin style="width: 1rem; height: 1rem;" class="opacity-75" />
-          <span>{{ selectedVenue || allSitesLabel }}</span>
-          <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showVenueDropdown }" />
-        </button>
+          <div class="position-relative musuc">
+            <button @click="showVenueDropdown = !showVenueDropdown; showJobTypeDropdown = false"
+              class="border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
+              <LucideMapPin style="width: 1rem; height: 1rem;" class="opacity-75" />
+              <span>{{ selectedVenue || allSitesLabel }}</span>
+              <img src="/images/chevronDown.svg" alt="chevron" class="chevron-icon" :class="{ 'rotated': showVenueDropdown }" />
+            </button>
 
         <!-- Venue Dropdown Menu -->
         <Transition enter-active-class="transition-fade-in" leave-active-class="transition-fade-out">
@@ -247,13 +247,12 @@ const goToPage = (page: number) => {
           </div>
 
           <!-- Job Type Dropdown -->
-          <div class="position-relative">
+          <div class="position-relative musuc">
         <button @click="showJobTypeDropdown = !showJobTypeDropdown; showVenueDropdown = false"
-          class="bg-brand-dark border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
+          class="border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
           <span>{{ selectedJobType || 'All Job Types' }}</span>
-          <LucideChevronDown style="width: 1rem; height: 1rem;" :class="{ 'rotate-180': showJobTypeDropdown }" />
+          <img src="/images/chevronDown.svg" alt="chevron" class="chevron-icon" :class="{ 'rotated': showJobTypeDropdown }" />
         </button>
-
         <!-- Dropdown Menu -->
         <Transition enter-active-class="transition-fade-in" leave-active-class="transition-fade-out">
           <div v-if="showJobTypeDropdown"
@@ -269,43 +268,45 @@ const goToPage = (page: number) => {
         </Transition>
           </div>
         </div>
+        <hr>
+        <p id="bananasleep">
+            {{ filteredJobs.length }} {{ filteredJobs.length === 1 ? content.job_listing.positions_available_singular :
+              content.job_listing.positions_available_plural }} {{ content.job_listing.positions_available_suffix }}
+          </p>
       </section>
 
       <!-- Job Grid -->
-      <section class="container py-5">
+      <section id="jobgrid" class="container py-5">
         <div class="d-flex align-items-center justify-content-between mb-4">
-          <h2 class="font-heading fs-4 fw-bold">
-            {{ filteredJobs.length }} {{ filteredJobs.length === 1 ? content.job_listing.positions_available_singular :
-              content.job_listing.positions_available_plural }} {{ content.job_listing.positions_available_suffix }}
-          </h2>
-          <p v-if="totalPages > 1" class="text-muted small mb-0">
+          
+          <p v-if+="totalPages > 1" class="text-muted small mb-0">
             Page {{ currentPage }} of {{ totalPages }}
           </p>
         </div>
 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4">
           <div v-for="job in paginatedJobs" :key="job.id" class="col">
             <div class="bg-white border-organic p-4 h-100 job-card">
               <div class="d-flex flex-column h-100 justify-content-between">
                 <!-- Header -->
-                <div>
+                <div id="jobcardheader">
                   <h3 class="font-heading fw-bold fs-5 lh-sm mb-1">{{ getJobTitle(job) }}</h3>
-                  <p class="small text-muted fw-medium mb-3">{{ content.job_listing.posted_prefix }} {{
+                  <p class="job-date small text-muted fw-medium mb-3">{{ content.job_listing.posted_prefix }} {{
                     getPostedTime(job.date) }}</p>
 
                   <!-- Tags Row -->
                   <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span class="tag-blue">🍳 {{ job.department }}</span>
-                    <span class="tag-outline d-flex align-items-center gap-1">
+                    <span class="tag-blue">{{ job.department }}</span>
+                   <!-- <span class="tag-outline d-flex align-items-center gap-1">
                       <LucideMapPin style="width: 0.75rem; height: 0.75rem;" /> {{ job.location }}
-                    </span>
-                  </div>
-                  <div class="d-flex flex-wrap gap-2 mb-3">
+                    </span>-->
                     <span class="tag-lime d-flex align-items-center gap-1">
+                      <nuxt-img src="/images/streamline-emojis_briefcase.png" alt="briefcase icon" width="16" height="16" />
                       {{ job.job_type }}
                     </span>
                     <span class="tag-yellow d-flex align-items-center gap-1">
-                      <span class="small">💰</span> {{ job.salary }}
+                      <nuxt-img src="/images/streamline-emojis_moneybag.png" alt="money bag icon" width="16" height="16" />
+                      {{ job.salary }}
                     </span>
                   </div>
 
@@ -363,7 +364,7 @@ const goToPage = (page: number) => {
       </section>
 
       <!-- CTA Section -->
-      <section class="bg-brand-dark py-5 text-center">
+      <section class="py-5 text-center">
         <div class="container">
           <h2 class="font-heading display-5 fw-bold text-white mb-4">
             {{ content.cta_section.title }}
@@ -393,7 +394,7 @@ const goToPage = (page: number) => {
     </div>
   </div>
 </template>
-
++
 <style scoped lang="scss">
 /* ============================================
    CAREERS HERO DEFAULT (No venue selected)
@@ -554,8 +555,16 @@ const goToPage = (page: number) => {
 }
 
 .hero-section.has-venue {
-  padding: 10rem 0 6rem;
+  padding:0em !important;
+  max-height:710px !important;
+  min-height:0px !important;
+  height:100vh !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
 }
+  
 
 .hero-section.has-venue .hero-background {
   background: none;
@@ -708,15 +717,69 @@ const goToPage = (page: number) => {
     margin: 0 auto;
     width: 100vw;
     height: 100vh;
-    
     &.has-active-venue {
-      margin-top: -1.5rem;
+        margin-top: -9.5rem !important;
+        backdrop-filter: blur(20px);
+        border: solid 3px rgba(253, 250, 248, 0.2);
+        background-color: rgba(47, 47, 47, 0.4);
+        background-image: none;
+        border-radius: 21px;
+        padding: 0em;
+        height:150px !important;
+        .dropdown-menu-custom{
+            backdrop-filter: blur(20px);
+        border: solid 3px rgba(253, 250, 248, 0.2);
+        background-color: rgba(47, 47, 47, 0.93) !important;
+        }
+        #neilcruz svg{
+          color:white !important;
+
+        }
+        .search-input::placeholder{
+          
+            font-family: FONTSPRINGDEMO-RecoletaMedium;
+          font-size: 18px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: normal;
+          text-align: left;
+          color: #fff !important;
+        }
+
+      #bananasleep{
+      display:none !important;
+      }
+      #rallah{
+  
+        height: 72px;
+        padding: 0 !important;
+        margin:  27px 0 0 0;
+          input, button{
+            font-family: FONTSPRINGDEMO-RecoletaMedium;
+          font-size: 18px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: normal;
+          letter-spacing: normal;
+          text-align: left;
+          color: #fff !important;
+          }
+      }
+  .musuc{
+  background:none !important;
+  border:2px white solid !important;
+  border-radius:10px !important;
+  }
     }
 }
 
 /* Adjust search bar when venue is active (overlapping hero) */
 .has-venue~.search-bar-section {
   margin-top: -1.5rem;
+
 }
 
 .search-input::placeholder {
@@ -735,18 +798,33 @@ const goToPage = (page: number) => {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-.rotate-180 {
+/* Chevron icon animations */
+.chevron-icon {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.chevron-icon.rotated {
   transform: rotate(180deg);
 }
 
+.dropdown-btn:hover .chevron-icon {
+  transform: translateY(3px);
+}
+
+.dropdown-btn:hover .chevron-icon.rotated {
+  transform: rotate(180deg) translateY(3px);
+}
+
 .dropdown-menu-custom {
-  width: 12rem;
+  width: 100%;
   z-index: 30;
 }
 
 .dropdown-menu-venue {
-  width: 16rem;
-  max-height: 300px;
+  width: 100%;
+  min-height: 300px !important;
   overflow-y: auto;
 }
 
@@ -898,6 +976,131 @@ const goToPage = (page: number) => {
   letter-spacing: normal;
   text-align: left;
   color: #000;
+    }
+  }
+  .musuc{
+    background: url(/images/searcgBgContainer.svg);
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 427px;
+    max-height: 74px !important;
+    border: none;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    > div {
+    }
+
+    input {
+        font-family: FONTSPRINGDEMO-RecoletaMedium;
+        font-size: 18px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 74px;
+        letter-spacing: normal;
+        text-align: left;
+        color: rgba(0, 0, 0, 0.8) !important;
+        height: 100%;
+
+        &::placeholder {
+            font-family: FONTSPRINGDEMO-RecoletaMedium;
+            font-size: 18px;
+            color: rgba(0, 0, 0, 0.5) !important;
+        }
+    }
+    button{
+      background:none;
+      border:none;
+      width:100%;
+      height:100%;   
+        font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.8) !important;
+  text-align: left;
+  
+    }
+  }
+#neilcruz{
+  width:100%;
+  svg{
+  color:black !important;
+  }
+}
+#rallah{
+  input{
+    
+  }
+}
+#bananasleep{       width: 94%;
+    padding: 1em 0em 0em 0em;
+    position: relative;
+    font-family: FONTSPRINGDEMO-RecoletaMedium;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.84;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgba(0, 0, 0, 0.8) !important;
+    margin: 0;
+    &::before{
+         content: "";
+    background: url(/images/lineUnderSearchBar.svg);
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    top: -13px;
+    left: 0;
+    background-repeat: no-repeat;
+    right: 0;
+    margin: auto;
+    background-position: center;
+    padding: 1em 0 0 0;
+    }
+}
+  #jobgrid{
+  max-width:1400px;
+  width:100%;
+  padding:2em 4em !important;
+  border-radius: 20px;
+  background-color: #fff6f0;
+  }
+
+  #jobcardheader{
+    .job-date{
+      font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.52;
+  letter-spacing: normal;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.7);
+  display:block;
+  margin:1em auto;
+    }
+    .tag-blue{
+      font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.52;
+  letter-spacing: normal;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.7);
     }
   }
 </style>

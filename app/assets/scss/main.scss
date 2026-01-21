@@ -213,15 +213,11 @@ body {
 }
 
 .tag-blue {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  border: 2px solid $brand-dark;
-  background-color: $brand-blue;
-  color: $brand-dark;
-  border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
+    flex-grow: 0;
+  padding: 9px 16px;
+  border-radius: 30px;
+  border: solid 1px #add7fe;
+  background-color: #add7fe;
 }
 
 .tag-yellow {
@@ -237,15 +233,13 @@ body {
 }
 
 .tag-lime {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  border: 2px solid $brand-dark;
-  background-color: $brand-lime;
-  color: $brand-dark;
-  border-radius: 50px 10px 45px 10px / 10px 45px 10px 50px;
+   padding: 9px 16px 9px 17px;
+  border-radius: 30px;
+  border: solid 1px #a7f49d;
+  background-color: #a7f49d;
+    font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 15px;
+  color:black;
 }
 
 // Buttons
