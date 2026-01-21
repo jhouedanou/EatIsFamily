@@ -6,7 +6,7 @@
  */
 
 import { readMultipartFormData, createError, H3Event } from 'h3'
-import { writeFile, mkdir } from 'fs/promises'
+import { writeFile, mkdir, readFile } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
 import {
@@ -17,8 +17,8 @@ import {
     isFileSizeValid,
     generateSecureFilename,
     type ApplicationFormData
-} from '~/server/utils/security'
-import { getClientIP, checkRateLimit } from '~/server/utils/rateLimit'
+} from '../../utils/security'
+import { getClientIP, checkRateLimit } from '../../utils/rateLimit'
 
 // Base directory for storing uploads (outside public folder for security)
 const UPLOADS_DIR = join(process.cwd(), 'server', 'uploads', 'applications')
@@ -147,16 +147,62 @@ export default defineEventHandler(async (event: H3Event) => {
         }
 
         // 7. Generate secure filename and save file
+        // 7. Generate secure filename and save file
         const secureFilename = generateSecureFilename(resumeFile.filename)
         const filePath = join(UPLOADS_DIR, secureFilename)
 
         await writeFile(filePath, resumeFile.data)
 
-        // 8. Create application record
+        // 8. Determine recipients
+        let recipients: string[] = []
+        let jobDepartment = 'Unknown'
+        let jobTitle = 'Unknown Position'
+
+        try {
+            // Read jobs data to find department
+            const jobsPath = join(process.cwd(), 'public', 'api', 'jobs.json')
+            if (existsSync(jobsPath)) {
+                const jobsData = await readFile(jobsPath, 'utf-8')
+                const jobs = JSON.parse(jobsData)
+                const job = jobs.find((j: any) => j.slug === applicationData.jobSlug)
+
+                if (job) {
+                    jobDepartment = job.department || 'Unknown'
+                    jobTitle = job.title?.rendered || job.title || 'Unknown Position'
+                }
+            }
+
+            // Read recipients configuration
+            const recipientsPath = join(process.cwd(), 'server', 'data', 'recipients.json')
+
+            if (existsSync(recipientsPath)) {
+                const recipientsData = await readFile(recipientsPath, 'utf-8')
+                const config = JSON.parse(recipientsData)
+
+                // Strategy: specific department -> default -> fallback
+                if (jobDepartment && config.departments && config.departments[jobDepartment]) {
+                    recipients = config.departments[jobDepartment]
+                } else if (config.default) {
+                    recipients = config.default
+                }
+            }
+        } catch (err) {
+            console.error('[CONFIG ERROR] Failed to load recipients configuration or job details:', err)
+            // Fallback if config fails
+            recipients = ['hr@eatisfamily.com']
+        }
+
+        if (recipients.length === 0) {
+            recipients = ['hr@eatisfamily.com']
+        }
+
+        // 9. Create application record
         const applicationId = crypto.randomUUID()
         const applicationRecord = {
             id: applicationId,
             jobSlug: sanitizeInput(applicationData.jobSlug),
+            jobTitle: jobTitle,
+            department: jobDepartment,
             applicant: {
                 name: sanitizeInput(applicationData.name),
                 email: sanitizeInput(applicationData.email),
@@ -170,6 +216,10 @@ export default defineEventHandler(async (event: H3Event) => {
                 mimeType: resumeFile.type,
                 size: resumeFile.data.length
             },
+            routing: {
+                recipients: recipients,
+                sentTo: recipients // In a real email scenario, this confirms dispatch
+            },
             metadata: {
                 submittedAt: new Date().toISOString(),
                 ipAddress: clientIP,
@@ -178,19 +228,15 @@ export default defineEventHandler(async (event: H3Event) => {
             status: 'pending'
         }
 
-        // 9. Save application data
+        // 10. Save application data
         const applicationFilePath = join(APPLICATIONS_DATA_DIR, `${applicationId}.json`)
         await writeFile(applicationFilePath, JSON.stringify(applicationRecord, null, 2))
 
-        // 10. Log successful submission (for administrative purposes)
-        console.log(`[APPLICATION] New application submitted:`, {
-            id: applicationId,
-            job: applicationData.jobSlug,
-            applicant: applicationData.email,
-            date: applicationRecord.metadata.submittedAt
-        })
+        // 11. Log successful submission (simulating email send)
+        console.log(`[APPLICATION] New application ${applicationId} for ${jobTitle} (${jobDepartment})`)
+        console.log(`[MAILER] Sending notification to:`, recipients)
 
-        // 11. Return success response
+        // 12. Return success response
         return {
             success: true,
             message: 'Candidature envoyée avec succès',

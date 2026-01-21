@@ -1,0 +1,35 @@
+{
+  "id": "3eaebd9b-6d39-4999-ac71-bbee3c9d70dc",
+  "jobSlug": "head-chef-vip-hospitality-stade-jean-bouin",
+  "jobTitle": "Head Chef – VIP Hospitality",
+  "department": "Culinary",
+  "applicant": {
+    "name": "Jean Luc Houédanou",
+    "email": "jhouedanou@gmail.com",
+    "phone": "+2250748348221",
+    "linkedin": null
+  },
+  "coverLetter": "mkjomjklùklùk",
+  "resume": {
+    "originalFilename": "Quote QU0279 (1).pdf",
+    "storedFilename": "cc7533c0-dfc2-49a6-b116-c6642c38a3c6-1769022315523.pdf",
+    "mimeType": "application/pdf",
+    "size": 113323
+  },
+  "routing": {
+    "recipients": [
+      "chef@eatisfamily.com",
+      "kitchen@eatisfamily.com"
+    ],
+    "sentTo": [
+      "chef@eatisfamily.com",
+      "kitchen@eatisfamily.com"
+    ]
+  },
+  "metadata": {
+    "submittedAt": "2026-01-21T19:05:15.535Z",
+    "ipAddress": "::1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+  },
+  "status": "pending"
+}
