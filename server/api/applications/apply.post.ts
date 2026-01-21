@@ -9,16 +9,7 @@ import { readMultipartFormData, createError, H3Event } from 'h3'
 import { writeFile, mkdir, readFile } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
-import {
-    sanitizeInput,
-    validateFormData,
-    isAllowedExtension,
-    isAllowedMimeType,
-    isFileSizeValid,
-    generateSecureFilename,
-    type ApplicationFormData
-} from '../../utils/security'
-import { getClientIP, checkRateLimit } from '../../utils/rateLimit'
+
 
 // Base directory for storing uploads (outside public folder for security)
 const UPLOADS_DIR = join(process.cwd(), 'server', 'uploads', 'applications')

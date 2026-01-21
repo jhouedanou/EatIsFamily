@@ -409,7 +409,7 @@ const goToPage = (page: number) => {
               {{ content.cta_section.general_application_button }}
             </button> -->
             <nuxt-link to="/careers">
-              <nuxt-img src="/images/btnDiscoverAndApply.svg"></nuxt-img>
+              <nuxt-img src="/images/btnDiscoverAndApply.svg" width="316"></nuxt-img>
             </nuxt-link>
           </div>
         </div>
