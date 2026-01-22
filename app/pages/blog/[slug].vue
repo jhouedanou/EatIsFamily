@@ -219,9 +219,8 @@ color: #000;
     :deep(.user-avatar) { width: 44px; height: 44px; flex: 0 0 44px; }
     :deep(.user-list) { grid-template-columns: 1fr; }
   }
-}
 
-:deep(p) {
+  :deep(p) {
     margin: 0 0 1.75rem;
 
     &:last-child {
