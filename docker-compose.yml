@@ -1,4 +1,5 @@
-version: '3.8'
+# EatIsFamily - Docker Compose Configuration
+# Usage: docker-compose up -d
 
 services:
   # WordPress Application
