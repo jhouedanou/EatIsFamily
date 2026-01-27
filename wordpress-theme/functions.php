@@ -83,8 +83,675 @@ function eatisfamily_register_post_types() {
         'supports' => array('title', 'editor', 'thumbnail', 'custom-fields'),
         'rewrite' => array('slug' => 'venues'),
     ));
+    
+    // Blog Posts Custom Taxonomy (optional)
+    register_taxonomy('blog_category', 'post', array(
+        'labels' => array(
+            'name' => __('Blog Categories', 'eatisfamily'),
+            'singular_name' => __('Blog Category', 'eatisfamily'),
+        ),
+        'public' => true,
+        'hierarchical' => true,
+        'show_in_rest' => true,
+        'rewrite' => array('slug' => 'blog-category'),
+    ));
 }
 add_action('init', 'eatisfamily_register_post_types');
+
+/**
+ * ============================================================================
+ * THEME ACTIVATION - Import JSON Data
+ * ============================================================================
+ */
+
+/**
+ * Hook on theme activation to import data
+ */
+function eatisfamily_theme_activation() {
+    // Flush rewrite rules
+    flush_rewrite_rules();
+    
+    // Check if data was already imported
+    if (get_option('eatisfamily_data_imported')) {
+        return;
+    }
+    
+    // Import all JSON data
+    eatisfamily_import_all_json_data();
+    
+    // Mark as imported
+    update_option('eatisfamily_data_imported', true);
+    update_option('eatisfamily_import_date', current_time('mysql'));
+}
+add_action('after_switch_theme', 'eatisfamily_theme_activation');
+
+/**
+ * Import all JSON data
+ */
+function eatisfamily_import_all_json_data() {
+    $json_dir = get_template_directory() . '/data/';
+    
+    // Create data directory if not exists
+    if (!file_exists($json_dir)) {
+        wp_mkdir_p($json_dir);
+    }
+    
+    // Import each data type
+    eatisfamily_import_activities($json_dir . 'activities.json');
+    eatisfamily_import_events($json_dir . 'events.json');
+    eatisfamily_import_jobs($json_dir . 'jobs.json');
+    eatisfamily_import_venues($json_dir . 'venues.json');
+    eatisfamily_import_blog_posts($json_dir . 'blog-posts.json');
+    eatisfamily_import_site_content($json_dir . 'site-content.json');
+    eatisfamily_import_pages_content($json_dir . 'pages-content.json');
+    
+    // Log import
+    error_log('EatIsFamily: All JSON data imported successfully on ' . current_time('mysql'));
+}
+
+/**
+ * Import Activities from JSON
+ */
+function eatisfamily_import_activities($file_path) {
+    if (!file_exists($file_path)) {
+        error_log('EatIsFamily: activities.json not found at ' . $file_path);
+        return false;
+    }
+    
+    $json_data = file_get_contents($file_path);
+    $activities = json_decode($json_data, true);
+    
+    if (!$activities || !is_array($activities)) {
+        error_log('EatIsFamily: Invalid activities.json format');
+        return false;
+    }
+    
+    $imported = 0;
+    foreach ($activities as $activity) {
+        // Check if activity already exists
+        $existing = get_posts(array(
+            'post_type' => 'activity',
+            'meta_key' => 'original_id',
+            'meta_value' => $activity['id'],
+            'posts_per_page' => 1,
+        ));
+        
+        if (!empty($existing)) {
+            continue;
+        }
+        
+        // Create new activity
+        $post_data = array(
+            'post_title' => $activity['title']['rendered'] ?? $activity['title'],
+            'post_content' => $activity['content']['rendered'] ?? '',
+            'post_excerpt' => $activity['description'] ?? '',
+            'post_status' => 'publish',
+            'post_type' => 'activity',
+            'post_name' => $activity['slug'] ?? sanitize_title($activity['title']['rendered'] ?? ''),
+        );
+        
+        $post_id = wp_insert_post($post_data);
+        
+        if ($post_id && !is_wp_error($post_id)) {
+            // Add meta fields
+            update_post_meta($post_id, 'original_id', $activity['id']);
+            update_post_meta($post_id, 'activity_date', $activity['date'] ?? '');
+            update_post_meta($post_id, 'location', $activity['location'] ?? '');
+            update_post_meta($post_id, 'capacity', $activity['capacity'] ?? 0);
+            update_post_meta($post_id, 'available_spots', $activity['available_spots'] ?? 0);
+            update_post_meta($post_id, 'category', $activity['category'] ?? '');
+            update_post_meta($post_id, 'price', $activity['price'] ?? '');
+            update_post_meta($post_id, 'duration', $activity['duration'] ?? '');
+            update_post_meta($post_id, 'status', $activity['status'] ?? 'open');
+            
+            // Handle featured image
+            if (!empty($activity['featured_media'])) {
+                eatisfamily_set_featured_image_from_url($post_id, $activity['featured_media']);
+            }
+            
+            $imported++;
+        }
+    }
+    
+    error_log("EatIsFamily: Imported {$imported} activities");
+    return $imported;
+}
+
+/**
+ * Import Events from JSON
+ */
+function eatisfamily_import_events($file_path) {
+    if (!file_exists($file_path)) {
+        error_log('EatIsFamily: events.json not found at ' . $file_path);
+        return false;
+    }
+    
+    $json_data = file_get_contents($file_path);
+    $events = json_decode($json_data, true);
+    
+    if (!$events || !is_array($events)) {
+        error_log('EatIsFamily: Invalid events.json format');
+        return false;
+    }
+    
+    $imported = 0;
+    foreach ($events as $event) {
+        // Check if event already exists
+        $existing = get_posts(array(
+            'post_type' => 'event',
+            'meta_key' => 'original_id',
+            'meta_value' => $event['id'],
+            'posts_per_page' => 1,
+        ));
+        
+        if (!empty($existing)) {
+            continue;
+        }
+        
+        // Create new event
+        $post_data = array(
+            'post_title' => $event['title'] ?? '',
+            'post_content' => $event['description'] ?? '',
+            'post_status' => 'publish',
+            'post_type' => 'event',
+        );
+        
+        $post_id = wp_insert_post($post_data);
+        
+        if ($post_id && !is_wp_error($post_id)) {
+            update_post_meta($post_id, 'original_id', $event['id']);
+            update_post_meta($post_id, 'event_type', $event['event_type'] ?? '');
+            
+            // Handle featured image
+            if (!empty($event['image'])) {
+                eatisfamily_set_featured_image_from_url($post_id, $event['image']);
+            }
+            
+            $imported++;
+        }
+    }
+    
+    error_log("EatIsFamily: Imported {$imported} events");
+    return $imported;
+}
+
+/**
+ * Import Jobs from JSON
+ */
+function eatisfamily_import_jobs($file_path) {
+    if (!file_exists($file_path)) {
+        error_log('EatIsFamily: jobs.json not found at ' . $file_path);
+        return false;
+    }
+    
+    $json_data = file_get_contents($file_path);
+    $jobs = json_decode($json_data, true);
+    
+    if (!$jobs || !is_array($jobs)) {
+        error_log('EatIsFamily: Invalid jobs.json format');
+        return false;
+    }
+    
+    $imported = 0;
+    foreach ($jobs as $job) {
+        // Check if job already exists
+        $existing = get_posts(array(
+            'post_type' => 'job',
+            'meta_key' => 'original_id',
+            'meta_value' => $job['id'],
+            'posts_per_page' => 1,
+        ));
+        
+        if (!empty($existing)) {
+            continue;
+        }
+        
+        // Create new job
+        $post_data = array(
+            'post_title' => $job['title']['rendered'] ?? $job['title'],
+            'post_content' => $job['content']['rendered'] ?? '',
+            'post_excerpt' => $job['excerpt']['rendered'] ?? '',
+            'post_status' => 'publish',
+            'post_type' => 'job',
+            'post_name' => $job['slug'] ?? sanitize_title($job['title']['rendered'] ?? ''),
+        );
+        
+        $post_id = wp_insert_post($post_data);
+        
+        if ($post_id && !is_wp_error($post_id)) {
+            update_post_meta($post_id, 'original_id', $job['id']);
+            update_post_meta($post_id, 'venue_id', $job['venue_id'] ?? '');
+            update_post_meta($post_id, 'department', $job['department'] ?? '');
+            update_post_meta($post_id, 'job_type', $job['job_type'] ?? '');
+            update_post_meta($post_id, 'salary', $job['salary'] ?? '');
+            update_post_meta($post_id, 'requirements', json_encode($job['requirements'] ?? array()));
+            update_post_meta($post_id, 'benefits', json_encode($job['benefits'] ?? array()));
+            
+            // Handle featured image
+            if (!empty($job['featured_media'])) {
+                eatisfamily_set_featured_image_from_url($post_id, $job['featured_media']);
+            }
+            
+            $imported++;
+        }
+    }
+    
+    error_log("EatIsFamily: Imported {$imported} jobs");
+    return $imported;
+}
+
+/**
+ * Import Venues from JSON
+ */
+function eatisfamily_import_venues($file_path) {
+    if (!file_exists($file_path)) {
+        error_log('EatIsFamily: venues.json not found at ' . $file_path);
+        return false;
+    }
+    
+    $json_data = file_get_contents($file_path);
+    $data = json_decode($json_data, true);
+    
+    if (!$data) {
+        error_log('EatIsFamily: Invalid venues.json format');
+        return false;
+    }
+    
+    // Store metadata and event_types as options
+    if (isset($data['metadata'])) {
+        update_option('eatisfamily_venues_metadata', $data['metadata']);
+    }
+    if (isset($data['event_types'])) {
+        update_option('eatisfamily_event_types', $data['event_types']);
+    }
+    if (isset($data['stats'])) {
+        update_option('eatisfamily_stats', $data['stats']);
+    }
+    
+    $venues = $data['venues'] ?? array();
+    $imported = 0;
+    
+    foreach ($venues as $venue) {
+        // Check if venue already exists
+        $existing = get_posts(array(
+            'post_type' => 'venue',
+            'meta_key' => 'venue_slug',
+            'meta_value' => $venue['id'],
+            'posts_per_page' => 1,
+        ));
+        
+        if (!empty($existing)) {
+            continue;
+        }
+        
+        // Create new venue
+        $post_data = array(
+            'post_title' => $venue['name'] ?? '',
+            'post_content' => $venue['description'] ?? '',
+            'post_status' => 'publish',
+            'post_type' => 'venue',
+            'post_name' => $venue['id'],
+        );
+        
+        $post_id = wp_insert_post($post_data);
+        
+        if ($post_id && !is_wp_error($post_id)) {
+            update_post_meta($post_id, 'venue_slug', $venue['id']);
+            update_post_meta($post_id, 'location', $venue['location'] ?? '');
+            update_post_meta($post_id, 'city', $venue['city'] ?? '');
+            update_post_meta($post_id, 'country', $venue['country'] ?? '');
+            update_post_meta($post_id, 'venue_type', $venue['type'] ?? '');
+            update_post_meta($post_id, 'latitude', $venue['lat'] ?? 0);
+            update_post_meta($post_id, 'longitude', $venue['lng'] ?? 0);
+            update_post_meta($post_id, 'capacity', $venue['capacity'] ?? '');
+            update_post_meta($post_id, 'staff_members', $venue['staff_members'] ?? 0);
+            update_post_meta($post_id, 'recent_event', $venue['recent_event'] ?? '');
+            update_post_meta($post_id, 'guests_served', $venue['guests_served'] ?? '');
+            update_post_meta($post_id, 'services', json_encode($venue['services'] ?? array()));
+            update_post_meta($post_id, 'shops', json_encode($venue['shops'] ?? array()));
+            update_post_meta($post_id, 'menu_items', json_encode($venue['menu_items'] ?? array()));
+            
+            // Handle images
+            if (!empty($venue['image'])) {
+                eatisfamily_set_featured_image_from_url($post_id, $venue['image']);
+            }
+            if (!empty($venue['logo'])) {
+                update_post_meta($post_id, 'logo_url', $venue['logo']);
+            }
+            
+            $imported++;
+        }
+    }
+    
+    error_log("EatIsFamily: Imported {$imported} venues");
+    return $imported;
+}
+
+/**
+ * Import Blog Posts from JSON
+ */
+function eatisfamily_import_blog_posts($file_path) {
+    if (!file_exists($file_path)) {
+        error_log('EatIsFamily: blog-posts.json not found at ' . $file_path);
+        return false;
+    }
+    
+    $json_data = file_get_contents($file_path);
+    $posts = json_decode($json_data, true);
+    
+    if (!$posts || !is_array($posts)) {
+        error_log('EatIsFamily: Invalid blog-posts.json format');
+        return false;
+    }
+    
+    $imported = 0;
+    foreach ($posts as $post) {
+        // Check if post already exists
+        $existing = get_posts(array(
+            'post_type' => 'post',
+            'meta_key' => 'original_id',
+            'meta_value' => $post['id'],
+            'posts_per_page' => 1,
+        ));
+        
+        if (!empty($existing)) {
+            continue;
+        }
+        
+        // Create new post
+        $post_data = array(
+            'post_title' => $post['title']['rendered'] ?? $post['title'],
+            'post_content' => $post['content']['rendered'] ?? '',
+            'post_excerpt' => $post['excerpt']['rendered'] ?? '',
+            'post_status' => 'publish',
+            'post_type' => 'post',
+            'post_name' => $post['slug'] ?? sanitize_title($post['title']['rendered'] ?? ''),
+            'post_date' => isset($post['date']) ? date('Y-m-d H:i:s', strtotime($post['date'])) : current_time('mysql'),
+        );
+        
+        $post_id = wp_insert_post($post_data);
+        
+        if ($post_id && !is_wp_error($post_id)) {
+            update_post_meta($post_id, 'original_id', $post['id']);
+            
+            // Optional fields (may not exist in JSON)
+            if (!empty($post['author'])) {
+                update_post_meta($post_id, 'author_name', $post['author']['name'] ?? '');
+                update_post_meta($post_id, 'author_avatar', $post['author']['avatar'] ?? '');
+            }
+            if (!empty($post['reading_time'])) {
+                update_post_meta($post_id, 'reading_time', $post['reading_time']);
+            }
+            
+            // Handle featured image
+            if (!empty($post['featured_media'])) {
+                eatisfamily_set_featured_image_from_url($post_id, $post['featured_media']);
+            }
+            
+            $imported++;
+        }
+    }
+    
+    error_log("EatIsFamily: Imported {$imported} blog posts");
+    return $imported;
+}
+
+/**
+ * Import Site Content from JSON
+ */
+function eatisfamily_import_site_content($file_path) {
+    if (!file_exists($file_path)) {
+        error_log('EatIsFamily: site-content.json not found at ' . $file_path);
+        return false;
+    }
+    
+    $json_data = file_get_contents($file_path);
+    $content = json_decode($json_data, true);
+    
+    if (!$content) {
+        error_log('EatIsFamily: Invalid site-content.json format');
+        return false;
+    }
+    
+    update_option('eatisfamily_site_content', $content);
+    error_log('EatIsFamily: Site content imported successfully');
+    return true;
+}
+
+/**
+ * Import Pages Content from JSON
+ */
+function eatisfamily_import_pages_content($file_path) {
+    if (!file_exists($file_path)) {
+        error_log('EatIsFamily: pages-content.json not found at ' . $file_path);
+        return false;
+    }
+    
+    $json_data = file_get_contents($file_path);
+    $content = json_decode($json_data, true);
+    
+    if (!$content) {
+        error_log('EatIsFamily: Invalid pages-content.json format');
+        return false;
+    }
+    
+    update_option('eatisfamily_pages_content', $content);
+    error_log('EatIsFamily: Pages content imported successfully');
+    return true;
+}
+
+/**
+ * Helper: Set featured image from URL
+ */
+function eatisfamily_set_featured_image_from_url($post_id, $image_url) {
+    // Skip if URL is a local path starting with /
+    if (strpos($image_url, '/') === 0 && strpos($image_url, '//') !== 0) {
+        update_post_meta($post_id, 'featured_image_url', $image_url);
+        return false;
+    }
+    
+    // Skip if already set
+    if (has_post_thumbnail($post_id)) {
+        return true;
+    }
+    
+    require_once(ABSPATH . 'wp-admin/includes/media.php');
+    require_once(ABSPATH . 'wp-admin/includes/file.php');
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
+    
+    // Download and attach
+    $attachment_id = media_sideload_image($image_url, $post_id, null, 'id');
+    
+    if (!is_wp_error($attachment_id)) {
+        set_post_thumbnail($post_id, $attachment_id);
+        return true;
+    }
+    
+    // Store URL as fallback
+    update_post_meta($post_id, 'featured_image_url', $image_url);
+    return false;
+}
+
+/**
+ * ============================================================================
+ * ADMIN PAGE - Manual Import & Data Management
+ * ============================================================================
+ */
+
+/**
+ * Add admin menu for data management
+ */
+function eatisfamily_add_data_admin_menu() {
+    add_submenu_page(
+        'themes.php',
+        __('Import JSON Data', 'eatisfamily'),
+        __('Import JSON Data', 'eatisfamily'),
+        'manage_options',
+        'eatisfamily-import',
+        'eatisfamily_import_admin_page'
+    );
+}
+add_action('admin_menu', 'eatisfamily_add_data_admin_menu');
+
+/**
+ * Admin page for manual import
+ */
+function eatisfamily_import_admin_page() {
+    // Handle form submission
+    if (isset($_POST['eatisfamily_reimport']) && check_admin_referer('eatisfamily_reimport_nonce')) {
+        // Reset import flag
+        delete_option('eatisfamily_data_imported');
+        
+        // Re-import all data
+        eatisfamily_import_all_json_data();
+        
+        // Mark as imported
+        update_option('eatisfamily_data_imported', true);
+        update_option('eatisfamily_import_date', current_time('mysql'));
+        
+        echo '<div class="notice notice-success"><p>' . __('Data imported successfully!', 'eatisfamily') . '</p></div>';
+    }
+    
+    if (isset($_POST['eatisfamily_reset']) && check_admin_referer('eatisfamily_reset_nonce')) {
+        // Delete all imported data
+        eatisfamily_delete_all_imported_data();
+        
+        // Reset import flag
+        delete_option('eatisfamily_data_imported');
+        delete_option('eatisfamily_import_date');
+        
+        echo '<div class="notice notice-warning"><p>' . __('All imported data has been deleted.', 'eatisfamily') . '</p></div>';
+    }
+    
+    $import_date = get_option('eatisfamily_import_date', 'Never');
+    $is_imported = get_option('eatisfamily_data_imported', false);
+    
+    ?>
+    <div class="wrap">
+        <h1><?php _e('Eat Is Family - JSON Data Import', 'eatisfamily'); ?></h1>
+        
+        <div class="card" style="max-width: 600px; padding: 20px;">
+            <h2><?php _e('Import Status', 'eatisfamily'); ?></h2>
+            <p>
+                <strong><?php _e('Status:', 'eatisfamily'); ?></strong> 
+                <?php echo $is_imported ? '<span style="color: green;">✓ ' . __('Imported', 'eatisfamily') . '</span>' : '<span style="color: orange;">○ ' . __('Not imported', 'eatisfamily') . '</span>'; ?>
+            </p>
+            <p>
+                <strong><?php _e('Last Import:', 'eatisfamily'); ?></strong> 
+                <?php echo esc_html($import_date); ?>
+            </p>
+            
+            <h3><?php _e('Data Files Location', 'eatisfamily'); ?></h3>
+            <p><code><?php echo esc_html(get_template_directory() . '/data/'); ?></code></p>
+            <p class="description"><?php _e('Place your JSON files in the /data/ folder of the theme:', 'eatisfamily'); ?></p>
+            <ul style="list-style: disc; margin-left: 20px;">
+                <li>activities.json</li>
+                <li>events.json</li>
+                <li>jobs.json</li>
+                <li>venues.json</li>
+                <li>blog-posts.json</li>
+                <li>site-content.json</li>
+                <li>pages-content.json</li>
+            </ul>
+        </div>
+        
+        <div class="card" style="max-width: 600px; padding: 20px; margin-top: 20px;">
+            <h2><?php _e('Actions', 'eatisfamily'); ?></h2>
+            
+            <form method="post" style="margin-bottom: 15px;">
+                <?php wp_nonce_field('eatisfamily_reimport_nonce'); ?>
+                <p>
+                    <button type="submit" name="eatisfamily_reimport" class="button button-primary">
+                        <?php _e('Import / Re-import JSON Data', 'eatisfamily'); ?>
+                    </button>
+                </p>
+                <p class="description"><?php _e('This will import new data from JSON files. Existing items will be skipped.', 'eatisfamily'); ?></p>
+            </form>
+            
+            <hr>
+            
+            <form method="post" onsubmit="return confirm('<?php _e('Are you sure? This will delete all imported posts!', 'eatisfamily'); ?>');">
+                <?php wp_nonce_field('eatisfamily_reset_nonce'); ?>
+                <p>
+                    <button type="submit" name="eatisfamily_reset" class="button button-secondary" style="color: #dc3232;">
+                        <?php _e('Delete All Imported Data', 'eatisfamily'); ?>
+                    </button>
+                </p>
+                <p class="description" style="color: #dc3232;"><?php _e('Warning: This will permanently delete all imported posts, events, jobs, venues, and activities.', 'eatisfamily'); ?></p>
+            </form>
+        </div>
+        
+        <div class="card" style="max-width: 600px; padding: 20px; margin-top: 20px;">
+            <h2><?php _e('Import Statistics', 'eatisfamily'); ?></h2>
+            <?php
+            $stats = array(
+                'Activities' => wp_count_posts('activity')->publish ?? 0,
+                'Events' => wp_count_posts('event')->publish ?? 0,
+                'Jobs' => wp_count_posts('job')->publish ?? 0,
+                'Venues' => wp_count_posts('venue')->publish ?? 0,
+                'Blog Posts' => wp_count_posts('post')->publish ?? 0,
+            );
+            ?>
+            <table class="widefat" style="max-width: 300px;">
+                <thead>
+                    <tr>
+                        <th><?php _e('Content Type', 'eatisfamily'); ?></th>
+                        <th><?php _e('Count', 'eatisfamily'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($stats as $label => $count): ?>
+                    <tr>
+                        <td><?php echo esc_html($label); ?></td>
+                        <td><?php echo esc_html($count); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <?php
+}
+
+/**
+ * Delete all imported data
+ */
+function eatisfamily_delete_all_imported_data() {
+    $post_types = array('activity', 'event', 'job', 'venue');
+    
+    foreach ($post_types as $post_type) {
+        $posts = get_posts(array(
+            'post_type' => $post_type,
+            'posts_per_page' => -1,
+            'post_status' => 'any',
+        ));
+        
+        foreach ($posts as $post) {
+            wp_delete_post($post->ID, true);
+        }
+    }
+    
+    // Delete blog posts with original_id meta (imported ones)
+    $blog_posts = get_posts(array(
+        'post_type' => 'post',
+        'posts_per_page' => -1,
+        'meta_key' => 'original_id',
+        'post_status' => 'any',
+    ));
+    
+    foreach ($blog_posts as $post) {
+        wp_delete_post($post->ID, true);
+    }
+    
+    // Delete options
+    delete_option('eatisfamily_site_content');
+    delete_option('eatisfamily_pages_content');
+    delete_option('eatisfamily_venues_metadata');
+    delete_option('eatisfamily_event_types');
+    delete_option('eatisfamily_stats');
+    
+    error_log('EatIsFamily: All imported data deleted');
+}
 
 /**
  * Register REST API Routes

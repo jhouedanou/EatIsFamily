@@ -1,0 +1,82 @@
+[
+    {
+        "id": 1,
+        "slug": "cooking-workshop-italian-cuisine",
+        "title": {
+            "rendered": "Italian Cuisine Cooking Workshop"
+        },
+        "description": "Learn to prepare authentic Italian dishes with our expert chef. From fresh pasta to traditional sauces, discover the secrets of Italian cooking.",
+        "content": {
+            "rendered": "<p>Join us for an immersive Italian cooking experience! In this hands-on workshop, you'll learn to make fresh pasta from scratch, prepare classic sauces like carbonara and amatriciana, and master the art of Italian desserts.</p><p>Our experienced chef will guide you through each step, sharing tips and techniques passed down through generations. You'll leave with new skills, delicious recipes, and a full stomach!</p><h3>What You'll Learn:</h3><ul><li>Making fresh pasta dough</li><li>Rolling and shaping different pasta types</li><li>Preparing traditional Italian sauces</li><li>Creating authentic tiramisu</li></ul>"
+        },
+        "date": "2026-01-15T18:00:00",
+        "location": "Culinary Studio, 123 Rue de la Cuisine, Paris",
+        "capacity": 12,
+        "available_spots": 5,
+        "category": "Cooking",
+        "price": "€85",
+        "duration": "3 hours",
+        "featured_media": "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800",
+        "status": "open"
+    },
+    {
+        "id": 2,
+        "slug": "wine-tasting-bordeaux",
+        "title": {
+            "rendered": "Bordeaux Wine Tasting Experience"
+        },
+        "description": "Discover the rich flavors of Bordeaux wines with our sommelier-led tasting session. Perfect for wine enthusiasts and beginners alike.",
+        "content": {
+            "rendered": "<p>Embark on a sensory journey through the prestigious wine region of Bordeaux. Our certified sommelier will guide you through a carefully curated selection of red, white, and dessert wines.</p><p>You'll learn about the terroir, grape varieties, and winemaking techniques that make Bordeaux wines world-renowned. Each wine will be paired with artisanal cheeses and charcuterie to enhance the tasting experience.</p><h3>Experience Includes:</h3><ul><li>Tasting of 6 premium Bordeaux wines</li><li>Expert sommelier guidance</li><li>Cheese and charcuterie pairings</li><li>Wine tasting notes and guide</li></ul>"
+        },
+        "date": "2026-01-22T19:00:00",
+        "location": "Wine Bar Le Sommelier, 45 Avenue des Vins, Bordeaux",
+        "capacity": 20,
+        "available_spots": 12,
+        "category": "Wine & Spirits",
+        "price": "€65",
+        "duration": "2 hours",
+        "featured_media": "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800",
+        "status": "open"
+    },
+    {
+        "id": 3,
+        "slug": "french-pastry-masterclass",
+        "title": {
+            "rendered": "French Pastry Masterclass"
+        },
+        "description": "Master the art of French pastry with our award-winning pastry chef. Learn to create croissants, éclairs, and macarons.",
+        "content": {
+            "rendered": "<p>Dive into the elegant world of French pastry in this comprehensive masterclass. You'll work alongside our award-winning pastry chef to create classic French desserts from scratch.</p><p>This intensive workshop covers the fundamental techniques of French pastry-making, from laminating dough for perfect croissants to piping delicate éclairs and mastering the temperamental macaron.</p><h3>What You'll Create:</h3><ul><li>Buttery croissants with perfect layers</li><li>Chocolate éclairs with pastry cream</li><li>Colorful French macarons</li><li>Tarte Tatin</li></ul><p>All ingredients and equipment are provided. You'll take home your creations plus a recipe booklet.</p>"
+        },
+        "date": "2026-02-05T14:00:00",
+        "location": "Pâtisserie École, 78 Boulevard Saint-Germain, Paris",
+        "capacity": 10,
+        "available_spots": 3,
+        "category": "Baking",
+        "price": "€120",
+        "duration": "4 hours",
+        "featured_media": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800",
+        "status": "open"
+    },
+    {
+        "id": 4,
+        "slug": "cheese-making-workshop",
+        "title": {
+            "rendered": "Artisanal Cheese Making Workshop"
+        },
+        "description": "Learn the ancient art of cheese making and create your own artisanal cheeses to take home.",
+        "content": {
+            "rendered": "<p>Discover the fascinating process of transforming milk into delicious artisanal cheese. In this hands-on workshop, you'll learn traditional cheese-making techniques and create several types of cheese.</p><p>Our expert cheese maker will guide you through each step, from curdling and molding to aging and flavoring. You'll understand the science behind cheese making and gain skills to continue your cheese-making journey at home.</p><h3>Workshop Highlights:</h3><ul><li>Make fresh mozzarella and ricotta</li><li>Learn about cheese cultures and aging</li><li>Create flavored cheese varieties</li><li>Cheese tasting session</li><li>Take home your handmade cheeses</li></ul>"
+        },
+        "date": "2026-02-12T10:00:00",
+        "location": "Fromagerie Artisanale, 34 Rue du Fromage, Lyon",
+        "capacity": 15,
+        "available_spots": 8,
+        "category": "Cooking",
+        "price": "€75",
+        "duration": "3.5 hours",
+        "featured_media": "https://images.unsplash.com/photo-1452195100486-9cc805987862?w=800",
+        "status": "open"
+    }
+]

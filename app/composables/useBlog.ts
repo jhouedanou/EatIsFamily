@@ -25,18 +25,27 @@ export interface BlogPost {
 }
 
 export const useBlog = () => {
+    const { fetchData, fetchSingle, useLocalFallback } = useApi()
+
+    /**
+     * Get all blog posts from WordPress API or local fallback
+     */
     const getBlogPosts = async (): Promise<BlogPost[]> => {
-        try {
-            // Utiliser la route serveur qui lit le JSON
-            const data = await $fetch<BlogPost[]>('/data/blog-posts.json')
-            return data
-        } catch (error) {
-            console.error('Erreur lors du chargement des articles:', error)
-            return []
-        }
+        const posts = await fetchData<BlogPost[]>('blog-posts', 'blog-posts.json')
+        return posts || []
     }
 
+    /**
+     * Get a single blog post by slug
+     */
     const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+        // Try to fetch from API first
+        if (!useLocalFallback) {
+            const post = await fetchSingle<BlogPost>('blog-posts', slug)
+            if (post) return post
+        }
+        
+        // Fallback: fetch all and filter
         const posts = await getBlogPosts()
         return posts.find(post => post.slug === slug) || null
     }
@@ -46,3 +55,4 @@ export const useBlog = () => {
         getBlogPostBySlug
     }
 }
+

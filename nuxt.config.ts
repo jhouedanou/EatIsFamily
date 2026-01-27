@@ -56,5 +56,15 @@ export default defineNuxtConfig({
     }
   ],
 
+  // Configuration de l'API WordPress
+  runtimeConfig: {
+    public: {
+      // URL de l'API WordPress - peut être modifiée via NUXT_PUBLIC_API_BASE_URL
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://bigfive.dev/eatisfamily/index.php/wp-json/eatisfamily/v1',
+      // Fallback vers les fichiers JSON locaux si l'API est indisponible
+      useLocalFallback: process.env.NUXT_PUBLIC_USE_LOCAL_FALLBACK === 'true' || false
+    }
+  },
+
   devtools: { enabled: true }
 })

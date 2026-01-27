@@ -26,44 +26,71 @@ export interface JobWithVenue extends Job {
 }
 
 export const useJobs = () => {
-    const { fetchData } = useApi()
+    const { fetchData, fetchSingle, useLocalFallback } = useApi()
     const { getVenueById, getVenues } = useVenues()
 
+    /**
+     * Get all jobs from WordPress API or local fallback
+     */
     const getJobs = async (): Promise<Job[] | null> => {
-        return await fetchData<Job[]>('jobs.json')
+        return await fetchData<Job[]>('jobs', 'jobs.json')
     }
 
+    /**
+     * Get a single job by slug
+     */
     const getJobBySlug = async (slug: string): Promise<Job | null> => {
+        // Try to fetch from API first
+        if (!useLocalFallback) {
+            const job = await fetchSingle<Job>('jobs', slug)
+            if (job) return job
+        }
+        
+        // Fallback: fetch all and filter
         const jobs = await getJobs()
         if (!jobs) return null
         return jobs.find(job => job.slug === slug) || null
     }
 
+    /**
+     * Get a single job by ID
+     */
     const getJobById = async (id: number): Promise<Job | null> => {
         const jobs = await getJobs()
         if (!jobs) return null
         return jobs.find(job => job.id === id) || null
     }
 
+    /**
+     * Get jobs filtered by venue ID
+     */
     const getJobsByVenue = async (venueId: string): Promise<Job[] | null> => {
         const jobs = await getJobs()
         if (!jobs) return null
         return jobs.filter(job => job.venue_id === venueId)
     }
 
+    /**
+     * Get jobs filtered by department
+     */
     const getJobsByDepartment = async (department: string): Promise<Job[] | null> => {
         const jobs = await getJobs()
         if (!jobs) return null
         return jobs.filter(job => job.department.toLowerCase() === department.toLowerCase())
     }
 
+    /**
+     * Get jobs filtered by job type
+     */
     const getJobsByType = async (jobType: string): Promise<Job[] | null> => {
         const jobs = await getJobs()
         if (!jobs) return null
         return jobs.filter(job => job.job_type.toLowerCase() === jobType.toLowerCase())
     }
 
-    // Get job with its associated venue
+    /**
+     * Get job with its associated venue
+     */
     const getJobWithVenue = async (slug: string): Promise<JobWithVenue | null> => {
         const job = await getJobBySlug(slug)
         if (!job) return null
@@ -72,7 +99,9 @@ export const useJobs = () => {
         return { ...job, venue }
     }
 
-    // Get all jobs with their associated venues
+    /**
+     * Get all jobs with their associated venues
+     */
     const getJobsWithVenues = async (): Promise<JobWithVenue[] | null> => {
         const jobs = await getJobs()
         const venues = await getVenues()
@@ -87,7 +116,9 @@ export const useJobs = () => {
         }))
     }
 
-    // Get unique venue options from jobs (for filtering)
+    /**
+     * Get unique venue options from jobs (for filtering)
+     */
     const getJobVenueOptions = async (): Promise<{ id: string; name: string; location: string }[]> => {
         const jobs = await getJobs()
         const venues = await getVenues()
@@ -115,3 +146,4 @@ export const useJobs = () => {
         getJobVenueOptions
     }
 }
+

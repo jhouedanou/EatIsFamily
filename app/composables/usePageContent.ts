@@ -329,20 +329,32 @@ export interface PagesContent {
 export const usePageContent = () => {
   const { fetchData } = useApi()
 
+  /**
+   * Get all pages content from WordPress API or local fallback
+   */
   const getPageContent = async (): Promise<PagesContent | null> => {
-    return await fetchData<PagesContent>('pages-content.json')
+    return await fetchData<PagesContent>('pages-content', 'pages-content.json')
   }
 
+  /**
+   * Get homepage content
+   */
   const getHomepageContent = async (): Promise<HomepageContent | null> => {
     const content = await getPageContent()
     return content?.homepage || null
   }
 
+  /**
+   * Get careers page content
+   */
   const getCareersContent = async (): Promise<CareersContent | null> => {
     const content = await getPageContent()
     return content?.careers || null
   }
 
+  /**
+   * Get contact page content
+   */
   const getContactContent = async (): Promise<ContactContent | null> => {
     const content = await getPageContent()
     return content?.contact || null

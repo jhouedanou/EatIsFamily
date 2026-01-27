@@ -13,11 +13,15 @@ export interface SiteContent {
 export const useSiteContent = () => {
     const { fetchData } = useApi()
 
+    /**
+     * Get site content from WordPress API or local fallback
+     */
     const getSiteContent = async (): Promise<SiteContent | null> => {
-        return await fetchData<SiteContent>('site-content.json')
+        return await fetchData<SiteContent>('site-content', 'site-content.json')
     }
 
     return {
         getSiteContent
     }
 }
+

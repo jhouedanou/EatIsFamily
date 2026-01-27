@@ -49,10 +49,36 @@ The application uses **Vue 3 Composables** for state management without Pinia or
    - `useEvents()` - Events
    - `useActivities()` - Activities
    - `useSiteContent()` - Global site configuration
+   - `usePageContent()` - Page-specific content
+   - `useVenues()` - Venues/stadiums data
 
-3. **Data Source** - Static JSON files in `/public/api/`:
-   - `jobs.json`, `blog-posts.json`, `events.json`, `activities.json`, `site-content.json`
-   - These files can be swapped for real API endpoints by updating composables
+3. **Data Source** - WordPress REST API with local JSON fallback:
+   - Primary: WordPress API at `https://bigfive.dev/eatisfamily/index.php/wp-json/eatisfamily/v1/`
+   - Fallback: Static JSON files in `/public/api/` when API is unavailable
+   - Configuration via environment variables (see `.env.example`)
+
+**API Endpoints:**
+- `/activities` - List of activities
+- `/activities/{slug}` - Single activity by slug
+- `/blog-posts` - List of blog posts
+- `/blog-posts/{slug}` - Single blog post by slug
+- `/events` - List of events
+- `/events/{id}` - Single event by ID
+- `/jobs` - List of job postings
+- `/jobs/{slug}` - Single job by slug
+- `/venues` - List of venues with metadata
+- `/venues/{id}` - Single venue by ID
+- `/site-content` - Global site configuration
+- `/pages-content` - Page-specific content
+
+**Environment Variables:**
+```bash
+# WordPress API Base URL
+NUXT_PUBLIC_API_BASE_URL=https://bigfive.dev/eatisfamily/index.php/wp-json/eatisfamily/v1
+
+# Use local JSON fallback (for offline development)
+NUXT_PUBLIC_USE_LOCAL_FALLBACK=false
+```
 
 **Example composable usage in components:**
 ```typescript
