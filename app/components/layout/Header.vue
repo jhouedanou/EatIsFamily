@@ -22,7 +22,7 @@
           <NuxtLink to="/blog" class="nav-link">{{ content.nav_links.blogs }}</NuxtLink>
           <NuxtLink to="/contact" class="contact-button-wrapper">
             <NuxtImg
-              src="/images/btnGetInTouch.svg"
+              :src="btnGetInTouch"
               alt="Get in touch"
               class="contact-image"
             />
@@ -40,7 +40,11 @@
 
 <script setup lang="ts">
 const { getHeaderContent } = usePageContent()
+const { settings } = useGlobalSettings()
 const content = ref<any>(null)
+
+// Dynamic button URL with fallback
+const btnGetInTouch = computed(() => settings.value?.icons?.btn_get_in_touch || '/images/btnGetInTouch.svg')
 
 onMounted(async () => {
   content.value = await getHeaderContent()

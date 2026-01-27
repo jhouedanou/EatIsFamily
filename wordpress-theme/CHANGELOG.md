@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2026-01-27
+
+### 🎉 Major Release - Complete Dynamic Backend
+
+#### Added
+
+- ✅ **Hero Section Video Support**
+  - YouTube video background support with autoplay, mute, loop
+  - MP4 video background support with native HTML5 video
+  - Toggle between Image / YouTube / MP4 in WordPress admin
+  - Responsive video styles for all screen sizes
+
+- ✅ **Forms Labels Management** (New Tab in Pages Content)
+  - Job Search Form labels (title, subtitle, placeholders)
+  - Contact Form labels (all fields, buttons, messages)
+  - Job Application Form labels (all fields, buttons, messages)
+  - All labels editable from WordPress admin
+
+- ✅ **Corrected Pages Content Structure**
+  - Fixed `hero_section.title.line_1/line_2/line_3` structure
+  - Now matches exact JSON structure expected by Vue frontend
+  - WYSIWYG editors for rich text fields
+
+- ✅ **New TypeScript Interfaces**
+  - `FormsContent.job_search` for job search form labels
+  - `FormsContent.job_application` for job application form labels
+  - Updated `HomepageContent.hero_section` with video fields
+
+#### Changed
+
+- 🔄 **JobSearchForm.vue** now uses dynamic labels from WordPress
+- 🔄 **ContactForm.vue** already uses dynamic labels (verified)
+- 🔄 **index.vue** hero section supports video backgrounds
+- 🔄 **admin-pages.php** completely rewritten for correct structure
+
+#### Fixed
+
+- 🐛 **Critical Bug**: Admin page fields now map correctly to JSON structure
+- 🐛 **Fixed**: Editing hero subtitle now actually updates frontend
+- 🐛 **Fixed**: All homepage sections use correct nested structure
+
+---
+
 ## [2.0.0] - 2026-01-27
 
 ### 🎉 Major Release - Headless CMS Complete

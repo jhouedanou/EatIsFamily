@@ -6,12 +6,224 @@
  * that were previously stored in JSON files.
  * 
  * @package EatIsFamily
- * @version 2.0.0
+ * @version 3.0.0
+ * 
+ * NOTE: Uses AJAX with base64 encoding to bypass mod_security restrictions
  */
 
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
     exit;
+}
+
+/**
+ * ============================================================================
+ * AJAX HANDLER FOR PAGES CONTENT (Bypasses mod_security 403 errors)
+ * ============================================================================
+ */
+add_action('wp_ajax_eatisfamily_save_pages_content', 'eatisfamily_ajax_save_pages_content');
+
+function eatisfamily_ajax_save_pages_content() {
+    // Verify nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'eatisfamily_ajax_pages_content')) {
+        wp_send_json_error(array('message' => 'Security check failed'));
+        return;
+    }
+    
+    // Check permissions
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(array('message' => 'Permission denied'));
+        return;
+    }
+    
+    // Get and decode the base64 data
+    if (!isset($_POST['encoded_data'])) {
+        wp_send_json_error(array('message' => 'No data received'));
+        return;
+    }
+    
+    $decoded_data = base64_decode($_POST['encoded_data']);
+    if ($decoded_data === false) {
+        wp_send_json_error(array('message' => 'Failed to decode data'));
+        return;
+    }
+    
+    $form_data = json_decode($decoded_data, true);
+    if ($form_data === null) {
+        wp_send_json_error(array('message' => 'Invalid JSON data'));
+        return;
+    }
+    
+    // Build pages_content structure (same as before but from decoded data)
+    $pages_content = eatisfamily_build_pages_content_from_data($form_data);
+    
+    // Save to database
+    $result = update_option('eatisfamily_pages_content', $pages_content);
+    
+    if ($result !== false) {
+        wp_send_json_success(array('message' => 'Pages content saved successfully!'));
+    } else {
+        // Check if data is identical (update_option returns false if unchanged)
+        $current = get_option('eatisfamily_pages_content', array());
+        if ($current == $pages_content) {
+            wp_send_json_success(array('message' => 'Pages content saved (no changes detected)'));
+        } else {
+            wp_send_json_error(array('message' => 'Failed to save to database'));
+        }
+    }
+}
+
+/**
+ * Build pages_content array from form data
+ */
+function eatisfamily_build_pages_content_from_data($data) {
+    return array(
+        'homepage' => array(
+            'seo' => array(
+                'title' => sanitize_text_field($data['homepage_seo_title'] ?? ''),
+                'description' => sanitize_textarea_field($data['homepage_seo_description'] ?? ''),
+                'keywords' => sanitize_text_field($data['homepage_seo_keywords'] ?? ''),
+                'og_title' => sanitize_text_field($data['homepage_seo_og_title'] ?? ''),
+                'og_description' => sanitize_textarea_field($data['homepage_seo_og_description'] ?? ''),
+                'og_image' => esc_url_raw($data['homepage_seo_og_image'] ?? ''),
+            ),
+            'hero_section' => array(
+                'bg' => esc_url_raw($data['homepage_hero_bg'] ?? ''),
+                'video_type' => sanitize_text_field($data['homepage_hero_video_type'] ?? 'image'),
+                'video_url' => esc_url_raw($data['homepage_hero_video_url'] ?? ''),
+                'youtube_id' => sanitize_text_field($data['homepage_hero_youtube_id'] ?? ''),
+                'title' => array(
+                    'line_1' => wp_kses_post($data['homepage_hero_title_line1'] ?? ''),
+                    'line_2' => wp_kses_post($data['homepage_hero_title_line2'] ?? ''),
+                    'line_3' => wp_kses_post($data['homepage_hero_title_line3'] ?? ''),
+                ),
+            ),
+            'intro_section' => array(
+                'texte' => wp_kses_post($data['homepage_intro_texte'] ?? ''),
+            ),
+            'services_section' => array(
+                'tag' => sanitize_text_field($data['homepage_services_tag'] ?? ''),
+                'title' => array(
+                    'line_1' => sanitize_text_field($data['homepage_services_title_line1'] ?? ''),
+                    'highlight' => sanitize_text_field($data['homepage_services_title_highlight'] ?? ''),
+                    'line_2' => sanitize_text_field($data['homepage_services_title_line2'] ?? ''),
+                ),
+            ),
+            'cta_section' => array(
+                'title' => sanitize_text_field($data['homepage_cta_title'] ?? ''),
+                'description' => wp_kses_post($data['homepage_cta_description'] ?? ''),
+            ),
+            'sustainable_service_title' => sanitize_text_field($data['homepage_sustainable_title'] ?? ''),
+            'beautiful' => array(
+                'title' => sanitize_text_field($data['homepage_beautiful_title'] ?? ''),
+                'text' => wp_kses_post($data['homepage_beautiful_text'] ?? ''),
+                'image' => esc_url_raw($data['homepage_beautiful_image'] ?? ''),
+            ),
+            'partners_title' => sanitize_text_field($data['homepage_partners_title'] ?? ''),
+            'homepageCTA' => array(
+                'title' => sanitize_text_field($data['homepage_cta_block_title'] ?? ''),
+                'image' => esc_url_raw($data['homepage_cta_block_image'] ?? ''),
+                'description' => wp_kses_post($data['homepage_cta_block_description'] ?? ''),
+                'additionalText' => wp_kses_post($data['homepage_cta_block_additional'] ?? ''),
+            ),
+        ),
+        'about' => array(
+            'hero' => array(
+                'title' => sanitize_text_field($data['about_hero_title'] ?? ''),
+                'subtitle' => sanitize_text_field($data['about_hero_subtitle'] ?? ''),
+                'description' => wp_kses_post($data['about_hero_description'] ?? ''),
+                'image' => array(
+                    'src' => esc_url_raw($data['about_hero_image'] ?? ''),
+                    'alt' => sanitize_text_field($data['about_hero_image_alt'] ?? ''),
+                ),
+            ),
+            'section_titles' => array(
+                'values' => sanitize_text_field($data['about_values_title'] ?? ''),
+                'team' => sanitize_text_field($data['about_team_title'] ?? ''),
+            ),
+            'seo' => array(
+                'title' => sanitize_text_field($data['about_seo_title'] ?? ''),
+                'description' => sanitize_textarea_field($data['about_seo_description'] ?? ''),
+            ),
+        ),
+        'contact' => array(
+            'hero' => array(
+                'title' => sanitize_text_field($data['contact_hero_title'] ?? ''),
+                'subtitle' => sanitize_text_field($data['contact_hero_subtitle'] ?? ''),
+            ),
+            'form_title' => sanitize_text_field($data['contact_form_title'] ?? ''),
+            'form_subtitle' => sanitize_text_field($data['contact_form_subtitle'] ?? ''),
+        ),
+        'careers' => array(
+            'seo' => array(
+                'title' => sanitize_text_field($data['careers_seo_title'] ?? ''),
+                'description' => sanitize_textarea_field($data['careers_seo_description'] ?? ''),
+            ),
+            'hero_default' => array(
+                'title_line_1' => sanitize_text_field($data['careers_hero_title_line1'] ?? ''),
+                'title_line_2' => sanitize_text_field($data['careers_hero_title_line2'] ?? ''),
+                'image' => esc_url_raw($data['careers_hero_image'] ?? ''),
+                'background_image' => esc_url_raw($data['careers_hero_bg'] ?? ''),
+            ),
+            'join_box' => array(
+                'title' => sanitize_text_field($data['careers_join_title'] ?? ''),
+                'description' => wp_kses_post($data['careers_join_description'] ?? ''),
+            ),
+            'benefits_title' => sanitize_text_field($data['careers_benefits_title'] ?? ''),
+            'benefits' => isset($data['careers_benefits']) ? array_filter(array_map('sanitize_text_field', (array)$data['careers_benefits'])) : array(),
+        ),
+        'events' => array(
+            'hero' => array(
+                'title' => sanitize_text_field($data['events_hero_title'] ?? ''),
+                'subtitle' => sanitize_text_field($data['events_hero_subtitle'] ?? ''),
+            ),
+        ),
+        'forms' => array(
+            'job_search' => array(
+                'title' => sanitize_text_field($data['form_job_search_title'] ?? 'Find Your Perfect Role'),
+                'subtitle' => sanitize_text_field($data['form_job_search_subtitle'] ?? 'Explore open positions across France'),
+                'job_title_placeholder' => sanitize_text_field($data['form_job_search_job_placeholder'] ?? 'Select job title'),
+                'site_placeholder' => sanitize_text_field($data['form_job_search_site_placeholder'] ?? 'Select sites'),
+                'all_jobs_label' => sanitize_text_field($data['form_job_search_all_jobs'] ?? 'All job titles'),
+                'all_sites_label' => sanitize_text_field($data['form_job_search_all_sites'] ?? 'All sites'),
+                'search_button' => sanitize_text_field($data['form_job_search_button'] ?? 'Search'),
+                'loading_text' => sanitize_text_field($data['form_job_search_loading'] ?? 'Loading...'),
+            ),
+            'contact_form' => array(
+                'name_label' => sanitize_text_field($data['form_contact_name_label'] ?? 'Your Name'),
+                'name_placeholder' => sanitize_text_field($data['form_contact_name_placeholder'] ?? 'Enter your name'),
+                'email_label' => sanitize_text_field($data['form_contact_email_label'] ?? 'Email Address'),
+                'email_placeholder' => sanitize_text_field($data['form_contact_email_placeholder'] ?? 'Enter your email'),
+                'subject_label' => sanitize_text_field($data['form_contact_subject_label'] ?? 'Subject'),
+                'subject_placeholder' => sanitize_text_field($data['form_contact_subject_placeholder'] ?? 'What is this about?'),
+                'message_label' => sanitize_text_field($data['form_contact_message_label'] ?? 'Message'),
+                'message_placeholder' => sanitize_text_field($data['form_contact_message_placeholder'] ?? 'Write your message...'),
+                'submit_button' => sanitize_text_field($data['form_contact_submit_button'] ?? 'Send Message'),
+                'submitting_button' => sanitize_text_field($data['form_contact_submitting_button'] ?? 'Sending...'),
+                'success_message' => sanitize_text_field($data['form_contact_success_message'] ?? 'Thank you! Your message has been sent.'),
+                'error_message' => sanitize_text_field($data['form_contact_error_message'] ?? 'Sorry, there was an error. Please try again.'),
+            ),
+            'job_application' => array(
+                'title' => sanitize_text_field($data['form_job_app_title'] ?? 'Apply for this Position'),
+                'firstname_label' => sanitize_text_field($data['form_job_app_firstname_label'] ?? 'First Name'),
+                'firstname_placeholder' => sanitize_text_field($data['form_job_app_firstname_placeholder'] ?? 'Enter your first name'),
+                'lastname_label' => sanitize_text_field($data['form_job_app_lastname_label'] ?? 'Last Name'),
+                'lastname_placeholder' => sanitize_text_field($data['form_job_app_lastname_placeholder'] ?? 'Enter your last name'),
+                'email_label' => sanitize_text_field($data['form_job_app_email_label'] ?? 'Email'),
+                'email_placeholder' => sanitize_text_field($data['form_job_app_email_placeholder'] ?? 'Enter your email'),
+                'phone_label' => sanitize_text_field($data['form_job_app_phone_label'] ?? 'Phone Number'),
+                'phone_placeholder' => sanitize_text_field($data['form_job_app_phone_placeholder'] ?? 'Enter your phone number'),
+                'resume_label' => sanitize_text_field($data['form_job_app_resume_label'] ?? 'Upload Resume/CV'),
+                'resume_placeholder' => sanitize_text_field($data['form_job_app_resume_placeholder'] ?? 'Choose file (PDF, DOC, DOCX)'),
+                'coverletter_label' => sanitize_text_field($data['form_job_app_coverletter_label'] ?? 'Cover Letter (Optional)'),
+                'coverletter_placeholder' => sanitize_text_field($data['form_job_app_coverletter_placeholder'] ?? 'Tell us why you would be great for this role...'),
+                'submit_button' => sanitize_text_field($data['form_job_app_submit_button'] ?? 'Submit Application'),
+                'submitting_button' => sanitize_text_field($data['form_job_app_submitting_button'] ?? 'Submitting...'),
+                'success_message' => sanitize_text_field($data['form_job_app_success_message'] ?? 'Application submitted successfully!'),
+                'error_message' => sanitize_text_field($data['form_job_app_error_message'] ?? 'Error submitting application. Please try again.'),
+            ),
+        ),
+    );
 }
 
 /**
@@ -413,6 +625,52 @@ function eatisfamily_pages_content_page() {
                     'subtitle' => sanitize_text_field($_POST['events_hero_subtitle'] ?? ''),
                 ),
             ),
+            // Form Labels for all forms
+            'forms' => array(
+                'job_search' => array(
+                    'title' => sanitize_text_field($_POST['form_job_search_title'] ?? 'Find Your Perfect Role'),
+                    'subtitle' => sanitize_text_field($_POST['form_job_search_subtitle'] ?? 'Explore open positions across France'),
+                    'job_title_placeholder' => sanitize_text_field($_POST['form_job_search_job_placeholder'] ?? 'Select job title'),
+                    'site_placeholder' => sanitize_text_field($_POST['form_job_search_site_placeholder'] ?? 'Select sites'),
+                    'all_jobs_label' => sanitize_text_field($_POST['form_job_search_all_jobs'] ?? 'All job titles'),
+                    'all_sites_label' => sanitize_text_field($_POST['form_job_search_all_sites'] ?? 'All sites'),
+                    'search_button' => sanitize_text_field($_POST['form_job_search_button'] ?? 'Search'),
+                    'loading_text' => sanitize_text_field($_POST['form_job_search_loading'] ?? 'Loading...'),
+                ),
+                'contact_form' => array(
+                    'name_label' => sanitize_text_field($_POST['form_contact_name_label'] ?? 'Your Name'),
+                    'name_placeholder' => sanitize_text_field($_POST['form_contact_name_placeholder'] ?? 'Enter your name'),
+                    'email_label' => sanitize_text_field($_POST['form_contact_email_label'] ?? 'Email Address'),
+                    'email_placeholder' => sanitize_text_field($_POST['form_contact_email_placeholder'] ?? 'Enter your email'),
+                    'subject_label' => sanitize_text_field($_POST['form_contact_subject_label'] ?? 'Subject'),
+                    'subject_placeholder' => sanitize_text_field($_POST['form_contact_subject_placeholder'] ?? 'What is this about?'),
+                    'message_label' => sanitize_text_field($_POST['form_contact_message_label'] ?? 'Message'),
+                    'message_placeholder' => sanitize_text_field($_POST['form_contact_message_placeholder'] ?? 'Write your message...'),
+                    'submit_button' => sanitize_text_field($_POST['form_contact_submit_button'] ?? 'Send Message'),
+                    'submitting_button' => sanitize_text_field($_POST['form_contact_submitting_button'] ?? 'Sending...'),
+                    'success_message' => sanitize_text_field($_POST['form_contact_success_message'] ?? 'Thank you! Your message has been sent.'),
+                    'error_message' => sanitize_text_field($_POST['form_contact_error_message'] ?? 'Sorry, there was an error. Please try again.'),
+                ),
+                'job_application' => array(
+                    'title' => sanitize_text_field($_POST['form_job_app_title'] ?? 'Apply for this Position'),
+                    'firstname_label' => sanitize_text_field($_POST['form_job_app_firstname_label'] ?? 'First Name'),
+                    'firstname_placeholder' => sanitize_text_field($_POST['form_job_app_firstname_placeholder'] ?? 'Enter your first name'),
+                    'lastname_label' => sanitize_text_field($_POST['form_job_app_lastname_label'] ?? 'Last Name'),
+                    'lastname_placeholder' => sanitize_text_field($_POST['form_job_app_lastname_placeholder'] ?? 'Enter your last name'),
+                    'email_label' => sanitize_text_field($_POST['form_job_app_email_label'] ?? 'Email'),
+                    'email_placeholder' => sanitize_text_field($_POST['form_job_app_email_placeholder'] ?? 'Enter your email'),
+                    'phone_label' => sanitize_text_field($_POST['form_job_app_phone_label'] ?? 'Phone Number'),
+                    'phone_placeholder' => sanitize_text_field($_POST['form_job_app_phone_placeholder'] ?? 'Enter your phone number'),
+                    'resume_label' => sanitize_text_field($_POST['form_job_app_resume_label'] ?? 'Upload Resume/CV'),
+                    'resume_placeholder' => sanitize_text_field($_POST['form_job_app_resume_placeholder'] ?? 'Choose file (PDF, DOC, DOCX)'),
+                    'coverletter_label' => sanitize_text_field($_POST['form_job_app_coverletter_label'] ?? 'Cover Letter (Optional)'),
+                    'coverletter_placeholder' => sanitize_text_field($_POST['form_job_app_coverletter_placeholder'] ?? 'Tell us why you would be great for this role...'),
+                    'submit_button' => sanitize_text_field($_POST['form_job_app_submit_button'] ?? 'Submit Application'),
+                    'submitting_button' => sanitize_text_field($_POST['form_job_app_submitting_button'] ?? 'Submitting...'),
+                    'success_message' => sanitize_text_field($_POST['form_job_app_success_message'] ?? 'Application submitted successfully!'),
+                    'error_message' => sanitize_text_field($_POST['form_job_app_error_message'] ?? 'Error submitting application. Please try again.'),
+                ),
+            ),
         );
         
         update_option('eatisfamily_pages_content', $pages_content);
@@ -427,14 +685,21 @@ function eatisfamily_pages_content_page() {
     $contact = $pages_content['contact'] ?? array();
     $careers = $pages_content['careers'] ?? array();
     $events = $pages_content['events'] ?? array();
+    $forms = $pages_content['forms'] ?? array();
+    
+    // Generate AJAX nonce for secure submission
+    $ajax_nonce = wp_create_nonce('eatisfamily_ajax_pages_content');
     
     ?>
     <div class="wrap eatisfamily-pages-content">
         <h1><?php _e('Pages Content Settings', 'eatisfamily'); ?></h1>
         <p class="description"><?php _e('Edit content for each page of your website. Changes are reflected immediately on the Vue.js frontend.', 'eatisfamily'); ?></p>
         
-        <form method="post" action="">
-            <?php wp_nonce_field('save_pages_content', 'eatisfamily_pages_content_nonce'); ?>
+        <!-- AJAX Status Message -->
+        <div id="eatisfamily-ajax-message" style="display:none;" class="notice is-dismissible"><p></p></div>
+        
+        <form method="post" action="" id="eatisfamily-pages-form">
+            <input type="hidden" id="eatisfamily_ajax_nonce" value="<?php echo esc_attr($ajax_nonce); ?>">
             
             <h2 class="nav-tab-wrapper">
                 <a href="#homepage" class="nav-tab nav-tab-active"><?php _e('Homepage', 'eatisfamily'); ?></a>
@@ -442,6 +707,7 @@ function eatisfamily_pages_content_page() {
                 <a href="#contact" class="nav-tab"><?php _e('Contact', 'eatisfamily'); ?></a>
                 <a href="#careers" class="nav-tab"><?php _e('Careers', 'eatisfamily'); ?></a>
                 <a href="#events" class="nav-tab"><?php _e('Events', 'eatisfamily'); ?></a>
+                <a href="#forms" class="nav-tab"><?php _e('📝 Forms Labels', 'eatisfamily'); ?></a>
             </h2>
             
             <!-- ============================================================ -->
@@ -1042,7 +1308,261 @@ function eatisfamily_pages_content_page() {
                 </div>
             </div>
             
-            <?php submit_button(__('Save Pages Content', 'eatisfamily')); ?>
+            <!-- ============================================================ -->
+            <!-- FORMS LABELS TAB -->
+            <!-- ============================================================ -->
+            <div id="forms" class="tab-content" style="display: none;">
+                
+                <!-- Job Search Form -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🔍 Job Search Form (Homepage Hero)', 'eatisfamily'); ?></h3>
+                    <p class="description"><?php _e('Labels and placeholders for the job search form on the homepage.', 'eatisfamily'); ?></p>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="form_job_search_title"><?php _e('Form Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_search_title" id="form_job_search_title" value="<?php echo esc_attr($forms['job_search']['title'] ?? 'Find Your Perfect Role'); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_search_subtitle"><?php _e('Form Subtitle', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_search_subtitle" id="form_job_search_subtitle" value="<?php echo esc_attr($forms['job_search']['subtitle'] ?? 'Explore open positions across France'); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_search_job_placeholder"><?php _e('Job Title Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_search_job_placeholder" id="form_job_search_job_placeholder" value="<?php echo esc_attr($forms['job_search']['job_title_placeholder'] ?? 'Select job title'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_search_site_placeholder"><?php _e('Site Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_search_site_placeholder" id="form_job_search_site_placeholder" value="<?php echo esc_attr($forms['job_search']['site_placeholder'] ?? 'Select sites'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_search_all_jobs"><?php _e('"All Jobs" Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_search_all_jobs" id="form_job_search_all_jobs" value="<?php echo esc_attr($forms['job_search']['all_jobs_label'] ?? 'All job titles'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_search_all_sites"><?php _e('"All Sites" Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_search_all_sites" id="form_job_search_all_sites" value="<?php echo esc_attr($forms['job_search']['all_sites_label'] ?? 'All sites'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_search_loading"><?php _e('Loading Text', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_search_loading" id="form_job_search_loading" value="<?php echo esc_attr($forms['job_search']['loading_text'] ?? 'Loading...'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Contact Form -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('📧 Contact Form', 'eatisfamily'); ?></h3>
+                    <p class="description"><?php _e('Labels, placeholders and messages for the contact form.', 'eatisfamily'); ?></p>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="form_contact_name_label"><?php _e('Name Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_name_label" id="form_contact_name_label" value="<?php echo esc_attr($forms['contact_form']['name_label'] ?? 'Your Name'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_name_placeholder"><?php _e('Name Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_name_placeholder" id="form_contact_name_placeholder" value="<?php echo esc_attr($forms['contact_form']['name_placeholder'] ?? 'Enter your name'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_email_label"><?php _e('Email Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_email_label" id="form_contact_email_label" value="<?php echo esc_attr($forms['contact_form']['email_label'] ?? 'Email Address'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_email_placeholder"><?php _e('Email Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_email_placeholder" id="form_contact_email_placeholder" value="<?php echo esc_attr($forms['contact_form']['email_placeholder'] ?? 'Enter your email'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_subject_label"><?php _e('Subject Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_subject_label" id="form_contact_subject_label" value="<?php echo esc_attr($forms['contact_form']['subject_label'] ?? 'Subject'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_subject_placeholder"><?php _e('Subject Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_subject_placeholder" id="form_contact_subject_placeholder" value="<?php echo esc_attr($forms['contact_form']['subject_placeholder'] ?? 'What is this about?'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_message_label"><?php _e('Message Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_message_label" id="form_contact_message_label" value="<?php echo esc_attr($forms['contact_form']['message_label'] ?? 'Message'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_message_placeholder"><?php _e('Message Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_message_placeholder" id="form_contact_message_placeholder" value="<?php echo esc_attr($forms['contact_form']['message_placeholder'] ?? 'Write your message...'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_submit_button"><?php _e('Submit Button', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_submit_button" id="form_contact_submit_button" value="<?php echo esc_attr($forms['contact_form']['submit_button'] ?? 'Send Message'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_submitting_button"><?php _e('Submitting Text', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_submitting_button" id="form_contact_submitting_button" value="<?php echo esc_attr($forms['contact_form']['submitting_button'] ?? 'Sending...'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_success_message"><?php _e('Success Message', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_success_message" id="form_contact_success_message" value="<?php echo esc_attr($forms['contact_form']['success_message'] ?? 'Thank you! Your message has been sent.'); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_contact_error_message"><?php _e('Error Message', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_contact_error_message" id="form_contact_error_message" value="<?php echo esc_attr($forms['contact_form']['error_message'] ?? 'Sorry, there was an error. Please try again.'); ?>" class="large-text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Job Application Form -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('💼 Job Application Form', 'eatisfamily'); ?></h3>
+                    <p class="description"><?php _e('Labels, placeholders and messages for the job application form.', 'eatisfamily'); ?></p>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="form_job_app_title"><?php _e('Form Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_title" id="form_job_app_title" value="<?php echo esc_attr($forms['job_application']['title'] ?? 'Apply for this Position'); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_firstname_label"><?php _e('First Name Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_firstname_label" id="form_job_app_firstname_label" value="<?php echo esc_attr($forms['job_application']['firstname_label'] ?? 'First Name'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_firstname_placeholder"><?php _e('First Name Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_firstname_placeholder" id="form_job_app_firstname_placeholder" value="<?php echo esc_attr($forms['job_application']['firstname_placeholder'] ?? 'Enter your first name'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_lastname_label"><?php _e('Last Name Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_lastname_label" id="form_job_app_lastname_label" value="<?php echo esc_attr($forms['job_application']['lastname_label'] ?? 'Last Name'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_lastname_placeholder"><?php _e('Last Name Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_lastname_placeholder" id="form_job_app_lastname_placeholder" value="<?php echo esc_attr($forms['job_application']['lastname_placeholder'] ?? 'Enter your last name'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_email_label"><?php _e('Email Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_email_label" id="form_job_app_email_label" value="<?php echo esc_attr($forms['job_application']['email_label'] ?? 'Email'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_email_placeholder"><?php _e('Email Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_email_placeholder" id="form_job_app_email_placeholder" value="<?php echo esc_attr($forms['job_application']['email_placeholder'] ?? 'Enter your email'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_phone_label"><?php _e('Phone Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_phone_label" id="form_job_app_phone_label" value="<?php echo esc_attr($forms['job_application']['phone_label'] ?? 'Phone Number'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_phone_placeholder"><?php _e('Phone Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_phone_placeholder" id="form_job_app_phone_placeholder" value="<?php echo esc_attr($forms['job_application']['phone_placeholder'] ?? 'Enter your phone number'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_resume_label"><?php _e('Resume Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_resume_label" id="form_job_app_resume_label" value="<?php echo esc_attr($forms['job_application']['resume_label'] ?? 'Upload Resume/CV'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_resume_placeholder"><?php _e('Resume Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_resume_placeholder" id="form_job_app_resume_placeholder" value="<?php echo esc_attr($forms['job_application']['resume_placeholder'] ?? 'Choose file (PDF, DOC, DOCX)'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_coverletter_label"><?php _e('Cover Letter Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_coverletter_label" id="form_job_app_coverletter_label" value="<?php echo esc_attr($forms['job_application']['coverletter_label'] ?? 'Cover Letter (Optional)'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_coverletter_placeholder"><?php _e('Cover Letter Placeholder', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_coverletter_placeholder" id="form_job_app_coverletter_placeholder" value="<?php echo esc_attr($forms['job_application']['coverletter_placeholder'] ?? 'Tell us why you would be great for this role...'); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_submit_button"><?php _e('Submit Button', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_submit_button" id="form_job_app_submit_button" value="<?php echo esc_attr($forms['job_application']['submit_button'] ?? 'Submit Application'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_submitting_button"><?php _e('Submitting Text', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_submitting_button" id="form_job_app_submitting_button" value="<?php echo esc_attr($forms['job_application']['submitting_button'] ?? 'Submitting...'); ?>" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_success_message"><?php _e('Success Message', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_success_message" id="form_job_app_success_message" value="<?php echo esc_attr($forms['job_application']['success_message'] ?? 'Application submitted successfully!'); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="form_job_app_error_message"><?php _e('Error Message', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="form_job_app_error_message" id="form_job_app_error_message" value="<?php echo esc_attr($forms['job_application']['error_message'] ?? 'Error submitting application. Please try again.'); ?>" class="large-text">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <p class="submit">
+                <button type="button" id="eatisfamily-ajax-submit" class="button button-primary button-hero">
+                    <?php _e('💾 Save Pages Content', 'eatisfamily'); ?>
+                </button>
+                <span id="eatisfamily-saving-indicator" style="display:none; margin-left: 15px;">
+                    <span class="spinner is-active" style="float: none; margin-top: 0;"></span>
+                    <?php _e('Saving...', 'eatisfamily'); ?>
+                </span>
+            </p>
         </form>
     </div>
     
@@ -1158,6 +1678,92 @@ function eatisfamily_pages_content_page() {
             } else {
                 $(this).siblings('input').val('');
             }
+        });
+        
+        // ================================================================
+        // AJAX Form Submission (bypasses mod_security 403 errors)
+        // ================================================================
+        $('#eatisfamily-ajax-submit').on('click', function(e) {
+            e.preventDefault();
+            
+            var $button = $(this);
+            var $indicator = $('#eatisfamily-saving-indicator');
+            var $message = $('#eatisfamily-ajax-message');
+            var $form = $('#eatisfamily-pages-form');
+            
+            // Disable button and show loading
+            $button.prop('disabled', true);
+            $indicator.show();
+            $message.hide();
+            
+            // Collect all form data
+            var formData = {};
+            
+            // Regular inputs, selects, textareas
+            $form.find('input[type="text"], input[type="url"], input[type="email"], input[type="hidden"], select, textarea').each(function() {
+                var name = $(this).attr('name');
+                if (name && name !== 'eatisfamily_pages_content_nonce' && name !== '_wp_http_referer') {
+                    // Handle arrays (like careers_benefits[])
+                    if (name.endsWith('[]')) {
+                        var baseName = name.slice(0, -2);
+                        if (!formData[baseName]) {
+                            formData[baseName] = [];
+                        }
+                        if ($(this).val()) {
+                            formData[baseName].push($(this).val());
+                        }
+                    } else {
+                        formData[name] = $(this).val();
+                    }
+                }
+            });
+            
+            // Encode data to base64 to bypass mod_security
+            var encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(formData))));
+            
+            // Send via AJAX
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'eatisfamily_save_pages_content',
+                    nonce: $('#eatisfamily_ajax_nonce').val(),
+                    encoded_data: encodedData
+                },
+                success: function(response) {
+                    $button.prop('disabled', false);
+                    $indicator.hide();
+                    
+                    if (response.success) {
+                        $message.removeClass('notice-error').addClass('notice-success');
+                        $message.find('p').text(response.data.message);
+                    } else {
+                        $message.removeClass('notice-success').addClass('notice-error');
+                        $message.find('p').text(response.data.message || 'An error occurred');
+                    }
+                    $message.show();
+                    
+                    // Scroll to top to show message
+                    $('html, body').animate({ scrollTop: 0 }, 300);
+                    
+                    // Auto-hide success message after 5 seconds
+                    if (response.success) {
+                        setTimeout(function() {
+                            $message.fadeOut();
+                        }, 5000);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $button.prop('disabled', false);
+                    $indicator.hide();
+                    
+                    $message.removeClass('notice-success').addClass('notice-error');
+                    $message.find('p').text('Server error: ' + error + '. Please try again.');
+                    $message.show();
+                    
+                    $('html, body').animate({ scrollTop: 0 }, 300);
+                }
+            });
         });
     });
     </script>

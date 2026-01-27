@@ -11,6 +11,14 @@ const job = ref<JobWithVenue | null>(null)
 const isLoading = ref(true)
 const showApplyModal = ref(false)
 
+// Dynamic icon URLs with fallbacks
+const iconBriefcase = computed(() => settings.value?.icons?.icon_briefcase || '/images/streamline-emojis_briefcase.png')
+const iconMoneybag = computed(() => settings.value?.icons?.icon_moneybag || '/images/streamline-emojis_moneybag.svg')
+const iconApplyForThis = computed(() => settings.value?.icons?.icon_apply_for_this || '/images/ApplyForThisOh.svg')
+const iconShareJob = computed(() => settings.value?.icons?.icon_share_job || '/images/ShareThisJobOh.svg')
+const btnApplyPosition = computed(() => settings.value?.icons?.btn_apply_position || '/images/btnApplyForPosition.svg')
+const btnGoBackJobs = computed(() => settings.value?.icons?.btn_go_back_jobs || '/images/btnGoBackToJobs.svg')
+
 // Gallery images for "Life at" section
 const galleryImages = [
   '/images/gallery/stadium.jpg',
@@ -135,11 +143,11 @@ useHead(() => ({
                 Department - {{ job.department || 'Culinary' }}
               </span>
               <span class="tag tag-lime">
-                <nuxt-img src="/images/streamline-emojis_briefcase.png" alt="briefcase icon" width="16" height="16" />
+                <nuxt-img :src="iconBriefcase" alt="briefcase icon" width="16" height="16" />
                 {{ job.job_type }}
               </span>
               <span class="tag tag-yellow">
-               <nuxt-img src="/images/streamline-emojis_moneybag.svg" alt="money bag icon" width="16" height="16" />
+               <nuxt-img :src="iconMoneybag" alt="money bag icon" width="16" height="16" />
                 {{ job.salary }}
               </span>
             </div>
@@ -154,7 +162,7 @@ useHead(() => ({
               <p>Apply now and be part of something special</p>
             </div>
             <button id="apply-button" class="border-0 bg-transparent" @click="openApplyModal">
-              <nuxt-img src="/images/ApplyForThisOh.svg" alt="briefcase icon" width="16" height="16" />
+              <nuxt-img :src="iconApplyForThis" alt="briefcase icon" width="16" height="16" />
             </button>
           </div>
 
@@ -243,7 +251,7 @@ useHead(() => ({
               <h3>Do You Know Someone That Is Perfect For This Position?</h3>
               <p>Kindly Share This Job To The Person</p>
               <button class="btn-sharesd border-0 background-transparent bg-transparent" @click="shareJob">
-                <nuxtImg src="/images/ShareThisJobOh.svg" alt="share icon" width="240" height="" />
+                <nuxtImg :src="iconShareJob" alt="share icon" width="240" height="" />
               </button>
             </div>
           </div>
@@ -255,10 +263,10 @@ useHead(() => ({
               <p>Join our team and be part of creating unforgettable experiences at one of France's most exciting venues.</p>
               <div class="bottom-cta-buttons">
                 <button class="bg-transparent border-0" @click="openApplyModal">
-                  <nuxt-img src="/images/btnApplyForPosition.svg" alt="apply icon" width="240" height="" />
+                  <nuxt-img :src="btnApplyPosition" alt="apply icon" width="240" height="" />
                 </button>
                 <button class="bg-transparent border-0" @click="goBack">
-                  <nuxt-img src="/images/btnGoBackToJobs.svg" alt="back icon" width="240" height="" />
+                  <nuxt-img :src="btnGoBackJobs" alt="back icon" width="240" height="" />
                 </button>
               </div>
             </div>

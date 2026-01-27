@@ -3,6 +3,15 @@ import type { LocationsData, Venue } from '~/composables/useLocations'
 
 const { getLocations } = useLocations()
 const locationsData = ref<LocationsData | null>(null)
+const { settings } = useGlobalSettings()
+
+// Dynamic icon URLs with fallbacks
+const iconMap = computed(() => settings.value?.icons?.icon_map || '/images/mapIcon.svg')
+const iconCalendar = computed(() => settings.value?.icons?.icon_calendar || '/images/iconCal.svg')
+const iconInfo = computed(() => settings.value?.icons?.icon_info || '/images/iconInfo.svg')
+const iconShop = computed(() => settings.value?.icons?.icon_shop || '/images/iconShop.svg')
+const iconFood = computed(() => settings.value?.icons?.icon_food || '/images/iconFood.svg')
+const btnJoinNow = computed(() => settings.value?.icons?.btn_join_now || '/images/joinNowBtn.svg')
 
 const activeEventFilter = ref<string | undefined>(undefined)
 const selectedVenue = ref<Venue | null>(null)
@@ -137,7 +146,7 @@ const goToMenuPage = (page: number) => {
           <!-- Info: Location, Capacity, Staff -->
           <div class="venue-info-row">
             <div class="venue-info-item">
-              <span class="venue-info-icon"><img src="/images/mapIcon.svg" alt=""></span>
+              <span class="venue-info-icon"><img :src="iconMap" alt=""></span>
               <span class="venue-info-text">{{ selectedVenue.location }}</span>
             </div>
             <div class="venue-info-item">
@@ -153,7 +162,7 @@ const goToMenuPage = (page: number) => {
           <!-- Recent event banner -->
           <div class="venue-event-banner">
             <div class="venue-event-item">
-               <NuxtImg src="/images/iconCal.svg" alt="Staff Icon" />
+               <NuxtImg :src="iconCalendar" alt="Staff Icon" />
               <span class="venue-event-label">RECENT EVENT</span>
               <span class="venue-event-value">{{ selectedVenue.recent_event }}</span>
             </div>
@@ -170,21 +179,21 @@ const goToMenuPage = (page: number) => {
               :class="{ active: activeTab === 'overview' }"
               @click="setActiveTab('overview')"
             >
-              <span class="tab-icon"><nuxt-img src="/images/iconInfo.svg" alt="Overview Icon" /></span> OVERVIEW
+              <span class="tab-icon"><nuxt-img :src="iconInfo" alt="Overview Icon" /></span> OVERVIEW
             </button>
             <button
               class="venue-tab"
               :class="{ active: activeTab === 'shops' }"
               @click="setActiveTab('shops')"
             >
-              <span class="tab-icon"><nuxt-img src="/images/iconShop.svg" alt="Shops Icon" /></span> SHOPS ({{ selectedVenue.shops?.length || selectedVenue.shops_count }})
+              <span class="tab-icon"><nuxt-img :src="iconShop" alt="Shops Icon" /></span> SHOPS ({{ selectedVenue.shops?.length || selectedVenue.shops_count }})
             </button>
             <button
               class="venue-tab"
               :class="{ active: activeTab === 'menus' }"
               @click="setActiveTab('menus')"
             >
-              <span class="tab-icon"><nuxt-img src="/images/iconFood.svg" alt="Menus Icon" /></span> MENUS ({{ selectedVenue.menu_items?.length || selectedVenue.menus_count }})
+              <span class="tab-icon"><nuxt-img :src="iconFood" alt="Menus Icon" /></span> MENUS ({{ selectedVenue.menu_items?.length || selectedVenue.menus_count }})
             </button>
           </div>
 
@@ -297,7 +306,7 @@ const goToMenuPage = (page: number) => {
             :to="`/careers?venue=${encodeURIComponent(selectedVenue.location)}`"
             class="d-flex align-items-start justify-content-start venue-join-btn"
           >
-          <nuxt-img src="/images/joinNowBtn.svg" alt="Join Now Button" class="img-fluid"></nuxt-img>
+          <nuxt-img :src="btnJoinNow" alt="Join Now Button" class="img-fluid"></nuxt-img>
           </NuxtLink>
         </div>
 

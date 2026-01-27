@@ -2,6 +2,10 @@
 import { computed } from 'vue'
 
 const { getBlogPosts } = useBlog()
+const { settings } = useGlobalSettings()
+
+// Dynamic button URL with fallback
+const btnReadMore = computed(() => settings.value?.icons?.btn_read_more || '/images/btnReadMore.svg')
 
 // Charger les articles depuis le serveur
 const { data: posts } = await useAsyncData('blog-posts', () => getBlogPosts())
@@ -42,7 +46,7 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
             </h3>
             <p class="post-excerpt">{{ featuredPosts[0].excerpt.rendered }}</p>
             <NuxtLink :to="`/blog/${featuredPosts[0].slug}`" class="bg-transparent border-0 p-0 m-0">
-              <NuxtImg src="/images/btnReadMore.svg" alt="Read more" width="247"/>
+              <NuxtImg :src="btnReadMore" alt="Read more" width="247"/>
             </NuxtLink>
           </div>
         </article>
@@ -63,7 +67,7 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
             </h3>
             <p class="post-excerpt">{{ featuredPosts[1].excerpt.rendered }}</p>
             <NuxtLink :to="`/blog/${featuredPosts[1].slug}`" class="bg-transparent border-0 p-0 m-0">
-              <NuxtImg src="/images/btnReadMore.svg" alt="Read more" width="247"/>
+              <NuxtImg :src="btnReadMore" alt="Read more" width="247"/>
             </NuxtLink>
           </div>
         </article>
@@ -90,7 +94,7 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
               </h3>
               <p class="card-excerpt">{{ post.excerpt.rendered }}</p>
               <NuxtLink :to="`/blog/${post.slug}`" class="bg-transparent border-0 p-0 m-0 mt-1">
-                              <NuxtImg src="/images/btnReadMore.svg" alt="Read more" width="247"/>
+                              <NuxtImg :src="btnReadMore" alt="Read more" width="247"/>
               </NuxtLink>
             </div>
           </article>

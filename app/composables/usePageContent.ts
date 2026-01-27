@@ -263,6 +263,16 @@ export interface FooterContent {
 }
 
 export interface FormsContent {
+  job_search?: {
+    title: string
+    subtitle: string
+    job_title_placeholder: string
+    site_placeholder: string
+    all_jobs_label: string
+    all_sites_label: string
+    search_button: string
+    loading_text: string
+  }
   contact_form: {
     name_label: string
     name_placeholder: string
@@ -275,6 +285,26 @@ export interface FormsContent {
     submit_button: string
     submitting_button: string
     success_message: string
+    error_message?: string
+  }
+  job_application?: {
+    title: string
+    firstname_label: string
+    firstname_placeholder: string
+    lastname_label: string
+    lastname_placeholder: string
+    email_label: string
+    email_placeholder: string
+    phone_label: string
+    phone_placeholder: string
+    resume_label: string
+    resume_placeholder: string
+    coverletter_label: string
+    coverletter_placeholder: string
+    submit_button: string
+    submitting_button: string
+    success_message: string
+    error_message: string
   }
   job_application_form: {
     title: string

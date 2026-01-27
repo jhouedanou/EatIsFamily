@@ -30,9 +30,9 @@ useHead(() => ({
       property: 'og:type', 
       content: 'website'
     },
-    { 
-      property: 'og:image', 
-      content: settings.value?.seo?.og_image || '/images/og-default.jpg'
+    {
+      property: 'og:image',
+      content: settings.value?.seo?.og_image || ''
     },
     // Twitter
     { 

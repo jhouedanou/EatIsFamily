@@ -365,7 +365,271 @@ function eatisfamily_customize_register($wp_customize) {
         'section'     => 'eatisfamily_markers',
         'mime_type'   => 'image',
     )));
-    
+
+    // =========================================================================
+    // SECTION: UI Icons & Buttons
+    // =========================================================================
+    $wp_customize->add_section('eatisfamily_icons', array(
+        'title'       => __('UI Icons & Buttons', 'eatisfamily'),
+        'description' => __('Upload custom icons and button images used throughout the site', 'eatisfamily'),
+        'priority'    => 32,
+    ));
+
+    // --- Job Icons ---
+    $wp_customize->add_setting('eatisfamily_icon_briefcase', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_icon_briefcase', array(
+        'label'       => __('Job Icon - Briefcase', 'eatisfamily'),
+        'description' => __('Icon for job type/department field', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_icon_moneybag', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_icon_moneybag', array(
+        'label'       => __('Job Icon - Moneybag', 'eatisfamily'),
+        'description' => __('Icon for salary field', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_icon_apply_for_this', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_icon_apply_for_this', array(
+        'label'       => __('Job Icon - Apply For This', 'eatisfamily'),
+        'description' => __('Decorative icon near apply section', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_icon_share_job', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_icon_share_job', array(
+        'label'       => __('Job Icon - Share This Job', 'eatisfamily'),
+        'description' => __('Share job icon/graphic', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    // --- CTA Buttons ---
+    $wp_customize->add_setting('eatisfamily_btn_apply_position', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_apply_position', array(
+        'label'       => __('Button - Apply for Position', 'eatisfamily'),
+        'description' => __('Apply button on job detail page', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_btn_go_back_jobs', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_go_back_jobs', array(
+        'label'       => __('Button - Go Back to Jobs', 'eatisfamily'),
+        'description' => __('Back button on job detail page', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_btn_apply', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_apply', array(
+        'label'       => __('Button - Apply (Careers Page)', 'eatisfamily'),
+        'description' => __('Apply button on careers listing', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_btn_view', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_view', array(
+        'label'       => __('Button - View Details', 'eatisfamily'),
+        'description' => __('View button on careers listing', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_btn_discover_apply', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_discover_apply', array(
+        'label'       => __('Button - Discover and Apply', 'eatisfamily'),
+        'description' => __('Large CTA button on careers page', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_btn_explore', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_explore', array(
+        'label'       => __('Button - Explore', 'eatisfamily'),
+        'description' => __('Explore button on homepage hero', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_btn_learn_more', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_learn_more', array(
+        'label'       => __('Button - Learn More About Us', 'eatisfamily'),
+        'description' => __('Learn more button on homepage', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_btn_get_in_touch', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_get_in_touch', array(
+        'label'       => __('Button - Get in Touch', 'eatisfamily'),
+        'description' => __('Get in touch button in header', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_btn_read_more', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_read_more', array(
+        'label'       => __('Button - Read More', 'eatisfamily'),
+        'description' => __('Read more button on blog posts', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_btn_search_form', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_search_form', array(
+        'label'       => __('Button - Search Form', 'eatisfamily'),
+        'description' => __('Search button icon in job search form', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_btn_join_now', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_btn_join_now', array(
+        'label'       => __('Button - Join Now', 'eatisfamily'),
+        'description' => __('Join now button in explore section', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    // --- UI Icons ---
+    $wp_customize->add_setting('eatisfamily_icon_chevron_down', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_icon_chevron_down', array(
+        'label'       => __('Icon - Chevron Down', 'eatisfamily'),
+        'description' => __('Dropdown indicator icon', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_icon_map', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_icon_map', array(
+        'label'       => __('Icon - Map/Location', 'eatisfamily'),
+        'description' => __('Map pin icon in venue info', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_icon_calendar', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_icon_calendar', array(
+        'label'       => __('Icon - Calendar', 'eatisfamily'),
+        'description' => __('Calendar/date icon', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_icon_info', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_icon_info', array(
+        'label'       => __('Icon - Info/Overview', 'eatisfamily'),
+        'description' => __('Overview tab icon', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_icon_shop', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_icon_shop', array(
+        'label'       => __('Icon - Shop', 'eatisfamily'),
+        'description' => __('Shops tab icon', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
+    $wp_customize->add_setting('eatisfamily_icon_food', array(
+        'default'           => '',
+        'sanitize_callback' => 'absint',
+        'transport'         => 'refresh',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'eatisfamily_icon_food', array(
+        'label'       => __('Icon - Food/Menu', 'eatisfamily'),
+        'description' => __('Menus tab icon', 'eatisfamily'),
+        'section'     => 'eatisfamily_icons',
+        'mime_type'   => 'image',
+    )));
+
     // =========================================================================
     // SECTION: SEO & Meta
     // =========================================================================
@@ -889,7 +1153,35 @@ function eatisfamily_get_customizer_settings() {
         'festival' => eatisfamily_get_image_url('eatisfamily_marker_festival'),
         'default'  => eatisfamily_get_image_url('eatisfamily_marker_default'),
     );
-    
+
+    // UI Icons & Buttons
+    $settings['icons'] = array(
+        // Job Icons
+        'icon_briefcase'      => eatisfamily_get_image_url('eatisfamily_icon_briefcase'),
+        'icon_moneybag'       => eatisfamily_get_image_url('eatisfamily_icon_moneybag'),
+        'icon_apply_for_this' => eatisfamily_get_image_url('eatisfamily_icon_apply_for_this'),
+        'icon_share_job'      => eatisfamily_get_image_url('eatisfamily_icon_share_job'),
+        // CTA Buttons
+        'btn_apply_position'  => eatisfamily_get_image_url('eatisfamily_btn_apply_position'),
+        'btn_go_back_jobs'    => eatisfamily_get_image_url('eatisfamily_btn_go_back_jobs'),
+        'btn_apply'           => eatisfamily_get_image_url('eatisfamily_btn_apply'),
+        'btn_view'            => eatisfamily_get_image_url('eatisfamily_btn_view'),
+        'btn_discover_apply'  => eatisfamily_get_image_url('eatisfamily_btn_discover_apply'),
+        'btn_explore'         => eatisfamily_get_image_url('eatisfamily_btn_explore'),
+        'btn_learn_more'      => eatisfamily_get_image_url('eatisfamily_btn_learn_more'),
+        'btn_get_in_touch'    => eatisfamily_get_image_url('eatisfamily_btn_get_in_touch'),
+        'btn_read_more'       => eatisfamily_get_image_url('eatisfamily_btn_read_more'),
+        'btn_search_form'     => eatisfamily_get_image_url('eatisfamily_btn_search_form'),
+        'btn_join_now'        => eatisfamily_get_image_url('eatisfamily_btn_join_now'),
+        // UI Icons
+        'icon_chevron_down'   => eatisfamily_get_image_url('eatisfamily_icon_chevron_down'),
+        'icon_map'            => eatisfamily_get_image_url('eatisfamily_icon_map'),
+        'icon_calendar'       => eatisfamily_get_image_url('eatisfamily_icon_calendar'),
+        'icon_info'           => eatisfamily_get_image_url('eatisfamily_icon_info'),
+        'icon_shop'           => eatisfamily_get_image_url('eatisfamily_icon_shop'),
+        'icon_food'           => eatisfamily_get_image_url('eatisfamily_icon_food'),
+    );
+
     // SEO
     $settings['seo'] = array(
         'default_title'       => get_theme_mod('eatisfamily_seo_title', 'Eat Is Family'),

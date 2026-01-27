@@ -10,18 +10,48 @@ const showSiteDropdown = ref(false)
 
 const { getJobsWithVenues } = useJobs()
 const { getVenues } = useVenues()
+const { getFormsContent } = usePageContent()
+const { settings } = useGlobalSettings()
+
+// Dynamic icon URL with fallback
+const btnSearchForm = computed(() => settings.value?.icons?.btn_search_form || '/images/btnSearchForm.svg')
 
 const jobs = ref<JobWithVenue[]>([])
 const venues = ref<Venue[]>([])
 const pending = ref(true)
+const formLabels = ref<any>(null)
+
+// Default labels (fallback)
+const defaultLabels = {
+  title: 'Find Your Perfect Role',
+  subtitle: 'Explore open positions across France',
+  job_title_placeholder: 'Select job title',
+  site_placeholder: 'Select sites',
+  all_jobs_label: 'All job titles',
+  all_sites_label: 'All sites',
+  loading_text: 'Loading...'
+}
+
+// Computed labels with fallback
+const labels = computed(() => ({
+  title: formLabels.value?.title || defaultLabels.title,
+  subtitle: formLabels.value?.subtitle || defaultLabels.subtitle,
+  job_title_placeholder: formLabels.value?.job_title_placeholder || defaultLabels.job_title_placeholder,
+  site_placeholder: formLabels.value?.site_placeholder || defaultLabels.site_placeholder,
+  all_jobs_label: formLabels.value?.all_jobs_label || defaultLabels.all_jobs_label,
+  all_sites_label: formLabels.value?.all_sites_label || defaultLabels.all_sites_label,
+  loading_text: formLabels.value?.loading_text || defaultLabels.loading_text
+}))
 
 onMounted(async () => {
-  const [fetchedJobs, fetchedVenues] = await Promise.all([
+  const [fetchedJobs, fetchedVenues, formsContent] = await Promise.all([
     getJobsWithVenues(),
-    getVenues()
+    getVenues(),
+    getFormsContent()
   ])
   jobs.value = fetchedJobs || []
   venues.value = fetchedVenues || []
+  formLabels.value = formsContent?.job_search || null
   pending.value = false
 })
 
@@ -105,8 +135,8 @@ onUnmounted(() => {
 <template>
   <div class="job-search-form">
     <div class="form-header">
-      <h2 class="form-title">Find Your Perfect Role</h2>
-      <p class="form-subtitle">Explore more than {{ jobs?.length || 0 }} open positions across France</p>
+      <h2 class="form-title">{{ labels.title }}</h2>
+      <p class="form-subtitle">{{ labels.subtitle.replace('{count}', String(jobs?.length || 0)) }}</p>
     </div>
 
     <div class="form-fields">
@@ -117,21 +147,21 @@ onUnmounted(() => {
           :class="{ 'is-open': showJobTitleDropdown, 'has-value': selectedJobTitle }"
           @click.stop="toggleJobTitleDropdown"
         >
-          <span class="field-text">{{ selectedJobTitle || 'Select job title' }}</span>
+          <span class="field-text">{{ selectedJobTitle || labels.job_title_placeholder }}</span>
           <svg class="chevron-icon" :class="{ 'rotated': showJobTitleDropdown }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 9l6 6 6-6"/>
           </svg>
         </div>
 
         <div class="dropdown-menu" :class="{ 'is-visible': showJobTitleDropdown }" @click.stop>
-          <div v-if="pending" class="dropdown-loading">Loading...</div>
+          <div v-if="pending" class="dropdown-loading">{{ labels.loading_text }}</div>
           <template v-else>
             <button
               class="dropdown-item"
               :class="{ 'active': selectedJobTitle === '' }"
               @click="selectedJobTitle = ''; showJobTitleDropdown = false; navigateTo('/careers')"
             >
-              All job titles
+              {{ labels.all_jobs_label }}
             </button>
             <button
               v-for="job in jobsWithTitles"
@@ -153,21 +183,21 @@ onUnmounted(() => {
           :class="{ 'is-open': showSiteDropdown, 'has-value': selectedSite }"
           @click.stop="toggleSiteDropdown"
         >
-          <span class="field-text">{{ selectedSite || 'Select sites' }}</span>
+          <span class="field-text">{{ selectedSite || labels.site_placeholder }}</span>
           <svg class="chevron-icon" :class="{ 'rotated': showSiteDropdown }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 9l6 6 6-6"/>
           </svg>
         </div>
 
         <div class="dropdown-menu" :class="{ 'is-visible': showSiteDropdown }" @click.stop>
-          <div v-if="pending" class="dropdown-loading">Loading...</div>
+          <div v-if="pending" class="dropdown-loading">{{ labels.loading_text }}</div>
           <template v-else>
             <button
               class="dropdown-item"
               :class="{ 'active': selectedSite === '' }"
               @click="selectedSite = ''; showSiteDropdown = false; navigateTo('/careers')"
             >
-              All sites
+              {{ labels.all_sites_label }}
             </button>
             <button
               v-for="site in uniqueSites"
@@ -188,7 +218,7 @@ onUnmounted(() => {
         @click="handleSearch"
         aria-label="Search jobs"
       >
-        <img src="/images/btnSearchForm.svg" alt="Search" class="search-icon" />
+        <img :src="btnSearchForm" alt="Search" class="search-icon" />
       </button>
     </div>
   </div>

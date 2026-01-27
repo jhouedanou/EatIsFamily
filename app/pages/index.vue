@@ -6,6 +6,11 @@ import type { HomepageContent } from '~/composables/usePageContent'
 const heroTitle = ref(null)
 const { getHomepageContent } = usePageContent()
 const content = ref<HomepageContent | null>(null)
+const { settings } = useGlobalSettings()
+
+// Dynamic button URLs with fallbacks
+const btnExplore = computed(() => settings.value?.icons?.btn_explore || '/images/btnExplore.svg')
+const btnLearnMore = computed(() => settings.value?.icons?.btn_learn_more || '/images/btnLearnMoreAboutUs.svg')
 
 // Icon mapping
 const iconMap: Record<string, any> = {
@@ -118,7 +123,7 @@ onMounted(async () => {
           </div>
 
           <NuxtLink to="#mapPreview" aria-label="Contactez-nous" class="d-inline-block mt-4 m-0 sanga">
-            <NuxtImg id="btnExplore" src="/images/btnExplore.svg" alt="Contact" />
+            <NuxtImg id="btnExplore" :src="btnExplore" alt="Contact" />
           </NuxtLink>
         </div>
       </div>
@@ -127,7 +132,7 @@ onMounted(async () => {
       <div id="tromp" class="container">
         <div class="kemiseba" v-html="content.intro_section?.texte"></div>
         <NuxtLink to="/about" aria-label="En savoir plus sur nous" class="mt-4 d-inline-block mt-4">
-          <NuxtImg src="/images/btnLearnMoreAboutUs.svg" alt="En savoir plus sur nous" />
+          <NuxtImg :src="btnLearnMore" alt="En savoir plus sur nous" />
         </NuxtLink>
       </div>
 

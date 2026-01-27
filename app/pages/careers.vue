@@ -9,6 +9,15 @@ const route = useRoute()
 const { getCareersContent } = usePageContent()
 const { getJobsWithVenues, getJobVenueOptions } = useJobs()
 const { getVenues } = useVenues()
+const { settings } = useGlobalSettings()
+
+// Dynamic icon URLs with fallbacks
+const iconBriefcase = computed(() => settings.value?.icons?.icon_briefcase || '/images/streamline-emojis_briefcase.png')
+const iconMoneybag = computed(() => settings.value?.icons?.icon_moneybag || '/images/streamline-emojis_moneybag.svg')
+const iconChevronDown = computed(() => settings.value?.icons?.icon_chevron_down || '/images/chevronDown.svg')
+const btnApply = computed(() => settings.value?.icons?.btn_apply || '/images/btnApplu.svg')
+const btnView = computed(() => settings.value?.icons?.btn_view || '/images/btnVieu.svg')
+const btnDiscoverApply = computed(() => settings.value?.icons?.btn_discover_apply || '/images/btnDiscoverAndApply.svg')
 
 const content = ref<CareersContent | null>(null)
 const allJobs = ref<JobWithVenue[]>([])
@@ -253,7 +262,7 @@ const goToPage = (page: number) => {
               class="border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
               <LucideMapPin style="width: 1rem; height: 1rem;" class="opacity-75" />
               <span>{{ activeVenue?.name || allSitesLabel }}</span>
-              <img src="/images/chevronDown.svg" alt="chevron" class="chevron-icon" :class="{ 'rotated': showVenueDropdown }" />
+              <img :src="iconChevronDown" alt="chevron" class="chevron-icon" :class="{ 'rotated': showVenueDropdown }" />
             </button>
 
         <!-- Venue Dropdown Menu -->
@@ -281,7 +290,7 @@ const goToPage = (page: number) => {
         <button @click="showJobTypeDropdown = !showJobTypeDropdown; showVenueDropdown = false"
           class="border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
           <span>{{ selectedJobType || 'All Job Types' }}</span>
-          <img src="/images/chevronDown.svg" alt="chevron" class="chevron-icon" :class="{ 'rotated': showJobTypeDropdown }" />
+          <img :src="iconChevronDown" alt="chevron" class="chevron-icon" :class="{ 'rotated': showJobTypeDropdown }" />
         </button>
         <!-- Dropdown Menu -->
         <Transition enter-active-class="transition-fade-in" leave-active-class="transition-fade-out">
@@ -331,11 +340,11 @@ const goToPage = (page: number) => {
                       <LucideMapPin style="width: 0.75rem; height: 0.75rem;" /> {{ getJobVenueLocation(job) }}
                     </span>-->
                     <span class="tag-lime d-flex align-items-center gap-1">
-                      <nuxt-img src="/images/streamline-emojis_briefcase.png" alt="briefcase icon" width="16" height="16" />
+                      <nuxt-img :src="iconBriefcase" alt="briefcase icon" width="16" height="16" />
                       {{ job.job_type }}
                     </span>
                     <span class="tag-yellow d-flex align-items-center gap-1">
-                      <nuxt-img src="/images/streamline-emojis_moneybag.svg" alt="money bag icon" width="16" height="16" />
+                      <nuxt-img :src="iconMoneybag" alt="money bag icon" width="16" height="16" />
                       {{ job.salary }}
                     </span>
                   </div>
@@ -349,10 +358,10 @@ const goToPage = (page: number) => {
                 <!-- Buttons -->
                 <div class="d-flex gap-3 mt-auto">
                   <NuxtLink class="matiti":to="`/jobs/${job.slug}`">
-                    <nuxt-img src="/images/btnApplu.svg"></nuxt-img>
+                    <nuxt-img :src="btnApply"></nuxt-img>
                   </NuxtLink>
                   <NuxtLink class="matiti" :to="`/jobs/${job.slug}`">
-                    <nuxt-img src="/images/btnVieu.svg"></nuxt-img>
+                    <nuxt-img :src="btnView"></nuxt-img>
                   </NuxtLink>
                 </div>
               </div>
@@ -410,7 +419,7 @@ const goToPage = (page: number) => {
               {{ content.cta_section?.general_application_button }}
             </button> -->
             <NuxtLink to="/careers">
-              <NuxtImg src="/images/btnDiscoverAndApply.svg" width="316" />
+              <NuxtImg :src="btnDiscoverApply" width="316" />
             </NuxtLink>
           </div>
         </div>

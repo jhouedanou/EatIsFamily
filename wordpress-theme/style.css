@@ -3,15 +3,15 @@ Theme Name: Eat Is Family
 Theme URI: https://eatisfamily.fr
 Author: Eat Is Family
 Author URI: https://eatisfamily.fr
-Description: WordPress backend for Eat Is Family Nuxt.js application. Provides REST API endpoints and admin interface for managing all content (Activities, Jobs, Venues, Events, Blog, Site Content).
-Version: 2.0.0
+Description: WordPress backend for Eat Is Family Nuxt.js application. Provides REST API endpoints and admin interface for managing all content (Activities, Jobs, Venues, Events, Blog, Site Content, Form Labels).
+Version: 3.0.0
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 8.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: eatisfamily
-Tags: headless-cms, rest-api, nuxt-backend, custom-post-types, food-service
+Tags: headless-cms, rest-api, nuxt-backend, custom-post-types, food-service, forms-management
 */
 
 /* Basic Reset */
