@@ -362,12 +362,14 @@ nuxt-link:has(img) {
 }
 
 .job-search-form-wrapper {
-  position: absolute;
-  bottom: 0%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  padding: 1rem;
+     position: absolute;
+    bottom: 0%;
+    left: 0;
+    margin: auto;
+    z-index: 2;
+    padding: 1rem;
+    right: 0;
+    max-width: 558px;
 }
 
 .job-search-form-placeholder {

@@ -49,13 +49,13 @@ function eatisfamily_register_admin_menus_v5() {
         'eatisfamily_site_content_page'
     );
     
-    // Submenu - Pages Content (Unified)
+    // Submenu - Pages Content (Unified - replaces old pages-content)
     add_submenu_page(
         'eatisfamily-dashboard',
         __('Pages Content', 'eatisfamily'),
         __('Pages Content', 'eatisfamily'),
         'manage_options',
-        'eatisfamily-pages-content-v5',
+        'eatisfamily-pages-content',
         'eatisfamily_pages_content_page_v5'
     );
     
@@ -147,7 +147,7 @@ function eatisfamily_dashboard_page_v5() {
             <div class="eatisfamily-card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                 <h3>📄 Pages Content</h3>
                 <p><?php _e('Gérez le contenu de toutes les pages : Homepage, About, Contact, Careers, Events, Blog, etc.', 'eatisfamily'); ?></p>
-                <a href="<?php echo admin_url('admin.php?page=eatisfamily-pages-content-v5'); ?>" class="button button-primary"><?php _e('Gérer', 'eatisfamily'); ?></a>
+                <a href="<?php echo admin_url('admin.php?page=eatisfamily-pages-content'); ?>" class="button button-primary"><?php _e('Gérer', 'eatisfamily'); ?></a>
             </div>
             
             <div class="eatisfamily-card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
@@ -1393,8 +1393,29 @@ function eatisfamily_pages_content_page_v5() {
             <!-- CAREERS PAGE -->
             <div id="careers" class="tab-content" style="display: none;">
                 <h3><?php _e('💼 Careers Page', 'eatisfamily'); ?></h3>
+                
+                <!-- SEO Section -->
                 <div class="eatisfamily-section">
-                    <h4><?php _e('Hero Section', 'eatisfamily'); ?></h4>
+                    <h4><?php _e('🔍 SEO', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="careers_seo_title"><?php _e('SEO Title', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_seo_title" id="careers_seo_title" value="<?php echo esc_attr($careers['seo']['title'] ?? ''); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_seo_description"><?php _e('SEO Description', 'eatisfamily'); ?></label></th>
+                            <td><textarea name="careers_seo_description" id="careers_seo_description" class="large-text" rows="2"><?php echo esc_textarea($careers['seo']['description'] ?? ''); ?></textarea></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_seo_keywords"><?php _e('SEO Keywords', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_seo_keywords" id="careers_seo_keywords" value="<?php echo esc_attr($careers['seo']['keywords'] ?? ''); ?>" class="large-text"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Hero Default Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('🎯 Hero Section (Default)', 'eatisfamily'); ?></h4>
                     <table class="form-table">
                         <tr>
                             <th scope="row"><label for="careers_hero_title_line1"><?php _e('Title Line 1', 'eatisfamily'); ?></label></th>
@@ -1420,8 +1441,10 @@ function eatisfamily_pages_content_page_v5() {
                         </tr>
                     </table>
                 </div>
+                
+                <!-- Join Box Section -->
                 <div class="eatisfamily-section">
-                    <h4><?php _e('Join Box', 'eatisfamily'); ?></h4>
+                    <h4><?php _e('📦 Join Box', 'eatisfamily'); ?></h4>
                     <table class="form-table">
                         <tr>
                             <th scope="row"><label for="careers_join_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
@@ -1433,21 +1456,190 @@ function eatisfamily_pages_content_page_v5() {
                         </tr>
                     </table>
                 </div>
+                
+                <!-- Hero With Venue Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('🏟️ Hero With Venue (When venue selected)', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="careers_venue_tag"><?php _e('Tag', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_venue_tag" id="careers_venue_tag" value="<?php echo esc_attr($careers['hero_with_venue']['tag'] ?? 'Now Hiring'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_venue_title_prefix"><?php _e('Title Prefix', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_venue_title_prefix" id="careers_venue_title_prefix" value="<?php echo esc_attr($careers['hero_with_venue']['title_prefix'] ?? 'Join Our Team At'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_venue_subtitle"><?php _e('Subtitle', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_venue_subtitle" id="careers_venue_subtitle" value="<?php echo esc_attr($careers['hero_with_venue']['subtitle'] ?? ''); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_stats_positions_label"><?php _e('Open Positions Label', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_stats_positions_label" id="careers_stats_positions_label" value="<?php echo esc_attr($careers['hero_with_venue']['stats']['open_positions_label'] ?? 'Open Positions'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_stats_locations_label"><?php _e('Locations Label', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_stats_locations_label" id="careers_stats_locations_label" value="<?php echo esc_attr($careers['hero_with_venue']['stats']['locations_label'] ?? 'Locations'); ?>" class="regular-text"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Search Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('🔎 Search Section', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="careers_search_placeholder"><?php _e('Search Placeholder', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_search_placeholder" id="careers_search_placeholder" value="<?php echo esc_attr($careers['search_section']['search_placeholder'] ?? 'Search Job title and category here'); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_all_sites_label"><?php _e('All Sites Label', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_all_sites_label" id="careers_all_sites_label" value="<?php echo esc_attr($careers['search_section']['all_sites_label'] ?? 'All Sites'); ?>" class="regular-text"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Job Listing Labels -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('📋 Job Listing Labels', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="careers_positions_singular"><?php _e('Position (singular)', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_positions_singular" id="careers_positions_singular" value="<?php echo esc_attr($careers['job_listing']['positions_available_singular'] ?? 'Position'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_positions_plural"><?php _e('Positions (plural)', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_positions_plural" id="careers_positions_plural" value="<?php echo esc_attr($careers['job_listing']['positions_available_plural'] ?? 'Positions'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_positions_suffix"><?php _e('Positions Suffix', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_positions_suffix" id="careers_positions_suffix" value="<?php echo esc_attr($careers['job_listing']['positions_available_suffix'] ?? 'Available'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_posted_prefix"><?php _e('Posted Prefix', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_posted_prefix" id="careers_posted_prefix" value="<?php echo esc_attr($careers['job_listing']['posted_prefix'] ?? 'Posted'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_apply_button"><?php _e('Apply Button', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_apply_button" id="careers_apply_button" value="<?php echo esc_attr($careers['job_listing']['apply_button'] ?? 'Apply Now'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_view_details_button"><?php _e('View Details Button', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_view_details_button" id="careers_view_details_button" value="<?php echo esc_attr($careers['job_listing']['view_details_button'] ?? 'View details'); ?>" class="regular-text"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- No Results Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('❌ No Results Messages', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="careers_no_results_title"><?php _e('No Results Title', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_no_results_title" id="careers_no_results_title" value="<?php echo esc_attr($careers['no_results']['title'] ?? 'No jobs found at this venue'); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_no_results_description"><?php _e('No Results Description', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_no_results_description" id="careers_no_results_description" value="<?php echo esc_attr($careers['no_results']['description'] ?? 'Try selecting a different venue or adjusting your filters'); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_clear_filters"><?php _e('Clear Filters Button', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_clear_filters" id="careers_clear_filters" value="<?php echo esc_attr($careers['no_results']['clear_filters_button'] ?? 'Clear all filters'); ?>" class="regular-text"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- CTA Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('📢 CTA Section', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="careers_cta_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_cta_title" id="careers_cta_title" value="<?php echo esc_attr($careers['cta_section']['title'] ?? ''); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_cta_description"><?php _e('Description', 'eatisfamily'); ?></label></th>
+                            <td><textarea name="careers_cta_description" id="careers_cta_description" class="large-text" rows="3"><?php echo esc_textarea($careers['cta_section']['description'] ?? ''); ?></textarea></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_explore_venues_button"><?php _e('Explore Venues Button', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_explore_venues_button" id="careers_explore_venues_button" value="<?php echo esc_attr($careers['cta_section']['explore_venues_button'] ?? 'Explore all venues'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="careers_general_application_button"><?php _e('General Application Button', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="careers_general_application_button" id="careers_general_application_button" value="<?php echo esc_attr($careers['cta_section']['general_application_button'] ?? 'Submit general application'); ?>" class="regular-text"></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             
             <!-- EVENTS PAGE -->
             <div id="events" class="tab-content" style="display: none;">
                 <h3><?php _e('🎉 Events Page', 'eatisfamily'); ?></h3>
+                
+                <!-- SEO Section -->
                 <div class="eatisfamily-section">
-                    <h4><?php _e('Hero Section', 'eatisfamily'); ?></h4>
+                    <h4><?php _e('🔍 SEO', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="events_seo_title"><?php _e('SEO Title', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="events_seo_title" id="events_seo_title" value="<?php echo esc_attr($events['seo']['title'] ?? ''); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="events_seo_description"><?php _e('SEO Description', 'eatisfamily'); ?></label></th>
+                            <td><textarea name="events_seo_description" id="events_seo_description" class="large-text" rows="2"><?php echo esc_textarea($events['seo']['description'] ?? ''); ?></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Hero Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('🎯 Hero Section', 'eatisfamily'); ?></h4>
                     <table class="form-table">
                         <tr>
                             <th scope="row"><label for="events_hero_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
-                            <td><input type="text" name="events_hero_title" id="events_hero_title" value="<?php echo esc_attr($events['hero']['title'] ?? $events['page_hero']['title'] ?? ''); ?>" class="large-text"></td>
+                            <td><textarea name="events_hero_title" id="events_hero_title" class="large-text" rows="2"><?php echo esc_textarea($events['page_hero']['title'] ?? $events['hero']['title'] ?? ''); ?></textarea></td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="events_hero_subtitle"><?php _e('Subtitle', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="events_hero_subtitle" id="events_hero_subtitle" class="large-text" rows="2"><?php echo esc_textarea($events['hero']['subtitle'] ?? $events['page_hero']['subtitle'] ?? ''); ?></textarea></td>
+                            <td><textarea name="events_hero_subtitle" id="events_hero_subtitle" class="large-text" rows="3"><?php echo esc_textarea($events['page_hero']['subtitle'] ?? $events['hero']['subtitle'] ?? ''); ?></textarea></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="events_hero_btn"><?php _e('Button Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="events_hero_btn" id="events_hero_btn" value="<?php echo esc_attr($events['page_hero']['btn'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="events_hero_btn"><?php _e('Select', 'eatisfamily'); ?></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="events_hero_link"><?php _e('Button Link', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="events_hero_link" id="events_hero_link" value="<?php echo esc_attr($events['page_hero']['link'] ?? '/contact'); ?>" class="regular-text"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Section 2 -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('📝 Section 2 (Description)', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="events_section2"><?php _e('Description Text', 'eatisfamily'); ?></label></th>
+                            <td><textarea name="events_section2" id="events_section2" class="large-text" rows="5"><?php echo esc_textarea($events['section2'] ?? ''); ?></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Events List -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('📋 Events List', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="events_list_description"><?php _e('List Description', 'eatisfamily'); ?></label></th>
+                            <td><textarea name="events_list_description" id="events_list_description" class="large-text" rows="2"><?php echo esc_textarea($events['eventslist']['description'] ?? ''); ?></textarea></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="events_loading_text"><?php _e('Loading Text', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="events_loading_text" id="events_loading_text" value="<?php echo esc_attr($events['loading_text'] ?? 'Loading events...'); ?>" class="regular-text"></td>
                         </tr>
                     </table>
                 </div>
@@ -1775,6 +1967,11 @@ function eatisfamily_build_pages_content_v5($data) {
             'form_subtitle' => sanitize_text_field($data['contact_form_subtitle'] ?? ''),
         ),
         'careers' => array(
+            'seo' => array(
+                'title' => sanitize_text_field($data['careers_seo_title'] ?? ''),
+                'description' => sanitize_textarea_field($data['careers_seo_description'] ?? ''),
+                'keywords' => sanitize_text_field($data['careers_seo_keywords'] ?? ''),
+            ),
             'hero_default' => array(
                 'title_line_1' => sanitize_text_field($data['careers_hero_title_line1'] ?? ''),
                 'title_line_2' => sanitize_text_field($data['careers_hero_title_line2'] ?? ''),
@@ -1785,12 +1982,56 @@ function eatisfamily_build_pages_content_v5($data) {
                 'title' => sanitize_text_field($data['careers_join_title'] ?? ''),
                 'description' => wp_kses_post($data['careers_join_description'] ?? ''),
             ),
+            'hero_with_venue' => array(
+                'tag' => sanitize_text_field($data['careers_venue_tag'] ?? 'Now Hiring'),
+                'title_prefix' => sanitize_text_field($data['careers_venue_title_prefix'] ?? 'Join Our Team At'),
+                'subtitle' => sanitize_text_field($data['careers_venue_subtitle'] ?? ''),
+                'stats' => array(
+                    'open_positions_label' => sanitize_text_field($data['careers_stats_positions_label'] ?? 'Open Positions'),
+                    'locations_label' => sanitize_text_field($data['careers_stats_locations_label'] ?? 'Locations'),
+                ),
+            ),
+            'search_section' => array(
+                'search_placeholder' => sanitize_text_field($data['careers_search_placeholder'] ?? 'Search Job title and category here'),
+                'all_sites_label' => sanitize_text_field($data['careers_all_sites_label'] ?? 'All Sites'),
+                'job_types' => array('All job types', 'Full time', 'Part time', 'Contract', 'Freelance'),
+            ),
+            'job_listing' => array(
+                'positions_available_singular' => sanitize_text_field($data['careers_positions_singular'] ?? 'Position'),
+                'positions_available_plural' => sanitize_text_field($data['careers_positions_plural'] ?? 'Positions'),
+                'positions_available_suffix' => sanitize_text_field($data['careers_positions_suffix'] ?? 'Available'),
+                'posted_prefix' => sanitize_text_field($data['careers_posted_prefix'] ?? 'Posted'),
+                'apply_button' => sanitize_text_field($data['careers_apply_button'] ?? 'Apply Now'),
+                'view_details_button' => sanitize_text_field($data['careers_view_details_button'] ?? 'View details'),
+            ),
+            'no_results' => array(
+                'title' => sanitize_text_field($data['careers_no_results_title'] ?? 'No jobs found at this venue'),
+                'description' => sanitize_text_field($data['careers_no_results_description'] ?? 'Try selecting a different venue or adjusting your filters'),
+                'clear_filters_button' => sanitize_text_field($data['careers_clear_filters'] ?? 'Clear all filters'),
+            ),
+            'cta_section' => array(
+                'title' => sanitize_text_field($data['careers_cta_title'] ?? ''),
+                'description' => wp_kses_post($data['careers_cta_description'] ?? ''),
+                'explore_venues_button' => sanitize_text_field($data['careers_explore_venues_button'] ?? 'Explore all venues'),
+                'general_application_button' => sanitize_text_field($data['careers_general_application_button'] ?? 'Submit general application'),
+            ),
         ),
         'events' => array(
-            'hero' => array(
-                'title' => sanitize_text_field($data['events_hero_title'] ?? ''),
-                'subtitle' => sanitize_text_field($data['events_hero_subtitle'] ?? ''),
+            'seo' => array(
+                'title' => sanitize_text_field($data['events_seo_title'] ?? ''),
+                'description' => sanitize_textarea_field($data['events_seo_description'] ?? ''),
             ),
+            'page_hero' => array(
+                'title' => wp_kses_post($data['events_hero_title'] ?? ''),
+                'subtitle' => wp_kses_post($data['events_hero_subtitle'] ?? ''),
+                'btn' => esc_url_raw($data['events_hero_btn'] ?? ''),
+                'link' => sanitize_text_field($data['events_hero_link'] ?? '/contact'),
+            ),
+            'section2' => wp_kses_post($data['events_section2'] ?? ''),
+            'eventslist' => array(
+                'description' => wp_kses_post($data['events_list_description'] ?? ''),
+            ),
+            'loading_text' => sanitize_text_field($data['events_loading_text'] ?? 'Loading events...'),
         ),
         'blog' => array(
             'index' => array(

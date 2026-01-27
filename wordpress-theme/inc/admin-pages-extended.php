@@ -5,6 +5,9 @@
  *
  * @package EIFBackend
  * @version 4.0.0
+ * 
+ * NOTE: Menu registration has been moved to admin-pages-v5.php for unified management.
+ * This file now only contains the page rendering functions (Partners, Services, etc.)
  */
 
 if (!defined('ABSPATH')) {
@@ -12,81 +15,12 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Register admin menus
+ * Register admin menus - DISABLED
+ * Menu registration is now handled by admin-pages-v5.php to avoid duplicate menus.
+ * The functions below (eatisfamily_partners_page, etc.) are still used by v5.
  */
-function eatisfamily_register_admin_menus() {
-    // Main menu - Site Content
-    add_menu_page(
-        __('Site Content', 'eatisfamily'),
-        __('Site Content', 'eatisfamily'),
-        'manage_options',
-        'eatisfamily-site-content',
-        'eatisfamily_site_content_page',
-        'dashicons-admin-site',
-        30
-    );
-    
-    // Submenu - Pages Content
-    add_submenu_page(
-        'eatisfamily-site-content',
-        __('Pages Content', 'eatisfamily'),
-        __('Pages Content', 'eatisfamily'),
-        'manage_options',
-        'eatisfamily-pages-content',
-        'eatisfamily_pages_content_page_extended'
-    );
-    
-    // Submenu - Partners
-    add_submenu_page(
-        'eatisfamily-site-content',
-        __('Partners', 'eatisfamily'),
-        __('Partners', 'eatisfamily'),
-        'manage_options',
-        'eatisfamily-partners',
-        'eatisfamily_partners_page'
-    );
-    
-    // Submenu - Services
-    add_submenu_page(
-        'eatisfamily-site-content',
-        __('Services', 'eatisfamily'),
-        __('Services', 'eatisfamily'),
-        'manage_options',
-        'eatisfamily-services',
-        'eatisfamily_services_page'
-    );
-    
-    // Submenu - Sustainable Services
-    add_submenu_page(
-        'eatisfamily-site-content',
-        __('Sustainability', 'eatisfamily'),
-        __('Sustainability', 'eatisfamily'),
-        'manage_options',
-        'eatisfamily-sustainability',
-        'eatisfamily_sustainability_page'
-    );
-    
-    // Submenu - Gallery
-    add_submenu_page(
-        'eatisfamily-site-content',
-        __('Gallery', 'eatisfamily'),
-        __('Gallery', 'eatisfamily'),
-        'manage_options',
-        'eatisfamily-gallery',
-        'eatisfamily_gallery_page'
-    );
-
-    // Submenu - Data Management
-    add_submenu_page(
-        'eatisfamily-site-content',
-        __('Data Management', 'eatisfamily'),
-        __('Data Management', 'eatisfamily'),
-        'manage_options',
-        'eatisfamily-data-management',
-        'eatisfamily_data_management_page'
-    );
-}
-add_action('admin_menu', 'eatisfamily_register_admin_menus', 5);
+// function eatisfamily_register_admin_menus() { ... }
+// add_action('admin_menu', 'eatisfamily_register_admin_menus', 5); // DISABLED
 
 /**
  * ============================================
