@@ -14,16 +14,16 @@ param(
     [switch]$Help
 )
 
-$ErrorActionPreference = "Stop"
-$ProjectRoot = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
+$ErrorActionPreference = "Continue"
+$ProjectRoot = $PSScriptRoot | Split-Path -Parent
 
 # Colors for output
-function Write-Success { param($Message) Write-Host "✅ $Message" -ForegroundColor Green }
-function Write-Info { param($Message) Write-Host "ℹ️  $Message" -ForegroundColor Cyan }
-function Write-Warning { param($Message) Write-Host "⚠️  $Message" -ForegroundColor Yellow }
-function Write-Error { param($Message) Write-Host "❌ $Message" -ForegroundColor Red }
+function Write-SuccessMsg { param($Message) Write-Host "[OK] $Message" -ForegroundColor Green }
+function Write-InfoMsg { param($Message) Write-Host "[INFO] $Message" -ForegroundColor Cyan }
+function Write-WarningMsg { param($Message) Write-Host "[WARN] $Message" -ForegroundColor Yellow }
+function Write-ErrorMsg { param($Message) Write-Host "[ERROR] $Message" -ForegroundColor Red }
 
-function Show-Help {
+function Show-HelpInfo {
     Write-Host ""
     Write-Host "========================================" -ForegroundColor Cyan
     Write-Host "  EatIsFamily WordPress Local Setup" -ForegroundColor Cyan
@@ -48,23 +48,23 @@ function Show-Help {
     Write-Host ""
 }
 
-function Test-Docker {
+function Test-DockerInstalled {
     try {
-        $null = docker --version
+        $null = docker --version 2>$null
         return $true
     } catch {
         return $false
     }
 }
 
-function Start-WordPress {
-    Write-Info "Starting WordPress containers..."
+function Start-WPContainers {
+    Write-InfoMsg "Starting WordPress containers..."
     
     # Check if Docker is running
-    if (-not (Test-Docker)) {
-        Write-Error "Docker is not installed or not running. Please install Docker Desktop first."
+    if (-not (Test-DockerInstalled)) {
+        Write-ErrorMsg "Docker is not installed or not running. Please install Docker Desktop first."
         Write-Host "Download: https://www.docker.com/products/docker-desktop/" -ForegroundColor Yellow
-        exit 1
+        return
     }
 
     Set-Location $ProjectRoot
@@ -72,21 +72,21 @@ function Start-WordPress {
     # Create uploads directory if it doesn't exist
     if (-not (Test-Path "wordpress-uploads")) {
         New-Item -ItemType Directory -Path "wordpress-uploads" -Force | Out-Null
-        Write-Info "Created wordpress-uploads directory"
+        Write-InfoMsg "Created wordpress-uploads directory"
     }
 
     # Start containers
     docker-compose up -d
 
     Write-Host ""
-    Write-Success "WordPress is starting up!"
+    Write-SuccessMsg "WordPress is starting up!"
     Write-Host ""
     Write-Host "Please wait 30-60 seconds for the first startup, then visit:" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "  🌐 WordPress:    http://localhost:8080" -ForegroundColor Cyan
-    Write-Host "  🔐 WP Admin:     http://localhost:8080/wp-admin" -ForegroundColor Cyan
-    Write-Host "  🗄️  phpMyAdmin:   http://localhost:8081" -ForegroundColor Cyan
-    Write-Host "  📡 API Endpoint: http://localhost:8080/wp-json/eatisfamily/v1/" -ForegroundColor Cyan
+    Write-Host "  WordPress:    http://localhost:8080" -ForegroundColor Cyan
+    Write-Host "  WP Admin:     http://localhost:8080/wp-admin" -ForegroundColor Cyan
+    Write-Host "  phpMyAdmin:   http://localhost:8081" -ForegroundColor Cyan
+    Write-Host "  API Endpoint: http://localhost:8080/wp-json/eatisfamily/v1/" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "First time setup:" -ForegroundColor Yellow
     Write-Host "  1. Complete WordPress installation at http://localhost:8080"
@@ -96,25 +96,25 @@ function Start-WordPress {
     Write-Host ""
 }
 
-function Stop-WordPress {
-    Write-Info "Stopping WordPress containers..."
+function Stop-WPContainers {
+    Write-InfoMsg "Stopping WordPress containers..."
     Set-Location $ProjectRoot
     docker-compose down
-    Write-Success "WordPress containers stopped."
+    Write-SuccessMsg "WordPress containers stopped."
 }
 
-function Restart-WordPress {
-    Stop-WordPress
+function Restart-WPContainers {
+    Stop-WPContainers
     Start-Sleep -Seconds 2
-    Start-WordPress
+    Start-WPContainers
 }
 
-function Reset-WordPress {
-    Write-Warning "This will delete all WordPress data and start fresh!"
+function Reset-WPContainers {
+    Write-WarningMsg "This will delete all WordPress data and start fresh!"
     $confirm = Read-Host "Are you sure? (yes/no)"
     
     if ($confirm -eq "yes") {
-        Write-Info "Resetting WordPress..."
+        Write-InfoMsg "Resetting WordPress..."
         Set-Location $ProjectRoot
         docker-compose down -v
         
@@ -123,18 +123,18 @@ function Reset-WordPress {
         }
         
         Start-Sleep -Seconds 2
-        Start-WordPress
+        Start-WPContainers
     } else {
-        Write-Info "Reset cancelled."
+        Write-InfoMsg "Reset cancelled."
     }
 }
 
-function Show-Logs {
+function Show-WPLogs {
     Set-Location $ProjectRoot
     docker-compose logs -f
 }
 
-function Show-Status {
+function Show-WPStatus {
     Set-Location $ProjectRoot
     Write-Host ""
     Write-Host "Container Status:" -ForegroundColor Cyan
@@ -145,17 +145,17 @@ function Show-Status {
 
 # Main execution
 if ($Help -or (-not $Start -and -not $Stop -and -not $Restart -and -not $Reset -and -not $Logs -and -not $Status)) {
-    Show-Help
+    Show-HelpInfo
 } elseif ($Start) {
-    Start-WordPress
+    Start-WPContainers
 } elseif ($Stop) {
-    Stop-WordPress
+    Stop-WPContainers
 } elseif ($Restart) {
-    Restart-WordPress
+    Restart-WPContainers
 } elseif ($Reset) {
-    Reset-WordPress
+    Reset-WPContainers
 } elseif ($Logs) {
-    Show-Logs
+    Show-WPLogs
 } elseif ($Status) {
-    Show-Status
+    Show-WPStatus
 }
