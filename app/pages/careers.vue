@@ -326,7 +326,7 @@ const goToPage = (page: number) => {
           </p>
         </div>
 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4">
+        <div v-if="!isLoadingJobs" class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4">
           <div v-for="job in paginatedJobs" :key="job.id" class="col">
             <div class="bg-white border-organic p-4 h-100 job-card">
               <div class="d-flex flex-column h-100 justify-content-between">
