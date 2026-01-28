@@ -106,9 +106,10 @@ export interface Example {
 export interface HomepageContent {
   hero_section: {
     bg: string
-    video_type?: 'image' | 'youtube' | 'mp4'
+    video_type?: 'image' | 'youtube' | 'wistia' | 'mp4'
     video_url?: string
     youtube_id?: string
+    wistia_id?: string
     tag: string
     title: HeroTitle
     description: string

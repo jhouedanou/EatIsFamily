@@ -86,6 +86,49 @@ function eatisfamily_theme_setup() {
 }
 add_action('after_setup_theme', 'eatisfamily_theme_setup');
 
+/**
+ * Allow SVG uploads in WordPress Media Library
+ */
+function eatisfamily_allow_svg_upload($mimes) {
+    $mimes['svg'] = 'image/svg+xml';
+    $mimes['svgz'] = 'image/svg+xml';
+    return $mimes;
+}
+add_filter('upload_mimes', 'eatisfamily_allow_svg_upload');
+
+/**
+ * Fix SVG display in Media Library
+ */
+function eatisfamily_fix_svg_display($response, $attachment, $meta) {
+    if ($response['mime'] === 'image/svg+xml') {
+        $svg_path = get_attached_file($attachment->ID);
+        if (file_exists($svg_path)) {
+            $svg_content = file_get_contents($svg_path);
+            // Try to get dimensions from SVG
+            if (preg_match('/viewBox=["\']([^"\']+)["\']/', $svg_content, $matches)) {
+                $viewbox = explode(' ', $matches[1]);
+                if (count($viewbox) === 4) {
+                    $response['width'] = intval($viewbox[2]);
+                    $response['height'] = intval($viewbox[3]);
+                }
+            }
+            if (empty($response['width']) || empty($response['height'])) {
+                $response['width'] = 100;
+                $response['height'] = 100;
+            }
+            $response['sizes'] = array(
+                'full' => array(
+                    'url' => $response['url'],
+                    'width' => $response['width'],
+                    'height' => $response['height'],
+                    'orientation' => 'landscape',
+                ),
+            );
+        }
+    }
+    return $response;
+}
+add_filter('wp_prepare_attachment_for_js', 'eatisfamily_fix_svg_display', 10, 3);
 
 /**
  * Register Custom Post Types
