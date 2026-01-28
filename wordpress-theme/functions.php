@@ -1576,6 +1576,12 @@ function eatisfamily_get_pages_content($request) {
         $pages_content['homepage']['sustainable_service'] = $sustainability_data['items'];
     }
     
+    // Merge with components data (header/footer)
+    $components = get_option('eatisfamily_components', array());
+    if (!empty($components)) {
+        $pages_content['components'] = $components;
+    }
+    
     return rest_ensure_response($pages_content);
 }
 

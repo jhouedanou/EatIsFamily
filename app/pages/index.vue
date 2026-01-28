@@ -67,10 +67,12 @@ onMounted(async () => {
 <template>
   <div class="overflow-hidden">
     <!-- Loading state -->
-    <div v-if="!content" class="d-flex justify-content-center align-items-center min-vh-100">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Chargement...</span>
-      </div>
+    <div v-if="!content" class="loading-container d-flex justify-content-center align-items-center min-vh-100">
+      <img 
+        src="/images/imageLogo.png" 
+        alt="Chargement..." 
+        class="loading-logo"
+      />
     </div>
     
     <!-- Main content -->
@@ -215,7 +217,7 @@ onMounted(async () => {
           <div class="inner">
             <img :src="service.icone" :alt="service.title" />
             <h4>{{ service.title }}</h4>
-            <p>{{ service.description }}</p>
+            <p v-html="service.description"></p>
           </div>
         </div>
       </div>
@@ -261,6 +263,32 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
+/* Loading animation */
+.loading-container {
+  background-color: #fff;
+}
+
+.loading-logo {
+  max-width: 200px;
+  height: auto;
+  animation: fadeInOut 1.5s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+}
+
 .txtwrapper{
   max-width:800px;
 }
@@ -319,7 +347,7 @@ nuxt-link:has(img) {
 
 /* Hero Video Styles */
 .hero-media-container {
-  overflow: hidden;
+  //overflow: hidden;
   
   &.has-video {
     background: #000;

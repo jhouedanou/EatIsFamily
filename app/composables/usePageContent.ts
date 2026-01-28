@@ -577,6 +577,22 @@ export const usePageContent = () => {
       }
     }
 
+    // ============================================
+    // COMPONENTS (Header, Navbar, Footer)
+    // ============================================
+    if (wpData.components) {
+      result.components = result.components || {}
+      if (wpData.components.header) {
+        result.components.header = deepMerge(result.components.header || {}, wpData.components.header)
+      }
+      if (wpData.components.navbar) {
+        result.components.navbar = deepMerge(result.components.navbar || {}, wpData.components.navbar)
+      }
+      if (wpData.components.footer) {
+        result.components.footer = deepMerge(result.components.footer || {}, wpData.components.footer)
+      }
+    }
+
     return result
   }
 
