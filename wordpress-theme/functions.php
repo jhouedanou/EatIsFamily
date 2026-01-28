@@ -1263,18 +1263,21 @@ function eatisfamily_format_job($post) {
  * API Callback Functions - Venues
  */
 function eatisfamily_get_venues($request) {
-    // Get metadata
-    $metadata = get_option('eatisfamily_venues_metadata', array(
+    // Get venues data from unified option (v5) or fallback to separate options
+    $venues_data = get_option('eatisfamily_venues', array());
+    
+    // Metadata - from unified option or fallback
+    $metadata = !empty($venues_data['metadata']) ? $venues_data['metadata'] : get_option('eatisfamily_venues_metadata', array(
         'title' => 'Explore Where We Operate',
         'description' => 'Tap any marker on the map to discover the story behind that event.',
         'filter_label' => 'Click to filter by an event type',
     ));
     
-    // Get event types
-    $event_types = get_option('eatisfamily_event_types', array());
+    // Event types - from unified option or fallback
+    $event_types = !empty($venues_data['event_types']) ? $venues_data['event_types'] : get_option('eatisfamily_event_types', array());
     
-    // Get stats
-    $stats = get_option('eatisfamily_stats', array());
+    // Stats - from unified option or fallback
+    $stats = !empty($venues_data['stats']) ? $venues_data['stats'] : get_option('eatisfamily_stats', array());
     
     // Get venues
     $args = array(

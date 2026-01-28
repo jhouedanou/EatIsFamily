@@ -313,7 +313,7 @@ const goToMenuPage = (page: number) => {
         <!-- Default content -->
         <template v-else>
           <h2 class="explore-title">{{ locationsData.title }}</h2>
-          <p class="explore-description">{{ locationsData.description }}</p>
+          <p class="explore-description" v-html="locationsData.description"></p>
 
           <!-- Event Type Filters -->
           <p class="filter-label">{{ locationsData.filter_label }}</p>

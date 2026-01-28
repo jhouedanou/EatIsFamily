@@ -4,7 +4,10 @@
  * Complete unified content management with ALL administrable fields
  *
  * @package EIFBackend
- * @version 5.0.0
+ * @version 5.1.0
+ * 
+ * CHANGELOG v5.1.0:
+ * - Added WYSIWYG editors for text content fields (descriptions, long texts)
  * 
  * CHANGELOG v5.0.0:
  * - Unified admin interface combining admin-pages.php and admin-pages-extended.php
@@ -18,6 +21,9 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
+// Include WYSIWYG helper functions
+require_once get_template_directory() . '/inc/admin-wysiwyg-helper.php';
 
 /**
  * ============================================================================
@@ -77,6 +83,16 @@ function eatisfamily_register_admin_menus_v5() {
         'manage_options',
         'eatisfamily-components',
         'eatisfamily_components_page_v5'
+    );
+    
+    // Submenu - Venues (Map section)
+    add_submenu_page(
+        'eatisfamily-dashboard',
+        __('Venues / Map', 'eatisfamily'),
+        __('Venues / Map', 'eatisfamily'),
+        'manage_options',
+        'eatisfamily-venues',
+        'eatisfamily_venues_page_v5'
     );
     
     // Submenu - Partners
@@ -163,6 +179,12 @@ function eatisfamily_dashboard_page_v5() {
             </div>
             
             <div class="eatisfamily-card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <h3>📍 Venues / Map</h3>
+                <p><?php _e('Gérez la section "Explore Where We Operate" : titre, description, types d\'événements et statistiques.', 'eatisfamily'); ?></p>
+                <a href="<?php echo admin_url('admin.php?page=eatisfamily-venues'); ?>" class="button button-primary"><?php _e('Gérer', 'eatisfamily'); ?></a>
+            </div>
+            
+            <div class="eatisfamily-card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                 <h3>🤝 Partners</h3>
                 <p><?php _e('Gérez les logos des partenaires affichés sur la page d\'accueil.', 'eatisfamily'); ?></p>
                 <a href="<?php echo admin_url('admin.php?page=eatisfamily-partners'); ?>" class="button button-primary"><?php _e('Gérer', 'eatisfamily'); ?></a>
@@ -171,13 +193,15 @@ function eatisfamily_dashboard_page_v5() {
         </div>
         
         <div style="margin-top: 40px; padding: 20px; background: #f0f6fc; border-left: 4px solid #0073aa; border-radius: 4px;">
-            <h3 style="margin-top: 0;">📋 Version 5.0 - Nouveautés</h3>
+            <h3 style="margin-top: 0;">📋 Version 5.1 - Nouveautés</h3>
             <ul>
                 <li>✅ Interface d'administration unifiée</li>
                 <li>✅ Section "Forms & Labels" avec Job Search Form, Contact Form, Job Application</li>
                 <li>✅ Section "Components" pour Navbar et Footer</li>
-                <li>✅ Tous les ~263 champs administrables accessibles</li>
-                <li>✅ Support complet du fichier pages-content.json</li>
+                <li>✅ <strong>NEW:</strong> Section "Venues / Map" pour gérer "Explore Where We Operate"</li>
+                <li>✅ <strong>NEW:</strong> Éditeurs WYSIWYG pour tous les champs de contenu texte</li>
+                <li>✅ Tous les ~280+ champs administrables accessibles</li>
+                <li>✅ Support complet des fichiers pages-content.json et venues.json</li>
             </ul>
         </div>
     </div>
@@ -198,6 +222,71 @@ add_action('wp_ajax_eatisfamily_save_components_v5', 'eatisfamily_ajax_save_comp
 
 // AJAX for Pages Content
 add_action('wp_ajax_eatisfamily_save_pages_content_v5', 'eatisfamily_ajax_save_pages_content_v5');
+
+// AJAX for Venues
+add_action('wp_ajax_eatisfamily_save_venues_v5', 'eatisfamily_ajax_save_venues_v5');
+
+// AJAX for Reimport from JSON
+add_action('wp_ajax_eatisfamily_reimport_from_json', 'eatisfamily_ajax_reimport_from_json');
+
+/**
+ * AJAX Handler - Reimport pages-content.json and site-content.json
+ */
+function eatisfamily_ajax_reimport_from_json() {
+    // Verify nonce
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'reimport_json')) {
+        wp_send_json_error(array('message' => 'Security check failed'));
+        return;
+    }
+
+    // Check permissions
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(array('message' => 'Permission denied'));
+        return;
+    }
+
+    $messages = array();
+
+    // Import pages-content.json
+    $pages_json_file = get_template_directory() . '/data/pages-content.json';
+    if (!file_exists($pages_json_file)) {
+        // Try alternative path
+        $pages_json_file = ABSPATH . 'public/api/pages-content.json';
+    }
+
+    if (file_exists($pages_json_file)) {
+        $pages_content = json_decode(file_get_contents($pages_json_file), true);
+        if ($pages_content !== null) {
+            update_option('eatisfamily_pages_content', $pages_content);
+            $messages[] = 'Pages content imported successfully';
+        } else {
+            $messages[] = 'Error: Invalid JSON in pages-content.json';
+        }
+    } else {
+        $messages[] = 'Warning: pages-content.json not found';
+    }
+
+    // Import site-content.json
+    $site_json_file = get_template_directory() . '/data/site-content.json';
+    if (!file_exists($site_json_file)) {
+        // Try alternative path
+        $site_json_file = ABSPATH . 'public/api/site-content.json';
+    }
+
+    if (file_exists($site_json_file)) {
+        $site_content = json_decode(file_get_contents($site_json_file), true);
+        if ($site_content !== null) {
+            update_option('eatisfamily_site_content', $site_content);
+            $messages[] = 'Site content imported successfully';
+        } else {
+            $messages[] = 'Error: Invalid JSON in site-content.json';
+        }
+    } else {
+        $messages[] = 'Warning: site-content.json not found';
+    }
+
+    wp_send_json_success(array('message' => implode(' | ', $messages)));
+}
 
 function eatisfamily_ajax_save_forms_v5() {
     // Verify nonce
@@ -410,6 +499,85 @@ function eatisfamily_ajax_save_pages_content_v5() {
     
     update_option('eatisfamily_pages_content', $pages_content);
     wp_send_json_success(array('message' => 'Pages content saved successfully!'));
+}
+
+/**
+ * AJAX Handler for Venues
+ */
+function eatisfamily_ajax_save_venues_v5() {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'save_venues_v5')) {
+        wp_send_json_error(array('message' => 'Security check failed'));
+        return;
+    }
+    
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(array('message' => 'Permission denied'));
+        return;
+    }
+    
+    if (!isset($_POST['encoded_data'])) {
+        wp_send_json_error(array('message' => 'No data received'));
+        return;
+    }
+    
+    $decoded_data = base64_decode($_POST['encoded_data']);
+    $form_data = json_decode($decoded_data, true);
+    
+    if ($form_data === null) {
+        wp_send_json_error(array('message' => 'Invalid data'));
+        return;
+    }
+    
+    // Build venues content
+    $venues_content = eatisfamily_build_venues_content_v5($form_data);
+    
+    update_option('eatisfamily_venues', $venues_content);
+    wp_send_json_success(array('message' => 'Venues saved successfully!'));
+}
+
+/**
+ * Build venues content array from form data
+ */
+function eatisfamily_build_venues_content_v5($data) {
+    // Metadata
+    $metadata = array(
+        'title' => sanitize_text_field(wp_strip_all_tags($data['venues_meta_title'] ?? 'Explore Where We Operate')),
+        'description' => wp_kses_post($data['venues_meta_description'] ?? ''),
+        'filter_label' => sanitize_text_field($data['venues_meta_filter_label'] ?? 'Click to filter by an event type'),
+    );
+    
+    // Event Types (up to 10)
+    $event_types = array();
+    for ($i = 1; $i <= 10; $i++) {
+        $id = sanitize_text_field($data["event_type_{$i}_id"] ?? '');
+        $name = sanitize_text_field($data["event_type_{$i}_name"] ?? '');
+        if (!empty($id) && !empty($name)) {
+            $event_types[] = array(
+                'id' => $id,
+                'name' => $name,
+                'image' => esc_url_raw($data["event_type_{$i}_image"] ?? ''),
+            );
+        }
+    }
+    
+    // Stats (up to 8)
+    $stats = array();
+    for ($i = 1; $i <= 8; $i++) {
+        $value = sanitize_text_field($data["stat_{$i}_value"] ?? '');
+        $label = sanitize_text_field($data["stat_{$i}_label"] ?? '');
+        if (!empty($value) && !empty($label)) {
+            $stats[] = array(
+                'value' => $value,
+                'label' => $label,
+            );
+        }
+    }
+    
+    return array(
+        'metadata' => $metadata,
+        'event_types' => $event_types,
+        'stats' => $stats,
+    );
 }
 
 /**
@@ -972,8 +1140,8 @@ function eatisfamily_components_page_v5() {
                         <td><input type="text" name="footer_brand_name" id="footer_brand_name" value="<?php echo esc_attr($footer['brand_name'] ?? 'Eat Is Friday'); ?>" class="regular-text"></td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="footer_brand_description"><?php _e('Brand Description', 'eatisfamily'); ?></label></th>
-                        <td><textarea name="footer_brand_description" id="footer_brand_description" rows="3" class="large-text"><?php echo esc_textarea($footer['brand_description'] ?? ''); ?></textarea></td>
+                        <th scope="row"><label for="footer_brand_description"><?php _e('Brand Description', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                        <td><?php eatisfamily_mini_wysiwyg_editor('footer_brand_description', $footer['brand_description'] ?? ''); ?></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="footer_contact_email"><?php _e('Contact Email', 'eatisfamily'); ?></label></th>
@@ -1055,11 +1223,26 @@ function eatisfamily_components_page_v5() {
             $submitBtn.prop('disabled', true).val('<?php _e('Saving...', 'eatisfamily'); ?>');
             $status.removeClass('notice-success notice-error').hide();
             
+            // Sync all WYSIWYG editors before collecting data
+            if (typeof window.eatisfamilySyncEditors === 'function') {
+                window.eatisfamilySyncEditors();
+            }
+            
             var formData = {};
             $form.find('input[name], textarea[name], select[name]').each(function() {
                 var name = $(this).attr('name');
                 if (name && name !== 'eatisfamily_components_nonce' && name !== '_wp_http_referer') {
-                    formData[name] = $(this).val();
+                    // For WYSIWYG fields, get content from TinyMCE if available
+                    if (typeof tinymce !== 'undefined') {
+                        var editor = tinymce.get($(this).attr('id'));
+                        if (editor && !editor.isHidden()) {
+                            formData[name] = editor.getContent();
+                        } else {
+                            formData[name] = $(this).val();
+                        }
+                    } else {
+                        formData[name] = $(this).val();
+                    }
                 }
             });
             
@@ -1071,6 +1254,275 @@ function eatisfamily_components_page_v5() {
                 data: {
                     action: 'eatisfamily_save_components_v5',
                     nonce: $form.find('#eatisfamily_components_nonce').val(),
+                    encoded_data: encodedData
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $status.addClass('notice notice-success is-dismissible')
+                               .html('<p>' + response.data.message + '</p>')
+                               .show();
+                    } else {
+                        $status.addClass('notice notice-error is-dismissible')
+                               .html('<p>' + (response.data ? response.data.message : 'Error') + '</p>')
+                               .show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $status.addClass('notice notice-error is-dismissible')
+                           .html('<p><?php _e('Connection error. Please try again.', 'eatisfamily'); ?></p>')
+                           .show();
+                },
+                complete: function() {
+                    $submitBtn.prop('disabled', false).val(originalBtnText);
+                    $('html, body').animate({ scrollTop: 0 }, 300);
+                }
+            });
+        });
+    });
+    </script>
+    <?php
+}
+
+/**
+ * ============================================================================
+ * VENUES PAGE - V5 (Map Section - Explore Where We Operate)
+ * ============================================================================
+ */
+function eatisfamily_venues_page_v5() {
+    // Handle form submission (fallback if AJAX fails)
+    if (isset($_POST['eatisfamily_venues_v5_nonce']) && 
+        wp_verify_nonce($_POST['eatisfamily_venues_v5_nonce'], 'save_venues_v5')) {
+        
+        $venues_content = eatisfamily_build_venues_content_v5($_POST);
+        update_option('eatisfamily_venues', $venues_content);
+        echo '<div class="notice notice-success is-dismissible"><p>' . __('Venues saved successfully!', 'eatisfamily') . '</p></div>';
+    }
+    
+    // Get current values
+    $venues = get_option('eatisfamily_venues', array());
+    $metadata = $venues['metadata'] ?? array();
+    $event_types = $venues['event_types'] ?? array();
+    $stats = $venues['stats'] ?? array();
+    
+    ?>
+    <div class="wrap">
+        <h1><?php _e('Venues / Map Section', 'eatisfamily'); ?></h1>
+        <p class="description"><?php _e('Gérez le contenu de la section "Explore Where We Operate" sur la page d\'accueil.', 'eatisfamily'); ?></p>
+        
+        <div id="venues-save-status" style="display:none;"></div>
+        
+        <form method="post" action="" id="eatisfamily-venues-form">
+            <?php wp_nonce_field('save_venues_v5', 'eatisfamily_venues_v5_nonce'); ?>
+            
+            <h2 class="nav-tab-wrapper">
+                <a href="#metadata" class="nav-tab nav-tab-active"><?php _e('📍 Metadata', 'eatisfamily'); ?></a>
+                <a href="#event-types" class="nav-tab"><?php _e('🏟️ Event Types', 'eatisfamily'); ?></a>
+                <a href="#stats" class="nav-tab"><?php _e('📊 Statistics', 'eatisfamily'); ?></a>
+            </h2>
+            
+            <!-- METADATA -->
+            <div id="metadata" class="tab-content" style="display: block;">
+                <h3><?php _e('📍 Section Metadata', 'eatisfamily'); ?></h3>
+                <p class="description"><?php _e('Titres et descriptions affichés au-dessus de la carte interactive.', 'eatisfamily'); ?></p>
+                
+                <div class="eatisfamily-section">
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="venues_meta_title"><?php _e('Section Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="venues_meta_title" id="venues_meta_title" value="<?php echo esc_attr(wp_strip_all_tags($metadata['title'] ?? 'Explore Where We Operate')); ?>" class="large-text">
+                                <p class="description"><?php _e('Ex: "Explore Where We Operate" - Le titre principal de la section carte', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="venues_meta_description"><?php _e('Description', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td>
+                                <?php eatisfamily_wysiwyg_editor('venues_meta_description', $metadata['description'] ?? ''); ?>
+                                <p class="description"><?php _e('Texte explicatif affiché sous le titre', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="venues_meta_filter_label"><?php _e('Filter Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="venues_meta_filter_label" id="venues_meta_filter_label" value="<?php echo esc_attr($metadata['filter_label'] ?? 'Click to filter by an event type'); ?>" class="large-text">
+                                <p class="description"><?php _e('Ex: "Click to filter by an event type"', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- EVENT TYPES -->
+            <div id="event-types" class="tab-content" style="display: none;">
+                <h3><?php _e('🏟️ Event Types', 'eatisfamily'); ?></h3>
+                <p class="description"><?php _e('Types d\'événements utilisés pour filtrer les venues sur la carte (Stadium, Festival, Arena, etc.)', 'eatisfamily'); ?></p>
+                
+                <?php for ($i = 1; $i <= 10; $i++): 
+                    $event_type = $event_types[$i - 1] ?? array();
+                ?>
+                <div class="eatisfamily-section">
+                    <h4><?php printf(__('Event Type %d', 'eatisfamily'), $i); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="event_type_<?php echo $i; ?>_id"><?php _e('ID (slug)', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="event_type_<?php echo $i; ?>_id" id="event_type_<?php echo $i; ?>_id" value="<?php echo esc_attr($event_type['id'] ?? ''); ?>" class="regular-text">
+                                <p class="description"><?php _e('Ex: "stadium", "festival", "arena" (en minuscules, sans espaces)', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="event_type_<?php echo $i; ?>_name"><?php _e('Name', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="event_type_<?php echo $i; ?>_name" id="event_type_<?php echo $i; ?>_name" value="<?php echo esc_attr($event_type['name'] ?? ''); ?>" class="regular-text">
+                                <p class="description"><?php _e('Ex: "Stadium", "Festival", "Arena"', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="event_type_<?php echo $i; ?>_image"><?php _e('Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="event_type_<?php echo $i; ?>_image" id="event_type_<?php echo $i; ?>_image" value="<?php echo esc_attr($event_type['image'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="event_type_<?php echo $i; ?>_image"><?php _e('Select', 'eatisfamily'); ?></button>
+                                <p class="description"><?php _e('Image/icône représentant ce type d\'événement', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <?php endfor; ?>
+            </div>
+            
+            <!-- STATS -->
+            <div id="stats" class="tab-content" style="display: none;">
+                <h3><?php _e('📊 Statistics', 'eatisfamily'); ?></h3>
+                <p class="description"><?php _e('Statistiques affichées dans la section carte (ex: "250+ Events", "300,000 People fed", etc.)', 'eatisfamily'); ?></p>
+                
+                <?php for ($i = 1; $i <= 8; $i++): 
+                    $stat = $stats[$i - 1] ?? array();
+                ?>
+                <div class="eatisfamily-section">
+                    <h4><?php printf(__('Statistic %d', 'eatisfamily'), $i); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="stat_<?php echo $i; ?>_value"><?php _e('Value', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="stat_<?php echo $i; ?>_value" id="stat_<?php echo $i; ?>_value" value="<?php echo esc_attr($stat['value'] ?? ''); ?>" class="regular-text">
+                                <p class="description"><?php _e('Ex: "250+", "300,000", "100%"', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="stat_<?php echo $i; ?>_label"><?php _e('Label', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="stat_<?php echo $i; ?>_label" id="stat_<?php echo $i; ?>_label" value="<?php echo esc_attr($stat['label'] ?? ''); ?>" class="large-text">
+                                <p class="description"><?php _e('Ex: "Food & Beverage Events in 2024", "People fed in 2024"', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <?php endfor; ?>
+            </div>
+            
+            <?php submit_button(__('Save Venues', 'eatisfamily')); ?>
+        </form>
+    </div>
+    
+    <style>
+    .eatisfamily-section {
+        background: #fff;
+        padding: 15px 20px;
+        margin: 15px 0;
+        border: 1px solid #ccd0d4;
+        border-radius: 4px;
+    }
+    .eatisfamily-section h4 {
+        margin-top: 0;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    </style>
+    
+    <script>
+    jQuery(document).ready(function($) {
+        // Tab navigation
+        $('.nav-tab').on('click', function(e) {
+            e.preventDefault();
+            var target = $(this).attr('href');
+            
+            $('.nav-tab').removeClass('nav-tab-active');
+            $(this).addClass('nav-tab-active');
+            
+            $('.tab-content').hide();
+            $(target).show();
+            
+            // Refresh WYSIWYG editors when tab becomes visible
+            if (typeof window.eatisfamilyRefreshEditors === 'function') {
+                setTimeout(function() {
+                    window.eatisfamilyRefreshEditors();
+                }, 100);
+            }
+        });
+        
+        // Media uploader
+        $('.eatisfamily-upload-media').on('click', function(e) {
+            e.preventDefault();
+            var button = $(this);
+            var targetId = button.data('target');
+            
+            var frame = wp.media({
+                title: '<?php _e('Select Image', 'eatisfamily'); ?>',
+                button: { text: '<?php _e('Use this image', 'eatisfamily'); ?>' },
+                multiple: false
+            });
+            
+            frame.on('select', function() {
+                var attachment = frame.state().get('selection').first().toJSON();
+                $('#' + targetId).val(attachment.url);
+            });
+            
+            frame.open();
+        });
+        
+        // AJAX Form submission
+        $('#eatisfamily-venues-form').on('submit', function(e) {
+            e.preventDefault();
+            
+            var $form = $(this);
+            var $submitBtn = $form.find('input[type="submit"]');
+            var $status = $('#venues-save-status');
+            var originalBtnText = $submitBtn.val();
+            
+            $submitBtn.prop('disabled', true).val('<?php _e('Saving...', 'eatisfamily'); ?>');
+            $status.removeClass('notice-success notice-error').hide();
+            
+            // Sync all WYSIWYG editors before collecting data
+            if (typeof window.eatisfamilySyncEditors === 'function') {
+                window.eatisfamilySyncEditors();
+            }
+            
+            var formData = {};
+            $form.find('input[name], textarea[name], select[name]').each(function() {
+                var name = $(this).attr('name');
+                if (name && name !== 'eatisfamily_venues_v5_nonce' && name !== '_wp_http_referer') {
+                    // For WYSIWYG fields, get content from TinyMCE if available
+                    if (typeof tinymce !== 'undefined') {
+                        var editor = tinymce.get($(this).attr('id'));
+                        if (editor && !editor.isHidden()) {
+                            formData[name] = editor.getContent();
+                        } else {
+                            formData[name] = $(this).val();
+                        }
+                    } else {
+                        formData[name] = $(this).val();
+                    }
+                }
+            });
+            
+            var encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(formData))));
+            
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'eatisfamily_save_venues_v5',
+                    nonce: $form.find('#eatisfamily_venues_v5_nonce').val(),
                     encoded_data: encodedData
                 },
                 success: function(response) {
@@ -1131,7 +1583,17 @@ function eatisfamily_pages_content_page_v5() {
     <div class="wrap">
         <h1><?php _e('Pages Content', 'eatisfamily'); ?></h1>
         <p class="description"><?php _e('Gérez le contenu de toutes les pages du site.', 'eatisfamily'); ?></p>
-        
+
+        <!-- Reimport Button -->
+        <div style="margin: 15px 0; padding: 15px; background: #f0f0f1; border-left: 4px solid #2271b1; border-radius: 4px;">
+            <p style="margin: 0 0 10px 0;"><strong><?php _e('🔄 Réimporter depuis les fichiers JSON', 'eatisfamily'); ?></strong></p>
+            <p style="margin: 0 0 10px 0; color: #666;"><?php _e('Cliquez pour recharger le contenu depuis les fichiers pages-content.json et site-content.json', 'eatisfamily'); ?></p>
+            <button type="button" id="eatisfamily-reimport-json" class="button button-secondary">
+                <?php _e('🔄 Réimporter depuis JSON', 'eatisfamily'); ?>
+            </button>
+            <span id="reimport-status" style="margin-left: 10px; display: none;"></span>
+        </div>
+
         <div id="pages-save-status" style="display:none;"></div>
         
         <form method="post" action="" id="eatisfamily-pages-content-form">
@@ -1165,15 +1627,15 @@ function eatisfamily_pages_content_page_v5() {
                         </tr>
                         <tr>
                             <th scope="row"><label for="homepage_hero_title_line1"><?php _e('Title Line 1', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_hero_title_line1" id="homepage_hero_title_line1" class="large-text" rows="2"><?php echo esc_textarea($homepage['hero_section']['title']['line_1'] ?? ''); ?></textarea></td>
+                            <td><input type="text" name="homepage_hero_title_line1" id="homepage_hero_title_line1" value="<?php echo esc_attr(wp_strip_all_tags($homepage['hero_section']['title']['line_1'] ?? '')); ?>" class="large-text"></td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="homepage_hero_title_line2"><?php _e('Title Line 2', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_hero_title_line2" id="homepage_hero_title_line2" class="large-text" rows="2"><?php echo esc_textarea($homepage['hero_section']['title']['line_2'] ?? ''); ?></textarea></td>
+                            <td><input type="text" name="homepage_hero_title_line2" id="homepage_hero_title_line2" value="<?php echo esc_attr(wp_strip_all_tags($homepage['hero_section']['title']['line_2'] ?? '')); ?>" class="large-text"></td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="homepage_hero_title_line3"><?php _e('Subtitle', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_hero_title_line3" id="homepage_hero_title_line3" class="large-text" rows="2"><?php echo esc_textarea($homepage['hero_section']['title']['line_3'] ?? ''); ?></textarea></td>
+                            <td><input type="text" name="homepage_hero_title_line3" id="homepage_hero_title_line3" value="<?php echo esc_attr(wp_strip_all_tags($homepage['hero_section']['title']['line_3'] ?? '')); ?>" class="large-text"></td>
                         </tr>
                     </table>
                 </div>
@@ -1183,8 +1645,8 @@ function eatisfamily_pages_content_page_v5() {
                     <h4><?php _e('Intro Section', 'eatisfamily'); ?></h4>
                     <table class="form-table">
                         <tr>
-                            <th scope="row"><label for="homepage_intro_texte"><?php _e('Intro Text', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_intro_texte" id="homepage_intro_texte" class="large-text" rows="4"><?php echo esc_textarea($homepage['intro_section']['texte'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="homepage_intro_texte"><?php _e('Intro Text', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('homepage_intro_texte', $homepage['intro_section']['texte'] ?? ''); ?></td>
                         </tr>
                     </table>
                 </div>
@@ -1221,8 +1683,8 @@ function eatisfamily_pages_content_page_v5() {
                             <td><input type="text" name="homepage_cta_title" id="homepage_cta_title" value="<?php echo esc_attr($homepage['cta_section']['title'] ?? ''); ?>" class="large-text"></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="homepage_cta_description"><?php _e('Description', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_cta_description" id="homepage_cta_description" class="large-text" rows="3"><?php echo esc_textarea($homepage['cta_section']['description'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="homepage_cta_description"><?php _e('Description', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('homepage_cta_description', $homepage['cta_section']['description'] ?? ''); ?></td>
                         </tr>
                     </table>
                 </div>
@@ -1232,12 +1694,12 @@ function eatisfamily_pages_content_page_v5() {
                     <h4><?php _e('Beautiful Section', 'eatisfamily'); ?></h4>
                     <table class="form-table">
                         <tr>
-                            <th scope="row"><label for="homepage_beautiful_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_beautiful_title" id="homepage_beautiful_title" class="large-text" rows="2"><?php echo esc_textarea($homepage['beautiful']['title'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="homepage_beautiful_title"><?php _e('Title', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_mini_wysiwyg_editor('homepage_beautiful_title', $homepage['beautiful']['title'] ?? ''); ?></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="homepage_beautiful_text"><?php _e('Text', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_beautiful_text" id="homepage_beautiful_text" class="large-text" rows="3"><?php echo esc_textarea($homepage['beautiful']['text'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="homepage_beautiful_text"><?php _e('Text', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('homepage_beautiful_text', $homepage['beautiful']['text'] ?? ''); ?></td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="homepage_beautiful_image"><?php _e('Image', 'eatisfamily'); ?></label></th>
@@ -1255,7 +1717,7 @@ function eatisfamily_pages_content_page_v5() {
                     <table class="form-table">
                         <tr>
                             <th scope="row"><label for="homepage_partners_title"><?php _e('Partners Title', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_partners_title" id="homepage_partners_title" class="large-text" rows="2"><?php echo esc_textarea($homepage['partners_title'] ?? ''); ?></textarea></td>
+                            <td><input type="text" name="homepage_partners_title" id="homepage_partners_title" value="<?php echo esc_attr(wp_strip_all_tags($homepage['partners_title'] ?? '')); ?>" class="large-text"></td>
                         </tr>
                     </table>
                 </div>
@@ -1266,7 +1728,7 @@ function eatisfamily_pages_content_page_v5() {
                     <table class="form-table">
                         <tr>
                             <th scope="row"><label for="homepage_sustainable_title"><?php _e('Section Title', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_sustainable_title" id="homepage_sustainable_title" class="large-text" rows="2"><?php echo esc_textarea($homepage['sustainable_service_title'] ?? ''); ?></textarea></td>
+                            <td><input type="text" name="homepage_sustainable_title" id="homepage_sustainable_title" value="<?php echo esc_attr(wp_strip_all_tags($homepage['sustainable_service_title'] ?? '')); ?>" class="large-text"></td>
                         </tr>
                     </table>
                 </div>
@@ -1280,8 +1742,8 @@ function eatisfamily_pages_content_page_v5() {
                             <td><input type="text" name="homepage_cta_block_title" id="homepage_cta_block_title" value="<?php echo esc_attr($homepage['homepageCTA']['title'] ?? ''); ?>" class="large-text"></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="homepage_cta_block_description"><?php _e('Description', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_cta_block_description" id="homepage_cta_block_description" class="large-text" rows="3"><?php echo esc_textarea($homepage['homepageCTA']['description'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="homepage_cta_block_description"><?php _e('Description', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('homepage_cta_block_description', $homepage['homepageCTA']['description'] ?? ''); ?></td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="homepage_cta_block_image"><?php _e('Image', 'eatisfamily'); ?></label></th>
@@ -1291,8 +1753,8 @@ function eatisfamily_pages_content_page_v5() {
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="homepage_cta_block_additional"><?php _e('Additional Text', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="homepage_cta_block_additional" id="homepage_cta_block_additional" class="large-text" rows="2"><?php echo esc_textarea($homepage['homepageCTA']['additionalText'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="homepage_cta_block_additional"><?php _e('Additional Text', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_mini_wysiwyg_editor('homepage_cta_block_additional', $homepage['homepageCTA']['additionalText'] ?? ''); ?></td>
                         </tr>
                     </table>
                 </div>
@@ -1332,8 +1794,8 @@ function eatisfamily_pages_content_page_v5() {
                             <td><input type="text" name="about_hero_subtitle" id="about_hero_subtitle" value="<?php echo esc_attr($about['hero']['subtitle'] ?? ''); ?>" class="large-text"></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="about_hero_description"><?php _e('Description', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="about_hero_description" id="about_hero_description" class="large-text" rows="4"><?php echo esc_textarea($about['hero']['description'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="about_hero_description"><?php _e('Description', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('about_hero_description', $about['hero']['description'] ?? ''); ?></td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="about_hero_image"><?php _e('Image', 'eatisfamily'); ?></label></th>
@@ -1451,8 +1913,8 @@ function eatisfamily_pages_content_page_v5() {
                             <td><input type="text" name="careers_join_title" id="careers_join_title" value="<?php echo esc_attr($careers['join_box']['title'] ?? ''); ?>" class="large-text"></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="careers_join_description"><?php _e('Description', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="careers_join_description" id="careers_join_description" class="large-text" rows="3"><?php echo esc_textarea($careers['join_box']['description'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="careers_join_description"><?php _e('Description', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('careers_join_description', $careers['join_box']['description'] ?? ''); ?></td>
                         </tr>
                     </table>
                 </div>
@@ -1558,8 +2020,8 @@ function eatisfamily_pages_content_page_v5() {
                             <td><input type="text" name="careers_cta_title" id="careers_cta_title" value="<?php echo esc_attr($careers['cta_section']['title'] ?? ''); ?>" class="large-text"></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="careers_cta_description"><?php _e('Description', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="careers_cta_description" id="careers_cta_description" class="large-text" rows="3"><?php echo esc_textarea($careers['cta_section']['description'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="careers_cta_description"><?php _e('Description', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('careers_cta_description', $careers['cta_section']['description'] ?? ''); ?></td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="careers_explore_venues_button"><?php _e('Explore Venues Button', 'eatisfamily'); ?></label></th>
@@ -1598,11 +2060,11 @@ function eatisfamily_pages_content_page_v5() {
                     <table class="form-table">
                         <tr>
                             <th scope="row"><label for="events_hero_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="events_hero_title" id="events_hero_title" class="large-text" rows="2"><?php echo esc_textarea($events['page_hero']['title'] ?? $events['hero']['title'] ?? ''); ?></textarea></td>
+                            <td><input type="text" name="events_hero_title" id="events_hero_title" value="<?php echo esc_attr(wp_strip_all_tags($events['page_hero']['title'] ?? $events['hero']['title'] ?? '')); ?>" class="large-text"></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="events_hero_subtitle"><?php _e('Subtitle', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="events_hero_subtitle" id="events_hero_subtitle" class="large-text" rows="3"><?php echo esc_textarea($events['page_hero']['subtitle'] ?? $events['hero']['subtitle'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="events_hero_subtitle"><?php _e('Subtitle', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('events_hero_subtitle', $events['page_hero']['subtitle'] ?? $events['hero']['subtitle'] ?? ''); ?></td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="events_hero_btn"><?php _e('Button Image', 'eatisfamily'); ?></label></th>
@@ -1623,8 +2085,8 @@ function eatisfamily_pages_content_page_v5() {
                     <h4><?php _e('📝 Section 2 (Description)', 'eatisfamily'); ?></h4>
                     <table class="form-table">
                         <tr>
-                            <th scope="row"><label for="events_section2"><?php _e('Description Text', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="events_section2" id="events_section2" class="large-text" rows="5"><?php echo esc_textarea($events['section2'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="events_section2"><?php _e('Description Text', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('events_section2', $events['section2'] ?? ''); ?></td>
                         </tr>
                     </table>
                 </div>
@@ -1634,8 +2096,8 @@ function eatisfamily_pages_content_page_v5() {
                     <h4><?php _e('📋 Events List', 'eatisfamily'); ?></h4>
                     <table class="form-table">
                         <tr>
-                            <th scope="row"><label for="events_list_description"><?php _e('List Description', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="events_list_description" id="events_list_description" class="large-text" rows="2"><?php echo esc_textarea($events['eventslist']['description'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="events_list_description"><?php _e('List Description', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_mini_wysiwyg_editor('events_list_description', $events['eventslist']['description'] ?? ''); ?></td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="events_loading_text"><?php _e('Loading Text', 'eatisfamily'); ?></label></th>
@@ -1756,7 +2218,7 @@ function eatisfamily_pages_content_page_v5() {
                     <table class="form-table">
                         <tr>
                             <th scope="row"><label for="apply_activities_hero_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="apply_activities_hero_title" id="apply_activities_hero_title" class="large-text" rows="2"><?php echo esc_textarea($apply_activities['page_hero']['title'] ?? ''); ?></textarea></td>
+                            <td><input type="text" name="apply_activities_hero_title" id="apply_activities_hero_title" value="<?php echo esc_attr(wp_strip_all_tags($apply_activities['page_hero']['title'] ?? '')); ?>" class="large-text"></td>
                         </tr>
                         <tr>
                             <th scope="row"><label for="apply_activities_hero_image"><?php _e('Image', 'eatisfamily'); ?></label></th>
@@ -1779,8 +2241,8 @@ function eatisfamily_pages_content_page_v5() {
                             <td><input type="text" name="apply_activities_text_subtitle" id="apply_activities_text_subtitle" value="<?php echo esc_attr($apply_activities['page_text']['subtitle'] ?? ''); ?>" class="large-text"></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="apply_activities_text_description"><?php _e('Description', 'eatisfamily'); ?></label></th>
-                            <td><textarea name="apply_activities_text_description" id="apply_activities_text_description" class="large-text" rows="4"><?php echo esc_textarea($apply_activities['page_text']['description'] ?? ''); ?></textarea></td>
+                            <th scope="row"><label for="apply_activities_text_description"><?php _e('Description', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('apply_activities_text_description', $apply_activities['page_text']['description'] ?? ''); ?></td>
                         </tr>
                     </table>
                 </div>
@@ -1838,7 +2300,49 @@ function eatisfamily_pages_content_page_v5() {
             
             frame.open();
         });
-        
+
+        // Reimport from JSON button handler
+        $('#eatisfamily-reimport-json').on('click', function(e) {
+            e.preventDefault();
+
+            if (!confirm('<?php _e('Êtes-vous sûr de vouloir réimporter le contenu depuis les fichiers JSON ? Cela écrasera les modifications actuelles.', 'eatisfamily'); ?>')) {
+                return;
+            }
+
+            var $btn = $(this);
+            var $status = $('#reimport-status');
+            var originalText = $btn.text();
+
+            $btn.prop('disabled', true).text('<?php _e('Importation...', 'eatisfamily'); ?>');
+            $status.hide();
+
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'eatisfamily_reimport_from_json',
+                    nonce: '<?php echo wp_create_nonce('reimport_json'); ?>'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $status.css('color', 'green').text('✅ ' + response.data.message).show();
+                        // Reload page after 1.5 seconds to show updated content
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        $status.css('color', 'red').text('❌ ' + (response.data ? response.data.message : 'Error')).show();
+                    }
+                },
+                error: function() {
+                    $status.css('color', 'red').text('❌ <?php _e('Erreur de connexion', 'eatisfamily'); ?>').show();
+                },
+                complete: function() {
+                    $btn.prop('disabled', false).text(originalText);
+                }
+            });
+        });
+
         // AJAX Form submission to bypass mod_security
         $('#eatisfamily-pages-content-form').on('submit', function(e) {
             e.preventDefault();
@@ -1851,11 +2355,26 @@ function eatisfamily_pages_content_page_v5() {
             $submitBtn.prop('disabled', true).val('<?php _e('Saving...', 'eatisfamily'); ?>');
             $status.removeClass('notice-success notice-error').hide();
             
+            // Sync all WYSIWYG editors before collecting data
+            if (typeof window.eatisfamilySyncEditors === 'function') {
+                window.eatisfamilySyncEditors();
+            }
+            
             var formData = {};
             $form.find('input[name], textarea[name], select[name]').each(function() {
                 var name = $(this).attr('name');
                 if (name && name !== 'eatisfamily_pages_content_v5_nonce' && name !== '_wp_http_referer') {
-                    formData[name] = $(this).val();
+                    // For WYSIWYG fields, get content from TinyMCE if available
+                    if (typeof tinymce !== 'undefined') {
+                        var editor = tinymce.get($(this).attr('id'));
+                        if (editor && !editor.isHidden()) {
+                            formData[name] = editor.getContent();
+                        } else {
+                            formData[name] = $(this).val();
+                        }
+                    } else {
+                        formData[name] = $(this).val();
+                    }
                 }
             });
             
@@ -1910,9 +2429,9 @@ function eatisfamily_build_pages_content_v5($data) {
             'hero_section' => array(
                 'bg' => esc_url_raw($data['homepage_hero_bg'] ?? ''),
                 'title' => array(
-                    'line_1' => wp_kses_post($data['homepage_hero_title_line1'] ?? ''),
-                    'line_2' => wp_kses_post($data['homepage_hero_title_line2'] ?? ''),
-                    'line_3' => wp_kses_post($data['homepage_hero_title_line3'] ?? ''),
+                    'line_1' => sanitize_text_field(wp_strip_all_tags($data['homepage_hero_title_line1'] ?? '')),
+                    'line_2' => sanitize_text_field(wp_strip_all_tags($data['homepage_hero_title_line2'] ?? '')),
+                    'line_3' => sanitize_text_field(wp_strip_all_tags($data['homepage_hero_title_line3'] ?? '')),
                 ),
             ),
             'intro_section' => array(
@@ -1930,13 +2449,13 @@ function eatisfamily_build_pages_content_v5($data) {
                 'title' => sanitize_text_field($data['homepage_cta_title'] ?? ''),
                 'description' => wp_kses_post($data['homepage_cta_description'] ?? ''),
             ),
-            'sustainable_service_title' => sanitize_text_field($data['homepage_sustainable_title'] ?? ''),
+            'sustainable_service_title' => sanitize_text_field(wp_strip_all_tags($data['homepage_sustainable_title'] ?? '')),
             'beautiful' => array(
                 'title' => wp_kses_post($data['homepage_beautiful_title'] ?? ''),
                 'text' => wp_kses_post($data['homepage_beautiful_text'] ?? ''),
                 'image' => esc_url_raw($data['homepage_beautiful_image'] ?? ''),
             ),
-            'partners_title' => sanitize_text_field($data['homepage_partners_title'] ?? ''),
+            'partners_title' => sanitize_text_field(wp_strip_all_tags($data['homepage_partners_title'] ?? '')),
             'homepageCTA' => array(
                 'title' => sanitize_text_field($data['homepage_cta_block_title'] ?? ''),
                 'image' => esc_url_raw($data['homepage_cta_block_image'] ?? ''),
@@ -2022,7 +2541,7 @@ function eatisfamily_build_pages_content_v5($data) {
                 'description' => sanitize_textarea_field($data['events_seo_description'] ?? ''),
             ),
             'page_hero' => array(
-                'title' => wp_kses_post($data['events_hero_title'] ?? ''),
+                'title' => sanitize_text_field(wp_strip_all_tags($data['events_hero_title'] ?? '')),
                 'subtitle' => wp_kses_post($data['events_hero_subtitle'] ?? ''),
                 'btn' => esc_url_raw($data['events_hero_btn'] ?? ''),
                 'link' => sanitize_text_field($data['events_hero_link'] ?? '/contact'),
@@ -2066,7 +2585,7 @@ function eatisfamily_build_pages_content_v5($data) {
         ),
         'apply_activities' => array(
             'page_hero' => array(
-                'title' => wp_kses_post($data['apply_activities_hero_title'] ?? ''),
+                'title' => sanitize_text_field(wp_strip_all_tags($data['apply_activities_hero_title'] ?? '')),
                 'image' => array(
                     'src' => esc_url_raw($data['apply_activities_hero_image'] ?? ''),
                 ),
@@ -2081,11 +2600,19 @@ function eatisfamily_build_pages_content_v5($data) {
 }
 
 /**
- * Enqueue admin scripts for media uploader
+ * Enqueue admin scripts for media uploader and WYSIWYG editors
  */
 function eatisfamily_admin_scripts_v5($hook) {
     if (strpos($hook, 'eatisfamily') !== false) {
+        // Media uploader
         wp_enqueue_media();
+        
+        // Ensure WordPress editor scripts are loaded
+        wp_enqueue_editor();
+        
+        // Enqueue WordPress color picker for editor
+        wp_enqueue_style('wp-color-picker');
+        wp_enqueue_script('wp-color-picker');
     }
 }
 add_action('admin_enqueue_scripts', 'eatisfamily_admin_scripts_v5');

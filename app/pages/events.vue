@@ -57,7 +57,7 @@ useHead(() => ({
     <!-- Intro Section -->
     <section v-if="content?.section2" class="intro-section">
       <div class="container">
-        <p class="intro-text preserve-lines">{{ content.section2 }}</p>
+        <p class="intro-text preserve-lines" v-html="content.section2"></p>
       </div>
     </section>
 
@@ -65,8 +65,7 @@ useHead(() => ({
     <section class="events-section">
       <div class="container">
         <div v-if="content?.eventslist" class="section-header">
-          <p class="section-description preserve-lines
-          ">{{ content.eventslist.description }}</p>
+          <p class="section-description preserve-lines" v-html="content.eventslist.description"></p>
         </div>
 
         <div v-if="loading" class="loading">

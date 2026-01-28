@@ -7,7 +7,7 @@
             <img :src="content.logoFooter || '/images/imageLogo.png'" alt="Logo" />
             <h3 class="mb-0">{{ content.brand_name }}</h3>
           </div>
-          <p v-if="content">{{ content.brand_description }}</p>
+          <p v-if="content" v-html="content.brand_description"></p>
           <p v-if="content">{{ content.contact_email }}</p>
           <p v-if="content">{{ content.contact_phone }}</p>
           <ul class="d-flex flex-row gap-2">
