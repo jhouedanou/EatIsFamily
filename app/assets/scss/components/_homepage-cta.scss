@@ -1,5 +1,7 @@
 // HomepageCTA.vue styles
 #ready-to-make-an-impact {
+      min-height:536px;
+  position:relative;
   .preserve-lines {
     white-space: pre-line;
   }
@@ -33,7 +35,7 @@
     }
 
     p {
-      font-family: FONTSPRINGDEMO-RecoletaAlt;
+      font-family: FONTSPRINGDEMO-Recoleta;
       font-size: 18px;
       font-weight: normal;
       font-stretch: normal;
@@ -71,4 +73,7 @@
       transform: translateY(-2px) scale(0.98);
     }
   }
+}
+#mero{
+  min-height: 536px;
 }

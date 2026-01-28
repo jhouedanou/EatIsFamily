@@ -235,7 +235,7 @@ onMounted(async () => {
             class="col-md-6 example">
             <div class="inner-example">
               <h4>{{ example.title }}</h4>
-              <p>{{ example.texte }}</p>
+              <div v-html="example.texte"></div>
               <NuxtLink :to="example.link">
                 <NuxtImg :src="example.btn" :alt="example.title" />
               </NuxtLink>

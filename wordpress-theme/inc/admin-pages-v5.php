@@ -1813,7 +1813,52 @@ function eatisfamily_pages_content_page_v5() {
                             <th scope="row"><label for="homepage_cta_block_additional"><?php _e('Additional Text', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
                             <td><?php eatisfamily_mini_wysiwyg_editor('homepage_cta_block_additional', $homepage['homepageCTA']['additionalText'] ?? ''); ?></td>
                         </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_cta_block_link"><?php _e('Link URL', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_cta_block_link" id="homepage_cta_block_link" value="<?php echo esc_attr($homepage['homepageCTA']['link'] ?? ''); ?>" class="regular-text" placeholder="/contact">
+                                <p class="description"><?php _e('URL du lien pour les boutons', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_cta_block_button"><?php _e('Button Image (Primary)', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_cta_block_button" id="homepage_cta_block_button" value="<?php echo esc_attr($homepage['homepageCTA']['button'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="homepage_cta_block_button"><?php _e('Select', 'eatisfamily'); ?></button>
+                                <p class="description"><?php _e('Image du bouton principal', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="homepage_cta_block_button2"><?php _e('Button Image (Secondary)', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="homepage_cta_block_button2" id="homepage_cta_block_button2" value="<?php echo esc_attr($homepage['homepageCTA']['button2'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="homepage_cta_block_button2"><?php _e('Select', 'eatisfamily'); ?></button>
+                                <p class="description"><?php _e('Image du bouton secondaire (pour le bloc additionnel)', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
                     </table>
+                </div>
+                
+                <!-- Examples Section (Concession & Events) -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('Examples Section (Concession & Events)', 'eatisfamily'); ?></h4>
+                    <p class="description"><?php _e('Les deux blocs affichés sous la section "Beautiful Moments"', 'eatisfamily'); ?></p>
+                    <div id="examples-list-v5" class="eatisfamily-repeater">
+                        <?php 
+                        $examples = $homepage['examples'] ?? array();
+                        if (!empty($examples)) {
+                            foreach ($examples as $index => $example) {
+                                eatisfamily_render_example_row_v5($index, $example);
+                            }
+                        } else {
+                            eatisfamily_render_example_row_v5(0, array());
+                            eatisfamily_render_example_row_v5(1, array());
+                        }
+                        ?>
+                    </div>
+                    <p>
+                        <button type="button" class="button" id="add-example-v5"><?php _e('+ Add Example', 'eatisfamily'); ?></button>
+                    </p>
                 </div>
                 
                 <!-- SEO Section -->
@@ -2421,16 +2466,30 @@ function eatisfamily_pages_content_page_v5() {
             $form.find('input[name], textarea[name], select[name]').each(function() {
                 var name = $(this).attr('name');
                 if (name && name !== 'eatisfamily_pages_content_v5_nonce' && name !== '_wp_http_referer') {
+                    var value;
                     // For WYSIWYG fields, get content from TinyMCE if available
                     if (typeof tinymce !== 'undefined') {
                         var editor = tinymce.get($(this).attr('id'));
                         if (editor && !editor.isHidden()) {
-                            formData[name] = editor.getContent();
+                            value = editor.getContent();
                         } else {
-                            formData[name] = $(this).val();
+                            value = $(this).val();
                         }
                     } else {
-                        formData[name] = $(this).val();
+                        value = $(this).val();
+                    }
+
+                    // Handle array-style field names like example_title_v5[0]
+                    var arrayMatch = name.match(/^(.+)\[(\d+)\]$/);
+                    if (arrayMatch) {
+                        var arrayName = arrayMatch[1];
+                        var arrayIndex = parseInt(arrayMatch[2], 10);
+                        if (!formData[arrayName]) {
+                            formData[arrayName] = {};
+                        }
+                        formData[arrayName][arrayIndex] = value;
+                    } else {
+                        formData[name] = value;
                     }
                 }
             });
@@ -2466,6 +2525,58 @@ function eatisfamily_pages_content_page_v5() {
                     $('html, body').animate({ scrollTop: 0 }, 300);
                 }
             });
+        });
+
+        // Examples repeater for v5
+        var exampleIndexV5 = <?php echo count($homepage['examples'] ?? array()); ?>;
+        if (exampleIndexV5 < 2) exampleIndexV5 = 2;
+        
+        $('#add-example-v5').on('click', function() {
+            var template = `
+            <div class="example-row-v5" style="background: #f9f9f9; border: 1px solid #ccd0d4; padding: 15px; margin-bottom: 15px; border-radius: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <strong><?php _e('Example', 'eatisfamily'); ?> #` + (exampleIndexV5 + 1) + `</strong>
+                    <span class="remove-example-v5" style="color: #d63638; cursor: pointer; text-decoration: underline;"><?php _e('Remove', 'eatisfamily'); ?></span>
+                </div>
+                <table class="form-table" style="margin: 0;">
+                    <tr>
+                        <th scope="row" style="width: 150px;"><label><?php _e('Title', 'eatisfamily'); ?></label></th>
+                        <td>
+                            <textarea name="example_title_v5[` + exampleIndexV5 + `]" rows="2" class="large-text"></textarea>
+                            <p class="description"><?php _e('HTML autorisé pour le formatage', 'eatisfamily'); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label><?php _e('Text', 'eatisfamily'); ?></label></th>
+                        <td>
+                            <textarea name="example_text_v5[` + exampleIndexV5 + `]" rows="4" class="large-text"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label><?php _e('Button Image', 'eatisfamily'); ?></label></th>
+                        <td>
+                            <input type="text" name="example_btn_v5[` + exampleIndexV5 + `]" id="example_btn_v5_` + exampleIndexV5 + `" class="regular-text">
+                            <button type="button" class="button eatisfamily-upload-media" data-target="example_btn_v5_` + exampleIndexV5 + `"><?php _e('Select', 'eatisfamily'); ?></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label><?php _e('Link URL', 'eatisfamily'); ?></label></th>
+                        <td>
+                            <input type="text" name="example_link_v5[` + exampleIndexV5 + `]" class="regular-text" placeholder="/contact">
+                        </td>
+                    </tr>
+                </table>
+            </div>`;
+            $('#examples-list-v5').append(template);
+            exampleIndexV5++;
+        });
+        
+        $(document).on('click', '.remove-example-v5', function() {
+            if (confirm('<?php _e('Are you sure you want to remove this example?', 'eatisfamily'); ?>')) {
+                $(this).closest('.example-row-v5').fadeOut(300, function() {
+                    $(this).remove();
+                });
+            }
         });
     });
     </script>
@@ -2522,7 +2633,11 @@ function eatisfamily_build_pages_content_v5($data) {
                 'image' => esc_url_raw($data['homepage_cta_block_image'] ?? ''),
                 'description' => wp_kses_post($data['homepage_cta_block_description'] ?? ''),
                 'additionalText' => wp_kses_post($data['homepage_cta_block_additional'] ?? ''),
+                'link' => sanitize_text_field($data['homepage_cta_block_link'] ?? ''),
+                'button' => esc_url_raw($data['homepage_cta_block_button'] ?? ''),
+                'button2' => esc_url_raw($data['homepage_cta_block_button2'] ?? ''),
             ),
+            'examples' => eatisfamily_process_examples_v5($data),
         ),
         'about' => array(
             'hero' => array(
@@ -2658,6 +2773,98 @@ function eatisfamily_build_pages_content_v5($data) {
             ),
         ),
     );
+}
+
+/**
+ * Process examples from form data
+ */
+function eatisfamily_process_examples_v5($data) {
+    $examples = array();
+    
+    // Handle both array and object format from JSON decode
+    $titles = $data['example_title_v5'] ?? array();
+    $texts = $data['example_text_v5'] ?? array();
+    $btns = $data['example_btn_v5'] ?? array();
+    $links = $data['example_link_v5'] ?? array();
+    
+    // Convert objects to arrays if needed
+    if (is_object($titles)) $titles = (array) $titles;
+    if (is_object($texts)) $texts = (array) $texts;
+    if (is_object($btns)) $btns = (array) $btns;
+    if (is_object($links)) $links = (array) $links;
+    
+    if (!empty($titles) && (is_array($titles) || is_object($titles))) {
+        foreach ($titles as $index => $title) {
+            $text = isset($texts[$index]) ? $texts[$index] : '';
+            if (!empty($title) || !empty($text)) {
+                $examples[] = array(
+                    'title' => wp_kses_post($title),
+                    'texte' => wp_kses_post($text),
+                    'btn' => esc_url_raw($btns[$index] ?? ''),
+                    'link' => sanitize_text_field($links[$index] ?? ''),
+                );
+            }
+        }
+    }
+    
+    return $examples;
+}
+
+/**
+ * Render example row for v5 admin
+ */
+function eatisfamily_render_example_row_v5($index, $example) {
+    ?>
+    <div class="example-row-v5" style="background: #f9f9f9; border: 1px solid #ccd0d4; padding: 15px; margin-bottom: 15px; border-radius: 4px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <strong><?php _e('Example', 'eatisfamily'); ?> #<?php echo is_numeric($index) ? $index + 1 : '?'; ?></strong>
+            <span class="remove-example-v5" style="color: #d63638; cursor: pointer; text-decoration: underline;"><?php _e('Remove', 'eatisfamily'); ?></span>
+        </div>
+        <table class="form-table" style="margin: 0;">
+            <tr>
+                <th scope="row" style="width: 150px;"><label><?php _e('Title', 'eatisfamily'); ?></label></th>
+                <td>
+                    <textarea name="example_title_v5[<?php echo $index; ?>]" rows="2" class="large-text"><?php echo esc_textarea($example['title'] ?? ''); ?></textarea>
+                    <p class="description"><?php _e('HTML autorisé pour le formatage', 'eatisfamily'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label><?php _e('Text', 'eatisfamily'); ?></label></th>
+                <td>
+                    <?php 
+                    $editor_id = 'example_text_v5_' . $index;
+                    $content = $example['texte'] ?? '';
+                    wp_editor($content, $editor_id, array(
+                        'textarea_name' => 'example_text_v5[' . $index . ']',
+                        'textarea_rows' => 6,
+                        'media_buttons' => false,
+                        'teeny' => true,
+                        'quicktags' => true,
+                        'tinymce' => array(
+                            'toolbar1' => 'bold,italic,underline,link,unlink,bullist,numlist',
+                            'toolbar2' => '',
+                        ),
+                    ));
+                    ?>
+                    <p class="description"><?php _e('Utilisez l\'éditeur pour formater le texte', 'eatisfamily'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label><?php _e('Button Image', 'eatisfamily'); ?></label></th>
+                <td>
+                    <input type="text" name="example_btn_v5[<?php echo $index; ?>]" id="example_btn_v5_<?php echo $index; ?>" value="<?php echo esc_attr($example['btn'] ?? ''); ?>" class="regular-text">
+                    <button type="button" class="button eatisfamily-upload-media" data-target="example_btn_v5_<?php echo $index; ?>"><?php _e('Select', 'eatisfamily'); ?></button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label><?php _e('Link URL', 'eatisfamily'); ?></label></th>
+                <td>
+                    <input type="text" name="example_link_v5[<?php echo $index; ?>]" value="<?php echo esc_attr($example['link'] ?? ''); ?>" class="regular-text" placeholder="/contact">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <?php
 }
 
 /**

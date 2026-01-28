@@ -54,10 +54,22 @@ useHead(() => ({
   <div class="d-flex flex-column min-vh-100 bg-brand-gray overflow-hidden">
     <LayoutHeader />
 
-    <main class="flex-grow-1 pt-0">
+    <main class="flex-grow-1 main-content">
       <slot />
     </main>
 
     <LayoutFooter />
   </div>
 </template>
+
+<style scoped>
+.main-content {
+  padding-top: 103px; /* Hauteur du header */
+}
+
+@media (max-width: 968px) {
+  .main-content {
+    padding-top: 80px; /* Hauteur du header mobile */
+  }
+}
+</style>

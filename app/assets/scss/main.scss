@@ -824,8 +824,9 @@ body {
   .example {
     padding: 5px;
     .inner-example {
-      padding: 4em 4em 10em 4em;
-      border-radius: 20px;
+    padding: 4em;
+    border-radius: 20px;
+    min-height: 760px;
     }
     h4 {
       font-family: FONTSPRINGDEMO-RecoletaBold;
@@ -858,6 +859,7 @@ body {
       background-repeat: no-repeat;
       background-position: right bottom;
       position: relative;
+      background-size:cover;
       &::before {
         content: "";
         background-image: url(/images/concession.svg);
@@ -893,6 +895,8 @@ body {
     .inner-example {
       background: url(/images/bgRE.svg);
       background-repeat: no-repeat;
+      background-size:cover;      position: relative;
+
     }
   }
 }

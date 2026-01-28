@@ -54,11 +54,12 @@ onMounted(async () => {
 <style scoped lang="scss">
 .header {
   padding: 0;
-  position: absolute;
+  position: fixed;
   top: 0;
   z-index: 1000;
-  left:0;
-  right:0;
+  left: 0;
+  right: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .header-grid {

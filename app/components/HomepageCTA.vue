@@ -1,4 +1,4 @@
-<script setup lang="ts">
+-4<script setup lang="ts">
 interface Props {
   image: string
   title: string
@@ -14,8 +14,8 @@ defineProps<Props>()
 
 <template>
   <section id="ready-to-make-an-impact" class="py-5 bg-white position-relative">
-    <div class="container-fluid position-relative d-flex justify-content-center align-items-center">
-      <img :src="image" alt="" />
+    <div id="mero" class="container-fluid position-relative d-flex justify-content-center align-items-center p-4">
+      <!-- <img :src="image" alt="" /> -->
       <div id="leforme" class="position-absolute d-flex flex-column justify-content-center align-items-center text-center p-4 mx-auto">
         <h2>{{ title }}</h2>
         <p class="preserve-lines" v-html="description"></p>
