@@ -372,6 +372,10 @@ const goToMenuPage = (page: number) => {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+
+    max-height: 690px;
+    overflow: auto;
+
 }
 
 .explore-title {

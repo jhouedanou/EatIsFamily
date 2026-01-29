@@ -64,12 +64,12 @@ useHead(() => ({
 
 <style scoped>
 .main-content {
-  padding-top: 103px; /* Hauteur du header */
+  padding-top: ss0px; /* Hauteur du header */
 }
 
 @media (max-width: 968px) {
   .main-content {
-    padding-top: 80px; /* Hauteur du header mobile */
+    padding-top: 0px; /* Hauteur du header mobile */
   }
 }
 </style>
