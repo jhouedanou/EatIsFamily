@@ -173,6 +173,9 @@ onMounted(async () => {
   color: #fff;
 }
 .titlewrapper{
+  img{
+    height:40px;
+  }
 h3{
   padding-left: 1rem;
 }
