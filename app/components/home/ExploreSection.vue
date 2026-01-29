@@ -372,7 +372,10 @@ const goToMenuPage = (page: number) => {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow: auto;
+  height: 80vh;
+  max-height: 80vh;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .explore-title {
@@ -550,7 +553,34 @@ const goToMenuPage = (page: number) => {
 .venue-details {
   display: flex;
   flex-direction: column;
-  padding: 0;
+  padding: 0 0 2rem 0;
+  height: calc(80vh - 3rem);
+  max-height: calc(80vh - 3rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  /* Custom scrollbar */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #fe002f;
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: #cc0026;
+  }
+  
+  /* Firefox scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #fe002f #f1f1f1;
 }
 
 .venue-images-grid {
@@ -665,6 +695,10 @@ const goToMenuPage = (page: number) => {
 
 .venue-info-icon {
   font-size: 0.8rem;
+  
+  img {
+    filter: brightness(0) saturate(100%) invert(15%) sepia(95%) saturate(6932%) hue-rotate(358deg) brightness(95%) contrast(126%);
+  }
 }
 
 .venue-info-label {
@@ -829,7 +863,7 @@ filter: alpha(opacity=50); /* internet explorer */
 /* Tab Content */
 .tab-content {
   flex: 1;
-  overflow-y: auto;
+ // overflow-y: auto;
   position:relative;
 }
 
