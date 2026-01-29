@@ -449,6 +449,8 @@ function eatisfamily_ajax_save_components_v5() {
             'policy_title' => sanitize_text_field($form_data['footer_policy_title'] ?? 'Policy'),
             'copyright_template' => sanitize_text_field($form_data['footer_copyright'] ?? '© {year} Eat Is Friday. All rights reserved.'),
             'back_to_top' => sanitize_text_field($form_data['footer_back_to_top'] ?? 'Back to top'),
+            'company_links' => array(),
+            'policy_links' => array(),
         ),
         'header' => array(
             'logo' => sanitize_text_field($form_data['header_logo'] ?? 'Eat Is Friday'),
@@ -462,6 +464,30 @@ function eatisfamily_ajax_save_components_v5() {
             ),
         ),
     );
+    
+    // Process Company Links from AJAX form data
+    if (isset($form_data['footer_company_link_text']) && is_array($form_data['footer_company_link_text'])) {
+        foreach ($form_data['footer_company_link_text'] as $index => $text) {
+            if (!empty($text)) {
+                $components['footer']['company_links'][] = array(
+                    'text' => sanitize_text_field($text),
+                    'to' => sanitize_text_field($form_data['footer_company_link_url'][$index] ?? '/')
+                );
+            }
+        }
+    }
+    
+    // Process Policy Links from AJAX form data
+    if (isset($form_data['footer_policy_link_text']) && is_array($form_data['footer_policy_link_text'])) {
+        foreach ($form_data['footer_policy_link_text'] as $index => $text) {
+            if (!empty($text)) {
+                $components['footer']['policy_links'][] = array(
+                    'text' => sanitize_text_field($text),
+                    'to' => sanitize_text_field($form_data['footer_policy_link_url'][$index] ?? '/')
+                );
+            }
+        }
+    }
     
     update_option('eatisfamily_components', $components);
     wp_send_json_success(array('message' => 'Components saved successfully!'));
@@ -1044,6 +1070,8 @@ function eatisfamily_components_page_v5() {
                 'policy_title' => sanitize_text_field($_POST['footer_policy_title'] ?? 'Policy'),
                 'copyright_template' => sanitize_text_field($_POST['footer_copyright'] ?? '© {year} Eat Is Friday. All rights reserved.'),
                 'back_to_top' => sanitize_text_field($_POST['footer_back_to_top'] ?? 'Back to top'),
+                'company_links' => array(),
+                'policy_links' => array(),
             ),
             'header' => array(
                 'logo' => sanitize_text_field($_POST['header_logo'] ?? 'Eat Is Friday'),
@@ -1057,6 +1085,30 @@ function eatisfamily_components_page_v5() {
                 ),
             ),
         );
+        
+        // Process Company Links
+        if (isset($_POST['footer_company_link_text']) && is_array($_POST['footer_company_link_text'])) {
+            foreach ($_POST['footer_company_link_text'] as $index => $text) {
+                if (!empty($text)) {
+                    $components['footer']['company_links'][] = array(
+                        'text' => sanitize_text_field($text),
+                        'to' => sanitize_text_field($_POST['footer_company_link_url'][$index] ?? '/')
+                    );
+                }
+            }
+        }
+        
+        // Process Policy Links
+        if (isset($_POST['footer_policy_link_text']) && is_array($_POST['footer_policy_link_text'])) {
+            foreach ($_POST['footer_policy_link_text'] as $index => $text) {
+                if (!empty($text)) {
+                    $components['footer']['policy_links'][] = array(
+                        'text' => sanitize_text_field($text),
+                        'to' => sanitize_text_field($_POST['footer_policy_link_url'][$index] ?? '/')
+                    );
+                }
+            }
+        }
         
         update_option('eatisfamily_components', $components);
         echo '<div class="notice notice-success is-dismissible"><p>' . __('Components saved successfully!', 'eatisfamily') . '</p></div>';
@@ -1172,6 +1224,60 @@ function eatisfamily_components_page_v5() {
                         <td><input type="text" name="footer_back_to_top" id="footer_back_to_top" value="<?php echo esc_attr($footer['back_to_top'] ?? 'Back to top'); ?>" class="regular-text"></td>
                     </tr>
                 </table>
+                
+                <!-- Company Links (Menu 1) -->
+                <h4 style="margin-top: 30px; border-top: 1px solid #ccc; padding-top: 20px;">
+                    <?php _e('📋 Company Links (Menu 1)', 'eatisfamily'); ?>
+                </h4>
+                <p class="description"><?php _e('Ces liens apparaissent dans la colonne "Company" du footer.', 'eatisfamily'); ?></p>
+                
+                <?php 
+                $company_links = $footer['company_links'] ?? array(
+                    array('text' => 'About', 'to' => '/about'),
+                    array('text' => 'Activities', 'to' => '/activities'),
+                    array('text' => 'Events', 'to' => '/events'),
+                    array('text' => 'Careers', 'to' => '/careers'),
+                    array('text' => 'Blog', 'to' => '/blog'),
+                );
+                ?>
+                <div id="company-links-list" class="footer-links-repeater" style="margin-top: 15px;">
+                    <?php foreach ($company_links as $index => $link): ?>
+                    <div class="footer-link-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                        <input type="text" name="footer_company_link_text[]" value="<?php echo esc_attr($link['text'] ?? ''); ?>" placeholder="<?php _e('Link Text', 'eatisfamily'); ?>" style="width: 200px;">
+                        <input type="text" name="footer_company_link_url[]" value="<?php echo esc_attr($link['to'] ?? ''); ?>" placeholder="<?php _e('/url', 'eatisfamily'); ?>" style="width: 200px;">
+                        <button type="button" class="button remove-footer-link" style="color: #d63638;"><?php _e('✕', 'eatisfamily'); ?></button>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <button type="button" class="button" id="add-company-link" style="margin-top: 10px;">
+                    <?php _e('+ Add Company Link', 'eatisfamily'); ?>
+                </button>
+                
+                <!-- Policy Links (Menu 2) -->
+                <h4 style="margin-top: 30px; border-top: 1px solid #ccc; padding-top: 20px;">
+                    <?php _e('📋 Policy Links (Menu 2)', 'eatisfamily'); ?>
+                </h4>
+                <p class="description"><?php _e('Ces liens apparaissent dans la colonne "Policy" du footer.', 'eatisfamily'); ?></p>
+                
+                <?php 
+                $policy_links = $footer['policy_links'] ?? array(
+                    array('text' => 'Privacy Statement', 'to' => '/privacy'),
+                    array('text' => 'Terms and Conditions', 'to' => '/terms'),
+                    array('text' => 'Cookies Policy', 'to' => '/cookies'),
+                );
+                ?>
+                <div id="policy-links-list" class="footer-links-repeater" style="margin-top: 15px;">
+                    <?php foreach ($policy_links as $index => $link): ?>
+                    <div class="footer-link-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                        <input type="text" name="footer_policy_link_text[]" value="<?php echo esc_attr($link['text'] ?? ''); ?>" placeholder="<?php _e('Link Text', 'eatisfamily'); ?>" style="width: 200px;">
+                        <input type="text" name="footer_policy_link_url[]" value="<?php echo esc_attr($link['to'] ?? ''); ?>" placeholder="<?php _e('/url', 'eatisfamily'); ?>" style="width: 200px;">
+                        <button type="button" class="button remove-footer-link" style="color: #d63638;"><?php _e('✕', 'eatisfamily'); ?></button>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <button type="button" class="button" id="add-policy-link" style="margin-top: 10px;">
+                    <?php _e('+ Add Policy Link', 'eatisfamily'); ?>
+                </button>
             </div>
             
             <?php submit_button(__('Save Components', 'eatisfamily')); ?>
@@ -1233,16 +1339,28 @@ function eatisfamily_components_page_v5() {
             $form.find('input[name], textarea[name], select[name]').each(function() {
                 var name = $(this).attr('name');
                 if (name && name !== 'eatisfamily_components_nonce' && name !== '_wp_http_referer') {
+                    var value;
                     // For WYSIWYG fields, get content from TinyMCE if available
                     if (typeof tinymce !== 'undefined') {
                         var editor = tinymce.get($(this).attr('id'));
                         if (editor && !editor.isHidden()) {
-                            formData[name] = editor.getContent();
+                            value = editor.getContent();
                         } else {
-                            formData[name] = $(this).val();
+                            value = $(this).val();
                         }
                     } else {
-                        formData[name] = $(this).val();
+                        value = $(this).val();
+                    }
+                    
+                    // Handle array fields (e.g., footer_company_link_text[])
+                    if (name.endsWith('[]')) {
+                        var baseName = name.slice(0, -2);
+                        if (!formData[baseName]) {
+                            formData[baseName] = [];
+                        }
+                        formData[baseName].push(value);
+                    } else {
+                        formData[name] = value;
                     }
                 }
             });
@@ -1278,6 +1396,31 @@ function eatisfamily_components_page_v5() {
                     $('html, body').animate({ scrollTop: 0 }, 300);
                 }
             });
+        });
+        
+        // Add Company Link
+        $('#add-company-link').on('click', function() {
+            var html = '<div class="footer-link-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">' +
+                '<input type="text" name="footer_company_link_text[]" value="" placeholder="<?php _e('Link Text', 'eatisfamily'); ?>" style="width: 200px;">' +
+                '<input type="text" name="footer_company_link_url[]" value="" placeholder="<?php _e('/url', 'eatisfamily'); ?>" style="width: 200px;">' +
+                '<button type="button" class="button remove-footer-link" style="color: #d63638;"><?php _e('✕', 'eatisfamily'); ?></button>' +
+                '</div>';
+            $('#company-links-list').append(html);
+        });
+        
+        // Add Policy Link
+        $('#add-policy-link').on('click', function() {
+            var html = '<div class="footer-link-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">' +
+                '<input type="text" name="footer_policy_link_text[]" value="" placeholder="<?php _e('Link Text', 'eatisfamily'); ?>" style="width: 200px;">' +
+                '<input type="text" name="footer_policy_link_url[]" value="" placeholder="<?php _e('/url', 'eatisfamily'); ?>" style="width: 200px;">' +
+                '<button type="button" class="button remove-footer-link" style="color: #d63638;"><?php _e('✕', 'eatisfamily'); ?></button>' +
+                '</div>';
+            $('#policy-links-list').append(html);
+        });
+        
+        // Remove Footer Link
+        $(document).on('click', '.remove-footer-link', function() {
+            $(this).closest('.footer-link-row').remove();
         });
     });
     </script>

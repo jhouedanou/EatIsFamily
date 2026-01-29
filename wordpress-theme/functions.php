@@ -1688,6 +1688,8 @@ function eatisfamily_get_global_settings($request) {
                 'policy_title' => $footer_components['policy_title'] ?? 'Policy',
                 'copyright_template' => $footer_components['copyright_template'] ?? '',
                 'back_to_top' => $footer_components['back_to_top'] ?? 'Back to top',
+                'company_links' => $footer_components['company_links'] ?? array(),
+                'policy_links' => $footer_components['policy_links'] ?? array(),
             )
         ),
         

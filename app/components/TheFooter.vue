@@ -22,15 +22,30 @@ const showBackToTop = computed(() => settings.value?.footer?.show_back_to_top !=
 const backToTopText = computed(() => settings.value?.footer?.back_to_top_text || 'Back to top')
 const copyrightText = computed(() => getCopyrightText())
 
-// Company links from navigation
-const companyLinks = computed(() => settings.value?.navigation?.links || [])
+// Company links from footer settings (fallback to navigation links for backwards compatibility)
+const companyLinks = computed(() => {
+  // First check for footer.company_links (new structure from admin)
+  const footerLinks = settings.value?.footer?.company_links
+  if (footerLinks && footerLinks.length > 0) {
+    return footerLinks
+  }
+  // Fallback to navigation links for backwards compatibility
+  return settings.value?.navigation?.links || []
+})
 
-// Policy links (static for now, could be made dynamic)
-const policyLinks = [
-  { text: 'Privacy Statement', to: '/privacy' },
-  { text: 'Terms and Conditions', to: '/terms' },
-  { text: 'Cookies Policy', to: '/cookies' }
-]
+// Policy links from footer settings (with default fallback)
+const policyLinks = computed(() => {
+  const footerPolicyLinks = settings.value?.footer?.policy_links
+  if (footerPolicyLinks && footerPolicyLinks.length > 0) {
+    return footerPolicyLinks
+  }
+  // Default policy links if none configured
+  return [
+    { text: 'Privacy Statement', to: '/privacy' },
+    { text: 'Terms and Conditions', to: '/terms' },
+    { text: 'Cookies Policy', to: '/cookies' }
+  ]
+})
 
 // Social links from global settings
 const socialLinks = computed(() => {
@@ -98,14 +113,6 @@ const socialLinks = computed(() => {
                 class="text-gray-400 hover:text-white transition-colors font-body text-sm"
               >
                 {{ link.text }}
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink
-                to="/contact"
-                class="text-gray-400 hover:text-white transition-colors font-body text-sm"
-              >
-                Contact us
               </NuxtLink>
             </li>
           </ul>
