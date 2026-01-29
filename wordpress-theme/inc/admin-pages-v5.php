@@ -2049,8 +2049,178 @@ function eatisfamily_pages_content_page_v5() {
                                 <button type="button" class="button eatisfamily-upload-media" data-target="about_hero_image"><?php _e('Select', 'eatisfamily'); ?></button>
                             </td>
                         </tr>
+                        <tr>
+                            <th scope="row"><label for="about_hero_button_contact"><?php _e('Button Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_hero_button_contact" id="about_hero_button_contact" value="<?php echo esc_attr($about['hero']['buttonContact'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="about_hero_button_contact"><?php _e('Select', 'eatisfamily'); ?></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_hero_button_text"><?php _e('Button Text', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="about_hero_button_text" id="about_hero_button_text" value="<?php echo esc_attr($about['hero']['buttonText'] ?? 'Nous contacter'); ?>" class="regular-text"></td>
+                        </tr>
                     </table>
                 </div>
+                
+                <!-- Timeline Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('📅 Timeline Section', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="about_timeline_title"><?php _e('Timeline Title', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="about_timeline_title" id="about_timeline_title" value="<?php echo esc_attr($about['timeline']['title'] ?? 'Notre histoire, dans le temps'); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_timeline_subtitle"><?php _e('Timeline Subtitle', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="about_timeline_subtitle" id="about_timeline_subtitle" value="<?php echo esc_attr($about['timeline']['subtitle'] ?? ''); ?>" class="large-text"></td>
+                        </tr>
+                    </table>
+                    <h5 style="margin-top: 20px;"><?php _e('Timeline Events', 'eatisfamily'); ?></h5>
+                    <p class="description"><?php _e('Les événements de la timeline (jusqu\'à 10)', 'eatisfamily'); ?></p>
+                    <?php 
+                    $timeline_events = $about['timeline']['events'] ?? array();
+                    for ($i = 0; $i < 10; $i++):
+                        $event = $timeline_events[$i] ?? array();
+                    ?>
+                    <div class="timeline-event-row" style="background: #f9f9f9; border: 1px solid #ccd0d4; padding: 15px; margin: 10px 0; border-radius: 4px;">
+                        <strong><?php _e('Event', 'eatisfamily'); ?> #<?php echo $i + 1; ?></strong>
+                        <table class="form-table" style="margin: 0;">
+                            <tr>
+                                <th style="width: 120px;"><label><?php _e('Year', 'eatisfamily'); ?></label></th>
+                                <td><input type="text" name="about_timeline_event_<?php echo $i; ?>_year" value="<?php echo esc_attr($event['year'] ?? ''); ?>" class="regular-text" placeholder="2020 – 2021"></td>
+                            </tr>
+                            <tr>
+                                <th><label><?php _e('Title', 'eatisfamily'); ?></label></th>
+                                <td><input type="text" name="about_timeline_event_<?php echo $i; ?>_title" value="<?php echo esc_attr($event['title'] ?? ''); ?>" class="large-text" placeholder="<?php _e('Event title', 'eatisfamily'); ?>"></td>
+                            </tr>
+                            <tr>
+                                <th><label><?php _e('Description', 'eatisfamily'); ?></label></th>
+                                <td><textarea name="about_timeline_event_<?php echo $i; ?>_event" class="large-text" rows="3" placeholder="<?php _e('Event description...', 'eatisfamily'); ?>"><?php echo esc_textarea($event['event'] ?? ''); ?></textarea></td>
+                            </tr>
+                            <tr>
+                                <th><label><?php _e('Image', 'eatisfamily'); ?></label></th>
+                                <td>
+                                    <input type="text" name="about_timeline_event_<?php echo $i; ?>_image" id="about_timeline_event_<?php echo $i; ?>_image" value="<?php echo esc_attr($event['eventImage'] ?? ''); ?>" class="regular-text">
+                                    <button type="button" class="button eatisfamily-upload-media" data-target="about_timeline_event_<?php echo $i; ?>_image"><?php _e('Select', 'eatisfamily'); ?></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <?php endfor; ?>
+                </div>
+                
+                <!-- Mission Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('🎯 Mission Section', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="about_mission_title"><?php _e('Mission Title', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="about_mission_title" id="about_mission_title" value="<?php echo esc_attr($about['mission']['title'] ?? ''); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_mission_image"><?php _e('Mission Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_mission_image" id="about_mission_image" value="<?php echo esc_attr($about['mission']['image'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="about_mission_image"><?php _e('Select', 'eatisfamily'); ?></button>
+                            </td>
+                        </tr>
+                    </table>
+                    <h5 style="margin-top: 20px;"><?php _e('Encadrés (2 blocs)', 'eatisfamily'); ?></h5>
+                    <?php 
+                    $encadres = $about['mission']['encadres'] ?? array();
+                    for ($i = 0; $i < 2; $i++):
+                        $encadre = $encadres[$i] ?? array();
+                    ?>
+                    <div style="background: #f9f9f9; border: 1px solid #ccd0d4; padding: 15px; margin: 10px 0; border-radius: 4px;">
+                        <strong><?php _e('Encadré', 'eatisfamily'); ?> #<?php echo $i + 1; ?></strong>
+                        <table class="form-table" style="margin: 0;">
+                            <tr>
+                                <th style="width: 120px;"><label><?php _e('Title', 'eatisfamily'); ?></label></th>
+                                <td><input type="text" name="about_encadre_<?php echo $i; ?>_title" value="<?php echo esc_attr($encadre['title'] ?? ''); ?>" class="large-text"></td>
+                            </tr>
+                            <tr>
+                                <th><label><?php _e('Description', 'eatisfamily'); ?></label></th>
+                                <td><textarea name="about_encadre_<?php echo $i; ?>_desc" class="large-text" rows="4"><?php echo esc_textarea($encadre['desc'] ?? ''); ?></textarea></td>
+                            </tr>
+                            <tr>
+                                <th><label><?php _e('Button Image', 'eatisfamily'); ?></label></th>
+                                <td>
+                                    <input type="text" name="about_encadre_<?php echo $i; ?>_btn" id="about_encadre_<?php echo $i; ?>_btn" value="<?php echo esc_attr($encadre['btn'] ?? ''); ?>" class="regular-text">
+                                    <button type="button" class="button eatisfamily-upload-media" data-target="about_encadre_<?php echo $i; ?>_btn"><?php _e('Select', 'eatisfamily'); ?></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label><?php _e('Button Link', 'eatisfamily'); ?></label></th>
+                                <td><input type="text" name="about_encadre_<?php echo $i; ?>_link" value="<?php echo esc_attr($encadre['link'] ?? ''); ?>" class="regular-text" placeholder="/contact"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <?php endfor; ?>
+                </div>
+                
+                <!-- Chiffres Clés Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('📊 Chiffres Clés', 'eatisfamily'); ?></h4>
+                    <p class="description"><?php _e('Les statistiques affichées sur la page About (jusqu\'à 6)', 'eatisfamily'); ?></p>
+                    <?php 
+                    $stats = $about['chiffresCles']['stats'] ?? array();
+                    for ($i = 0; $i < 6; $i++):
+                        $stat = $stats[$i] ?? array();
+                    ?>
+                    <div style="display: inline-block; width: 48%; margin: 1%; background: #f9f9f9; border: 1px solid #ccd0d4; padding: 10px; border-radius: 4px; vertical-align: top;">
+                        <label><strong><?php _e('Stat', 'eatisfamily'); ?> #<?php echo $i + 1; ?></strong></label><br>
+                        <input type="text" name="about_stat_<?php echo $i; ?>_number" value="<?php echo esc_attr($stat['number'] ?? ''); ?>" placeholder="250" style="width: 80px;">
+                        <input type="text" name="about_stat_<?php echo $i; ?>_label" value="<?php echo esc_attr($stat['label'] ?? ''); ?>" placeholder="<?php _e('Label', 'eatisfamily'); ?>" style="width: calc(100% - 90px);">
+                    </div>
+                    <?php endfor; ?>
+                </div>
+                
+                <!-- Vision Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('👁️ Vision Section', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="about_vision_title"><?php _e('Vision Title', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="about_vision_title" id="about_vision_title" value="<?php echo esc_attr($about['vision']['title'] ?? ''); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_vision_content"><?php _e('Vision Content', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('about_vision_content', $about['vision']['content'] ?? ''); ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_vision_image"><?php _e('Vision Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="about_vision_image" id="about_vision_image" value="<?php echo esc_attr($about['vision']['image'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="about_vision_image"><?php _e('Select', 'eatisfamily'); ?></button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Consulting Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('💼 Consulting Section', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="about_consulting_title"><?php _e('Consulting Title', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="about_consulting_title" id="about_consulting_title" value="<?php echo esc_attr($about['consulting']['title'] ?? ''); ?>" class="large-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_consulting_description"><?php _e('Consulting Description', 'eatisfamily'); ?> <span class="wysiwyg-label-badge">HTML</span></label></th>
+                            <td><?php eatisfamily_wysiwyg_editor('about_consulting_description', $about['consulting']['description'] ?? ''); ?></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_consulting_cta_text"><?php _e('CTA Text', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="about_consulting_cta_text" id="about_consulting_cta_text" value="<?php echo esc_attr($about['consulting']['cta']['text'] ?? 'Nous contacter'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="about_consulting_cta_link"><?php _e('CTA Link', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="about_consulting_cta_link" id="about_consulting_cta_link" value="<?php echo esc_attr($about['consulting']['cta']['link'] ?? '/contact'); ?>" class="regular-text"></td>
+                        </tr>
+                    </table>
+                </div>
+                
                 <div class="eatisfamily-section">
                     <h4><?php _e('Section Titles', 'eatisfamily'); ?></h4>
                     <table class="form-table">
@@ -2790,6 +2960,34 @@ function eatisfamily_build_pages_content_v5($data) {
                 'image' => array(
                     'src' => esc_url_raw($data['about_hero_image'] ?? ''),
                 ),
+                'buttonContact' => esc_url_raw($data['about_hero_button_contact'] ?? ''),
+                'buttonText' => sanitize_text_field($data['about_hero_button_text'] ?? 'Nous contacter'),
+            ),
+            'timeline' => array(
+                'title' => sanitize_text_field($data['about_timeline_title'] ?? 'Notre histoire, dans le temps'),
+                'subtitle' => sanitize_text_field($data['about_timeline_subtitle'] ?? ''),
+                'events' => eatisfamily_process_about_timeline_events($data),
+            ),
+            'mission' => array(
+                'title' => sanitize_text_field($data['about_mission_title'] ?? ''),
+                'image' => esc_url_raw($data['about_mission_image'] ?? ''),
+                'encadres' => eatisfamily_process_about_encadres($data),
+            ),
+            'chiffresCles' => array(
+                'stats' => eatisfamily_process_about_stats($data),
+            ),
+            'vision' => array(
+                'title' => sanitize_text_field($data['about_vision_title'] ?? ''),
+                'content' => wp_kses_post($data['about_vision_content'] ?? ''),
+                'image' => esc_url_raw($data['about_vision_image'] ?? ''),
+            ),
+            'consulting' => array(
+                'title' => sanitize_text_field($data['about_consulting_title'] ?? ''),
+                'description' => wp_kses_post($data['about_consulting_description'] ?? ''),
+                'cta' => array(
+                    'text' => sanitize_text_field($data['about_consulting_cta_text'] ?? 'Nous contacter'),
+                    'link' => sanitize_text_field($data['about_consulting_cta_link'] ?? '/contact'),
+                ),
             ),
             'section_titles' => array(
                 'values' => sanitize_text_field($data['about_values_title'] ?? ''),
@@ -2916,6 +3114,81 @@ function eatisfamily_build_pages_content_v5($data) {
             ),
         ),
     );
+}
+
+/**
+ * Process About page timeline events from form data
+ */
+function eatisfamily_process_about_timeline_events($data) {
+    $events = array();
+    
+    for ($i = 0; $i < 10; $i++) {
+        $year = $data['about_timeline_event_' . $i . '_year'] ?? '';
+        $title = $data['about_timeline_event_' . $i . '_title'] ?? '';
+        $event = $data['about_timeline_event_' . $i . '_event'] ?? '';
+        $image = $data['about_timeline_event_' . $i . '_image'] ?? '';
+        
+        // Only add if year or title is filled
+        if (!empty($year) || !empty($title)) {
+            $events[] = array(
+                'id' => $i + 1,
+                'year' => sanitize_text_field($year),
+                'title' => sanitize_text_field($title),
+                'event' => sanitize_textarea_field($event),
+                'eventImage' => esc_url_raw($image),
+            );
+        }
+    }
+    
+    return $events;
+}
+
+/**
+ * Process About page mission encadrés from form data
+ */
+function eatisfamily_process_about_encadres($data) {
+    $encadres = array();
+    
+    for ($i = 0; $i < 2; $i++) {
+        $title = $data['about_encadre_' . $i . '_title'] ?? '';
+        $desc = $data['about_encadre_' . $i . '_desc'] ?? '';
+        $btn = $data['about_encadre_' . $i . '_btn'] ?? '';
+        $link = $data['about_encadre_' . $i . '_link'] ?? '';
+        
+        // Only add if title or description is filled
+        if (!empty($title) || !empty($desc)) {
+            $encadres[] = array(
+                'title' => sanitize_text_field($title),
+                'desc' => sanitize_textarea_field($desc),
+                'btn' => esc_url_raw($btn),
+                'link' => sanitize_text_field($link),
+            );
+        }
+    }
+    
+    return $encadres;
+}
+
+/**
+ * Process About page chiffres clés stats from form data
+ */
+function eatisfamily_process_about_stats($data) {
+    $stats = array();
+    
+    for ($i = 0; $i < 6; $i++) {
+        $number = $data['about_stat_' . $i . '_number'] ?? '';
+        $label = $data['about_stat_' . $i . '_label'] ?? '';
+        
+        // Only add if number or label is filled
+        if (!empty($number) || !empty($label)) {
+            $stats[] = array(
+                'number' => sanitize_text_field($number),
+                'label' => sanitize_text_field($label),
+            );
+        }
+    }
+    
+    return $stats;
 }
 
 /**
