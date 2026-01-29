@@ -795,530 +795,223 @@ function eatisfamily_render_sustainability_row_template() {
 
 /**
  * ============================================
- * GALLERY MANAGEMENT PAGE
+ * GALLERY MANAGEMENT PAGE - VERSION SIMPLIFIÉE
+ * Utilise les onglets par URL (pas de JS) et 
+ * le sélecteur de médias WordPress natif
  * ============================================
  */
 function eatisfamily_gallery_page() {
+    // Get current tab from URL
+    $current_tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : 'homepage';
+    $valid_tabs = array('homepage', 'about1', 'about2', 'events');
+    if (!in_array($current_tab, $valid_tabs)) {
+        $current_tab = 'homepage';
+    }
+    
     // Handle form submission
     if (isset($_POST['eatisfamily_gallery_nonce']) && 
         wp_verify_nonce($_POST['eatisfamily_gallery_nonce'], 'save_gallery')) {
         
-        $gallery_data = array(
+        $gallery_data = get_option('eatisfamily_gallery', array(
             'homepage' => array('images' => array()),
             'about_1' => array('images' => array()),
             'about_2' => array('images' => array()),
             'events' => array('images' => array())
-        );
+        ));
         
-        // Process Homepage Gallery
-        if (isset($_POST['homepage_gallery_src']) && is_array($_POST['homepage_gallery_src'])) {
-            foreach ($_POST['homepage_gallery_src'] as $index => $src) {
-                if (!empty($src)) {
-                    $gallery_data['homepage']['images'][] = array(
-                        'src' => esc_url_raw($src),
-                        'alt' => sanitize_text_field($_POST['homepage_gallery_alt'][$index] ?? '')
-                    );
-                }
-            }
-        }
+        // Process the current tab's gallery
+        $tab_key = $current_tab;
+        if ($current_tab === 'about1') $tab_key = 'about_1';
+        if ($current_tab === 'about2') $tab_key = 'about_2';
         
-        // Process About Gallery 1
-        if (isset($_POST['about1_gallery_src']) && is_array($_POST['about1_gallery_src'])) {
-            foreach ($_POST['about1_gallery_src'] as $index => $src) {
-                if (!empty($src)) {
-                    $gallery_data['about_1']['images'][] = array(
-                        'src' => esc_url_raw($src),
-                        'alt' => sanitize_text_field($_POST['about1_gallery_alt'][$index] ?? '')
-                    );
-                }
-            }
-        }
+        $gallery_data[$tab_key]['images'] = array();
         
-        // Process About Gallery 2
-        if (isset($_POST['about2_gallery_src']) && is_array($_POST['about2_gallery_src'])) {
-            foreach ($_POST['about2_gallery_src'] as $index => $src) {
+        if (isset($_POST['gallery_src']) && is_array($_POST['gallery_src'])) {
+            foreach ($_POST['gallery_src'] as $index => $src) {
                 if (!empty($src)) {
-                    $gallery_data['about_2']['images'][] = array(
+                    $gallery_data[$tab_key]['images'][] = array(
                         'src' => esc_url_raw($src),
-                        'alt' => sanitize_text_field($_POST['about2_gallery_alt'][$index] ?? '')
-                    );
-                }
-            }
-        }
-        
-        // Process Events Gallery
-        if (isset($_POST['events_gallery_src']) && is_array($_POST['events_gallery_src'])) {
-            foreach ($_POST['events_gallery_src'] as $index => $src) {
-                if (!empty($src)) {
-                    $gallery_data['events']['images'][] = array(
-                        'src' => esc_url_raw($src),
-                        'alt' => sanitize_text_field($_POST['events_gallery_alt'][$index] ?? '')
+                        'alt' => sanitize_text_field($_POST['gallery_alt'][$index] ?? '')
                     );
                 }
             }
         }
         
         update_option('eatisfamily_gallery', $gallery_data);
-        echo '<div class="notice notice-success is-dismissible"><p>' . __('Galleries saved successfully!', 'eatisfamily') . '</p></div>';
+        echo '<div class="notice notice-success is-dismissible"><p>' . __('Gallery saved successfully!', 'eatisfamily') . '</p></div>';
     }
     
     // Get current values
     $gallery_data = get_option('eatisfamily_gallery', array());
-    $homepage_images = $gallery_data['homepage']['images'] ?? $gallery_data['images'] ?? array();
-    $about1_images = $gallery_data['about_1']['images'] ?? array();
-    $about2_images = $gallery_data['about_2']['images'] ?? array();
-    $events_images = $gallery_data['events']['images'] ?? array();
     
+    // Get images for current tab
+    $tab_key = $current_tab;
+    if ($current_tab === 'about1') $tab_key = 'about_1';
+    if ($current_tab === 'about2') $tab_key = 'about_2';
+    if ($current_tab === 'homepage' && !isset($gallery_data['homepage'])) {
+        // Legacy support
+        $current_images = $gallery_data['images'] ?? array();
+    } else {
+        $current_images = $gallery_data[$tab_key]['images'] ?? array();
+    }
+    
+    $base_url = admin_url('admin.php?page=eatisfamily-gallery');
     ?>
     <div class="wrap">
         <h1><?php _e('🖼️ Galleries Management', 'eatisfamily'); ?></h1>
-        <p class="description"><?php _e('Manage gallery images for each page of the website. Drag and drop to reorder images.', 'eatisfamily'); ?></p>
+        <p class="description"><?php _e('Manage gallery images for each page. Select a tab, add/remove images, then save.', 'eatisfamily'); ?></p>
+        
+        <!-- TABS - Navigation par URL (pas de JS) -->
+        <h2 class="nav-tab-wrapper">
+            <a href="<?php echo esc_url($base_url . '&tab=homepage'); ?>" 
+               class="nav-tab <?php echo $current_tab === 'homepage' ? 'nav-tab-active' : ''; ?>">
+                🏠 Homepage
+            </a>
+            <a href="<?php echo esc_url($base_url . '&tab=about1'); ?>" 
+               class="nav-tab <?php echo $current_tab === 'about1' ? 'nav-tab-active' : ''; ?>">
+                📖 About (Gallery 1)
+            </a>
+            <a href="<?php echo esc_url($base_url . '&tab=about2'); ?>" 
+               class="nav-tab <?php echo $current_tab === 'about2' ? 'nav-tab-active' : ''; ?>">
+                📖 About (Gallery 2)
+            </a>
+            <a href="<?php echo esc_url($base_url . '&tab=events'); ?>" 
+               class="nav-tab <?php echo $current_tab === 'events' ? 'nav-tab-active' : ''; ?>">
+                🎉 Events
+            </a>
+        </h2>
         
         <style>
-            .gallery-list {
+            .eif-gallery-container { margin-top: 20px; }
+            .eif-gallery-list {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 15px;
-                margin-top: 15px;
-                min-height: 100px;
-                padding: 10px;
+                padding: 20px;
                 background: #f9f9f9;
                 border: 2px dashed #ccd0d4;
                 border-radius: 8px;
+                min-height: 150px;
             }
-            .gallery-row {
+            .eif-gallery-item {
                 background: #fff;
                 border: 1px solid #ccd0d4;
-                padding: 15px;
-                padding-top: 35px;
+                padding: 10px;
                 border-radius: 4px;
-                width: 200px;
-                cursor: move;
-                position: relative;
-                transition: box-shadow 0.2s, transform 0.2s;
+                width: 180px;
+                text-align: center;
             }
-            .gallery-row:hover {
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            }
-            .gallery-row.ui-sortable-helper {
-                box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-                transform: rotate(2deg);
-            }
-            .gallery-row.ui-sortable-placeholder {
-                visibility: visible !important;
-                background: #e0f0ff;
-                border: 2px dashed #0073aa;
-            }
-            .gallery-row .order-number {
-                position: absolute;
-                top: 5px;
-                right: 5px;
-                background: #0073aa;
-                color: #fff;
-                border-radius: 50%;
-                width: 24px;
-                height: 24px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 12px;
-                font-weight: bold;
-            }
-            .gallery-row .move-buttons {
-                position: absolute;
-                top: 5px;
-                left: 5px;
-                display: flex;
-                flex-direction: column;
-                gap: 2px;
-                z-index: 10;
-            }
-            .gallery-row .move-buttons .button {
-                padding: 2px 6px;
-                min-height: 24px;
-                line-height: 1;
-                font-size: 10px;
-            }
-            .gallery-row .move-buttons .button:hover {
-                background: #0073aa;
-                color: #fff;
-                border-color: #0073aa;
-            }
-            .gallery-row img {
-                max-width: 100%;
+            .eif-gallery-item img {
+                width: 100%;
                 height: 120px;
                 object-fit: cover;
-                display: block;
-                margin-bottom: 10px;
                 border-radius: 4px;
+                margin-bottom: 10px;
             }
-            .gallery-buttons {
-                display: flex;
-                gap: 10px;
-                margin-top: 20px;
-                padding-top: 20px;
-                clear: both;
+            .eif-gallery-item input[type="text"] {
+                width: 100%;
+                margin-bottom: 10px;
             }
-            .gallery-buttons .button-primary {
-                background: #2271b1;
-            }
-            .remove-gallery {
+            .eif-gallery-item .remove-btn {
                 color: #d63638;
                 cursor: pointer;
                 text-decoration: underline;
-                display: inline-block;
-                padding: 5px 10px;
-                background: #fff5f5;
-                border: 1px solid #d63638;
-                border-radius: 3px;
             }
-            .remove-gallery:hover {
-                color: #fff;
-                background: #d63638;
+            .eif-gallery-item .remove-btn:hover {
+                color: #a00;
+            }
+            .eif-gallery-buttons { margin-top: 20px; }
+            .eif-gallery-buttons .button { margin-right: 10px; }
+            .eif-no-images { 
+                color: #666; 
+                font-style: italic; 
+                padding: 40px;
+                text-align: center;
+                width: 100%;
             }
         </style>
         
-        <form method="post" action="">
-            <?php wp_nonce_field('save_gallery', 'eatisfamily_gallery_nonce'); ?>
+        <div class="eif-gallery-container">
+            <h3>
+                <?php 
+                $titles = array(
+                    'homepage' => __('Homepage Gallery', 'eatisfamily'),
+                    'about1' => __('About Page - Gallery 1', 'eatisfamily'),
+                    'about2' => __('About Page - Gallery 2', 'eatisfamily'),
+                    'events' => __('Events Page Gallery', 'eatisfamily'),
+                );
+                echo esc_html($titles[$current_tab]);
+                ?>
+            </h3>
             
-            <h2 class="nav-tab-wrapper">
-                <a href="#homepage-gallery" class="nav-tab nav-tab-active"><?php _e('🏠 Homepage', 'eatisfamily'); ?></a>
-                <a href="#about1-gallery" class="nav-tab"><?php _e('📖 About (Gallery 1)', 'eatisfamily'); ?></a>
-                <a href="#about2-gallery" class="nav-tab"><?php _e('📖 About (Gallery 2)', 'eatisfamily'); ?></a>
-                <a href="#events-gallery" class="nav-tab"><?php _e('🎉 Events', 'eatisfamily'); ?></a>
-            </h2>
-            
-            <!-- Homepage Gallery -->
-            <div id="homepage-gallery" class="tab-content" style="display:block;margin-top:20px;">
-                <h3><?php _e('Homepage Gallery', 'eatisfamily'); ?></h3>
-                <p class="description"><?php _e('Gallery displayed on the homepage. First image is larger on the left. Drag to reorder.', 'eatisfamily'); ?></p>
+            <form method="post" action="<?php echo esc_url($base_url . '&tab=' . $current_tab); ?>">
+                <?php wp_nonce_field('save_gallery', 'eatisfamily_gallery_nonce'); ?>
                 
-                <div id="homepage-gallery-list" class="gallery-list sortable-gallery" data-gallery="homepage">
-                    <?php 
-                    if (!empty($homepage_images)) {
-                        foreach ($homepage_images as $index => $image) {
-                            eatisfamily_render_gallery_row_new('homepage', $index, $image);
-                        }
-                    }
-                    ?>
+                <div id="eif-gallery-list" class="eif-gallery-list">
+                    <?php if (empty($current_images)): ?>
+                        <p class="eif-no-images"><?php _e('No images yet. Click "Add Images" to start.', 'eatisfamily'); ?></p>
+                    <?php else: ?>
+                        <?php foreach ($current_images as $index => $image): ?>
+                            <div class="eif-gallery-item">
+                                <img src="<?php echo esc_url($image['src']); ?>" alt="">
+                                <input type="hidden" name="gallery_src[]" value="<?php echo esc_attr($image['src']); ?>">
+                                <input type="text" name="gallery_alt[]" value="<?php echo esc_attr($image['alt'] ?? ''); ?>" placeholder="<?php _e('Alt text', 'eatisfamily'); ?>">
+                                <span class="remove-btn"><?php _e('Remove', 'eatisfamily'); ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
-                <div class="gallery-buttons">
-                    <button type="button" class="button add-gallery-btn" data-gallery="homepage"><?php _e('+ Add Image', 'eatisfamily'); ?></button>
-                    <button type="button" class="button button-primary add-multiple-btn" data-gallery="homepage"><?php _e('+ Add Multiple Images', 'eatisfamily'); ?></button>
-                </div>
-            </div>
-            
-            <!-- About Gallery 1 -->
-            <div id="about1-gallery" class="tab-content" style="display:none;margin-top:20px;">
-                <h3><?php _e('About Page - Gallery 1', 'eatisfamily'); ?></h3>
-                <p class="description"><?php _e('First gallery on the About page (after Vision section). Drag to reorder.', 'eatisfamily'); ?></p>
                 
-                <div id="about1-gallery-list" class="gallery-list sortable-gallery" data-gallery="about1">
-                    <?php 
-                    if (!empty($about1_images)) {
-                        foreach ($about1_images as $index => $image) {
-                            eatisfamily_render_gallery_row_new('about1', $index, $image);
-                        }
-                    }
-                    ?>
+                <div class="eif-gallery-buttons">
+                    <button type="button" id="eif-add-images" class="button button-primary">
+                        <?php _e('+ Add Images', 'eatisfamily'); ?>
+                    </button>
+                    <?php submit_button(__('Save Gallery', 'eatisfamily'), 'primary', 'submit', false); ?>
                 </div>
-                <div class="gallery-buttons">
-                    <button type="button" class="button add-gallery-btn" data-gallery="about1"><?php _e('+ Add Image', 'eatisfamily'); ?></button>
-                    <button type="button" class="button button-primary add-multiple-btn" data-gallery="about1"><?php _e('+ Add Multiple Images', 'eatisfamily'); ?></button>
-                </div>
-            </div>
-            
-            <!-- About Gallery 2 -->
-            <div id="about2-gallery" class="tab-content" style="display:none;margin-top:20px;">
-                <h3><?php _e('About Page - Gallery 2', 'eatisfamily'); ?></h3>
-                <p class="description"><?php _e('Second gallery on the About page (at the bottom). Drag to reorder.', 'eatisfamily'); ?></p>
-                
-                <div id="about2-gallery-list" class="gallery-list sortable-gallery" data-gallery="about2">
-                    <?php 
-                    if (!empty($about2_images)) {
-                        foreach ($about2_images as $index => $image) {
-                            eatisfamily_render_gallery_row_new('about2', $index, $image);
-                        }
-                    }
-                    ?>
-                </div>
-                <div class="gallery-buttons">
-                    <button type="button" class="button add-gallery-btn" data-gallery="about2"><?php _e('+ Add Image', 'eatisfamily'); ?></button>
-                    <button type="button" class="button button-primary add-multiple-btn" data-gallery="about2"><?php _e('+ Add Multiple Images', 'eatisfamily'); ?></button>
-                </div>
-            </div>
-            
-            <!-- Events Gallery -->
-            <div id="events-gallery" class="tab-content" style="display:none;margin-top:20px;">
-                <h3><?php _e('Events Page Gallery', 'eatisfamily'); ?></h3>
-                <p class="description"><?php _e('Gallery displayed on the Events page. Drag to reorder.', 'eatisfamily'); ?></p>
-                
-                <div id="events-gallery-list" class="gallery-list sortable-gallery" data-gallery="events">
-                    <?php 
-                    if (!empty($events_images)) {
-                        foreach ($events_images as $index => $image) {
-                            eatisfamily_render_gallery_row_new('events', $index, $image);
-                        }
-                    }
-                    ?>
-                </div>
-                <div class="gallery-buttons">
-                    <button type="button" class="button add-gallery-btn" data-gallery="events"><?php _e('+ Add Image', 'eatisfamily'); ?></button>
-                    <button type="button" class="button button-primary add-multiple-btn" data-gallery="events"><?php _e('+ Add Multiple Images', 'eatisfamily'); ?></button>
-                </div>
-            </div>
-            
-            <?php submit_button(__('Save All Galleries', 'eatisfamily')); ?>
-        </form>
+            </form>
+        </div>
     </div>
     
-    <!-- Templates for each gallery -->
-    <script type="text/html" id="homepage-gallery-template">
-        <?php eatisfamily_render_gallery_row_new('homepage', '{{INDEX}}', array()); ?>
-    </script>
-    <script type="text/html" id="about1-gallery-template">
-        <?php eatisfamily_render_gallery_row_new('about1', '{{INDEX}}', array()); ?>
-    </script>
-    <script type="text/html" id="about2-gallery-template">
-        <?php eatisfamily_render_gallery_row_new('about2', '{{INDEX}}', array()); ?>
-    </script>
-    <script type="text/html" id="events-gallery-template">
-        <?php eatisfamily_render_gallery_row_new('events', '{{INDEX}}', array()); ?>
-    </script>
-    
-    <script type="text/javascript">
-    jQuery(function($) {
-        'use strict';
-        
-        console.log('=== Gallery Admin Initializing ===');
-        console.log('jQuery version:', $.fn.jquery);
-        console.log('jQuery UI Sortable available:', typeof $.fn.sortable !== 'undefined');
-        
-        // Gallery indexes
-        var galleryIndexes = {
-            homepage: <?php echo count($homepage_images); ?>,
-            about1: <?php echo count($about1_images); ?>,
-            about2: <?php echo count($about2_images); ?>,
-            events: <?php echo count($events_images); ?>
-        };
-        console.log('Gallery indexes:', galleryIndexes);
-        
-        // Tab navigation - FIXED
-        $('.nav-tab-wrapper').on('click', '.nav-tab', function(e) {
-            e.preventDefault();
-            var href = $(this).attr('href');
-            console.log('Tab clicked:', href);
-            
-            // Update active tab
-            $('.nav-tab').removeClass('nav-tab-active');
-            $(this).addClass('nav-tab-active');
-            
-            // Show/hide content
-            $('.tab-content').hide();
-            $(href).show();
-            
-            return false;
-        });
-        
-        // Update visual order numbers
-        function updateOrderNumbers($gallery) {
-            console.log('Updating order numbers for:', $gallery.attr('id'));
-            $gallery.find('.gallery-row').each(function(index) {
-                $(this).find('.order-number').text(index + 1);
-            });
-        }
-        
-        // Reindex input names after sort
-        function reindexGallery($gallery) {
-            var galleryName = $gallery.data('gallery');
-            var prefix = galleryName + '_gallery';
-            console.log('Reindexing gallery:', galleryName);
-            
-            $gallery.find('.gallery-row').each(function(index) {
-                var $row = $(this);
-                $row.attr('data-index', index);
-                
-                var $srcInput = $row.find('.gallery-src-input');
-                $srcInput.attr('name', prefix + '_src[' + index + ']');
-                $srcInput.attr('id', prefix + '_src_' + index);
-                
-                $row.find('.eatisfamily-upload-media').attr('data-target', prefix + '_src_' + index);
-                
-                var $altInput = $row.find('.gallery-alt-input');
-                $altInput.attr('name', prefix + '_alt[' + index + ']');
-            });
-            
-            galleryIndexes[galleryName] = $gallery.find('.gallery-row').length;
-        }
-        
-        // REMOVE IMAGE
-        $(document).on('click', '.remove-gallery', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Remove clicked!');
-            
-            var $row = $(this).closest('.gallery-row');
-            var $gallery = $row.closest('.sortable-gallery');
-            
-            if (confirm('<?php _e('Are you sure you want to remove this image?', 'eatisfamily'); ?>')) {
-                $row.fadeOut(300, function() {
-                    $(this).remove();
-                    if ($gallery.length) {
-                        updateOrderNumbers($gallery);
-                        reindexGallery($gallery);
-                    }
-                });
+    <script>
+    jQuery(document).ready(function($) {
+        // Remove image
+        $('#eif-gallery-list').on('click', '.remove-btn', function() {
+            $(this).closest('.eif-gallery-item').remove();
+            if ($('#eif-gallery-list .eif-gallery-item').length === 0) {
+                $('#eif-gallery-list').html('<p class="eif-no-images"><?php _e('No images yet. Click "Add Images" to start.', 'eatisfamily'); ?></p>');
             }
         });
         
-        // MOVE UP BUTTON
-        $(document).on('click', '.move-up-btn', function(e) {
+        // Add images using WordPress Media Library
+        $('#eif-add-images').on('click', function(e) {
             e.preventDefault();
-            e.stopPropagation();
-            console.log('Move up clicked!');
             
-            var $row = $(this).closest('.gallery-row');
-            var $prev = $row.prev('.gallery-row');
-            var $gallery = $row.closest('.sortable-gallery');
-            
-            if ($prev.length) {
-                $row.insertBefore($prev);
-                updateOrderNumbers($gallery);
-                reindexGallery($gallery);
-            }
-        });
-        
-        // MOVE DOWN BUTTON
-        $(document).on('click', '.move-down-btn', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Move down clicked!');
-            
-            var $row = $(this).closest('.gallery-row');
-            var $next = $row.next('.gallery-row');
-            var $gallery = $row.closest('.sortable-gallery');
-            
-            if ($next.length) {
-                $row.insertAfter($next);
-                updateOrderNumbers($gallery);
-                reindexGallery($gallery);
-            }
-        });
-        
-        // ADD SINGLE IMAGE BUTTON
-        $(document).on('click', '.add-gallery-btn', function(e) {
-            e.preventDefault();
-            console.log('Add image clicked!');
-            
-            var gallery = $(this).data('gallery');
-            var template = $('#' + gallery + '-gallery-template').html();
-            template = template.replace(/\{\{INDEX\}\}/g, galleryIndexes[gallery]);
-            
-            var $newRow = $(template);
-            $('#' + gallery + '-gallery-list').append($newRow);
-            galleryIndexes[gallery]++;
-            updateOrderNumbers($('#' + gallery + '-gallery-list'));
-        });
-        
-        // ADD MULTIPLE IMAGES BUTTON
-        $(document).on('click', '.add-multiple-btn', function(e) {
-            e.preventDefault();
-            console.log('Add multiple clicked!');
-            
-            var gallery = $(this).data('gallery');
-            var $galleryList = $('#' + gallery + '-gallery-list');
-            
-            if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
-                alert('Media uploader not available');
-                return;
-            }
-            
-            var mediaUploader = wp.media({
+            var frame = wp.media({
                 title: '<?php _e('Select Images', 'eatisfamily'); ?>',
                 button: { text: '<?php _e('Add to Gallery', 'eatisfamily'); ?>' },
                 multiple: true,
                 library: { type: 'image' }
             });
             
-            mediaUploader.on('select', function() {
-                var attachments = mediaUploader.state().get('selection').toJSON();
-                console.log('Selected', attachments.length, 'images');
+            frame.on('select', function() {
+                var attachments = frame.state().get('selection').toJSON();
+                
+                // Remove "no images" message
+                $('#eif-gallery-list .eif-no-images').remove();
                 
                 attachments.forEach(function(attachment) {
-                    var template = $('#' + gallery + '-gallery-template').html();
-                    template = template.replace(/\{\{INDEX\}\}/g, galleryIndexes[gallery]);
-                    var $newRow = $(template);
-                    
-                    $newRow.find('.gallery-src-input').val(attachment.url);
-                    $newRow.find('img').attr('src', attachment.url).show();
-                    if (attachment.alt) {
-                        $newRow.find('.gallery-alt-input').val(attachment.alt);
-                    }
-                    
-                    $galleryList.append($newRow);
-                    galleryIndexes[gallery]++;
+                    var html = '<div class="eif-gallery-item">' +
+                        '<img src="' + attachment.url + '" alt="">' +
+                        '<input type="hidden" name="gallery_src[]" value="' + attachment.url + '">' +
+                        '<input type="text" name="gallery_alt[]" value="' + (attachment.alt || '') + '" placeholder="<?php _e('Alt text', 'eatisfamily'); ?>">' +
+                        '<span class="remove-btn"><?php _e('Remove', 'eatisfamily'); ?></span>' +
+                        '</div>';
+                    $('#eif-gallery-list').append(html);
                 });
-                
-                updateOrderNumbers($galleryList);
             });
             
-            mediaUploader.open();
+            frame.open();
         });
-        
-        // MEDIA UPLOADER FOR SINGLE IMAGE
-        $(document).on('click', '.eatisfamily-upload-media', function(e) {
-            e.preventDefault();
-            console.log('Upload media clicked!');
-            
-            var $button = $(this);
-            var targetId = $button.data('target');
-            var $targetInput = $('#' + targetId);
-            
-            if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
-                alert('Media uploader not available');
-                return;
-            }
-            
-            var mediaUploader = wp.media({
-                title: '<?php _e('Select Image', 'eatisfamily'); ?>',
-                button: { text: '<?php _e('Use this image', 'eatisfamily'); ?>' },
-                multiple: false,
-                library: { type: 'image' }
-            });
-            
-            mediaUploader.on('select', function() {
-                var attachment = mediaUploader.state().get('selection').first().toJSON();
-                $targetInput.val(attachment.url);
-                
-                var $previewImg = $button.closest('.gallery-row').find('img');
-                if ($previewImg.length) {
-                    $previewImg.attr('src', attachment.url).show();
-                }
-            });
-            
-            mediaUploader.open();
-        });
-        
-        // Initialize jQuery UI Sortable if available
-        if (typeof $.fn.sortable !== 'undefined') {
-            console.log('Initializing sortable...');
-            $('.sortable-gallery').sortable({
-                items: '> .gallery-row',
-                cursor: 'move',
-                opacity: 0.7,
-                placeholder: 'gallery-row ui-sortable-placeholder',
-                update: function(event, ui) {
-                    var $gallery = $(this);
-                    updateOrderNumbers($gallery);
-                    reindexGallery($gallery);
-                }
-            });
-            console.log('Sortable initialized');
-        } else {
-            console.warn('jQuery UI Sortable not available!');
-        }
-        
-        console.log('=== Gallery Admin Ready ===');
     });
     </script>
     <?php
@@ -1344,35 +1037,6 @@ function eatisfamily_render_gallery_row($index, $image) {
 }
 
 /**
- * Render a gallery row for new multi-gallery system
- */
-function eatisfamily_render_gallery_row_new($gallery_name, $index, $image) {
-    $src = $image['src'] ?? '';
-    $field_prefix = $gallery_name . '_gallery';
-    ?>
-    <div class="gallery-row" data-index="<?php echo $index; ?>">
-        <span class="order-number"><?php echo $index + 1; ?></span>
-        <div class="move-buttons">
-            <button type="button" class="button button-small move-up-btn" title="<?php _e('Move Up', 'eatisfamily'); ?>">▲</button>
-            <button type="button" class="button button-small move-down-btn" title="<?php _e('Move Down', 'eatisfamily'); ?>">▼</button>
-        </div>
-        <div class="form-field">
-            <input type="hidden" class="gallery-src-input" name="<?php echo $field_prefix; ?>_src[<?php echo $index; ?>]" id="<?php echo $field_prefix; ?>_src_<?php echo $index; ?>" value="<?php echo esc_attr($src); ?>">
-            <?php if ($src): ?>
-                <img src="<?php echo esc_url($src); ?>">
-            <?php else: ?>
-                <img src="" style="display:none;">
-            <?php endif; ?>
-            <button type="button" class="button eatisfamily-upload-media" data-target="<?php echo $field_prefix; ?>_src_<?php echo $index; ?>" style="width:100%"><?php _e('Select Image', 'eatisfamily'); ?></button>
-        </div>
-        <div class="form-field" style="margin-top:10px;">
-            <input type="text" class="gallery-alt-input" name="<?php echo $field_prefix; ?>_alt[<?php echo $index; ?>]" value="<?php echo esc_attr($image['alt'] ?? ''); ?>" placeholder="<?php _e('Alt text', 'eatisfamily'); ?>" style="width:100%">
-        </div>
-        <p style="text-align:center;margin:10px 0 0;"><span class="remove-gallery"><?php _e('Remove', 'eatisfamily'); ?></span></p>
-    </div>
-    <?php
-}
-
 /**
  * ============================================
  * EXTENDED PAGES CONTENT PAGE
