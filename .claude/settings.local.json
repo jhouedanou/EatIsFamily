@@ -12,7 +12,8 @@
       "Bash(grep -rn \"timeline\" \"C:\\\\Users\\\\socialmedia\\\\Documents\\\\EatIsFriday\\\\app\\\\composables\"\" --include=\"*.ts \")",
       "Bash(python3:*)",
       "Bash(docker ps:*)",
-      "Bash(docker exec:*)"
+      "Bash(docker exec:*)",
+      "WebFetch(domain:bigfive.dev)"
     ]
   }
 }

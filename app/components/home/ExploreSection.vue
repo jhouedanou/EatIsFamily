@@ -130,11 +130,11 @@ const goToMenuPage = (page: number) => {
           <div class="venue-images-grid">
             <div class="venue-image-wrapper">
               <span class="venue-type-badge">{{ selectedVenue.type }}</span>
-              <div class="venue-image" :style="{ backgroundImage: `url('${selectedVenue.image}')` }"></div>
+              <div class="venue-image" :style="(selectedVenue.image && typeof selectedVenue.image === 'string') ? { backgroundImage: `url('${selectedVenue.image}')` } : {}"></div>
             </div>
             <div class="venue-image-wrapper">
               <button class="venue-close-btn" @click="closeVenueDetails">&times;</button>
-              <div class="venue-image" :style="{ backgroundImage: `url('${selectedVenue.image2 || selectedVenue.image}')` }"></div>
+              <div class="venue-image" :style="((selectedVenue.image2 && typeof selectedVenue.image2 === 'string') || (selectedVenue.image && typeof selectedVenue.image === 'string')) ? { backgroundImage: `url('${(selectedVenue.image2 && typeof selectedVenue.image2 === 'string') ? selectedVenue.image2 : selectedVenue.image}')` } : {}"></div>
             </div>
           </div>
 

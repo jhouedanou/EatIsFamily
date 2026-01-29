@@ -559,6 +559,13 @@ export const usePageContent = () => {
     }
 
     // ============================================
+    // APPLY ACTIVITIES PAGE
+    // ============================================
+    if (wpData.apply_activities) {
+      result.apply_activities = deepMerge(result.apply_activities || {}, wpData.apply_activities)
+    }
+
+    // ============================================
     // FORMS (Job Search, Contact, Job Application, Activity Registration)
     // ============================================
     if (wpData.forms) {

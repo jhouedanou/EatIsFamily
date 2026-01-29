@@ -1,24 +1,24 @@
 <template>
   <div class="apply-activities-page">
-    <section v-if="content" id="future" class="page-hero">
+    <section v-if="content?.page_hero" id="future" class="page-hero">
       <div class="container-fluid p-0 mt-0 text-center">
         <h1 class="mt-4 mb-4">{{ content.page_hero.title }}</h1>
-        <img :src="content.page_hero.image.src" :alt="content.page_hero.image.alt">
+        <img v-if="content.page_hero.image?.src" :src="content.page_hero.image.src" :alt="content.page_hero.image.alt">
       </div>
     </section>
         <section v-if="activities" class="explore-section">
       <HomeExploreSection />
     </section>
-    <section v-if="content" id="mouf" class="booba">
+    <section v-if="content?.section2" id="mouf" class="booba">
       <div id="denzel" class="container">
         <h1 class="preserve-lines">{{ content.section2.text }}</h1>
         <div id="rohff" class="d-flex justify-content-center align-items-center text-center gap-4 flex-wrap">
-          <nuxtlink :to="content.section2.link1">
+          <NuxtLink :to="content.section2.link1">
             <img :src="content.section2.btn1">
-          </nuxtlink>
-          <nuxtlink :to="content.section2.link2">
+          </NuxtLink>
+          <NuxtLink :to="content.section2.link2">
             <img :src="content.section2.btn2">
-          </nuxtlink>
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -28,9 +28,9 @@
           <h3 class="font-header">{{ content.textedelapage.title }}</h3>
           <p>{{ content.textedelapage.subtitle }}</p>
           <p>{{ content.textedelapage.description }}</p>
-           <nuxtlink :to="content.textedelapage.link">
+           <NuxtLink :to="content.textedelapage.link">
             <img :src="content.textedelapage.btn">
-          </nuxtlink>
+          </NuxtLink>
         </div>
         <div class="col-6 p-0 m-0">
           <img :src="content.textedelapage.image" alt="Services illustration" class="img-fluid">

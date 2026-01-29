@@ -7,14 +7,15 @@ const homepageContent = ref<any>(null)
 const siteContent = ref<any>(null)
 const pageContent = ref<any>(null)
 const content = ref<any>(null)
+const { getEvents } = useEvents()
 const events = ref<Event[]>([])
 const loading = ref(true)
 
 // Computed property for events gallery with fallback
 const eventsGalleryImages = computed(() => {
   // Try events-specific gallery first, then fallback to about.gallery_section2
-  return siteContent.value?.about?.events_gallery?.images 
-    || siteContent.value?.about?.gallery_section2?.images 
+  return siteContent.value?.about?.events_gallery?.images
+    || siteContent.value?.about?.gallery_section2?.images
     || []
 })
 
@@ -23,13 +24,14 @@ onMounted(async () => {
   content.value = await getContentByPath('events')
   // Charger le site content pour la galerie
   siteContent.value = await getSiteContent()
-  //charger le contenu pour les différents composant 
+  //charger le contenu pour les différents composant
   homepageContent.value = await getHomepageContent()
-  // Charger les événements depuis events.json
+  // Charger les événements depuis l'API WordPress
   try {
-    const response = await fetch('/api/events.json')
-    const data = await response.json()
-    events.value = data
+    const data = await getEvents()
+    if (data) {
+      events.value = data
+    }
     console.log('Events loaded:', data)
   } catch (error) {
     console.error('Error loading events:', error)
