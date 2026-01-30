@@ -1,5 +1,9 @@
 <template>
   <div class="activities-page">
+    <!-- Loading Screen -->
+    <LoadingScreen v-if="!content" />
+    
+    <template v-else>
     <!-- Hero Section -->
     <section v-if="content?.page_hero" class="hero-section" :style="{ backgroundImage: `url('${content.page_hero.image.src}')` }">
       <div class="hero-overlay">
@@ -76,6 +80,7 @@
         <NuxtLink to="/contact" class="btn btn-light btn-lg px-5">Get in Touch</NuxtLink>
       </div>
     </section>
+    </template>
   </div>
 </template>
 

@@ -101,10 +101,7 @@ useHead(() => ({
 <template>
   <div class="job-detail-page">
     <!-- Loading State -->
-    <div v-if="isLoading" class="loading-container">
-      <div class="loading-spinner"></div>
-      <p>{{ loadingText }}</p>
-    </div>
+    <LoadingScreen v-if="isLoading" />
 
     <!-- Job Not Found -->
     <div v-else-if="!job" class="not-found-container">

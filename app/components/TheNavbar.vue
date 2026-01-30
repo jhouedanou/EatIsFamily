@@ -2,8 +2,17 @@
 import { ref, onMounted, computed } from 'vue'
 import { LucideMenu, LucideX } from 'lucide-vue-next'
 
+const route = useRoute()
 const isOpen = ref(false)
 const { settings, loadSettings } = useGlobalSettings()
+
+// Check if a link is active
+const isActiveLink = (linkTo: string) => {
+  if (linkTo === '/') {
+    return route.path === '/'
+  }
+  return route.path.startsWith(linkTo)
+}
 
 // Load settings if not already loaded
 onMounted(async () => {
@@ -38,7 +47,8 @@ const siteLogo = computed(() => settings.value?.brand?.logo || '')
           v-for="link in navLinks.slice(0, 2)"
           :key="link.text"
           :to="link.to"
-          class="font-body font-medium hover:text-brand-pink transition-colors"
+          class="nav-link font-body font-medium transition-colors"
+          :class="{ 'nav-active': isActiveLink(link.to) }"
         >
           {{ link.text }}
         </NuxtLink>
@@ -66,7 +76,8 @@ const siteLogo = computed(() => settings.value?.brand?.logo || '')
           v-for="link in navLinks.slice(2)"
           :key="link.text"
           :to="link.to"
-          class="font-body font-medium hover:text-brand-pink transition-colors"
+          class="nav-link font-body font-medium transition-colors"
+          :class="{ 'nav-active': isActiveLink(link.to) }"
         >
           {{ link.text }}
         </NuxtLink>
@@ -98,7 +109,8 @@ const siteLogo = computed(() => settings.value?.brand?.logo || '')
             v-for="link in navLinks"
             :key="link.text"
             :to="link.to"
-            class="text-lg font-body font-medium hover:text-brand-pink transition-colors"
+            class="nav-link text-lg font-body font-medium transition-colors"
+            :class="{ 'nav-active': isActiveLink(link.to) }"
             @click="isOpen = false"
           >
             {{ link.text }}
@@ -108,3 +120,18 @@ const siteLogo = computed(() => settings.value?.brand?.logo || '')
     </Transition>
   </nav>
 </template>
+
+<style scoped>
+.nav-link {
+  color: #000;
+}
+
+.nav-link:hover {
+  color: #f9375b !important;
+}
+
+.nav-active {
+  color: #f9375b !important;
+  font-weight: 600;
+}
+</style>

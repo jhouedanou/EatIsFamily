@@ -55,6 +55,10 @@ useHead(() => ({
 
 <template>
   <div class="events-page">
+    <!-- Loading Screen -->
+    <LoadingScreen v-if="loading" />
+    
+    <template v-else>
     <!-- Hero Section -->
     <section v-if="content" class="page-hero">
       <div class="container d-flex">
@@ -116,6 +120,7 @@ useHead(() => ({
    <!--  <section v-if="eventsGalleryImages2.length > 0" class="mt-4">
       <GalleryGrid :images="eventsGalleryImages2" />
     </section> -->
+    </template>
   </div>
 </template>
 

@@ -1,9 +1,13 @@
 <template>
   <div class="about-page">
-    <section v-if="siteContent" id="aboutHero" class="page-hero">
+    <!-- Loading Screen -->
+    <LoadingScreen v-if="!siteContent" />
+    
+    <template v-else>
+    <section id="aboutHero" class="page-hero">
       <div class="container-fluid d-flex flex-column justify-content-center align-items-center h-100 mt-5">
         <h1 class="heroTitle">{{ siteContent.about.hero.title }}</h1>
-        <div class="d-flex">
+        <div class="d-flex container">
           <div class="row">
             <div class="col-6 col-xs-12 d-flex flex-column">
               <div class="heroTextContainer d-flex flex-column">
@@ -24,7 +28,7 @@
       </div>
 
     </section>
-    <section v-if="siteContent" id="timeline">
+    <section id="timeline">
       <h3 class="timeline-title white-text recoleta preserve-lines">{{ siteContent.about.timeline.title }}</h3>
 
       <div class="timeline-wrapper">
@@ -120,11 +124,11 @@
       <p class="timeline-instruction">{{ siteContent.about.timeline.subtitle }}</p>
     </section>
     <section v-if="siteContent?.about?.mission" id="mission">
-      <div class="container-fluid">
+      <div class="container">
         <h3 class="font-heading preserve-lines mt-5">{{ siteContent.about.mission.title }}</h3>
         <img v-if="siteContent.about.mission.image" :src="siteContent.about.mission.image" :alt="siteContent.about.mission.title" class="img-fluid my-4" />
       </div>
-      <div id="lasalle" class="row mt-4 p-3">
+      <div id="lasalle" class="container row mt-4 p-3">
         <div v-for="(encadre, index) in siteContent.about.mission.encadres" :key="index" :id="`encadres-${index}`"
           class="col-md-6 decradr">
           <div class="inner-encadre">
@@ -136,7 +140,7 @@
       </div>
     </section>
     <section v-if="siteContent?.about?.chiffresCles" id="chiffres-cles" ref="chiffresSection">
-      <div class="container-fluid">
+      <div class="container">
         <div class="chiffres-grid">
           <div v-for="(stat, index) in siteContent.about.chiffresCles.stats" :key="index" class="chiffre-card">
             <span class="chiffre-number" :data-target="parseNumber(stat.number)"
@@ -177,6 +181,7 @@
     
       <GalleryGrid v-if="siteContent?.about?.gallery_section2?.images"
       :images="siteContent.about.gallery_section2.images" />
+    </template>
   </div>
 </template>
 

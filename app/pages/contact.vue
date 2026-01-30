@@ -54,6 +54,10 @@ useHead(() => ({
 
 <template>
   <div class="contact-page">
+    <!-- Loading Screen -->
+    <LoadingScreen v-if="!contactContent" />
+    
+    <template v-else>
     <!-- Decorative squiggle -->
     <div class="squiggle-decoration">
       <svg width="120" height="80" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -190,6 +194,7 @@ useHead(() => ({
         <button @click="submitSuccess = false" class="reset-btn">Send Another Message</button>
       </div>
     </div>
+    </template>
   </div>
 </template>
 

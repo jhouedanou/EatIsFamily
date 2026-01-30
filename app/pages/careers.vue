@@ -434,13 +434,7 @@ const goToPage = (page: number) => {
     </div>
 
     <!-- Loading state -->
-    <div v-else class="min-vh-100 bg-brand-gray d-flex align-items-center justify-content-center">
-      <div class="text-center">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    </div>
+    <LoadingScreen v-else />
   </div>
 </template>
 +

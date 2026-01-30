@@ -1,5 +1,9 @@
 <template>
   <div class="apply-jobs-page">
+    <!-- Loading Screen -->
+    <LoadingScreen v-if="!content" />
+    
+    <template v-else>
     <section v-if="content" class="page-hero">
       <div class="container">
         <h1>{{ content.page_hero.title }}</h1>
@@ -15,6 +19,7 @@
         <div v-else-if="content" class="loading">{{ content.loading_text }}</div>
       </div>
     </section>
+    </template>
   </div>
 </template>
 

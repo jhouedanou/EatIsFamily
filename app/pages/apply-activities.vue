@@ -1,5 +1,9 @@
 <template>
   <div class="apply-activities-page">
+    <!-- Loading Screen -->
+    <LoadingScreen v-if="!content" />
+    
+    <template v-else>
     <section v-if="content?.page_hero" id="future" class="page-hero">
       <div class="container-fluid p-0 mt-0 text-center">
         <h1 class="mt-4 mb-4">{{ content.page_hero.title }}</h1>
@@ -149,6 +153,7 @@
         :images="activitiesGalleryImages2"
       /> -->
     </section>
+    </template>
   </div>
 </template>
 

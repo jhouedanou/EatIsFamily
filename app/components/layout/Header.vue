@@ -5,9 +5,9 @@
         <!-- Left Navigation -->
 
         <nav class="nav-right desktop-only">
-          <NuxtLink to="/about" class="nav-link">{{ content.nav_links.about }}</NuxtLink>
-          <NuxtLink to="/apply-activities" class="nav-link">{{ content.nav_links.activities }}</NuxtLink>
-          <NuxtLink to="/events" class="nav-link">{{ content.nav_links.events }}</NuxtLink>
+          <NuxtLink to="/about" class="nav-link" :class="{ 'nav-active': isActiveLink('/about') }">{{ content.nav_links.about }}</NuxtLink>
+          <NuxtLink to="/apply-activities" class="nav-link" :class="{ 'nav-active': isActiveLink('/apply-activities') }">{{ content.nav_links.activities }}</NuxtLink>
+          <NuxtLink to="/events" class="nav-link" :class="{ 'nav-active': isActiveLink('/events') }">{{ content.nav_links.events }}</NuxtLink>
         </nav>
         <!-- Center Logo -->
         <div class="logo-container">
@@ -18,8 +18,8 @@
 
         <!-- Right Navigation -->
         <nav class="nav-left desktop-only">
-          <NuxtLink to="/careers" class="nav-link">{{ content.nav_links.careers }}</NuxtLink>
-          <NuxtLink to="/blog" class="nav-link">{{ content.nav_links.blogs }}</NuxtLink>
+          <NuxtLink to="/careers" class="nav-link" :class="{ 'nav-active': isActiveLink('/careers') }">{{ content.nav_links.careers }}</NuxtLink>
+          <NuxtLink to="/blog" class="nav-link" :class="{ 'nav-active': isActiveLink('/blog') }">{{ content.nav_links.blogs }}</NuxtLink>
           <NuxtLink to="/contact" class="contact-button-wrapper">
             <NuxtImg
               :src="btnGetInTouch"
@@ -39,12 +39,21 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
 const { getHeaderContent } = usePageContent()
 const { settings } = useGlobalSettings()
 const content = ref<any>(null)
 
 // Dynamic button URL with fallback
 const btnGetInTouch = computed(() => settings.value?.icons?.btn_get_in_touch || '/images/btnGetInTouch.svg')
+
+// Check if a link is active
+const isActiveLink = (linkTo: string) => {
+  if (linkTo === '/') {
+    return route.path === '/'
+  }
+  return route.path.startsWith(linkTo)
+}
 
 onMounted(async () => {
   content.value = await getHeaderContent()
@@ -105,7 +114,12 @@ onMounted(async () => {
 }
 
 .nav-link:hover {
-  color: var(--color-primary-blue);
+  color: #f9375b !important;
+}
+
+.nav-active {
+  color: #f9375b !important;
+  font-weight: 600;
 }
 
 .contact-button-wrapper {
