@@ -1389,6 +1389,18 @@ body {
     background-position: 87% 104%;
     }
   }
+   .footer-grid {
+    display: flex!important;
+ flex-wrap: wrap !important;   
+    .footer-section:first-child {
+      width: 100% !important;
+    }
+    
+    .footer-section:nth-child(2),
+    .footer-section:nth-child(3) {
+      width: 50% !important;
+    }
+  }
   #btnExplore{
     width:100% !important;
     max-width:100% !important;

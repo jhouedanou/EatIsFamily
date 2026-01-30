@@ -99,6 +99,10 @@ onMounted(async () => {
   margin-bottom: 2rem;
 }
 
+@media (min-width: 1024px) {
+ 
+}
+
 
 
 .footer-section h4 {
