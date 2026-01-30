@@ -206,9 +206,7 @@ const goToPage = (page: number) => {
         </div>
         <div id="limam" class="container d-flex flex-column justify-content-center text-center flex-wrap">
           <h3> {{ content.join_box?.title }}</h3>
-              <p class="kougar">
-                {{ content.join_box?.description }}
-              </p>
+              <p class="kougar" v-html="content.join_box?.description "></p>
         </div>
       </section>
 
@@ -220,9 +218,7 @@ const goToPage = (page: number) => {
         <div class="hero-background" :style="{ backgroundImage: `url('${activeVenue.image}')` }">
           <div class="hero-overlay"></div>
         </div>
-        <p class="careers-hero-subtitle">
-          {{ content.hero_with_venue?.subtitle }}
-        </p><!-- 
+        <p class="careers-hero-subtitle" v-html="content.hero_with_venue?.subtitle"></p><!-- 
         <div class="careers-hero-stats">
           <div class="stat-box">
             <span class="stat-number">{{ allJobs.length }}</span>

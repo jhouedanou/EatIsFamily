@@ -113,10 +113,9 @@ useHead(() => ({
       <PartnersSection v-if="homepageContent" :title="homepageContent.partners_title"
         :partners="(homepageContent.partners || []).map((p: any) => ({ ...p, name: p.alt }))" />
     </section>
-    <section v-if="eventsGalleryImages2.length > 0" class="mt-4">
-      <!-- Second gallery for events page -->
+   <!--  <section v-if="eventsGalleryImages2.length > 0" class="mt-4">
       <GalleryGrid :images="eventsGalleryImages2" />
-    </section>
+    </section> -->
   </div>
 </template>
 
@@ -126,7 +125,7 @@ useHead(() => ({
 }
 
 .page-hero {
-  background: url('/images/events-hero.jpg') center/cover no-repeat;
+  background: url('/images/image4.jpg') center/cover no-repeat;
   height: 90vh;
   margin: 0 0 0 0;
   justify-content: flex-end;
