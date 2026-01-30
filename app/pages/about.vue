@@ -8,17 +8,16 @@
             <div class="col-6 col-xs-12 d-flex flex-column">
               <div class="heroTextContainer d-flex flex-column">
                 <h2 class="heroSubtitle">{{ siteContent.about.hero.subtitle }}</h2>
-                <p class="heroDescription">{{ siteContent.about.hero.description }}</p>
-                <nuxt-link to="/">
+                <p class="heroDescription" v-html="siteContent.about.hero.description"></p>
+                <nuxt-link to="/contact">
                   <nuxt-img :src="siteContent.about.hero.buttonContact" alt="Contact Us"
                     class="contactButton img-fluid fluid-img" />
-
                 </nuxt-link>
               </div>
             </div>
             <div class="col-6 col-xs-12 d-flex justify-content-center align-items-center">
               <img :src="siteContent.about.hero.image.src" :alt="siteContent.about.hero.image.alt"
-                class="img-fluid heroImage" />
+                class="img-fluid heroImage rounded-pill" />
             </div>
           </div>
         </div>
@@ -81,7 +80,7 @@
                   <h4 class="event-card-title">{{ selectedEvent.title }}</h4>
                   <p class="event-card-date">{{ selectedEvent.year }}</p>
                   <p class="event-card-description" v-html="selectedEvent.event"></p>
-                  <button class="share-button">
+                  <!-- <button class="share-button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M12 5.5C13.1046 5.5 14 4.60457 14 3.5C14 2.39543 13.1046 1.5 12 1.5C10.8954 1.5 10 2.39543 10 3.5C10 4.60457 10.8954 5.5 12 5.5Z"
@@ -95,14 +94,15 @@
                       <path d="M5.7 9L10.3 11.5M10.3 4.5L5.7 7" stroke="currentColor" stroke-width="1.5" />
                     </svg>
                     Share This Story
-                  </button>
+                  </button> -->
                 </div>
               </div>
             </div>
           </div>
+            
 
           <!-- Sound wave bars - Organic waveform with cosine curve -->
-          <div class="sound-wave">
+                            <div class="sound-wave">
             <div v-for="(bar, i) in waveBarData" :key="i" class="wave-bar-wrapper">
               <div class="wave-bar" :style="{ height: bar.height + '%' }"></div>
             </div>
@@ -151,7 +151,7 @@
     <section v-if="siteContent?.about?.vision" id="vision" class="my-5">
       <div class="container-fluid">
         <TwoColumnText :title="siteContent.about.vision.title" :text="siteContent.about.vision.content" />
-        <img :src="siteContent.about.vision.image" :alt="siteContent.about.vision.image.alt"
+        <img :src="siteContent.about.vision.image" :alt="siteContent.about.vision.title || 'Vision'"
           class="img-fluid my-4 rounded w-100" />
         <CtaBlock :text="homepageContent?.homepageCTA.additionalText" :link="homepageContent?.homepageCTA.link"
           :button-image="homepageContent?.homepageCTA.button2" :button-alt="homepageContent?.homepageCTA.title" />

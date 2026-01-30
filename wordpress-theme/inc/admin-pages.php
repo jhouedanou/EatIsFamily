@@ -173,10 +173,21 @@ function eatisfamily_build_pages_content_from_data($data) {
             'benefits' => isset($data['careers_benefits']) ? array_filter(array_map('sanitize_text_field', (array)$data['careers_benefits'])) : array(),
         ),
         'events' => array(
-            'hero' => array(
-                'title' => sanitize_text_field($data['events_hero_title'] ?? ''),
-                'subtitle' => sanitize_text_field($data['events_hero_subtitle'] ?? ''),
+            'seo' => array(
+                'title' => sanitize_text_field($data['events_seo_title'] ?? ''),
+                'description' => sanitize_textarea_field($data['events_seo_description'] ?? ''),
             ),
+            'page_hero' => array(
+                'title' => sanitize_text_field($data['events_hero_title'] ?? ''),
+                'subtitle' => wp_kses_post($data['events_hero_subtitle'] ?? ''),
+                'btn' => esc_url_raw($data['events_hero_btn'] ?? ''),
+                'link' => sanitize_text_field($data['events_hero_link'] ?? '/contact'),
+            ),
+            'section2' => wp_kses_post($data['events_section2'] ?? ''),
+            'eventslist' => array(
+                'description' => wp_kses_post($data['events_eventslist_description'] ?? ''),
+            ),
+            'loading_text' => sanitize_text_field($data['events_loading_text'] ?? 'Loading events...'),
         ),
         'forms' => array(
             'job_search' => array(
@@ -586,10 +597,21 @@ function eatisfamily_pages_content_page() {
                 'benefits' => array_filter(array_map('sanitize_text_field', $_POST['careers_benefits'] ?? array())),
             ),
             'events' => array(
-                'hero' => array(
-                    'title' => sanitize_text_field($_POST['events_hero_title'] ?? ''),
-                    'subtitle' => sanitize_text_field($_POST['events_hero_subtitle'] ?? ''),
+                'seo' => array(
+                    'title' => sanitize_text_field($_POST['events_seo_title'] ?? ''),
+                    'description' => sanitize_textarea_field($_POST['events_seo_description'] ?? ''),
                 ),
+                'page_hero' => array(
+                    'title' => sanitize_text_field($_POST['events_hero_title'] ?? ''),
+                    'subtitle' => wp_kses_post($_POST['events_hero_subtitle'] ?? ''),
+                    'btn' => esc_url_raw($_POST['events_hero_btn'] ?? ''),
+                    'link' => sanitize_text_field($_POST['events_hero_link'] ?? '/contact'),
+                ),
+                'section2' => wp_kses_post($_POST['events_section2'] ?? ''),
+                'eventslist' => array(
+                    'description' => wp_kses_post($_POST['events_eventslist_description'] ?? ''),
+                ),
+                'loading_text' => sanitize_text_field($_POST['events_loading_text'] ?? 'Loading events...'),
             ),
             // Form Labels for all forms
             'forms' => array(
@@ -1255,19 +1277,131 @@ function eatisfamily_pages_content_page() {
             <!-- EVENTS TAB -->
             <!-- ============================================================ -->
             <div id="events" class="tab-content" style="display: none;">
+                
+                <!-- SEO Section -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('🔍 SEO', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="events_seo_title"><?php _e('Meta Title', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="events_seo_title" id="events_seo_title" value="<?php echo esc_attr($events['seo']['title'] ?? ''); ?>" class="large-text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="events_seo_description"><?php _e('Meta Description', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <textarea name="events_seo_description" id="events_seo_description" rows="3" class="large-text"><?php echo esc_textarea($events['seo']['description'] ?? ''); ?></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Hero Section -->
                 <div class="eatisfamily-section">
                     <h3 class="section-title"><?php _e('🎬 Hero Section', 'eatisfamily'); ?></h3>
                     <table class="form-table">
                         <tr>
                             <th scope="row"><label for="events_hero_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
                             <td>
-                                <input type="text" name="events_hero_title" id="events_hero_title" value="<?php echo esc_attr($events['hero']['title'] ?? ''); ?>" class="large-text">
+                                <input type="text" name="events_hero_title" id="events_hero_title" value="<?php echo esc_attr($events['page_hero']['title'] ?? ''); ?>" class="large-text">
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="events_hero_subtitle"><?php _e('Subtitle', 'eatisfamily'); ?></label></th>
+                            <th scope="row"><label for="events_hero_subtitle"><?php _e('Subtitle (WYSIWYG)', 'eatisfamily'); ?></label></th>
                             <td>
-                                <input type="text" name="events_hero_subtitle" id="events_hero_subtitle" value="<?php echo esc_attr($events['hero']['subtitle'] ?? ''); ?>" class="large-text">
+                                <?php 
+                                wp_editor(
+                                    $events['page_hero']['subtitle'] ?? '', 
+                                    'events_hero_subtitle',
+                                    array(
+                                        'textarea_name' => 'events_hero_subtitle',
+                                        'textarea_rows' => 5,
+                                        'media_buttons' => false,
+                                        'teeny' => true,
+                                        'quicktags' => true
+                                    )
+                                );
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="events_hero_btn"><?php _e('Button Image URL', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="events_hero_btn" id="events_hero_btn" value="<?php echo esc_attr($events['page_hero']['btn'] ?? ''); ?>" class="large-text">
+                                <button type="button" class="button eatisfamily-upload-btn" data-target="events_hero_btn"><?php _e('Select Image', 'eatisfamily'); ?></button>
+                                <?php if (!empty($events['page_hero']['btn'])): ?>
+                                <div class="image-preview" style="margin-top: 10px;">
+                                    <img src="<?php echo esc_url($events['page_hero']['btn']); ?>" style="max-width: 200px; height: auto;">
+                                </div>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="events_hero_link"><?php _e('Button Link', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="events_hero_link" id="events_hero_link" value="<?php echo esc_attr($events['page_hero']['link'] ?? '/contact'); ?>" class="regular-text">
+                                <p class="description"><?php _e('URL where the button links to (e.g., /contact)', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Section 2 - Intro Text -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('📝 Section Introduction', 'eatisfamily'); ?></h3>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="events_section2"><?php _e('Introduction Text (WYSIWYG)', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <?php 
+                                wp_editor(
+                                    $events['section2'] ?? '', 
+                                    'events_section2',
+                                    array(
+                                        'textarea_name' => 'events_section2',
+                                        'textarea_rows' => 8,
+                                        'media_buttons' => true,
+                                        'teeny' => false,
+                                        'quicktags' => true
+                                    )
+                                );
+                                ?>
+                                <p class="description"><?php _e('This text appears after the hero section as an introduction to the events page.', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Events List Section -->
+                <div class="eatisfamily-section">
+                    <h3 class="section-title"><?php _e('📋 Events List Section', 'eatisfamily'); ?></h3>
+                    <p class="description"><?php _e('Note: The actual events are managed via the Events custom post type. This section controls the header text above the events list.', 'eatisfamily'); ?></p>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="events_eventslist_description"><?php _e('Section Description (WYSIWYG)', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <?php 
+                                wp_editor(
+                                    $events['eventslist']['description'] ?? '', 
+                                    'events_eventslist_description',
+                                    array(
+                                        'textarea_name' => 'events_eventslist_description',
+                                        'textarea_rows' => 5,
+                                        'media_buttons' => false,
+                                        'teeny' => true,
+                                        'quicktags' => true
+                                    )
+                                );
+                                ?>
+                                <p class="description"><?php _e('Description displayed above the events grid.', 'eatisfamily'); ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="events_loading_text"><?php _e('Loading Text', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="events_loading_text" id="events_loading_text" value="<?php echo esc_attr($events['loading_text'] ?? 'Loading events...'); ?>" class="regular-text">
+                                <p class="description"><?php _e('Text shown while events are loading.', 'eatisfamily'); ?></p>
                             </td>
                         </tr>
                     </table>
