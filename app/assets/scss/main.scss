@@ -1280,6 +1280,11 @@ body {
 // =============================================
 // RESPONSIVE STYLES
 // =============================================
+@mixin mobileHeight(){
+  
+      height:100vh !important;
+      max-height:600px !important;
+}
 @media (min-width: 1024px){
  
   .mobile-only{
@@ -1366,14 +1371,14 @@ body {
       padding:0 !important;
     }
    #marr{
-      height:78vh !important;
-      width:100vw !important;
+    
+      @include mobileHeight();
             min-height:0 !important;
 
     }
     #blusy{
-        height: 60vh !important;
-    width: 100vw !important;
+   
+      @include mobileHeight();
     min-height: 0 !important;
     background-size: 128vw;
     background-position: 87% 104%;
@@ -1384,6 +1389,42 @@ body {
     max-width:100% !important;
     height:69px !important;
   }
+  a.contact-button-wrapper.mobile-only{
+       display: flex !important;
+    justify-content: center;
+    align-items: flex-end;
+  }
+  .contact-image{
+    height:38px !important;
+  }
+  .kemiseba{
+      p {
+    font-size: 24px;
+    line-height: 1.67;
+    }
+  }
+      #tromp img {
+        width: 224px !important;
+    }
+    .explore-map{
+     
+      @include mobileHeight();
+    }
+    .explore-title{
+      font-size:38px !important;
+    }
+    .venue-filter-btn{
+      width:33% !important;
+      .venue-filter-image{
+    height: 116px !important;
+    width: 100% !important;      }
+    }
+    .explore-stats{
+      .col-3{
+        width:50% !important;
+        padding:1em !important;
+      }
+    }
 }
 // ----- TABLET LANDSCAPE (max-width: 1200px) -----
 @media (max-width: 1200px) {
