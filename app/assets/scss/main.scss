@@ -1293,6 +1293,12 @@ body {
   .mobile-only{
     display:block !important;
   }
+  .hero-video-wrapper{
+    display:flex;
+    align-items:flex-end;
+    position:relative !important;
+    
+  }
  .menu-toggle{
     border:none !important;
      background:none !important;
@@ -1309,11 +1315,7 @@ body {
     }
   }
   }
-  .hero-video-wrapper{
-    display:flex;
-    align-items:flex-end;
-    position:relative !important;
-  }
+  
   .job-search-form{
     max-width:95vw !important;
     bottom:5vh !important;
@@ -1326,12 +1328,29 @@ body {
     h2{
   font-size: 24px !important;
     }
+    .select-field{
+      max-width:100% !important;
+      width:100% !important;
+      margin-bottom:10px !important;
+    }
+    .search-button{
+      display:flex !important;
+      justify-content:flex-start !important;
+      background:none !important;
+    }
+    .dropdown-menu{
+      width:80vw !important;
+    }
   }
   #hero{
     margin:0 !important;
     padding:0 !important;
     width:100vw !important;
     min-width:100vw !important;
+    p{
+      font-size:16px !important;
+      margin-bottom:4px !important;
+    }
     .row{
       
     width:100vw !important;
