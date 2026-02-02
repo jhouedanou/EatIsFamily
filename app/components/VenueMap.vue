@@ -44,7 +44,16 @@ const mapCenter = computed<[number, number]>(() => {
   return [2.0, 48.5] // Default: France
 })
 
-const mapZoom = computed(() => settings.value?.map?.zoom || 5)
+const isMobile = ref(false)
+
+const updateIsMobile = () => {
+  isMobile.value = typeof window !== 'undefined' && window.innerWidth <= 1024
+}
+
+const mapZoom = computed(() => {
+  if (isMobile.value) return 4.5
+  return settings.value?.map?.zoom || 5
+})
 
 const maptilerStyle = computed(() => {
   const style = settings.value?.map?.maptiler_style
@@ -147,6 +156,11 @@ const createMarkers = (maplibregl: any) => {
 }
 
 onMounted(async () => {
+  updateIsMobile()
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', updateIsMobile)
+  }
+
   // Ensure settings are loaded
   if (!settings.value) {
     await loadSettings()
@@ -178,6 +192,9 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', updateIsMobile)
+  }
   if (map) {
     map.remove()
     map = null

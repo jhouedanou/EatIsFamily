@@ -28,6 +28,7 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@popperjs/core": "^2.11.8",
     "@types/node": "^25.0.9",
+    "@vite-pwa/nuxt": "^1.1.0",
     "autoprefixer": "^10.4.23",
     "bootstrap": "^5.3.8",
     "postcss": "^8.5.6",

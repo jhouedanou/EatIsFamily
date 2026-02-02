@@ -1297,6 +1297,7 @@ body {
   }
 }
 @media (max-width: 1024px){
+  
   .desktop-only{
     display:none !important;
   }
@@ -1333,7 +1334,14 @@ body {
   }
   #heroTitle, #heroTitleAlt{
     font-size: 50px !important;
+    line-height: 1.3 !important;
 }
+//presentation eat is famaily
+    #presentationEatIsFamily{
+  background:url(images/rashawna.jpg) !important;
+      background-size: contain !important;
+    background-repeat:no-repeat !important;
+  }
   .job-search-form{
     max-width:95vw !important;
     bottom:5vh !important;
@@ -1376,14 +1384,15 @@ body {
       padding:0 !important;
     }
    #marr{
-    
-      @include mobileHeightFull();
-            min-height:0 !important;
-
+        height: 100vh !important;
+        max-height: 80vh !important;
+        min-height: 0 !important;
     }
     #blusy{
-   
-      @include mobileHeightFull();
+        height: 100vh !important;
+        max-height: 80vh !important;
+  
+        justify-content: flex-start !important;
     min-height: 0 !important;
     background-size: 128vw;
     background-position: 87% 104%;
@@ -1442,6 +1451,34 @@ body {
         padding:1em !important;
       }
     }
+  .job-search-form-wrapper{
+    z-index:1000000;
+  }
+  .venue-image{
+    max-height:170px !important;
+  }
+  .venue-event-banner{
+      flex-direction: column !important;
+    display: flex !important;
+    background: url(/images/charcot.svg) !important;
+    background-repeat: no-repeat;
+    background-size: cover !important;
+    height: 100vh !important;
+    min-height: 151px !important;
+    max-height: 151px !important;
+    gap: 0 !important;
+    gap:0 !important;
+    margin-bottom:10px !important;
+
+  .venue-event-item{
+    margin:0 !important;
+    padding:0 !important;
+    gap:0 !important;
+    display:flex !important;
+    justify-content:center !important;
+  }
+    
+  }
 }
 // ----- TABLET LANDSCAPE (max-width: 1200px) -----
 @media (max-width: 1200px) {
@@ -1513,6 +1550,7 @@ body {
       font-size: 40px;
     }
   }
+  
   #weHelpwith {
     #seeAboutYa {
       max-width: 380px;
@@ -2243,4 +2281,6 @@ body {
   #weHelpwith #seeAboutYa h3 {
     font-size: 18px;
   }
+
+
 }

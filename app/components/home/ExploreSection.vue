@@ -501,15 +501,16 @@ const goToMenuPage = (page: number) => {
 }
 
 /* Responsive */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .explore-container {
     flex-direction: column;
   }
 
   .explore-map {
     flex: none;
-    height: 350px;
-    min-height: 350px;
+    height: 400px;
+    max-height: 400px;
+    min-height: auto;
   }
 
   .explore-content {
@@ -607,9 +608,6 @@ const goToMenuPage = (page: number) => {
   position: absolute;
   top: 8px;
   left: 8px;
-  background-color: rgba(255, 255, 255, 0.95);
-  color: #333;
-  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -619,6 +617,13 @@ const goToMenuPage = (page: number) => {
   align-items: center;
   gap: 4px;
   z-index: 2;
+    width: 88px;
+  height: 28px;
+  padding: 2.9px 7px 3.4px 7.1px;
+  border-radius: 30px;
+  background-color: #93cbff;
+    font-family: FONTSPRINGDEMO-Recoleta !important;
+
 }
 
 .venue-type-badge::before {
