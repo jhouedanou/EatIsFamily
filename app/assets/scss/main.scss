@@ -1566,17 +1566,15 @@ body {
     }
   }
   #sustan{
-    padding-bottom:0em !important;
-    background:url(/images/leuremercon.svg) white !important;
+    background: url(../images/leuremercon.svg) #fff!important;
+    background-repeat: no-repeat !important;
+    background-position: top right !important;
+    background-size: auto !important;
     h3{
-      font-size:30px !important;
+      font-size:24px !important;
     }
   }
   //section avec les diférentes cta
-h4, h3{
-  font-size:30px !important;
-  line-height:1.22 !important;
-}
 }
 // ----- TABLET LANDSCAPE (max-width: 1200px) -----
 @media (max-width: 1200px) {
