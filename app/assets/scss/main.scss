@@ -1550,10 +1550,14 @@ body {
       }
     }
   }
-  .substainable-service-item{
+  .sustainable-service-item{
+    padding-bottom:0 !important;
     .inner{
-          background-size: contain !important;
-          max-width: 92vw !important;
+        background-size: contain !important;
+    max-width: 90vw !important;
+    margin: 0 auto !important;
+    max-height: none !important;
+    padding: 37px !important;
     }
   }
 }
