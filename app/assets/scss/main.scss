@@ -1559,11 +1559,36 @@ body {
     margin: 0 auto !important;
     max-height: none !important;
     padding: 20px !important;
-    h4{
-      padding:0 !important;
-      margin:0 !important;
+      h4{
+        padding:0 !important;
+        margin:0 !important;
+      }
+    }
+
+    #ready-to-make-an-impact {
+      #leforme {
+        background-color: #f83156;
+        border: 3px solid #ed2e52;
+        border-radius: 20px;
+        height: auto !important;
+        inset: 0;
+        margin: auto!important;
+        max-width: 1098px;
+        position: absolute;
+        width: 100vw;
+        position: relative !important;
+        max-height:none !important;
+        position:relative !important;
+
+        h2{
+          font-size:30px !important;
+        }
+        p{
+          font-size:16px !important;
+        }
     }
     }
+
   }
   #sustan{
     background: url(../images/leuremercon.svg) #fff!important;
