@@ -1552,20 +1552,31 @@ body {
   }
   .sustainable-service-item{
     padding-bottom:0 !important;
+    max-height:410px !important;
     .inner{
         background-size: contain !important;
     max-width: 90vw !important;
     margin: 0 auto !important;
     max-height: none !important;
     padding: 20px !important;
+    h4{
+      padding:0 !important;
+      margin:0 !important;
+    }
     }
   }
   #sustan{
+    padding-bottom:0em !important;
     background:url(/images/leuremercon.svg) white !important;
     h3{
       font-size:30px !important;
     }
   }
+  //section avec les diférentes cta
+h4, h3{
+  font-size:30px !important;
+  line-height:1.22 !important;
+}
 }
 // ----- TABLET LANDSCAPE (max-width: 1200px) -----
 @media (max-width: 1200px) {
