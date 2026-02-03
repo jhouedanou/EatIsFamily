@@ -194,13 +194,6 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  .post-content{
-       width: 100%;
-    height: 100%;
-    background-size: contain !important;
-    background-repeat: no-repeat !important;
-    padding: 2em;
-  }
   &:nth-of-type(1){
     .post-content{
     background:url(/images/bgFeatured1.svg);  
@@ -455,6 +448,27 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
   .post-image img,
   .card-image img {
     height: 200px;
+  }
+}
+@media (min-width:1024px){
+  
+  .post-content{
+       width: 100%;
+    height: 100%;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    padding: 2em;
+  }
+}
+
+@media (max-width:1024px){
+  
+  .post-content{
+       width: 100%;
+    height: 100%;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    padding: 2em;
   }
 }
 </style>

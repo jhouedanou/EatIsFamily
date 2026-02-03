@@ -131,6 +131,7 @@ useHead(() => ({
 </template>
 
 <style scoped lang="scss">
+
 .events-page {
   min-height: 100vh;
 }
