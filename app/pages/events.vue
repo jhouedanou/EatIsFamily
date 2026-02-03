@@ -67,7 +67,7 @@ useHead(() => ({
     <template v-else>
     <!-- Hero Section -->
     <section v-if="content" class="page-hero">
-      <div class="container d-flex">
+      <div id="nza" class="container d-flex">
         <div class="loris">
           <h1>{{ content.page_hero.title }}</h1>
           <p class="subtitle" v-html="content.page_hero.subtitle"></p>
@@ -90,7 +90,7 @@ useHead(() => ({
     <section class="events-section">
       <div class="container">
         <div v-if="content?.eventslist" class="section-header">
-          <p class="section-description preserve-lines" >{{ content.eventslist.description }}</p>
+          <p class="section-description preserve-lines" v-html="content.eventslist.description"></p>
         </div>
 
         <div v-if="loading" class="loading">

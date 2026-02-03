@@ -1788,14 +1788,84 @@ body {
     width: 100vw !important;
     height: 100vh !important;
 
-
-    
         ul{
           height: 480px !important;
         
            li{
     font-size:14px !important;
-  }}}
+  }
+}
+}
+    .cta-block{
+      margin:0 !important ;
+      padding:0 !important  ;
+  }
+  .events-page{
+    #nza{
+      padding:0 !important;
+      .loris{
+        padding:1em !important;
+        h1{
+          font-size:51px !important;
+          &::before{
+            max-width:308px !important;
+          }
+        }
+        p{
+          font-size:16px !important;
+            color: #161616 !important;
+        }
+      }
+    }
+    .intro-section{
+          padding: 4rem 0;
+        background-color: white;
+        background-image: url("/images/vectorBgAbout.svg");
+        background-position: 8% 0%!important;
+        background-repeat: no-repeat;
+      p{
+        font-weight: normal !important;
+      font-stretch: normal !important;
+      font-style: normal !important;
+      line-height: 1.67 !important;
+      letter-spacing: normal !important;
+      text-align: center !important;
+      font-size: 24px !important;
+      }
+    }
+  }
+  .intro-section{
+    padding-bottom:0px !important;
+  }
+  .events-section{  
+      padding-top:0px !important;
+      margin-top:0px !important;
+    .section-description{
+      p{
+
+        font-size:30px !important;
+      }
+    }
+  }
+  .events-grid{
+    .card-image{
+      margin-bottom:1em !important;
+      img{
+        border-radius:10px !important;
+      }
+    }
+    .card-content{
+      p{
+        font-size:16px !important;
+      }
+      h3{
+        font-size:30px !important;
+        &::before{
+          max-width:220px !important;
+        }
+      }
+    }
+  }
 }
 // ----- TABLET LANDSCAPE (max-width: 1200px) -----
 @media (max-width: 1200px) {

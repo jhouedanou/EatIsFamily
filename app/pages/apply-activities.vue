@@ -365,6 +365,7 @@ useHead(() => ({
 }
 
 @media (max-width: 1024px) {
+
   #weHelpwith {
       background-image: var(--bg-image);
     background-size: cover;
