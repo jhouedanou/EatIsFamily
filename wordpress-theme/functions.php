@@ -1820,6 +1820,11 @@ function eatisfamily_get_global_settings($request) {
         
         // UI Icons
         'icons' => $customizer_settings['icons'] ?? array(),
+        
+        // Contact Form 7 Configuration
+        'contact_form' => array(
+            'cf7_form_id' => get_option('eatisfamily_cf7_contact_form_id', ''),
+        ),
     );
     
     return rest_ensure_response($settings);
@@ -1834,6 +1839,59 @@ function eatisfamily_add_cors_headers() {
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
 }
 add_action('rest_api_init', 'eatisfamily_add_cors_headers');
+
+/**
+ * Add CORS headers specifically for Contact Form 7 REST API
+ */
+add_filter('wpcf7_feedback_response', function($response, $result) {
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type");
+    return $response;
+}, 10, 2);
+
+/**
+ * Handle OPTIONS preflight requests for CORS
+ */
+add_action('init', function() {
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type");
+        exit(0);
+    }
+});
+
+/**
+ * API Endpoint to get CF7 form numeric ID from hash
+ * This is needed because CF7 5.6+ uses hash IDs in shortcodes but API needs numeric IDs
+ */
+register_rest_route('eatisfamily/v1', '/cf7-form-id/(?P<hash>[a-zA-Z0-9]+)', array(
+    'methods' => 'GET',
+    'callback' => function($request) {
+        $hash = $request->get_param('hash');
+        
+        // Search for the form with this hash
+        $forms = get_posts(array(
+            'post_type' => 'wpcf7_contact_form',
+            'posts_per_page' => -1,
+        ));
+        
+        foreach ($forms as $form) {
+            $form_hash = substr(md5($form->ID), 0, 7);
+            if ($form_hash === $hash) {
+                return array(
+                    'numeric_id' => $form->ID,
+                    'hash' => $hash,
+                    'title' => $form->post_title
+                );
+            }
+        }
+        
+        return new WP_Error('not_found', 'Form not found', array('status' => 404));
+    },
+    'permission_callback' => '__return_true',
+));
 
 /**
  * Enqueue Scripts and Styles

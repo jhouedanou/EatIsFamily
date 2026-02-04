@@ -4,6 +4,7 @@ import { LucideX } from 'lucide-vue-next'
 
 const router = useRouter()
 const { getContactContent } = usePageContent()
+const { submitContactForm, validateForm } = useContactForm()
 
 const contactContent = ref<any>(null)
 
@@ -19,24 +20,54 @@ const form = ref({
 
 const isSubmitting = ref(false)
 const submitSuccess = ref(false)
+const submitError = ref('')
+const validationErrors = ref<string[]>([])
 
 const goBack = () => {
   router.back()
 }
 
 const submitForm = async () => {
+  // Réinitialiser les erreurs
+  submitError.value = ''
+  validationErrors.value = []
+  
+  // Valider le formulaire
+  const validation = validateForm(form.value)
+  if (!validation.valid) {
+    validationErrors.value = validation.errors
+    return
+  }
+  
   isSubmitting.value = true
-  await new Promise(resolve => setTimeout(resolve, 1500))
-  isSubmitting.value = false
-  submitSuccess.value = true
-  form.value = {
-    name: '',
-    email: '',
-    eventType: '',
-    location: '',
-    date: '',
-    guests: '',
-    message: ''
+  
+  try {
+    // Soumettre via Contact Form 7 API
+    const response = await submitContactForm(form.value)
+    
+    if (response.status === 'mail_sent') {
+      submitSuccess.value = true
+      // Réinitialiser le formulaire
+      form.value = {
+        name: '',
+        email: '',
+        eventType: '',
+        location: '',
+        date: '',
+        guests: '',
+        message: ''
+      }
+    } else if (response.status === 'validation_failed' && response.invalid_fields) {
+      // Afficher les erreurs de validation CF7
+      validationErrors.value = response.invalid_fields.map(f => f.message)
+    } else {
+      submitError.value = response.message || 'Une erreur est survenue. Veuillez réessayer.'
+    }
+  } catch (error) {
+    console.error('Error submitting form:', error)
+    submitError.value = 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer.'
+  } finally {
+    isSubmitting.value = false
   }
 }
 
@@ -106,6 +137,16 @@ useHead(() => ({
 
     <!-- Form Section -->
     <div class="form-container">
+      <!-- Error Messages -->
+      <div v-if="validationErrors.length > 0 || submitError" class="form-errors">
+        <div v-if="submitError" class="error-message">
+          {{ submitError }}
+        </div>
+        <ul v-if="validationErrors.length > 0" class="validation-errors">
+          <li v-for="(error, index) in validationErrors" :key="index">{{ error }}</li>
+        </ul>
+      </div>
+      
       <form v-if="!submitSuccess" @submit.prevent="submitForm" class="contact-form">
         <!-- Row 1: Name & Email -->
         <div class="form-row">
@@ -508,6 +549,35 @@ useHead(() => ({
   .oval-image {
     width: 150px;
     height: 100px;
+  }
+}
+
+// Error messages styles
+.form-errors {
+  background-color: #fee2e2;
+  border: 2px solid #ef4444;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  
+  .error-message {
+    color: #dc2626;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .validation-errors {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: #dc2626;
+    
+    li {
+      margin-bottom: 0.25rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 </style>

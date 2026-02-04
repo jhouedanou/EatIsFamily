@@ -332,6 +332,11 @@ function eatisfamily_ajax_save_forms_v5() {
     // Build forms content from decoded data
     $forms_content = eatisfamily_build_forms_from_data_v5($form_data);
     
+    // Save CF7 Form ID separately (it's a global setting)
+    if (isset($form_data['cf7_contact_form_id'])) {
+        update_option('eatisfamily_cf7_contact_form_id', sanitize_text_field($form_data['cf7_contact_form_id']));
+    }
+    
     // Save to database
     $result = update_option('eatisfamily_forms', $forms_content);
     
@@ -781,6 +786,27 @@ function eatisfamily_forms_page_v5() {
             <div id="contact-form" class="tab-content" style="display: none;">
                 <h3><?php _e('📧 Contact Form', 'eatisfamily'); ?></h3>
                 <p class="description"><?php _e('Labels, placeholders et messages pour le formulaire de contact.', 'eatisfamily'); ?></p>
+                
+                <!-- Contact Form 7 Integration -->
+                <div style="background: #e7f3fe; border-left: 4px solid #2196F3; padding: 15px; margin-bottom: 20px;">
+                    <h4 style="margin-top: 0;"><?php _e('🔗 Intégration Contact Form 7', 'eatisfamily'); ?></h4>
+                    <table class="form-table" style="margin: 0;">
+                        <tr>
+                            <th scope="row"><label for="cf7_contact_form_id"><?php _e('ID du Formulaire CF7', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="cf7_contact_form_id" id="cf7_contact_form_id" value="<?php echo esc_attr(get_option('eatisfamily_cf7_contact_form_id', '')); ?>" class="regular-text" placeholder="Ex: 123">
+                                <p class="description">
+                                    <?php _e('Entrez l\'ID du formulaire Contact Form 7 pour activer l\'intégration API.', 'eatisfamily'); ?><br>
+                                    <?php _e('Trouvez l\'ID dans <strong>Contact > Formulaires de contact</strong> (colonne "Shortcode").', 'eatisfamily'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="margin-bottom: 0; font-size: 12px; color: #666;">
+                        <?php _e('⚠️ Assurez-vous que Contact Form 7 est installé et que le formulaire contient les champs: your-name, your-email, event-type, location, event-date, guests, your-message', 'eatisfamily'); ?>
+                    </p>
+                </div>
+                
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="form_contact_name_label"><?php _e('Name Label', 'eatisfamily'); ?></label></th>
