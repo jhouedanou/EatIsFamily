@@ -9,9 +9,19 @@ onMounted(async () => {
   }
 })
 
+// Fonction pour valider le title template (éviter les URLs incorrectes)
+const getValidTitleTemplate = () => {
+  const template = settings.value?.seo?.title_template
+  // Si le template contient 'http', 'wp-content', ou 'themes', c'est une URL incorrecte
+  if (template && (template.includes('http') || template.includes('wp-content') || template.includes('themes'))) {
+    return '%s | Eat Is Family'
+  }
+  return template || '%s | Eat Is Family'
+}
+
 // Set default SEO meta tags from global settings
 useHead(() => ({
-  titleTemplate: settings.value?.seo?.title_template || '%s | Eat Is Family',
+  titleTemplate: getValidTitleTemplate(),
   meta: [
     { 
       name: 'description', 

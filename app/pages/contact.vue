@@ -230,9 +230,9 @@ useHead(() => ({
       <!-- Success Message -->
       <div v-else class="success-message">
         <div class="success-icon">✓</div>
-        <h3>Message Sent!</h3>
-        <p>Thank you for reaching out. We'll get back to you within 24-48 hours.</p>
-        <button @click="submitSuccess = false" class="reset-btn">Send Another Message</button>
+        <h3>Message envoyé !</h3>
+        <p>Merci de nous avoir contactés. Nous vous répondrons dans les 24 à 48 heures.</p>
+        <button @click="submitSuccess = false" class="reset-btn">Envoyer un autre message</button>
       </div>
     </div>
     </template>
@@ -247,7 +247,7 @@ useHead(() => ({
   position: relative;
 }
 
-// Squiggle decoration
+/* Squiggle decoration */
 .squiggle-decoration {
   position: absolute;
   top: 1.5rem;
@@ -255,7 +255,7 @@ useHead(() => ({
   z-index: 10;
 }
 
-// Top decorative line
+/* Top decorative line */
 .top-line {
   position: absolute;
   top: 5.5rem;
@@ -265,7 +265,7 @@ useHead(() => ({
   background-color: #1a1a1a;
 }
 
-// Close button
+/* Close button */
 .close-btn {
   position: absolute;
   top: 1.5rem;
@@ -288,7 +288,7 @@ useHead(() => ({
   }
 }
 
-// Main content area
+/* Main content area */
 .contact-content {
   display: flex;
   justify-content: space-between;
@@ -299,7 +299,7 @@ useHead(() => ({
   gap: 2rem;
 }
 
-// Header section
+/* Header section */
 .contact-header {
   flex: 1;
   max-width: 650px;
@@ -339,7 +339,7 @@ useHead(() => ({
   max-width: 500px;
 }
 
-// Oval image
+/* Oval image */
 .contact-image {
   flex-shrink: 0;
 }
@@ -358,7 +358,7 @@ useHead(() => ({
   }
 }
 
-// Form container
+/* Form container */
 .form-container {
   max-width: 1000px;
   margin: 3rem auto 0;
@@ -397,7 +397,7 @@ useHead(() => ({
     outline: none;
     transition: all 0.2s ease;
 
-    // Organic hand-drawn border effect
+    /* Organic hand-drawn border effect */
     border-radius: 25px 15px 20px 18px / 18px 22px 15px 25px;
 
     &::placeholder {
@@ -417,7 +417,7 @@ useHead(() => ({
   }
 }
 
-// Submit button
+/* Submit button */
 .submit-btn {
   display: inline-flex;
   align-items: center;
@@ -445,7 +445,7 @@ useHead(() => ({
   }
 }
 
-// Success message
+/* Success message */
 .success-message {
   text-align: center;
   padding: 3rem;
@@ -494,7 +494,7 @@ useHead(() => ({
   }
 }
 
-// Responsive
+/* Responsive */
 @media (max-width: 900px) {
   .contact-page {
     padding: 1.5rem;
@@ -552,7 +552,7 @@ useHead(() => ({
   }
 }
 
-// Error messages styles
+/* Error messages styles */
 .form-errors {
   background-color: #fee2e2;
   border: 2px solid #ef4444;
