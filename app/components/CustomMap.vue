@@ -172,7 +172,7 @@ watch(() => searchQuery.value, async () => {
       </div>
 
       <div class="bg-brand-dark border-organic px-4 py-3 flex items-center gap-2 cursor-pointer hover:bg-brand-dark/90 transition-colors">
-        <span class="text-white font-medium">All job types</span>
+        <span class="text-white font-medium">Tous les types d’emploi</span>
         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>

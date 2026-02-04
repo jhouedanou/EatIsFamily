@@ -288,7 +288,7 @@ const goToPage = (page: number) => {
           <div class="position-relative musuc">
         <button @click="showJobTypeDropdown = !showJobTypeDropdown; showVenueDropdown = false"
           class="border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
-          <span>{{ selectedJobType || 'All Job Types' }}</span>
+          <span>{{ selectedJobType || 'Tous les types d’emploi' }}</span>
           <img :src="iconChevronDown" alt="chevron" class="chevron-icon" :class="{ 'rotated': showJobTypeDropdown }" />
         </button>
         <!-- Dropdown Menu -->
@@ -439,6 +439,26 @@ const goToPage = (page: number) => {
 </template>
 +
 <style scoped lang="scss">
+@media screen and (min-width:1024px) {
+ .search-bar-section.has-active-venue {
+    margin-top: -9.5rem !important;
+  } 
+
+}
+@media screen and (max-width:1024px){
+ .search-bar-section.has-active-venue {
+    margin: -15rem auto 1em auto !important;
+    width: 95vw !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    min-height: 215px !important;
+    display: flex;
+    justify-content: flex-start;
+    }
+    .search-bar-section.has-active-venue #rallah input, .search-bar-section.has-active-venue #rallah button{
+      justify-content: flex-start !important;
+    }
+}
 /* ============================================
    CAREERS HERO DEFAULT (No venue selected)
    ============================================ */
@@ -597,16 +617,7 @@ const goToPage = (page: number) => {
   min-height: 80vh;
 }
 
-.hero-section.has-venue {
-  padding:0em !important;
-  max-height:710px !important;
-  min-height:0px !important;
-  height:100vh !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
+
   
 
 .hero-section.has-venue .hero-background {
@@ -761,7 +772,6 @@ const goToPage = (page: number) => {
     width: 100vw;
     height: 100vh;
     &.has-active-venue {
-        margin-top: -9.5rem !important;
         backdrop-filter: blur(20px);
         border: solid 3px rgba(253, 250, 248, 0.2);
         background-color: rgba(47, 47, 47, 0.4);

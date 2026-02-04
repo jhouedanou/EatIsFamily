@@ -3214,7 +3214,7 @@ function eatisfamily_build_pages_content_v5($data) {
             'search_section' => array(
                 'search_placeholder' => sanitize_text_field($data['careers_search_placeholder'] ?? 'Search Job title and category here'),
                 'all_sites_label' => sanitize_text_field($data['careers_all_sites_label'] ?? 'All Sites'),
-                'job_types' => array('All job types', 'Full time', 'Part time', 'Contract', 'Freelance'),
+                'job_types' => array('Tous les types d’emploi', 'Full time', 'Part time', 'Contract', 'Freelance'),
             ),
             'job_listing' => array(
                 'positions_available_singular' => sanitize_text_field($data['careers_positions_singular'] ?? 'Position'),

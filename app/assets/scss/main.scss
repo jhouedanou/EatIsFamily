@@ -222,6 +222,9 @@ body {
 }
 
 .tag-blue {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
   font-family: FONTSPRINGDEMO-RecoletaMedium;
   font-size: 17px;
   font-weight: normal;
@@ -231,6 +234,9 @@ body {
   letter-spacing: normal;
   text-align: center;
   color: #000;
+    border-radius: 30px;
+  border: solid 1px #add7fe;
+  background-color: #add7fe;
 }
 
 .tag-yellow {
@@ -1299,10 +1305,86 @@ body {
   .mobile-only {
     display: none !important;
   }
+  .hero-section.has-venue {
+    padding:0em !important;
+    max-height:710px !important;
+    min-height:0px !important;
+    height:100vh !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
 }
 @media (max-width: 1024px) {
+  .section-bar-section{
+        position: absolute;
+    right: 8px;
+  }
+  .section-bar-section.has-active-venue{
+    justify-content:flex-start !important;
+    .chevron-icon{
+      filter: invert(1);
+    }
+  }
+  .hero-section.has-venue {
+  padding:0em !important;
+  height:100vh !important;
+  max-height:780px !important;
+    display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+    padding-bottom:1em !important;
+}
+#jobgrid{
+  .font-heading{
+    font-size:18px !important;
+  }
+  .job-date{
+   font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 13px !important;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.87;
+  letter-spacing: normal;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.7) !important;}
+}
+  .careers-page{
+
+    .hero-content{
+      padding-top:4em !important;
+    }
+    .hero-background{
+      padding-bottom:1em !important;
+    }
+    .hero-title{
+      font-size: 50px !important;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4 !important;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fff;
+    }
+    .hero-subtitle{
+      font-size: 16px !important;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #fff;
+        font-family: FONTSPRINGDEMO-Recoleta !important;
+
+    }
+  }
   #app{
-    max-width:425px !important;
+    //max-width:425px !important;
     margin:0 auto !important;
   }
   .desktop-only {
