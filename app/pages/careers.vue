@@ -191,7 +191,7 @@ const goToPage = (page: number) => {
       <!-- ========================================== -->
       <section v-if="!activeVenue" class="careers-hero-default">
         <div class="careers-hero-container d-flex row">
-          <div class="careers-hero-content col-7">
+          <div class="careers-hero-content col-12 col-lg-7 col-md-7">
             <div class="careers-hero-inner">
               <h1 class="careers-hero-title">
                 {{ content.hero_default?.title_line_1 }}<br />
@@ -200,7 +200,7 @@ const goToPage = (page: number) => {
               
             </div>
           </div>
-          <div class="careers-hero-image col-5">
+          <div class="careers-hero-image col-12 col-lg-5 col-md-5">
             <img :src="content.hero_default?.image" alt="Join our team"  />
           </div>
         </div>
@@ -315,10 +315,9 @@ const goToPage = (page: number) => {
 
       <!-- Job Grid -->
       <section id="jobgrid" class="container py-5">
-        <div class="d-flex align-items-center justify-content-between mb-4">
-          
+        <div id="paginationJobs" class="d-flex align-items-center justify-content-between mb-4">
           <p v-if="totalPages > 1" class="text-muted small mb-0">
-            Page {{ currentPage }} of {{ totalPages }}
+            Page {{ currentPage }} sur {{ totalPages }}
           </p>
         </div>
 
@@ -1132,7 +1131,7 @@ const goToPage = (page: number) => {
   line-height: 1.52 !important;
   letter-spacing: normal;
   text-align: left;
-  color: #000 !important;
+  color: #000 ;
     }
     .job-date{
       font-family: FONTSPRINGDEMO-RecoletaMedium;

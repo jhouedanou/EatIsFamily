@@ -1289,7 +1289,21 @@ body {
     }
   }
 }
-
+#paginationJobs{
+  p{
+        font-family: FONTSPRINGDEMO-RecoletaMedium;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.52;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgba(0, 0, 0, 0.7);
+    display: block;
+    margin: 1em auto;
+  }
+}
 // =============================================
 // RESPONSIVE STYLES
 // =============================================
@@ -1302,6 +1316,7 @@ body {
   max-height: 100vh !important;
 }
 @media (min-width: 1024px) {
+  
   .mobile-only {
     display: none !important;
   }
@@ -1317,9 +1332,36 @@ body {
   }
 }
 @media (max-width: 1024px) {
+  .careers-hero-container{
+    display:flex;
+    flex-direction:colum !important;
+    
+  }
+  .jobcardheader{
+    h3{
+      font-size:20px !important;
+    }
+    p{
+        font-family: FONTSPRINGDEMO-RecoletaMedium;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.74;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+    }
+  }
   .section-bar-section{
         position: absolute;
     right: 8px;
+  }
+  .matiti{
+    img{
+   //height:50px !important;
+    }
+   
   }
   .section-bar-section.has-active-venue{
     justify-content:flex-start !important;
