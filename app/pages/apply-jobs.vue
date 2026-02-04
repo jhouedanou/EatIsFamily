@@ -44,7 +44,7 @@ const isValidSeoTitle = (title: string | undefined) => {
 }
 
 useHead(() => ({
-  title: isValidSeoTitle(content.value?.seo?.title) ? content.value.seo.title : 'Job Opportunities - Eat Is Family',
+  title: isValidSeoTitle(content.value?.seo?.title) ? content.value.seo.title : 'Offres d\'emploi - Eat Is Family',
   meta: [
     { name: 'description', content: content.value?.seo?.meta_description || '' }
   ]

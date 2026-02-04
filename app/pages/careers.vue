@@ -87,7 +87,7 @@ onMounted(async () => {
 
 // Label pour "All Sites" depuis le JSON
 const allSitesLabel = computed(() => {
-  return content.value?.search_section.all_sites_label || 'All Sites'
+  return content.value?.search_section.all_sites_label || 'Tous les sites'
 })
 
 // Extraire toutes les venues uniques des jobs
@@ -124,7 +124,7 @@ const getJobExcerpt = (job: JobWithVenue) => {
 
 // Helper pour obtenir le nom de la venue du job
 const getJobVenueName = (job: JobWithVenue) => {
-  return job.venue?.name || 'Various Locations'
+  return job.venue?.name || 'Plusieurs sites'
 }
 
 // Helper pour obtenir la location de la venue du job
@@ -134,17 +134,17 @@ const getJobVenueLocation = (job: JobWithVenue) => {
 
 // Helper pour formater la date relative
 const getPostedTime = (dateString?: string) => {
-  if (!dateString) return 'Recently'
+  if (!dateString) return 'Récemment'
   const date = new Date(dateString)
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
 
-  if (diffHours < 1) return 'Just now'
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
-  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  if (diffHours < 1) return 'À l\'instant'
+  if (diffHours < 24) return `Il y a ${diffHours} heure${diffHours > 1 ? 's' : ''}`
+  if (diffDays < 7) return `Il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`
+  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
 }
 
 const filteredJobs = computed(() => {
@@ -255,7 +255,7 @@ const goToPage = (page: number) => {
           <p class="hero-subtitle">
             <LucideMapPin style="width: 1.25rem; height: 1.25rem;" /> {{ activeVenue.location }}
             <span class="subtitle-divider">•</span>
-            {{ filteredJobs.length }} Open Position{{ filteredJobs.length !== 1 ? 's' : '' }}
+            {{ filteredJobs.length }} poste{{ filteredJobs.length !== 1 ? 's' : '' }} ouvert{{ filteredJobs.length !== 1 ? 's' : '' }}
           </p>
         </div>
       </section>

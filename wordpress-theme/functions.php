@@ -1824,6 +1824,7 @@ function eatisfamily_get_global_settings($request) {
         // Contact Form 7 Configuration
         'contact_form' => array(
             'cf7_form_id' => get_option('eatisfamily_cf7_contact_form_id', ''),
+            'cf7_job_application_form_id' => get_option('eatisfamily_cf7_job_application_form_id', ''),
         ),
     );
     

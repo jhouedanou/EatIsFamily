@@ -28,7 +28,7 @@ defineProps({
   },
   postedTime: {
     type: String,
-    default: 'Just now'
+    default: 'À l\'instant'
   }
 })
 </script>
@@ -39,7 +39,7 @@ defineProps({
       <!-- Header -->
       <div>
         <h3 class="font-heading font-bold text-xl leading-tight mb-1">{{ title }}</h3>
-        <p class="text-xs text-gray-500 font-medium mb-4">Posted {{ postedTime }}</p>
+        <p class="text-xs text-gray-500 font-medium mb-4">Publié {{ postedTime }}</p>
 
         <!-- Tags Row -->
         <div class="flex flex-wrap gap-2 mb-4">
@@ -68,10 +68,10 @@ defineProps({
       <!-- Buttons -->
       <div class="flex gap-3 mt-auto">
         <NuxtLink :to="link" class="btn-primary flex-1 text-center text-sm">
-          Apply Now
+          Postuler
         </NuxtLink>
         <NuxtLink :to="link" class="btn-secondary flex-1 text-center text-sm">
-          View details
+          Voir les détails
         </NuxtLink>
       </div>
     </div>

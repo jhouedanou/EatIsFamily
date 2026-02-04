@@ -43,7 +43,7 @@ const getJobExcerpt = (j: JobWithVenue) => {
 
 // Helper pour obtenir le nom de la venue
 const getVenueName = (j: JobWithVenue) => {
-  return j.venue?.name || 'Various Locations'
+  return j.venue?.name || 'Plusieurs sites'
 }
 
 // Helper pour obtenir la location de la venue
@@ -66,32 +66,32 @@ const goBack = () => {
 const shareJob = () => {
   if (navigator.share) {
     navigator.share({
-      title: job.value ? getJobTitle(job.value) : 'Job Opening',
+      title: job.value ? getJobTitle(job.value) : 'Offre d\'emploi',
       url: window.location.href
     })
   } else {
     navigator.clipboard.writeText(window.location.href)
-    alert('Link copied to clipboard!')
+    alert('Lien copié dans le presse-papiers !')
   }
 }
 
 // What you'll do - responsibilities
 const responsibilities = [
-  'Lead daily operations and ensure quality standards',
-  'Collaborate with team members to deliver excellence',
-  'Maintain safety and hygiene protocols',
-  'Contribute to menu planning and innovation',
-  'Train and mentor junior staff members'
+  'Diriger les opérations quotidiennes et garantir les normes de qualité',
+  'Collaborer avec les membres de l\'équipe pour atteindre l\'excellence',
+  'Maintenir les protocoles de sécurité et d\'hygiène',
+  'Contribuer à la planification des menus et à l\'innovation',
+  'Former et encadrer les membres juniors de l\'équipe'
 ]
 
 // UI Strings from global settings with fallbacks
-const loadingText = computed(() => getString('loading') || 'Loading...')
-const jobNotFoundText = computed(() => getString('job_not_found') || 'Job Not Found')
-const backToJobsText = computed(() => getString('back_to_jobs') || 'Browse All Jobs')
-const applyNowText = computed(() => getString('apply_now') || 'Apply Now')
+const loadingText = computed(() => getString('loading') || 'Chargement...')
+const jobNotFoundText = computed(() => getString('job_not_found') || 'Offre non trouvée')
+const backToJobsText = computed(() => getString('back_to_jobs') || 'Voir toutes les offres')
+const applyNowText = computed(() => getString('apply_now') || 'Postuler')
 
 useHead(() => ({
-  title: job.value ? `${getJobTitle(job.value)} - Careers | Eat Is Family` : 'Job Details',
+  title: job.value ? `${getJobTitle(job.value)} - Carrières | Eat Is Family` : 'Détails de l\'offre',
   meta: [
     { name: 'description', content: job.value ? getJobExcerpt(job.value) : '' }
   ]
@@ -106,7 +106,7 @@ useHead(() => ({
     <!-- Job Not Found -->
     <div v-else-if="!job" class="not-found-container">
       <h1>{{ jobNotFoundText }}</h1>
-      <p>The position you're looking for doesn't exist or has been filled.</p>
+      <p>Le poste que vous recherchez n'existe pas ou a été pourvu.</p>
       <NuxtLink to="/careers" class="btn-back">
         {{ backToJobsText }}
       </NuxtLink>
@@ -137,7 +137,7 @@ useHead(() => ({
 
             <div class="job-tags">
               <span class="tag tag-blue">
-                Department - {{ job.department || 'Culinary' }}
+                Département - {{ job.department || 'Culinaire' }}
               </span>
               <span class="tag tag-lime">
                 <nuxt-img :src="iconBriefcase" alt="briefcase icon" width="16" height="16" />
@@ -155,8 +155,8 @@ useHead(() => ({
           <!-- CTA Banner - Ready To Join -->
           <div class="cta-banner">
             <div class="cta-content">
-              <h3>Ready To Join Our Team?</h3>
-              <p>Apply now and be part of something special</p>
+              <h3>Prêt à rejoindre notre équipe ?</h3>
+              <p>Postulez maintenant et faites partie d'une aventure exceptionnelle</p>
             </div>
             <button id="apply-button" class="border-0 bg-transparent" @click="openApplyModal">
               <nuxt-img :src="iconApplyForThis" alt="briefcase icon" width="16" height="16" />
@@ -165,7 +165,7 @@ useHead(() => ({
 
           <!-- Life at Location Section -->
           <section class="life-section">
-            <h2 class="section-title">Life at {{ getVenueName(job) }}</h2>
+            <h2 class="section-title">La vie à {{ getVenueName(job) }}</h2>
             <div class="gallery-grid">
               <div v-for="(img, index) in galleryImages" :key="index" class="gallery-item">
                 <img :src="job.featured_media || `/images/placeholder-${index + 1}.jpg`" :alt="`Life at ${getVenueName(job)}`" />
@@ -175,13 +175,13 @@ useHead(() => ({
 
           <!-- Job Description And Requirement -->
           <section class="description-section">
-            <h2 class="section-title">Job Description And Requirement</h2>
+            <h2 class="section-title">Description du poste et prérequis</h2>
 
             <div class="description-grid">
               <!-- What You'll Do -->
               <div class="description-card">
-                <h3>What You'll Do</h3>
-                <p class="card-intro">You'll do the following:</p>
+                <h3>Vos missions</h3>
+                <p class="card-intro">Vous serez amené(e) à :</p>
                 <ul class="description-list">
                   <li v-for="(item, index) in responsibilities" :key="index">
                     <LucideChevronRight :size="16" class="list-icon" />
@@ -192,8 +192,8 @@ useHead(() => ({
 
               <!-- What We're Looking For -->
               <div class="description-card">
-                <h3>What We're Looking For</h3>
-                <p class="card-intro">The following requirement is what we are looking for</p>
+                <h3>Profil recherché</h3>
+                <p class="card-intro">Voici les compétences et qualités que nous recherchons</p>
                 <ul class="description-list">
                   <li v-for="(req, index) in job.requirements" :key="index">
                     <LucideChevronRight :size="16" class="list-icon" />
@@ -210,7 +210,7 @@ useHead(() => ({
             <div class="info-card card-pink">
               <div class="card-header">
                 <LucideHeart :size="20" class="card-icon" />
-                <h3>Why Join Us</h3>
+                <h3>Pourquoi nous rejoindre</h3>
               </div>
               <ul class="benefits-list">
                 <li v-for="(benefit, index) in job.benefits" :key="index">
@@ -222,31 +222,31 @@ useHead(() => ({
 
             <!-- Quick Facts - White Card -->
             <div class="info-card card-white">
-              <h3>Quick Facts</h3>
+              <h3>En bref</h3>
               <div class="facts-list">
                 <div class="fact-item">
-                  <span class="fact-label">LOCATION</span>
+                  <span class="fact-label">LIEU</span>
                   <span class="fact-value">{{ getVenueLocation(job) }}</span>
                 </div>
                 <div class="fact-item">
-                  <span class="fact-label">DEPARTMENT</span>
-                  <span class="fact-value">{{ job.department || 'Culinary' }}</span>
+                  <span class="fact-label">DÉPARTEMENT</span>
+                  <span class="fact-value">{{ job.department || 'Culinaire' }}</span>
                 </div>
                 <div class="fact-item">
-                  <span class="fact-label">EMPLOYMENT TYPE</span>
+                  <span class="fact-label">TYPE DE CONTRAT</span>
                   <span class="fact-value">{{ job.job_type }}</span>
                 </div>
                 <div class="fact-item">
-                  <span class="fact-label">AVAILABLE POSITIONS</span>
-                  <span class="fact-value fact-highlight">{{ job.positions || '2 Slots' }}</span>
+                  <span class="fact-label">POSTES DISPONIBLES</span>
+                  <span class="fact-value fact-highlight">{{ job.positions || '2 postes' }}</span>
                 </div>
               </div>
             </div>
 
             <!-- Share Job - Blue Card -->
             <div class="info-card card-blue">
-              <h3>Do You Know Someone That Is Perfect For This Position?</h3>
-              <p>Kindly Share This Job To The Person</p>
+              <h3>Vous connaissez quelqu'un de parfait pour ce poste ?</h3>
+              <p>Partagez cette offre avec cette personne</p>
               <button class="btn-sharesd border-0 background-transparent bg-transparent" @click="shareJob">
                 <nuxtImg :src="iconShareJob" alt="share icon" width="240" height="" />
               </button>
@@ -256,8 +256,8 @@ useHead(() => ({
           <!-- Bottom CTA Section -->
           <section id="mahamad" class="bottom-cta">
             <div class="bottom-cta-content">
-              <h2>Ready To Make An Impact?</h2>
-              <p>Join our team and be part of creating unforgettable experiences at one of France's most exciting venues.</p>
+              <h2>Prêt à faire la différence ?</h2>
+              <p>Rejoignez notre équipe et participez à la création d'expériences inoubliables dans l'un des lieux les plus passionnants de France.</p>
               <div class="bottom-cta-buttons">
                 <button class="bg-transparent border-0" @click="openApplyModal">
                   <nuxt-img :src="btnApplyPosition" alt="apply icon" width="240" height="" />

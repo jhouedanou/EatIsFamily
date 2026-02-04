@@ -2,7 +2,7 @@
   <div v-if="isOpen" class="modal-overlay" @click.self="close">
     <div class="modal-container">
       <!-- Close Button -->
-      <button class="modal-close" @click="close" aria-label="Close">
+      <button class="modal-close" @click="close" aria-label="Fermer">
         <LucideX />
       </button>
 
@@ -11,7 +11,7 @@
         <div class="modal-icon">
           <LucideBriefcase />
         </div>
-        <h2 class="modal-title">Apply for this Position</h2>
+        <h2 class="modal-title">Postuler à cette offre</h2>
         <p class="modal-subtitle">{{ jobTitle }}</p>
         <span class="modal-location">
           <LucideMapPin style="width: 1rem; height: 1rem;" />
@@ -24,22 +24,22 @@
         <form v-if="!submitSuccess" @submit.prevent="handleSubmit" class="apply-form">
           <div class="form-row">
             <div class="form-group">
-              <label for="apply-name">Full Name *</label>
+              <label for="apply-name">Nom complet *</label>
               <input
                     v-model="form.name"
                     type="text"
                     id="apply-name"
-                    placeholder="Enter your full name"
+                    placeholder="Entrez votre nom complet"
                     required
                   />
                 </div>
                 <div class="form-group">
-                  <label for="apply-email">Email Address *</label>
+                  <label for="apply-email">Adresse email *</label>
                   <input
                     v-model="form.email"
                     type="email"
                     id="apply-email"
-                    placeholder="your.email@example.com"
+                    placeholder="votre.email@exemple.com"
                     required
                   />
                 </div>
@@ -47,7 +47,7 @@
 
               <div class="form-row">
                 <div class="form-group">
-                  <label for="apply-phone">Phone Number *</label>
+                  <label for="apply-phone">Numéro de téléphone *</label>
                   <input
                     v-model="form.phone"
                     type="tel"
@@ -57,18 +57,18 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label for="apply-linkedin">LinkedIn Profile</label>
+                  <label for="apply-linkedin">Profil LinkedIn</label>
                   <input
                     v-model="form.linkedin"
                     type="url"
                     id="apply-linkedin"
-                    placeholder="https://linkedin.com/in/yourprofile"
+                    placeholder="https://linkedin.com/in/votreprofil"
                   />
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="apply-resume">Resume/CV *</label>
+                <label for="apply-resume">CV *</label>
                 <div class="file-upload" :class="{ 'has-file': form.resumeName }">
                   <input
                     type="file"
@@ -81,26 +81,26 @@
                     <LucideUpload />
                     <span v-if="form.resumeName">{{ form.resumeName }}</span>
                     <span v-else>
-                      <strong>Click to upload</strong> or drag and drop<br/>
-                      PDF, DOC, DOCX (max 5MB)
+                      <strong>Cliquez pour télécharger</strong> ou glissez-déposez<br/>
+                      PDF, DOC, DOCX (max 5 Mo)
                     </span>
                   </div>
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="apply-cover">Cover Letter</label>
+                <label for="apply-cover">Lettre de motivation</label>
                 <textarea
                   v-model="form.coverLetter"
                   id="apply-cover"
                   rows="4"
-                  placeholder="Tell us why you'd be a great fit for this role..."
+                  placeholder="Dites-nous pourquoi vous seriez parfait pour ce poste..."
                 ></textarea>
               </div>
 
               <!-- Honeypot field (hidden from users, trap for bots) -->
               <div class="form-group honeypot-field" aria-hidden="true">
-                <label for="apply-website">Website</label>
+                <label for="apply-website">Site web</label>
                 <input
                   v-model="form.website"
                   type="text"
@@ -119,7 +119,7 @@
                     required
                   />
                   <span class="checkbox-text">
-                    I agree to the processing of my personal data in accordance with the <a href="/privacy" target="_blank">Privacy Policy</a> *
+                    J'accepte le traitement de mes données personnelles conformément à la <a href="/privacy" target="_blank">Politique de confidentialité</a> *
                   </span>
                 </label>
               </div>
@@ -134,7 +134,7 @@
                 <span v-if="isSubmitting" class="spinner"></span>
                 <span v-else>
                   <LucideSend style="width: 1.25rem; height: 1.25rem;" />
-                  Submit Application
+                  Envoyer ma candidature
                 </span>
               </button>
             </form>
@@ -144,10 +144,10 @@
               <div class="success-icon">
                 <LucideCheck />
               </div>
-              <h3>Application Submitted!</h3>
-              <p>Thank you for applying to <strong>{{ jobTitle }}</strong>. We've received your application and will review it shortly.</p>
-              <p class="success-note">You'll receive a confirmation email at <strong>{{ form.email }}</strong></p>
-              <button @click="close" class="btn-close-success">Close</button>
+              <h3>Candidature envoyée !</h3>
+              <p>Merci d'avoir postulé pour le poste <strong>{{ jobTitle }}</strong>. Nous avons bien reçu votre candidature et l'examinerons rapidement.</p>
+              <p class="success-note">Vous recevrez un email de confirmation à <strong>{{ form.email }}</strong></p>
+              <button @click="close" class="btn-close-success">Fermer</button>
             </div>
           </div>
         </div>
@@ -178,6 +178,9 @@ watch(() => props.isOpen, (newVal, oldVal) => {
 
 const emit = defineEmits(['close'])
 
+// Utiliser le composable CF7 pour les candidatures
+const { submitJobApplication, validateForm, validateFile } = useJobApplicationForm()
+
 const form = ref({
   name: '',
   email: '',
@@ -201,39 +204,68 @@ const close = () => {
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (target.files && target.files[0]) {
-    form.value.resume = target.files[0]
-    form.value.resumeName = target.files[0].name
+    const file = target.files[0]
+    
+    // Valider le fichier
+    const validation = validateFile(file)
+    if (!validation.valid) {
+      submitError.value = validation.error || 'Fichier invalide'
+      return
+    }
+    
+    form.value.resume = file
+    form.value.resumeName = file.name
+    submitError.value = null
   }
 }
 
 const handleSubmit = async () => {
+  // Vérifier le honeypot (si rempli, c'est un bot)
+  if (form.value.website) {
+    console.log('[JobApplyModal] Honeypot detected, ignoring submission')
+    submitSuccess.value = true // Fake success pour le bot
+    return
+  }
+  
   isSubmitting.value = true
   submitError.value = null
   
+  // Valider les données du formulaire
+  const formData = {
+    name: form.value.name,
+    email: form.value.email,
+    phone: form.value.phone,
+    linkedin: form.value.linkedin,
+    resume: form.value.resume,
+    coverLetter: form.value.coverLetter,
+    jobTitle: props.jobTitle,
+    jobLocation: props.jobLocation,
+    jobSlug: props.jobSlug,
+    consent: form.value.consent
+  }
+  
+  const validation = validateForm(formData)
+  if (!validation.valid) {
+    isSubmitting.value = false
+    submitError.value = validation.errors.join('. ')
+    return
+  }
+  
   try {
-    // Create FormData for multipart/form-data submission
-    const formData = new FormData()
-    formData.append('name', form.value.name)
-    formData.append('email', form.value.email)
-    formData.append('phone', form.value.phone)
-    formData.append('linkedin', form.value.linkedin || '')
-    formData.append('coverLetter', form.value.coverLetter || '')
-    formData.append('jobSlug', props.jobSlug)
-    formData.append('website', form.value.website) // Honeypot
+    // Soumettre via Contact Form 7 API
+    const response = await submitJobApplication(formData)
     
-    if (form.value.resume) {
-      formData.append('resume', form.value.resume)
-    }
-    
-    // Submit to API
-    const response = await $fetch('/api/applications/apply', {
-      method: 'POST',
-      body: formData
-    })
-    
-    if (response.success) {
+    if (response.status === 'mail_sent') {
       isSubmitting.value = false
       submitSuccess.value = true
+      console.log('[JobApplyModal] Application submitted successfully')
+    } else if (response.status === 'validation_failed' && response.invalid_fields) {
+      isSubmitting.value = false
+      const fieldErrors = response.invalid_fields.map(f => f.message).join('. ')
+      submitError.value = fieldErrors || response.message
+    } else {
+      isSubmitting.value = false
+      submitError.value = response.message || 'Une erreur est survenue. Veuillez réessayer.'
     }
   } catch (error: any) {
     isSubmitting.value = false

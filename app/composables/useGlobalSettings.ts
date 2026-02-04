@@ -121,6 +121,10 @@ export interface GlobalSettings {
         decoration_2: string
         vector_bg: string
     }
+    contact_form?: {
+        cf7_form_id?: string
+        cf7_job_application_form_id?: string
+    }
 }
 
 // Local fallback settings
@@ -205,22 +209,22 @@ const defaultSettings: GlobalSettings = {
         locale: 'fr'
     },
     strings: {
-        loading: 'Loading...',
-        no_results: 'No results found.',
-        error_generic: 'An error occurred. Please try again.',
-        submit_button: 'Submit',
-        send_message: 'Send Message',
-        sending: 'Sending...',
-        message_sent: 'Message Sent!',
-        thank_you: 'Thank you for reaching out. We will get back to you soon.',
-        apply_now: 'Apply Now',
-        view_details: 'View Details',
-        read_more: 'Read More',
-        back_to_jobs: 'Browse All Jobs',
-        job_not_found: 'Job Not Found',
-        all_job_titles: 'All job titles',
-        all_sites: 'All sites',
-        search_placeholder: 'Search...'
+        loading: 'Chargement...',
+        no_results: 'Aucun résultat trouvé.',
+        error_generic: 'Une erreur est survenue. Veuillez réessayer.',
+        submit_button: 'Envoyer',
+        send_message: 'Envoyer le message',
+        sending: 'Envoi en cours...',
+        message_sent: 'Message envoyé !',
+        thank_you: 'Merci de nous avoir contactés. Nous vous répondrons rapidement.',
+        apply_now: 'Postuler',
+        view_details: 'Voir les détails',
+        read_more: 'Lire la suite',
+        back_to_jobs: 'Voir toutes les offres',
+        job_not_found: 'Offre non trouvée',
+        all_job_titles: 'Tous les postes',
+        all_sites: 'Tous les sites',
+        search_placeholder: 'Rechercher...'
     },
     backgrounds: {
         hero_default: '/images/heroBg.svg',

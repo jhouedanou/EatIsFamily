@@ -24,8 +24,8 @@
       </div>
       <p class="job-excerpt" v-html="getJobExcerpt()"></p>
       <div class="card-actions">
-        <NuxtLink :to="`/jobs/${job.slug}`" class="btn-view">View Details</NuxtLink>
-        <NuxtLink :to="`/jobs/${job.slug}#apply`" class="btn-apply">Apply</NuxtLink>
+        <NuxtLink :to="`/jobs/${job.slug}`" class="btn-view">Voir les détails</NuxtLink>
+        <NuxtLink :to="`/jobs/${job.slug}#apply`" class="btn-apply">Postuler</NuxtLink>
       </div>
     </div>
   </article>

@@ -337,6 +337,11 @@ function eatisfamily_ajax_save_forms_v5() {
         update_option('eatisfamily_cf7_contact_form_id', sanitize_text_field($form_data['cf7_contact_form_id']));
     }
     
+    // Save CF7 Job Application Form ID separately
+    if (isset($form_data['cf7_job_application_form_id'])) {
+        update_option('eatisfamily_cf7_job_application_form_id', sanitize_text_field($form_data['cf7_job_application_form_id']));
+    }
+    
     // Save to database
     $result = update_option('eatisfamily_forms', $forms_content);
     
@@ -863,6 +868,27 @@ function eatisfamily_forms_page_v5() {
             <div id="job-application" class="tab-content" style="display: none;">
                 <h3><?php _e('💼 Job Application Form', 'eatisfamily'); ?></h3>
                 <p class="description"><?php _e('Labels, placeholders et messages pour le formulaire de candidature.', 'eatisfamily'); ?></p>
+                
+                <!-- Contact Form 7 Integration for Job Applications -->
+                <div style="background: #e7f3fe; border-left: 4px solid #2196F3; padding: 15px; margin-bottom: 20px;">
+                    <h4 style="margin-top: 0;"><?php _e('🔗 Intégration Contact Form 7 - Candidatures', 'eatisfamily'); ?></h4>
+                    <table class="form-table" style="margin: 0;">
+                        <tr>
+                            <th scope="row"><label for="cf7_job_application_form_id"><?php _e('ID du Formulaire CF7', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="cf7_job_application_form_id" id="cf7_job_application_form_id" value="<?php echo esc_attr(get_option('eatisfamily_cf7_job_application_form_id', '')); ?>" class="regular-text" placeholder="Ex: 456">
+                                <p class="description">
+                                    <?php _e('Entrez l\'ID du formulaire Contact Form 7 pour les candidatures.', 'eatisfamily'); ?><br>
+                                    <?php _e('Trouvez l\'ID dans <strong>Contact > Formulaires de contact</strong> (colonne "Shortcode").', 'eatisfamily'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="margin-bottom: 0; font-size: 12px; color: #666;">
+                        <?php _e('⚠️ Assurez-vous que Contact Form 7 est installé et que le formulaire contient les champs: your-name, your-email, your-phone, your-linkedin, your-message, your-resume (fichier), job-title, job-location, job-slug', 'eatisfamily'); ?>
+                    </p>
+                </div>
+                
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="form_job_app_title"><?php _e('Form Title', 'eatisfamily'); ?></label></th>
