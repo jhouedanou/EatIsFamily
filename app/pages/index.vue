@@ -45,7 +45,7 @@ const heroVideoType = computed(() => content.value?.hero_section?.video_type || 
 const heroYoutubeId = computed(() => content.value?.hero_section?.youtube_id || '')
 const heroWistiaId = computed(() => content.value?.hero_section?.wistia_id || '')
 const heroVideoUrl = computed(() => content.value?.hero_section?.video_url || '')
-const heroBackgroundStyle = computed(() => {
+
 // Only show background image if video_type is 'image' or not set, or on mobile
 const heroBackgroundStyle = computed(() => {
   // On mobile, always show image instead of video to save battery
