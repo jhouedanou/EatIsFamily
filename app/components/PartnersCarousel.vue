@@ -21,11 +21,12 @@ defineProps<{
       :space-between="30"
       :loop="true"
       :autoplay="{
-        delay: 0,
+        delay: 3000,
         disableOnInteraction: false,
+        pauseOnMouseEnter: true,
       }"
-      :speed="3000"
-      :allow-touch-move="false"
+      :speed="800"
+      :allow-touch-move="true"
       :breakpoints="{
         640: {
           slidesPerView: 3,

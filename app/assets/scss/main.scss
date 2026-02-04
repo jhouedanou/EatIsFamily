@@ -1316,7 +1316,8 @@ body {
   max-height: 100vh !important;
 }
 @media (min-width: 1024px) {
-  
+
+ 
   .mobile-only {
     display: none !important;
   }
@@ -1346,6 +1347,11 @@ body {
   }
 }
 @media (max-width: 1024px) {
+
+   .events-page #nza .loris{
+    background:#93cbff;
+    border-radius:20px;
+  }
   .contact-page{
     padding-top:8em !important;
   }
@@ -1354,7 +1360,7 @@ body {
 
   }
   .contact-image{
-    display:none !important;
+   // display:none !important;
   }
     .musuc{
          width: 100% !important;
@@ -1562,7 +1568,7 @@ body {
   }
   #heroTitle,
   #heroTitleAlt {
-    font-size: 50px !important;
+    font-size: 45px !important;
     line-height: 1.3 !important;
   }
   //presentation eat is famaily
@@ -1574,7 +1580,6 @@ body {
   .job-search-form {
     max-width: 95vw !important;
     bottom: 5vh !important;
-    max-height: 44vh !important;
     position: absolute !important;
     margin: auto !important;
     left: 0 !important;
@@ -1613,7 +1618,7 @@ body {
     }
     #marr {
       height: 100vh !important;
-      max-height: 80vh !important;
+      max-height: 90vh !important;
       min-height: 0 !important;
     }
     #blusy {
@@ -2030,15 +2035,15 @@ padding-top:7em !important;
     }
   }
   #weHelpwith #seeAboutYa {
-    max-width: 399px !important;
-    overflow-y: scroll !important;
-    max-height: 533px !important;
-    width: 100vw !important;
-    height: 100vh !important;
-
+  max-width: 354px !important;
+        overflow-y: scroll !important;
+        max-height: 463px !important;
+        width: 100vw !important;
+        height: 100vh !important;
+    
     ul {
-      height: 480px !important;
-
+        height: 386px !important;
+        overflow: hidden;
       li {
         font-size: 14px !important;
       }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { LucideChefHat, LucideUtensils, LucidePartyPopper, LucideMapPin, LucideArrowRight } from 'lucide-vue-next'
+import { onUnmounted } from 'vue'
 import gsap from 'gsap'
 import type { HomepageContent } from '~/composables/usePageContent'
 
@@ -7,6 +8,14 @@ const heroTitle = ref(null)
 const { getHomepageContent } = usePageContent()
 const content = ref<HomepageContent | null>(null)
 const { settings } = useGlobalSettings()
+
+// Detect mobile devices to optimize video playback
+const isMobile = ref(false)
+const checkMobile = () => {
+  if (typeof window !== 'undefined') {
+    isMobile.value = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  }
+}
 
 // Dynamic button URLs with fallbacks
 const btnExplore = computed(() => settings.value?.icons?.btn_explore || '/images/btnExplore.svg')
@@ -37,6 +46,16 @@ const heroYoutubeId = computed(() => content.value?.hero_section?.youtube_id || 
 const heroWistiaId = computed(() => content.value?.hero_section?.wistia_id || '')
 const heroVideoUrl = computed(() => content.value?.hero_section?.video_url || '')
 const heroBackgroundStyle = computed(() => {
+// Only show background image if video_type is 'image' or not set, or on mobile
+const heroBackgroundStyle = computed(() => {
+  // On mobile, always show image instead of video to save battery
+  if (isMobile.value && content.value?.hero_section?.bg) {
+    return {
+      backgroundImage: `url('${content.value.hero_section.bg}')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center'
+    }
+  }
   // Only show background image if video_type is 'image' or not set
   if (heroVideoType.value === 'image' && content.value?.hero_section?.bg) {
     return {
@@ -48,7 +67,15 @@ const heroBackgroundStyle = computed(() => {
   return {}
 })
 
+// Check if video should be shown (not on mobile to save battery)
+const shouldShowVideo = computed(() => !isMobile.value)
+
 onMounted(async () => {
+  checkMobile()
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', checkMobile)
+  }
+  
   content.value = await getHomepageContent()
 
   if (heroTitle.value && content.value) {
@@ -60,7 +87,12 @@ onMounted(async () => {
       delay: 0.2
     })
   }
+})
 
+onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', checkMobile)
+  }
 })
 </script>
 
@@ -83,33 +115,35 @@ onMounted(async () => {
         <!-- Hero media container (image, YouTube or MP4 video) with job search form -->
         <div id="marr" class="col-lg-6 col-md-6 p-0 min-vh-100 position-relative hero-media-container"
           :style="heroBackgroundStyle"
-          :class="{ 'has-video': heroVideoType !== 'image' }">
+          :class="{ 'has-video': heroVideoType !== 'image' && shouldShowVideo }">
           
-          <!-- YouTube Video Background -->
-          <div v-if="heroVideoType === 'youtube' && heroYoutubeId" class="hero-video-wrapper">
+          <!-- YouTube Video Background (disabled on mobile for battery saving) -->
+          <div v-if="shouldShowVideo && heroVideoType === 'youtube' && heroYoutubeId" class="hero-video-wrapper">
             <iframe
               :src="`https://www.youtube.com/embed/${heroYoutubeId}?autoplay=1&mute=1&loop=1&playlist=${heroYoutubeId}&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1`"
               frameborder="0"
               allow="autoplay; encrypted-media"
               allowfullscreen
+              loading="lazy"
               class="hero-youtube-iframe"
             ></iframe>
           </div>
 
-          <!-- Wistia Video Background -->
-          <div v-else-if="heroVideoType === 'wistia' && heroWistiaId" class="hero-video-wrapper">
+          <!-- Wistia Video Background (disabled on mobile for battery saving) -->
+          <div v-else-if="shouldShowVideo && heroVideoType === 'wistia' && heroWistiaId" class="hero-video-wrapper">
             <iframe
               :src="`https://fast.wistia.net/embed/iframe/${heroWistiaId}?autoPlay=true&silentAutoPlay=true&muted=true&endVideoBehavior=loop&controlsVisibleOnLoad=false&playbar=false&fullscreenButton=false&playButton=false&settingsControl=false&volumeControl=false&smallPlayButton=false&fitStrategy=cover`"
               frameborder="0"
               allow="autoplay; fullscreen"
               allowfullscreen
+              loading="lazy"
               class="hero-wistia-iframe"
             ></iframe>
           </div>
 
-          <!-- MP4 Video Background -->
+          <!-- MP4 Video Background (disabled on mobile for battery saving) -->
           <video 
-            v-else-if="heroVideoType === 'mp4' && heroVideoUrl" 
+            v-else-if="shouldShowVideo && heroVideoType === 'mp4' && heroVideoUrl" 
             class="hero-video-mp4"
             autoplay 
             muted 
