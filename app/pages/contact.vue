@@ -202,7 +202,7 @@ useHead(() => ({
 .contact-page {
   min-height: 100vh;
   background-color: #b8e986;
-  padding: 2rem 3rem 4rem;
+  padding: 10rem 3rem 4rem;
   position: relative;
 }
 

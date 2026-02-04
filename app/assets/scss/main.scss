@@ -1346,9 +1346,15 @@ body {
   }
 }
 @media (max-width: 1024px) {
+  .contact-page{
+    padding-top:8em !important;
+  }
   #rallah{
           width:100% !important;
 
+  }
+  .contact-image{
+    display:none !important;
   }
     .musuc{
          width: 100% !important;
