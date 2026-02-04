@@ -84,6 +84,24 @@ const responsibilities = [
   'Former et encadrer les membres juniors de l\'équipe'
 ]
 
+// Helper pour obtenir les images de la galerie
+const getGalleryImage = (j: JobWithVenue, index: number) => {
+  // Priorité: image venue, image2 venue, featured_media du job
+  const images = [
+    j.venue?.image,
+    j.venue?.image2,
+    j.featured_media,
+    j.venue?.image // répéter pour avoir 4 images
+  ].filter(Boolean)
+  
+  if (images.length > 0) {
+    return images[index % images.length] || images[0]
+  }
+  
+  // Image par défaut si rien n'est disponible
+  return '/images/events-hero.jpg'
+}
+
 // UI Strings from global settings with fallbacks
 const loadingText = computed(() => getString('loading') || 'Chargement...')
 const jobNotFoundText = computed(() => getString('job_not_found') || 'Offre non trouvée')
@@ -168,7 +186,7 @@ useHead(() => ({
             <h2 class="section-title">La vie à {{ getVenueName(job) }}</h2>
             <div class="gallery-grid">
               <div v-for="(img, index) in galleryImages" :key="index" class="gallery-item">
-                <img :src="job.featured_media || `/images/placeholder-${index + 1}.jpg`" :alt="`Life at ${getVenueName(job)}`" />
+                <img :src="getGalleryImage(job, index)" :alt="`La vie à ${getVenueName(job)}`" />
               </div>
             </div>
           </section>

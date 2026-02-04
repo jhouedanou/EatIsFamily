@@ -84,15 +84,12 @@ export const useVenues = () => {
 
     /**
      * Get a single venue by ID
+     * Note: Toujours utiliser la liste complète car l'endpoint individuel n'existe pas
      */
     const getVenueById = async (id: string): Promise<Venue | null> => {
-        // Try to fetch from API first
-        if (!useLocalFallback) {
-            const venue = await fetchSingle<Venue>('venues', id)
-            if (venue) return venue
-        }
+        if (!id) return null
         
-        // Fallback: fetch all and filter
+        // Récupérer toutes les venues et filtrer
         const venues = await getVenues()
         if (!venues) return null
         return venues.find(venue => venue.id === id) || null
