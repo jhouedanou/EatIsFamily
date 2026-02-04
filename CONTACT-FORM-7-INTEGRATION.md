@@ -78,27 +78,59 @@ Message:
 
 ## Configuration CORS (Important!)
 
-Pour permettre au frontend Nuxt d'envoyer des requêtes à l'API CF7, ajoutez ce code dans votre `functions.php` :
+Pour permettre au frontend Nuxt d'envoyer des requêtes à l'API, le code CORS est **déjà inclus** dans le thème WordPress (`functions.php`).
+
+Si vous avez des problèmes CORS, vérifiez que ce code est présent dans `wordpress-theme/functions.php` :
 
 ```php
-// Ajouter les headers CORS pour Contact Form 7 REST API
-add_filter('wpcf7_feedback_response', function($response, $result) {
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type");
+/**
+ * Add CORS headers to ALL REST API responses
+ */
+function eatisfamily_add_cors_headers_to_response($response) {
+    $response->header('Access-Control-Allow-Origin', '*');
+    $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    $response->header('Access-Control-Allow-Credentials', 'true');
     return $response;
-}, 10, 2);
+}
+add_filter('rest_post_dispatch', 'eatisfamily_add_cors_headers_to_response', 10, 1);
 
-// Gérer les requêtes OPTIONS (preflight)
-add_action('init', function() {
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+/**
+ * Handle OPTIONS preflight requests EARLY
+ */
+function eatisfamily_handle_preflight() {
+    $rest_prefix = rest_get_url_prefix();
+    $is_rest_request = (strpos($_SERVER['REQUEST_URI'], '/' . $rest_prefix . '/') !== false);
+    
+    if ($is_rest_request) {
         header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type");
-        exit(0);
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+        header("Access-Control-Allow-Credentials: true");
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            header("Access-Control-Max-Age: 86400");
+            status_header(200);
+            exit();
+        }
     }
-});
+}
+add_action('init', 'eatisfamily_handle_preflight', 1);
+
+/**
+ * Also add headers via send_headers action
+ */
+function eatisfamily_send_cors_headers() {
+    if (!headers_sent()) {
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+    }
+}
+add_action('send_headers', 'eatisfamily_send_cors_headers');
 ```
+
+**⚠️ Important** : Après avoir mis à jour le thème sur le serveur, videz le cache WordPress et le cache du serveur (si applicable).
 
 ## API Endpoint
 

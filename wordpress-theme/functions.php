@@ -1831,67 +1831,106 @@ function eatisfamily_get_global_settings($request) {
 }
 
 /**
- * Add CORS headers for API requests
+ * ============================================================================
+ * CORS CONFIGURATION - CRITICAL FOR NUXT FRONTEND
+ * ============================================================================
+ * These headers MUST be sent for cross-origin requests from localhost:3000
+ * or any other frontend domain to work properly.
  */
-function eatisfamily_add_cors_headers() {
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+/**
+ * Add CORS headers to ALL REST API responses
+ */
+function eatisfamily_add_cors_headers_to_response($response) {
+    $response->header('Access-Control-Allow-Origin', '*');
+    $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    $response->header('Access-Control-Allow-Credentials', 'true');
+    return $response;
 }
-add_action('rest_api_init', 'eatisfamily_add_cors_headers');
+add_filter('rest_post_dispatch', 'eatisfamily_add_cors_headers_to_response', 10, 1);
+
+/**
+ * Handle OPTIONS preflight requests EARLY (before WordPress processes the request)
+ */
+function eatisfamily_handle_preflight() {
+    // Check if this is a REST API request
+    $rest_prefix = rest_get_url_prefix();
+    $is_rest_request = (strpos($_SERVER['REQUEST_URI'], '/' . $rest_prefix . '/') !== false);
+    
+    if ($is_rest_request) {
+        // Send CORS headers for all REST requests
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+        header("Access-Control-Allow-Credentials: true");
+        
+        // If this is a preflight OPTIONS request, respond and exit
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            header("Access-Control-Max-Age: 86400"); // Cache preflight for 24 hours
+            status_header(200);
+            exit();
+        }
+    }
+}
+add_action('init', 'eatisfamily_handle_preflight', 1);
+
+/**
+ * Also add headers via send_headers action for extra coverage
+ */
+function eatisfamily_send_cors_headers() {
+    if (!headers_sent()) {
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+    }
+}
+add_action('send_headers', 'eatisfamily_send_cors_headers');
 
 /**
  * Add CORS headers specifically for Contact Form 7 REST API
  */
 add_filter('wpcf7_feedback_response', function($response, $result) {
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type");
-    return $response;
-}, 10, 2);
-
-/**
- * Handle OPTIONS preflight requests for CORS
- */
-add_action('init', function() {
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    if (!headers_sent()) {
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
         header("Access-Control-Allow-Headers: Content-Type");
-        exit(0);
     }
-});
+    return $response;
+}, 10, 2);
 
 /**
  * API Endpoint to get CF7 form numeric ID from hash
  * This is needed because CF7 5.6+ uses hash IDs in shortcodes but API needs numeric IDs
  */
-register_rest_route('eatisfamily/v1', '/cf7-form-id/(?P<hash>[a-zA-Z0-9]+)', array(
-    'methods' => 'GET',
-    'callback' => function($request) {
-        $hash = $request->get_param('hash');
-        
-        // Search for the form with this hash
-        $forms = get_posts(array(
-            'post_type' => 'wpcf7_contact_form',
-            'posts_per_page' => -1,
-        ));
-        
-        foreach ($forms as $form) {
-            $form_hash = substr(md5($form->ID), 0, 7);
-            if ($form_hash === $hash) {
-                return array(
-                    'numeric_id' => $form->ID,
-                    'hash' => $hash,
-                    'title' => $form->post_title
-                );
+add_action('rest_api_init', function() {
+    register_rest_route('eatisfamily/v1', '/cf7-form-id/(?P<hash>[a-zA-Z0-9]+)', array(
+        'methods' => 'GET',
+        'callback' => function($request) {
+            $hash = $request->get_param('hash');
+            
+            // Search for the form with this hash
+            $forms = get_posts(array(
+                'post_type' => 'wpcf7_contact_form',
+                'posts_per_page' => -1,
+            ));
+            
+            foreach ($forms as $form) {
+                $form_hash = substr(md5($form->ID), 0, 7);
+                if ($form_hash === $hash) {
+                    return array(
+                        'numeric_id' => $form->ID,
+                        'hash' => $hash,
+                        'title' => $form->post_title
+                    );
+                }
             }
-        }
-        
-        return new WP_Error('not_found', 'Form not found', array('status' => 404));
-    },
-    'permission_callback' => '__return_true',
-));
+            
+            return new WP_Error('not_found', 'Form not found', array('status' => 404));
+        },
+        'permission_callback' => '__return_true',
+    ));
+});
 
 /**
  * Enqueue Scripts and Styles
