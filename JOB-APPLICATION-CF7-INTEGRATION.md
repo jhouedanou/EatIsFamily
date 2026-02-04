@@ -13,26 +13,32 @@ Ce guide explique comment configurer l'intégration entre le formulaire de candi
 2. Créez un nouveau formulaire avec les champs suivants :
 
 ```
-[text* your-name placeholder "Votre nom complet"]
+<label>Nom complet *
+[text* your-name placeholder "Votre nom complet"]</label>
 
-[email* your-email placeholder "Votre adresse email"]
+<label>Email *
+[email* your-email placeholder "Votre adresse email"]</label>
 
-[tel* your-phone placeholder "+33 6 00 00 00 00"]
+<label>Téléphone *
+[tel* your-phone placeholder "+33 6 00 00 00 00"]</label>
 
-[url your-linkedin placeholder "https://linkedin.com/in/votreprofil"]
+<label>Profil LinkedIn
+[url your-linkedin placeholder "https://linkedin.com/in/votreprofil"]</label>
 
-[file your-resume limit:5mb filetypes:pdf|doc|docx]
+<label>CV (PDF, DOC, DOCX - max 5Mo) *
+[file* your-resume limit:5mb filetypes:pdf|doc|docx]</label>
 
-[textarea your-message placeholder "Dites-nous pourquoi vous seriez parfait pour ce poste..."]
+<label>Lettre de motivation
+[textarea your-message placeholder "Dites-nous pourquoi vous seriez parfait pour ce poste..."]</label>
 
-[hidden job-title]
-
-[hidden job-location]
-
-[hidden job-slug]
+[hidden job-title default:get]
+[hidden job-location default:get]
+[hidden job-slug default:get]
 
 [submit "Envoyer ma candidature"]
 ```
+
+**⚠️ Important** : Les champs `[hidden]` avec `default:get` permettent de recevoir les valeurs envoyées par le frontend.
 
 ### Correspondance des champs
 
@@ -179,9 +185,19 @@ Le composable `useJobApplicationForm.ts` valide :
 
 ### Le fichier CV n'est pas reçu
 
-1. Vérifiez la taille max de upload dans WordPress (php.ini)
-2. Vérifiez que le champ `[file your-resume]` est présent dans le formulaire CF7
-3. Vérifiez que `[your-resume]` est dans "File Attachments" de l'email
+1. Vérifiez la taille max de upload dans WordPress (php.ini) :
+   - `upload_max_filesize = 5M`
+   - `post_max_size = 8M`
+2. Vérifiez que le champ `[file* your-resume]` est présent dans le formulaire CF7
+3. Vérifiez que `[your-resume]` est dans "File Attachments" de l'onglet Mail
+4. Vérifiez les permissions du dossier `wp-content/uploads/wpcf7_uploads/`
+5. Vérifiez dans la console du navigateur que le fichier est bien envoyé (logs `[JobApplicationForm]`)
+
+### Les champs cachés (job-title, etc.) sont vides
+
+1. Utilisez `[hidden job-title default:get]` au lieu de `[hidden job-title]`
+2. Vérifiez dans la console du navigateur que les valeurs sont envoyées
+3. Testez avec Postman en envoyant les champs manuellement
 
 ### Erreurs de validation
 

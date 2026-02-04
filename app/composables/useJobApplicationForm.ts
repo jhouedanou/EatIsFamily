@@ -112,6 +112,19 @@ export const useJobApplicationForm = () => {
     const endpoint = `${wpBaseUrl}/wp-json/contact-form-7/v1/contact-forms/${formId}/feedback`
     
     console.log(`[JobApplicationForm] Submitting to: ${endpoint}`)
+    console.log(`[JobApplicationForm] Form data:`, {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      linkedin: formData.linkedin,
+      jobTitle: formData.jobTitle,
+      jobLocation: formData.jobLocation,
+      jobSlug: formData.jobSlug,
+      hasResume: !!formData.resume,
+      resumeName: formData.resume?.name,
+      resumeSize: formData.resume?.size,
+      resumeType: formData.resume?.type
+    })
     
     // Créer un FormData pour l'envoi (supporte les fichiers)
     const data = new FormData()
@@ -129,11 +142,30 @@ export const useJobApplicationForm = () => {
     
     // Ajouter le fichier CV si présent
     if (formData.resume) {
-      data.append('your-resume', formData.resume)
+      // S'assurer que le fichier est bien un objet File valide
+      console.log('[JobApplicationForm] Adding resume file:', formData.resume.name, formData.resume.size, 'bytes')
+      data.append('your-resume', formData.resume, formData.resume.name)
+    } else {
+      console.warn('[JobApplicationForm] No resume file provided')
     }
     
-    // Ajouter le referer pour la validation CORS
-    data.append('_wpcf7_unit_tag', `wpcf7-f${formId}-o1`)
+    // Ajouter les champs requis par CF7 pour le traitement
+    data.append('_wpcf7', formId)
+    data.append('_wpcf7_version', '5.9')
+    data.append('_wpcf7_locale', 'fr_FR')
+    data.append('_wpcf7_unit_tag', `wpcf7-f${formId}-p0-o1`)
+    data.append('_wpcf7_container_post', '0')
+    data.append('_wpcf7_posted_data_hash', '')
+    
+    // Debug: Afficher le contenu du FormData
+    console.log('[JobApplicationForm] FormData entries:')
+    for (const [key, value] of data.entries()) {
+      if (value instanceof File) {
+        console.log(`  ${key}: [File] ${value.name} (${value.size} bytes, ${value.type})`)
+      } else {
+        console.log(`  ${key}: ${value}`)
+      }
+    }
     
     try {
       const response = await fetch(endpoint, {
@@ -144,11 +176,16 @@ export const useJobApplicationForm = () => {
         },
       })
       
+      console.log('[JobApplicationForm] Response status:', response.status)
+      
       if (!response.ok) {
+        const errorText = await response.text()
+        console.error('[JobApplicationForm] Error response:', errorText)
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       
       const result: CF7Response = await response.json()
+      console.log('[JobApplicationForm] CF7 Response:', result)
       return result
       
     } catch (error) {
