@@ -1330,8 +1330,56 @@ body {
     align-items:center !important;
     justify-content:center !important;
   }
+  .musuc{
+    
+    background: url(/images/searcgBgContainer.svg);
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 427px;
+    max-height: 74px !important;
+    border: none;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 @media (max-width: 1024px) {
+  #rallah{
+          width:100% !important;
+
+  }
+    .musuc{
+         width: 100% !important;
+    border: solid 3px #1a1a1a !important;
+    height: 74px !important;
+    border: none;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 45px !important;
+      button{
+        justify-content:flex-start !important;
+      }
+    }
+  .careers-hero-default{
+    margin-bottom:1em !important;
+  }
+  .search-bar-section{
+        border: 3px #d9d9d9 solid !important;
+        max-height: none !important;
+        background: none !important;
+        height: auto !important;
+        max-width: 95vw !important;
+        border-radius: 10px !important;
+        margin-bottom: 23px !important;
+        padding: 1em !important;
+        border-radius: 20px !important;
+
+  }
   #limam{
     margin-top:0em !important;
     padding:1em !important;

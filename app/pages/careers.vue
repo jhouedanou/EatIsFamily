@@ -1031,17 +1031,6 @@ const goToPage = (page: number) => {
     }
   }
   .musuc{
-    background: url(/images/searcgBgContainer.svg);
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: 427px;
-    max-height: 74px !important;
-    border: none;
-    background-repeat: no-repeat !important;
-    background-size: contain !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     input {
         font-family: FONTSPRINGDEMO-RecoletaMedium;
