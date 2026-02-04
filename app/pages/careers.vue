@@ -382,7 +382,7 @@ const goToPage = (page: number) => {
                 </div>
 
                 <!-- Buttons -->
-                <div class="d-flex gap-3 mt-auto">
+                <div id="matuidicharo" class="d-flex gap-3 mt-auto">
                   <NuxtLink class="matiti":to="`/jobs/${job.slug}`">
                     <nuxt-img :src="btnApply"></nuxt-img>
                   </NuxtLink>
@@ -442,8 +442,7 @@ const goToPage = (page: number) => {
           <h2 class="font-heading display-5 fw-bold text-white mb-4">
             {{ content.cta_section?.title }}
           </h2>
-          <p class="text-secondary mx-auto mb-4 font-body" style="max-width: 42rem;">
-            {{ content.cta_section?.description }}
+          <p class="text-secondary mx-auto mb-4 font-body" style="max-width: 42rem;" v-html="content.cta_section?.description ">
           </p>
           <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
             <!-- <button class="btn-lime fs-5 px-5 py-3">
@@ -1133,7 +1132,14 @@ const goToPage = (page: number) => {
   #jobgrid{
   max-width:1400px;
   width:100%;
+  @media (min-width){
   padding:2em 4em !important;
+
+  }
+    @media (min-width){
+  padding:2em 1em !important;
+
+  }
   border-radius: 20px;
   background-color: #fff6f0;
   }
@@ -1216,5 +1222,16 @@ const goToPage = (page: number) => {
   text-align: center;
   color: #fff !important;
     }
+}
+@media (max-width:1024px){
+  #matuidicharo{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+  }
+  #mahamad{
+    background:#1a1a1a !important;
+  }
 }
 </style>

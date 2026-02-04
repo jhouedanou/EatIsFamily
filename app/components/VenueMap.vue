@@ -180,8 +180,23 @@ onMounted(async () => {
         attributionControl: false,
         scrollZoom: false,
         dragRotate: false,
-        touchPitch: false
+        touchPitch: false,
+        // Désactiver les interactions tactiles sur mobile pour permettre le scroll naturel de la page
+        dragPan: !isMobile.value,
+        touchZoomRotate: !isMobile.value
       })
+
+      // Sur mobile, désactiver complètement les gestionnaires tactiles de la carte
+      if (isMobile.value) {
+        map.scrollZoom.disable()
+        map.boxZoom.disable()
+        map.dragRotate.disable()
+        map.dragPan.disable()
+        map.keyboard.disable()
+        map.doubleClickZoom.disable()
+        map.touchZoomRotate.disable()
+        map.touchPitch.disable()
+      }
 
       // Attendre que la carte soit chargée avant d'ajouter les marqueurs
       map.on('load', () => {
@@ -224,10 +239,63 @@ watch(() => props.selectedVenue, (newId) => {
     }
   }
 })
+
+// Watch for mobile state changes (resize)
+watch(isMobile, (newIsMobile) => {
+  if (map) {
+    if (newIsMobile) {
+      // Désactiver toutes les interactions sur mobile
+      map.scrollZoom.disable()
+      map.boxZoom.disable()
+      map.dragRotate.disable()
+      map.dragPan.disable()
+      map.keyboard.disable()
+      map.doubleClickZoom.disable()
+      map.touchZoomRotate.disable()
+      map.touchPitch.disable()
+    } else {
+      // Réactiver les interactions sur desktop
+      map.dragPan.enable()
+      map.keyboard.enable()
+      map.doubleClickZoom.enable()
+    }
+  }
+})
 </script>
 
 <template>
-  <div class="venue-map-wrapper">
+  <div class="venue-map-wrapper" :class="{ 'mobile-map': isMobile }">
     <div ref="mapContainer" class="venue-map-container"></div>
   </div>
 </template>
+
+<style scoped>
+/* Sur mobile, permettre le scroll naturel de la page à travers la carte */
+.mobile-map {
+  touch-action: pan-y !important;
+  pointer-events: auto;
+}
+
+.mobile-map .venue-map-container {
+  touch-action: pan-y !important;
+}
+
+/* Désactiver complètement les interactions tactiles sur le canvas MapLibre sur mobile */
+.mobile-map :deep(.maplibregl-canvas-container),
+.mobile-map :deep(.maplibregl-canvas),
+.mobile-map :deep(canvas) {
+  touch-action: pan-y !important;
+  pointer-events: none;
+}
+
+/* Permettre les clics sur les marqueurs même sur mobile */
+.mobile-map :deep(.custom-venue-marker) {
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+
+/* Permettre les clics sur le contrôle de carte si présent */
+.mobile-map :deep(.maplibregl-control-container) {
+  pointer-events: auto;
+}
+</style>

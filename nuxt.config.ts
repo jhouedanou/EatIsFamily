@@ -5,8 +5,52 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/image',
     '@nuxtjs/google-fonts',
-    '@nuxtjs/leaflet'
+    '@nuxtjs/leaflet',
+    '@vite-pwa/nuxt'
   ],
+
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'Eat Is Family',
+      short_name: 'EatIsFamily',
+      description: 'Découvrez des expériences culinaires incroyables, rejoignez des événements gastronomiques passionnants et explorez des opportunités de carrière.',
+      theme_color: '#fe002f',
+      background_color: '#f5f5f0',
+      display: 'standalone',
+      orientation: 'portrait',
+      start_url: '/',
+      scope: '/',
+      icons: [
+        {
+          src: '/pwa-192x192.png',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: '/pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png'
+        },
+        {
+          src: '/pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any maskable'
+        }
+      ]
+    },
+    workbox: {
+      navigateFallback: '/',
+      globPatterns: ['**/*.{js,css,html,png,svg,ico,woff,woff2}']
+    },
+    client: {
+      installPrompt: true
+    },
+    devOptions: {
+      enabled: false
+    }
+  },
 
   googleFonts: {
     families: {
@@ -26,8 +70,15 @@ export default defineNuxtConfig({
         { name: 'keywords', content: 'food, culinary, cooking, events, jobs, careers, recipes, blog' },
         { property: 'og:title', content: 'Eat Is Family' },
         { property: 'og:description', content: 'Celebrate Food Every Day' },
-        { property: 'og:type', content: 'website' }
+        { property: 'og:type', content: 'website' },
+        { name: 'theme-color', content: '#fe002f' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+        { name: 'apple-mobile-web-app-title', content: 'Eat Is Family' }
       ],
+      link: [
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }
+      ]
     },
     // Préserve la position de scroll lors de la navigation
     pageTransition: { name: 'page', mode: 'out-in' }
