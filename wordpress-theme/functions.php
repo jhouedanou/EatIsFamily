@@ -1043,8 +1043,53 @@ function eatisfamily_register_api_routes() {
         'callback' => 'eatisfamily_get_global_settings',
         'permission_callback' => '__return_true',
     ));
+    
+    // Job taxonomies endpoint (job types & departments)
+    register_rest_route($namespace, '/job-taxonomies', array(
+        'methods' => 'GET',
+        'callback' => 'eatisfamily_get_job_taxonomies',
+        'permission_callback' => '__return_true',
+    ));
 }
 add_action('rest_api_init', 'eatisfamily_register_api_routes');
+
+/**
+ * API Callback - Job Taxonomies (Types d'emploi & Départements)
+ */
+function eatisfamily_get_job_taxonomies() {
+    $job_types = get_option('eatisfamily_job_types', array());
+    $departments = get_option('eatisfamily_departments', array());
+    
+    // Default job types if empty
+    if (empty($job_types)) {
+        $job_types = array(
+            array('id' => 'full-time', 'label' => 'Full-time', 'label_fr' => 'Temps plein'),
+            array('id' => 'part-time', 'label' => 'Part-time', 'label_fr' => 'Temps partiel'),
+            array('id' => 'seasonal', 'label' => 'Seasonal', 'label_fr' => 'Saisonnier'),
+            array('id' => 'contract', 'label' => 'Contract', 'label_fr' => 'Contrat'),
+            array('id' => 'internship', 'label' => 'Internship', 'label_fr' => 'Stage'),
+        );
+    }
+    
+    // Default departments if empty
+    if (empty($departments)) {
+        $departments = array(
+            array('id' => 'culinary', 'label' => 'Culinary', 'label_fr' => 'Cuisine'),
+            array('id' => 'service', 'label' => 'Service', 'label_fr' => 'Service'),
+            array('id' => 'beverage', 'label' => 'Beverage', 'label_fr' => 'Boissons'),
+            array('id' => 'operations', 'label' => 'Operations', 'label_fr' => 'Opérations'),
+            array('id' => 'quality', 'label' => 'Quality', 'label_fr' => 'Qualité'),
+            array('id' => 'management', 'label' => 'Management', 'label_fr' => 'Direction'),
+            array('id' => 'marketing', 'label' => 'Marketing', 'label_fr' => 'Marketing'),
+            array('id' => 'hr', 'label' => 'Human Resources', 'label_fr' => 'Ressources Humaines'),
+        );
+    }
+    
+    return array(
+        'job_types' => $job_types,
+        'departments' => $departments,
+    );
+}
 
 /**
  * API Callback Functions - Activities

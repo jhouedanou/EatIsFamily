@@ -46,17 +46,8 @@ const heroYoutubeId = computed(() => content.value?.hero_section?.youtube_id || 
 const heroWistiaId = computed(() => content.value?.hero_section?.wistia_id || '')
 const heroVideoUrl = computed(() => content.value?.hero_section?.video_url || '')
 
-// Only show background image if video_type is 'image' or not set, or on mobile
+// Only show background image if video_type is 'image' or not set
 const heroBackgroundStyle = computed(() => {
-  // On mobile, always show image instead of video to save battery
-  if (isMobile.value && content.value?.hero_section?.bg) {
-    return {
-      backgroundImage: `url('${content.value.hero_section.bg}')`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center'
-    }
-  }
-  // Only show background image if video_type is 'image' or not set
   if (heroVideoType.value === 'image' && content.value?.hero_section?.bg) {
     return {
       backgroundImage: `url('${content.value.hero_section.bg}')`,
@@ -67,8 +58,8 @@ const heroBackgroundStyle = computed(() => {
   return {}
 })
 
-// Check if video should be shown (not on mobile to save battery)
-const shouldShowVideo = computed(() => !isMobile.value)
+// Video is now shown on all devices (carousel fix should resolve heating issue)
+const shouldShowVideo = computed(() => true)
 
 onMounted(async () => {
   checkMobile()

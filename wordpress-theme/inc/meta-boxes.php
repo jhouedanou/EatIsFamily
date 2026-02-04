@@ -156,32 +156,46 @@ function eatisfamily_get_event_types_dropdown() {
 
 /**
  * Get departments for dropdown
+ * Uses dynamic values from admin settings if available
  */
 function eatisfamily_get_departments_dropdown() {
+    // Try to use dynamic function if available
+    if (function_exists('eatisfamily_get_departments_dropdown_dynamic')) {
+        return eatisfamily_get_departments_dropdown_dynamic();
+    }
+    
+    // Fallback to static values
     return array(
-        '' => __('-- Select Department --', 'eatisfamily'),
-        'Culinary' => __('Culinary', 'eatisfamily'),
-        'Service' => __('Service', 'eatisfamily'),
-        'Beverage' => __('Beverage', 'eatisfamily'),
-        'Operations' => __('Operations', 'eatisfamily'),
-        'Quality' => __('Quality', 'eatisfamily'),
-        'Management' => __('Management', 'eatisfamily'),
-        'Marketing' => __('Marketing', 'eatisfamily'),
-        'HR' => __('Human Resources', 'eatisfamily'),
+        '' => __('-- Sélectionner un département --', 'eatisfamily'),
+        'culinary' => __('Cuisine', 'eatisfamily'),
+        'service' => __('Service', 'eatisfamily'),
+        'beverage' => __('Boissons', 'eatisfamily'),
+        'operations' => __('Opérations', 'eatisfamily'),
+        'quality' => __('Qualité', 'eatisfamily'),
+        'management' => __('Direction', 'eatisfamily'),
+        'marketing' => __('Marketing', 'eatisfamily'),
+        'hr' => __('Ressources Humaines', 'eatisfamily'),
     );
 }
 
 /**
  * Get job types for dropdown
+ * Uses dynamic values from admin settings if available
  */
 function eatisfamily_get_job_types_dropdown() {
+    // Try to use dynamic function if available
+    if (function_exists('eatisfamily_get_job_types_dropdown_dynamic')) {
+        return eatisfamily_get_job_types_dropdown_dynamic();
+    }
+    
+    // Fallback to static values
     return array(
-        '' => __('-- Select Job Type --', 'eatisfamily'),
-        'Full-time' => __('Full-time', 'eatisfamily'),
-        'Part-time' => __('Part-time', 'eatisfamily'),
-        'Seasonal' => __('Seasonal', 'eatisfamily'),
-        'Contract' => __('Contract', 'eatisfamily'),
-        'Internship' => __('Internship', 'eatisfamily'),
+        '' => __('-- Sélectionner un type d\'emploi --', 'eatisfamily'),
+        'full-time' => __('Temps plein', 'eatisfamily'),
+        'part-time' => __('Temps partiel', 'eatisfamily'),
+        'seasonal' => __('Saisonnier', 'eatisfamily'),
+        'contract' => __('Contrat', 'eatisfamily'),
+        'internship' => __('Stage', 'eatisfamily'),
     );
 }
 
@@ -190,13 +204,13 @@ function eatisfamily_get_job_types_dropdown() {
  */
 function eatisfamily_get_activity_categories_dropdown() {
     return array(
-        '' => __('-- Select Category --', 'eatisfamily'),
-        'Cooking' => __('Cooking', 'eatisfamily'),
-        'Baking' => __('Baking', 'eatisfamily'),
-        'Wine & Spirits' => __('Wine & Spirits', 'eatisfamily'),
-        'Tasting' => __('Tasting', 'eatisfamily'),
+        '' => __('-- Sélectionner une catégorie --', 'eatisfamily'),
+        'Cooking' => __('Cuisine', 'eatisfamily'),
+        'Baking' => __('Pâtisserie', 'eatisfamily'),
+        'Wine & Spirits' => __('Vins & Spiritueux', 'eatisfamily'),
+        'Tasting' => __('Dégustation', 'eatisfamily'),
         'Team Building' => __('Team Building', 'eatisfamily'),
-        'Workshop' => __('Workshop', 'eatisfamily'),
+        'Workshop' => __('Atelier', 'eatisfamily'),
         'Masterclass' => __('Masterclass', 'eatisfamily'),
     );
 }

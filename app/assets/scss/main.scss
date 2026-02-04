@@ -1347,6 +1347,11 @@ body {
   }
 }
 @media (max-width: 1024px) {
+  #ready-to-make-an-impact{
+    .cta-block{
+      padding:1em !important
+    }
+  }
 
    .events-page #nza .loris{
     background:#93cbff;

@@ -1,15 +1,17 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { LucideSearch, LucideMapPin, LucideChevronLeft, LucideChevronRight } from 'lucide-vue-next'
 import type { CareersContent } from '~/composables/usePageContent'
 import type { JobWithVenue } from '~/composables/useJobs'
 import type { Venue } from '~/composables/useVenues'
+import type { JobType } from '~/composables/useJobTaxonomies'
 
 const route = useRoute()
 const { getCareersContent } = usePageContent()
 const { getJobsWithVenues, getJobVenueOptions } = useJobs()
 const { getVenues } = useVenues()
 const { settings } = useGlobalSettings()
+const { getJobTypes } = useJobTaxonomies()
 
 // Dynamic icon URLs with fallbacks
 const iconBriefcase = computed(() => settings.value?.icons?.icon_briefcase || '/images/streamline-emojis_briefcase.png')
@@ -22,6 +24,7 @@ const btnDiscoverApply = computed(() => settings.value?.icons?.btn_discover_appl
 const content = ref<CareersContent | null>(null)
 const allJobs = ref<JobWithVenue[]>([])
 const allVenues = ref<Venue[]>([])
+const jobTypes = ref<JobType[]>([])
 const isLoadingJobs = ref(true)
 
 const searchQuery = ref('')
@@ -43,6 +46,11 @@ const activeVenue = computed(() => {
 onMounted(async () => {
   isLoadingJobs.value = true
   content.value = await getCareersContent()
+  
+  // Charger les types d'emploi depuis l'API
+  const fetchedJobTypes = await getJobTypes()
+  jobTypes.value = fetchedJobTypes
+  
   const fetchedVenues = await getVenues()
   if (fetchedVenues) {
     allVenues.value = fetchedVenues
@@ -52,9 +60,9 @@ onMounted(async () => {
     allJobs.value = fetchedJobs
   }
   isLoadingJobs.value = false
-  if (content.value?.search_section?.job_types) {
-    selectedJobType.value = content.value.search_section.job_types[0] || ''
-  }
+  
+  // Sélectionner "Tous les types" par défaut
+  selectedJobType.value = ''
 
   // Apply URL query parameters
   if (route.query.venue) {
@@ -102,6 +110,13 @@ const getJobTitle = (job: JobWithVenue) => {
   return typeof job.title === 'string' ? job.title : job.title?.rendered || ''
 }
 
+// Helper pour obtenir le libellé du type d'emploi
+const getJobTypeLabel = (typeId: string) => {
+  if (!typeId) return ''
+  const type = jobTypes.value.find(t => t.id === typeId)
+  return type ? (type.label_fr || type.label) : typeId
+}
+
 // Helper pour obtenir l'extrait du job
 const getJobExcerpt = (job: JobWithVenue) => {
   return typeof job.excerpt === 'string' ? job.excerpt : job.excerpt?.rendered || ''
@@ -147,10 +162,12 @@ const filteredJobs = computed(() => {
       venueLocation.toLowerCase().includes(searchQuery.value.toLowerCase())
 
     // Normaliser les types de job pour la comparaison
-    const normalizedJobType = job.job_type.toLowerCase().replace('-', ' ')
-    const normalizedSelectedType = selectedJobType.value.toLowerCase().replace('-', ' ')
+    const normalizedJobType = (job.job_type || '').toLowerCase().replace(/-/g, ' ').trim()
+    const normalizedSelectedType = selectedJobType.value.toLowerCase().replace(/-/g, ' ').trim()
 
-    const matchesType = selectedJobType.value === content.value!.search_section.job_types[0] ||
+    // Si aucun type sélectionné (""), afficher tous les jobs
+    const matchesType = selectedJobType.value === '' ||
+      normalizedJobType === normalizedSelectedType ||
       normalizedJobType.includes(normalizedSelectedType)
 
     // Filtre par venue_id depuis le dropdown
@@ -288,19 +305,30 @@ const goToPage = (page: number) => {
           <div class="position-relative musuc">
         <button @click="showJobTypeDropdown = !showJobTypeDropdown; showVenueDropdown = false"
           class="border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
-          <span>{{ selectedJobType || 'Tous les types d’emploi' }}</span>
+          <span>{{ getJobTypeLabel(selectedJobType) || 'Tous les types d\'emploi' }}</span>
           <img :src="iconChevronDown" alt="chevron" class="chevron-icon" :class="{ 'rotated': showJobTypeDropdown }" />
         </button>
         <!-- Dropdown Menu -->
         <Transition enter-active-class="transition-fade-in" leave-active-class="transition-fade-out">
           <div v-if="showJobTypeDropdown"
             class="position-absolute top-100 end-0 mt-2 bg-white border-organic shadow-organic-lg dropdown-menu-custom">
-            <button v-for="type in content.search_section?.job_types || []" :key="type"
-          @click="selectedJobType = type; showJobTypeDropdown = false" :class="[
-            'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
-            selectedJobType === type ? 'active' : ''
-          ]">
-          {{ type }}
+            <!-- Option "Tous" -->
+            <button 
+              @click="selectedJobType = ''; showJobTypeDropdown = false" 
+              :class="[
+                'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
+                selectedJobType === '' ? 'active' : ''
+              ]">
+              Tous les types d'emploi
+            </button>
+            <!-- Options dynamiques -->
+            <button v-for="type in jobTypes" :key="type.id"
+              @click="selectedJobType = type.id; showJobTypeDropdown = false" 
+              :class="[
+                'w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom',
+                selectedJobType === type.id ? 'active' : ''
+              ]">
+              {{ type.label_fr || type.label }}
             </button>
           </div>
         </Transition>
@@ -339,7 +367,7 @@ const goToPage = (page: number) => {
                     </span>-->
                     <span class="tag-lime d-flex align-items-center gap-1">
                       <nuxt-img :src="iconBriefcase" alt="briefcase icon" width="16" height="16" />
-                      {{ job.job_type }}
+                      {{ getJobTypeLabel(job.job_type) || job.job_type }}
                     </span>
                     <span class="tag-yellow d-flex align-items-center gap-1">
                       <nuxt-img :src="iconMoneybag" alt="money bag icon" width="16" height="16" />
@@ -380,7 +408,7 @@ const goToPage = (page: number) => {
           <p class="fs-5 text-muted mb-2">{{ content.no_results?.title }}</p>
           <p class="text-secondary mb-3">{{ content.no_results?.description }}</p>
           <button
-            @click="searchQuery = ''; selectedJobType = content.search_section?.job_types?.[0] || ''; selectedVenueId = ''"
+            @click="searchQuery = ''; selectedJobType = ''; selectedVenueId = ''"
             class="text-brand-pink fw-bold btn btn-link text-decoration-none">
             {{ content.no_results?.clear_filters_button }}
           </button>
