@@ -253,7 +253,11 @@ const handleSubmit = async () => {
     // Soumettre via Contact Form 7 API
     const response = await submitJobApplication(formData)
     
-    if (response.status === 'mail_sent') {
+    console.log('[JobApplyModal] CF7 response:', response)
+    
+    // Considérer comme succès si mail_sent OU si les données ont été traitées (posted_data_hash)
+    // Flamingo enregistre les données même si l'email échoue
+    if (response.status === 'mail_sent' || response.posted_data_hash) {
       isSubmitting.value = false
       submitSuccess.value = true
       console.log('[JobApplyModal] Application submitted successfully')
