@@ -42,7 +42,42 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
-      globPatterns: ['**/*.{js,css,html,png,svg,ico,woff,woff2}']
+      globPatterns: ['**/*.{js,css,html,svg,ico,woff,woff2}'],
+      // Augmenter la limite de taille pour les fichiers en cache
+      maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB
+      // Exclure les grandes images du précache
+      globIgnores: [
+        '**/images/client/**',
+        '**/images/**/*.{png,jpg,jpeg}',
+      ],
+      // Runtime caching pour les images
+      runtimeCaching: [
+        {
+          urlPattern: /^https:\/\/.*\.(png|jpg|jpeg|webp|gif)$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'images-cache',
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 jours
+            },
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
+          urlPattern: /\/images\/.*/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'local-images-cache',
+            expiration: {
+              maxEntries: 50,
+              maxAgeSeconds: 30 * 24 * 60 * 60 // 30 jours
+            }
+          }
+        }
+      ]
     },
     client: {
       installPrompt: true
