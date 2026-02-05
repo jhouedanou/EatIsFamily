@@ -107,7 +107,7 @@ export default defineNuxtConfig({
         { property: 'og:description', content: 'Celebrate Food Every Day' },
         { property: 'og:type', content: 'website' },
         { name: 'theme-color', content: '#fe002f' },
-        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
         { name: 'apple-mobile-web-app-title', content: 'Eat Is Family' }
       ],
