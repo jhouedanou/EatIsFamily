@@ -221,8 +221,8 @@ useHead(() => ({
         <!-- Submit Button -->
         <div class="form-row full-width">
           <button type="submit" class="submit-btn" :disabled="isSubmitting">
-            <span v-if="isSubmitting">Sending...</span>
-            <span v-else>{{ contactContent?.form?.submit_button || 'Send Message' }}</span>
+            <span v-if="isSubmitting">Envoi en cours...</span>
+            <span v-else>{{ contactContent?.form?.submit_button || 'Envoyer' }}</span>
           </button>
         </div>
       </form>

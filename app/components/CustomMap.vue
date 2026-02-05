@@ -212,7 +212,7 @@ watch(() => searchQuery.value, async () => {
 
           <div class="flex items-center gap-4">
             <span class="text-brand-lime font-bold">•</span>
-            <span class="text-sm font-medium">{{ selectedLocation.jobs }} Open Positions</span>
+            <span class="text-sm font-medium">{{ selectedLocation.jobs }} Postes ouverts</span>
           </div>
 
           <div class="mt-4 flex gap-3">

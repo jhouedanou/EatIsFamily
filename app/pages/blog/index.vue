@@ -56,7 +56,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
             </h3>
             <p class="post-excerpt">{{ featuredPosts[0].excerpt.rendered }}</p>
             <NuxtLink :to="`/blog/${featuredPosts[0].slug}`" class="bg-transparent border-0 p-0 m-0">
-              <NuxtImg :src="btnReadMore" alt="Read more" width="247"/>
+              <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
             </NuxtLink>
           </div>
         </article>

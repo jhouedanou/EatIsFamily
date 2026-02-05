@@ -27,11 +27,11 @@ const formatDate = (dateString: string) => {
   const diffHours = Math.floor(diffTime / (1000 * 60 * 60))
 
   if (diffHours < 24) {
-    return `Posted ${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`
+    return `Publié il y a ${diffHours} heure${diffHours !== 1 ? 's' : ''}`
   } else if (diffDays === 1) {
-    return 'Posted 1 day ago'
+    return 'Publié il y a 1 jour'
   } else {
-    return `Posted ${diffDays} days ago`
+    return `Publié il y a ${diffDays} jours`
   }
 }
 </script>
