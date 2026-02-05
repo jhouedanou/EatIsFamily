@@ -104,6 +104,7 @@ onMounted(() => {
 .btn {
   position: relative;
   display: inline-block;
+  font-family: FONTSPRINGDEMO-RecoletaSemiBold, Georgia, serif;
   font-size: 1.2rem;
   font-weight: bold;
   padding: 0.9rem 2rem;

@@ -677,6 +677,14 @@ export const usePageContent = () => {
     return content?.job_detail_slug || null
   }
 
+  /**
+   * Get blog page content
+   */
+  const getBlogPageContent = async () => {
+    const content = await getPageContent()
+    return content?.blog || null
+  }
+
   return {
     getPageContent,
     getHomepageContent,
@@ -689,6 +697,7 @@ export const usePageContent = () => {
     getContactModalContent,
     getJobDetailContent,
     getJobDetailSlugContent,
+    getBlogPageContent,
     getContentByPath
   }
 }

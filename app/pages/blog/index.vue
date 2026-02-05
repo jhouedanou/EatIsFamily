@@ -3,6 +3,7 @@ import { computed } from 'vue'
 
 const { getBlogPosts } = useBlog()
 const { settings } = useGlobalSettings()
+const { getBlogPageContent } = usePageContent()
 
 // Dynamic button URL with fallback
 const btnReadMore = computed(() => settings.value?.icons?.btn_read_more || '/images/btnReadMore.svg')
@@ -10,9 +11,18 @@ const btnReadMore = computed(() => settings.value?.icons?.btn_read_more || '/ima
 // Charger les articles depuis le serveur
 const { data: posts } = await useAsyncData('blog-posts', () => getBlogPosts())
 
+// Charger le contenu de la page blog depuis WordPress
+const { data: blogContent } = await useAsyncData('blog-page-content', () => getBlogPageContent())
+
 // Les 2 premiers posts sont "featured", les autres dans la grille
 const featuredPosts = computed(() => posts.value?.slice(0, 2) || [])
 const allPosts = computed(() => posts.value?.slice(2) || [])
+
+// Contenu dynamique avec fallbacks
+const heroTitleLine1 = computed(() => blogContent.value?.hero?.title_line_1 || 'Insightful Stories From')
+const heroTitleLine2 = computed(() => blogContent.value?.hero?.title_line_2 || 'The Kitchen')
+const recentInsightsTitle = computed(() => blogContent.value?.sections?.recent_insights_title || 'Most Recent Insights')
+const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insights_title || 'Explore All Insight')
 </script>
 
 <template>
@@ -21,7 +31,7 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
     <section class="blog-hero">
       <div class="container">
         <h1 class="hero-title">
-          <span class="title-black">Insightful Stories From<br>The Kitchen</span>
+          <span class="title-black">{{ heroTitleLine1 }}<br>{{ heroTitleLine2 }}</span>
         </h1>
       </div>
     </section>
@@ -29,7 +39,7 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
     <!-- Most Recent Insights -->
     <section class="recent-insights">
       <div class="container">
-        <h2 class="section-title">Most Recent Insights</h2>
+        <h2 class="section-title">{{ recentInsightsTitle }}</h2>
 
         <!-- Featured Post 1 - Image Left -->
         <article v-if="featuredPosts[0]" class="featured-post">
@@ -77,7 +87,7 @@ const allPosts = computed(() => posts.value?.slice(2) || [])
     <!-- Explore All Insights -->
     <section class="all-insights">
       <div class="container">
-        <h2 class="section-title">Explore All Insight</h2>
+        <h2 class="section-title">{{ allInsightsTitle }}</h2>
 
         <div class="posts-grid">
           <article v-for="post in allPosts" :key="post.id" class="post-card">

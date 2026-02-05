@@ -2645,6 +2645,37 @@ function eatisfamily_pages_content_page_v5() {
             <!-- BLOG PAGE -->
             <div id="blog" class="tab-content" style="display: none;">
                 <h3><?php _e('📝 Blog Page', 'eatisfamily'); ?></h3>
+                
+                <!-- Hero Section -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('🎯 Hero Section', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="blog_hero_title_line1"><?php _e('Title Line 1', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="blog_hero_title_line1" id="blog_hero_title_line1" value="<?php echo esc_attr($blog['hero']['title_line_1'] ?? 'Insightful Stories From'); ?>" class="large-text" placeholder="Insightful Stories From"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="blog_hero_title_line2"><?php _e('Title Line 2', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="blog_hero_title_line2" id="blog_hero_title_line2" value="<?php echo esc_attr($blog['hero']['title_line_2'] ?? 'The Kitchen'); ?>" class="large-text" placeholder="The Kitchen"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Section Titles -->
+                <div class="eatisfamily-section">
+                    <h4><?php _e('📋 Section Titles', 'eatisfamily'); ?></h4>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="blog_recent_insights_title"><?php _e('Recent Insights Title', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="blog_recent_insights_title" id="blog_recent_insights_title" value="<?php echo esc_attr($blog['sections']['recent_insights_title'] ?? 'Most Recent Insights'); ?>" class="large-text" placeholder="Most Recent Insights"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="blog_all_insights_title"><?php _e('All Insights Title', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="blog_all_insights_title" id="blog_all_insights_title" value="<?php echo esc_attr($blog['sections']['all_insights_title'] ?? 'Explore All Insight'); ?>" class="large-text" placeholder="Explore All Insight"></td>
+                        </tr>
+                    </table>
+                </div>
+                
                 <div class="eatisfamily-section">
                     <h4><?php _e('Index Page', 'eatisfamily'); ?></h4>
                     <table class="form-table">
@@ -3374,6 +3405,14 @@ function eatisfamily_build_pages_content_v5($data) {
             'loading_text' => sanitize_text_field($data['events_loading_text'] ?? 'Loading events...'),
         ),
         'blog' => array(
+            'hero' => array(
+                'title_line_1' => sanitize_text_field($data['blog_hero_title_line1'] ?? 'Insightful Stories From'),
+                'title_line_2' => sanitize_text_field($data['blog_hero_title_line2'] ?? 'The Kitchen'),
+            ),
+            'sections' => array(
+                'recent_insights_title' => sanitize_text_field($data['blog_recent_insights_title'] ?? 'Most Recent Insights'),
+                'all_insights_title' => sanitize_text_field($data['blog_all_insights_title'] ?? 'Explore All Insight'),
+            ),
             'index' => array(
                 'section_title' => sanitize_text_field($data['blog_section_title'] ?? ''),
                 'section_subtitle' => sanitize_text_field($data['blog_section_subtitle'] ?? ''),
