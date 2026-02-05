@@ -1958,9 +1958,9 @@ require_once get_template_directory() . '/inc/admin.php';
  * Customize Flamingo channel based on form type
  * This creates separate "channels" in Flamingo for different form types
  */
-add_filter('wpcf7_flamingo_inbound_message_parameters', 'eatisfamily_customize_flamingo_entry', 10, 2);
+add_filter('wpcf7_flamingo_inbound_message_parameters', 'eatisfamily_customize_flamingo_entry', 10, 1);
 
-function eatisfamily_customize_flamingo_entry($parameters, $result) {
+function eatisfamily_customize_flamingo_entry($parameters) {
     // Get the current form
     $form = WPCF7_ContactForm::get_current();
     if (!$form) {
