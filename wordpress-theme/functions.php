@@ -1999,6 +1999,7 @@ function eatisfamily_customize_flamingo_entry($parameters) {
         $parameters['subject'] = 'Nouvelle candidature - ' . $job_title;
         
         // Add meta for filtering
+        $resume_link = isset($posted_data['your-resume-link']) ? esc_url_raw($posted_data['your-resume-link']) : '';
         $parameters['meta'] = array_merge(
             $parameters['meta'] ?? array(),
             array(
@@ -2006,6 +2007,7 @@ function eatisfamily_customize_flamingo_entry($parameters) {
                 'job_title' => $job_title,
                 'job_location' => isset($posted_data['job-location']) ? sanitize_text_field($posted_data['job-location']) : '',
                 'job_slug' => isset($posted_data['job-slug']) ? sanitize_text_field($posted_data['job-slug']) : '',
+                'resume_link' => $resume_link,
             )
         );
     }
@@ -2028,6 +2030,7 @@ function eatisfamily_flamingo_custom_columns($columns) {
         // Add "Form Type" column after "From" column
         if ($key === 'from') {
             $new_columns['form_type'] = __('Type', 'eatisfamily');
+            $new_columns['resume_link'] = __('CV', 'eatisfamily');
         }
     }
     
@@ -2049,6 +2052,24 @@ function eatisfamily_flamingo_custom_column_content($column_name, $post_id) {
             echo '<span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 3px; font-size: 11px;">💼 Candidature</span>';
         } else {
             echo '<span style="background: #f5f5f5; color: #666; padding: 3px 8px; border-radius: 3px; font-size: 11px;">Autre</span>';
+        }
+    }
+    
+    if ($column_name === 'resume_link') {
+        $meta = get_post_meta($post_id, '_meta', true);
+        $resume_link = '';
+        
+        if (is_array($meta) && isset($meta['resume_link']) && !empty($meta['resume_link'])) {
+            $resume_link = $meta['resume_link'];
+        }
+        
+        if (!empty($resume_link)) {
+            echo '<a href="' . esc_url($resume_link) . '" target="_blank" rel="noopener noreferrer" style="background: #fff3e0; color: #e65100; padding: 3px 8px; border-radius: 3px; font-size: 11px; text-decoration: none;">📄 Voir CV</a>';
+        } else {
+            $channel = get_post_meta($post_id, '_channel', true);
+            if ($channel === 'job-applications') {
+                echo '<span style="color: #999; font-size: 11px;">—</span>';
+            }
         }
     }
 }
