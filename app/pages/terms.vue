@@ -1,93 +1,93 @@
 <template>
   <div class="legal-page">
     <div class="container py-5">
-      <h1 class="font-heading display-4 fw-bold mb-4">Terms and Conditions</h1>
-      <p class="text-muted mb-4">Last updated: January 2025</p>
+      <h1 class="font-heading display-4 fw-bold mb-4">Conditions Générales d'Utilisation</h1>
+      <p class="text-muted mb-4">Dernière mise à jour : Janvier 2025</p>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">1. Acceptance of Terms</h2>
+        <h2 class="h3 mb-3">1. Acceptation des Conditions</h2>
         <p>
-          By accessing and using the Eat Is Family website, you accept and agree to be bound by these Terms and Conditions. 
-          If you do not agree with any part of these terms, please do not use our website.
+          En accédant et en utilisant le site web Eat Is Family, vous acceptez d'être lié par ces Conditions Générales d'Utilisation. 
+          Si vous n'êtes pas d'accord avec une partie de ces conditions, veuillez ne pas utiliser notre site web.
         </p>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">2. Use of Website</h2>
-        <p>You agree to use our website only for lawful purposes and in a way that does not:</p>
+        <h2 class="h3 mb-3">2. Utilisation du Site</h2>
+        <p>Vous vous engagez à utiliser notre site uniquement à des fins légales et de manière à ne pas :</p>
         <ul>
-          <li>Infringe on the rights of others</li>
-          <li>Restrict or inhibit anyone's use of the website</li>
-          <li>Introduce viruses or other malicious software</li>
-          <li>Attempt unauthorized access to our systems</li>
+          <li>Porter atteinte aux droits d'autrui</li>
+          <li>Restreindre ou empêcher l'utilisation du site par quiconque</li>
+          <li>Introduire des virus ou autres logiciels malveillants</li>
+          <li>Tenter un accès non autorisé à nos systèmes</li>
         </ul>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">3. Job Applications</h2>
-        <p>When submitting job applications through our website:</p>
+        <h2 class="h3 mb-3">3. Candidatures</h2>
+        <p>Lors de la soumission de candidatures via notre site :</p>
         <ul>
-          <li>You must provide accurate and truthful information</li>
-          <li>You confirm that all documents submitted are genuine</li>
-          <li>You authorize us to verify the information provided</li>
-          <li>Submission of an application does not guarantee employment</li>
+          <li>Vous devez fournir des informations exactes et véridiques</li>
+          <li>Vous confirmez que tous les documents soumis sont authentiques</li>
+          <li>Vous nous autorisez à vérifier les informations fournies</li>
+          <li>La soumission d'une candidature ne garantit pas un emploi</li>
         </ul>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">4. Intellectual Property</h2>
+        <h2 class="h3 mb-3">4. Propriété Intellectuelle</h2>
         <p>
-          All content on this website, including but not limited to text, graphics, logos, images, and software, 
-          is the property of Eat Is Family and is protected by intellectual property laws. You may not reproduce, 
-          distribute, or create derivative works without our written consent.
+          Tout le contenu de ce site, y compris mais sans s'y limiter, les textes, graphiques, logos, images et logiciels, 
+          est la propriété d'Eat Is Family et est protégé par les lois sur la propriété intellectuelle. Vous ne pouvez pas reproduire, 
+          distribuer ou créer des œuvres dérivées sans notre consentement écrit.
         </p>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">5. Third-Party Links</h2>
+        <h2 class="h3 mb-3">5. Liens vers des Sites Tiers</h2>
         <p>
-          Our website may contain links to external websites. We are not responsible for the content, 
-          privacy practices, or availability of these third-party sites.
+          Notre site peut contenir des liens vers des sites externes. Nous ne sommes pas responsables du contenu, 
+          des pratiques de confidentialité ou de la disponibilité de ces sites tiers.
         </p>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">6. Limitation of Liability</h2>
+        <h2 class="h3 mb-3">6. Limitation de Responsabilité</h2>
         <p>
-          To the maximum extent permitted by law, Eat Is Family shall not be liable for any direct, indirect, 
-          incidental, or consequential damages arising from your use of this website.
+          Dans les limites permises par la loi, Eat Is Family ne sera pas responsable des dommages directs, indirects, 
+          accessoires ou consécutifs résultant de votre utilisation de ce site.
         </p>
       </section>
 
       <section class="mb-5">
         <h2 class="h3 mb-3">7. Modifications</h2>
         <p>
-          We reserve the right to modify these Terms and Conditions at any time. Changes will be effective immediately 
-          upon posting on this page. Your continued use of the website constitutes acceptance of the modified terms.
+          Nous nous réservons le droit de modifier ces Conditions Générales à tout moment. Les modifications prendront effet immédiatement 
+          après leur publication sur cette page. Votre utilisation continue du site constitue une acceptation des conditions modifiées.
         </p>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">8. Governing Law</h2>
+        <h2 class="h3 mb-3">8. Droit Applicable</h2>
         <p>
-          These Terms and Conditions are governed by and construed in accordance with the laws of France. 
-          Any disputes shall be subject to the exclusive jurisdiction of French courts.
+          Ces Conditions Générales sont régies et interprétées conformément aux lois françaises. 
+          Tout litige sera soumis à la compétence exclusive des tribunaux français.
         </p>
       </section>
 
       <section class="mb-5">
         <h2 class="h3 mb-3">9. Contact</h2>
         <p>
-          For questions about these Terms and Conditions, please contact us at:
+          Pour toute question concernant ces Conditions Générales, veuillez nous contacter à :
         </p>
         <address>
           <strong>Eat Is Family</strong><br>
-          Email: <a href="mailto:legal@eatisfamily.com">legal@eatisfamily.com</a>
+          Email : <a href="mailto:legal@eatisfamily.com">legal@eatisfamily.com</a>
         </address>
       </section>
 
       <div class="mt-5">
-        <NuxtLink to="/" class="btn btn-outline-dark">← Back to Home</NuxtLink>
+        <NuxtLink to="/" class="btn btn-outline-dark">← Retour à l'accueil</NuxtLink>
       </div>
     </div>
   </div>
@@ -95,9 +95,9 @@
 
 <script setup lang="ts">
 useHead({
-  title: 'Terms and Conditions - Eat Is Family',
+  title: 'Conditions Générales d\'Utilisation - Eat Is Family',
   meta: [
-    { name: 'description', content: 'Terms and Conditions for using the Eat Is Family website and services.' }
+    { name: 'description', content: 'Conditions Générales d\'Utilisation du site web et des services Eat Is Family.' }
   ]
 })
 </script>

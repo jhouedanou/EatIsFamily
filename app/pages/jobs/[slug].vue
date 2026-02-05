@@ -14,7 +14,7 @@ const showApplyModal = ref(false)
 // Dynamic icon URLs with fallbacks
 const iconBriefcase = computed(() => settings.value?.icons?.icon_briefcase || '/images/streamline-emojis_briefcase.png')
 const iconMoneybag = computed(() => settings.value?.icons?.icon_moneybag || '/images/streamline-emojis_moneybag.svg')
-const iconApplyForThis = computed(() => settings.value?.icons?.icon_apply_for_this || '/images/ApplyForThisOh.svg')
+const iconApplyForThis = computed(() => settings.value?.icons?.icon_apply_for_this || '/images/btnApplu.svg')
 const iconShareJob = computed(() => settings.value?.icons?.icon_share_job || '/images/ShareThisJobOh.svg')
 const btnApplyPosition = computed(() => settings.value?.icons?.btn_apply_position || '/images/btnApplyForPosition.svg')
 const btnGoBackJobs = computed(() => settings.value?.icons?.btn_go_back_jobs || '/images/btnGoBackToJobs.svg')
@@ -139,7 +139,7 @@ useHead(() => ({
             <LucideMapPin class="location-icon" />
             <span class="kuffar">{{ getVenueLocation(job) }}</span>
           </div>
-          <button class="close-btn" @click="goBack" aria-label="Close">
+          <button class="close-btn" @click="goBack" aria-label="Fermer">
             <LucideX :size="20" :stroke-width="2.5" />
           </button>
         </div>
@@ -158,11 +158,11 @@ useHead(() => ({
                 Département - {{ job.department || 'Culinaire' }}
               </span>
               <span class="tag tag-lime">
-                <nuxt-img :src="iconBriefcase" alt="briefcase icon" width="16" height="16" />
+                <nuxt-img :src="iconBriefcase" alt="Icône emploi" width="16" height="16" />
                 {{ job.job_type }}
               </span>
               <span class="tag tag-yellow">
-               <nuxt-img :src="iconMoneybag" alt="money bag icon" width="16" height="16" />
+               <nuxt-img :src="iconMoneybag" alt="Icône salaire" width="16" height="16" />
                 {{ job.salary }}
               </span>
             </div>
@@ -177,7 +177,7 @@ useHead(() => ({
               <p>Postulez maintenant et faites partie d'une aventure exceptionnelle</p>
             </div>
             <button id="apply-button" class="border-0 bg-transparent" @click="openApplyModal">
-              <nuxt-img :src="iconApplyForThis" alt="briefcase icon" width="16" height="16" />
+              <nuxt-img :src="iconApplyForThis" alt="Icône postuler" width="16" height="16" />
             </button>
           </div>
 
@@ -266,7 +266,7 @@ useHead(() => ({
               <h3>Vous connaissez quelqu'un de parfait pour ce poste ?</h3>
               <p>Partagez cette offre avec cette personne</p>
               <button class="btn-sharesd border-0 background-transparent bg-transparent" @click="shareJob">
-                <nuxtImg :src="iconShareJob" alt="share icon" width="240" height="" />
+                <nuxtImg :src="iconShareJob" alt="Partager cette offre" width="240" height="" />
               </button>
             </div>
           </div>
@@ -278,10 +278,10 @@ useHead(() => ({
               <p>Rejoignez notre équipe et participez à la création d'expériences inoubliables dans l'un des lieux les plus passionnants de France.</p>
               <div class="bottom-cta-buttons">
                 <button class="bg-transparent border-0" @click="openApplyModal">
-                  <nuxt-img :src="btnApplyPosition" alt="apply icon" width="240" height="" />
+                  <nuxt-img :src="btnApplyPosition" alt="Postuler" width="240" height="" />
                 </button>
                 <button class="bg-transparent border-0" @click="goBack">
-                  <nuxt-img :src="btnGoBackJobs" alt="back icon" width="240" height="" />
+                  <nuxt-img :src="btnGoBackJobs" alt="Retour" width="240" height="" />
                 </button>
               </div>
             </div>

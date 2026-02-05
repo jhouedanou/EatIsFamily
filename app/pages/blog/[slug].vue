@@ -39,7 +39,7 @@ const formatDate = (dateString: string) => {
 <template>
   <div class="blog-detail-page">
     <!-- Close Button -->
-    <button class="close-btn" @click="goBack" aria-label="Close">
+    <button class="close-btn" @click="goBack" aria-label="Fermer">
       <LucideX :size="24" />
     </button>
 

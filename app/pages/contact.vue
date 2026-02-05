@@ -76,9 +76,9 @@ onMounted(async () => {
 })
 
 useHead(() => ({
-  title: 'Contact Us - Eat Is Family',
+  title: 'Nous contacter - Eat Is Family',
   meta: [
-    { name: 'description', content: contactContent.value?.hero_section?.description || 'Get in touch with Eat Is Family. Share your vision and we\'ll bring it to life.' }
+    { name: 'description', content: contactContent.value?.hero_section?.description || 'Contactez Eat Is Family. Partagez votre vision et nous la réaliserons.' }
   ]
 }))
 </script>
@@ -98,7 +98,7 @@ useHead(() => ({
     </div>
 
     <!-- Close Button -->
-    <button class="close-btn" @click="goBack" aria-label="Close">
+    <button class="close-btn" @click="goBack" aria-label="Fermer">
       <LucideX :size="24" />
     </button>
 
@@ -115,12 +115,12 @@ useHead(() => ({
             {{ contactContent.hero_section.title.line_3 }}
           </template>
           <template v-else>
-            Reach <span class="highlight">Out</span> Let's Create<br/>
-            Something Amazing
+            Prenez <span class="highlight">Contact</span> Créons<br/>
+            Quelque Chose d'Exceptionnel
           </template>
         </h1>
         <p class="contact-subtitle">
-          {{ contactContent?.hero_section?.description || 'Ready to elevate your event with exceptional catering? Share your vision and we\'ll bring it to life.' }}
+          {{ contactContent?.hero_section?.description || 'Prêt à sublimer votre événement avec un traiteur d\'exception ? Partagez votre vision et nous la réaliserons.' }}
         </p>
       </div>
 
@@ -129,7 +129,7 @@ useHead(() => ({
         <div class="oval-image">
           <img 
             :src="contactContent?.hero_section?.image?.src || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600&auto=format&fit=crop'" 
-            :alt="contactContent?.hero_section?.image?.alt || 'Delicious catering food'" 
+            :alt="contactContent?.hero_section?.image?.alt || 'Délicieux plats traiteur'" 
           />
         </div>
       </div>
@@ -257,6 +257,7 @@ useHead(() => ({
 
 /* Top decorative line */
 .top-line {
+  display:none !important;
   position: absolute;
   top: 5.5rem;
   left: 0;
@@ -266,7 +267,8 @@ useHead(() => ({
 }
 
 /* Close button */
-.close-btn {
+.close-btn {  display:none !important;
+
   position: absolute;
   top: 1.5rem;
   right: 2rem;

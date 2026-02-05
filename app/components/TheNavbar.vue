@@ -25,7 +25,7 @@ onMounted(async () => {
 const brandName = computed(() => settings.value?.brand?.name || 'Eat is')
 const brandHighlight = computed(() => settings.value?.brand?.highlight || 'Family')
 const navLinks = computed(() => settings.value?.navigation?.links || [])
-const ctaText = computed(() => settings.value?.header?.cta_text || 'Get in touch')
+const ctaText = computed(() => settings.value?.header?.cta_text || 'Contactez-nous')
 const ctaTextMobile = computed(() => settings.value?.header?.cta_text_mobile || 'Contact')
 const ctaLink = computed(() => settings.value?.header?.cta_link || '/contact')
 const siteLogo = computed(() => settings.value?.brand?.logo || '')

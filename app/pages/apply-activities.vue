@@ -61,7 +61,7 @@
           <div class="col-12 col-lg-6 col-md-6  p-0 m-0">
             <img
               :src="content.textedelapage.image"
-              alt="Services illustration"
+              alt="Illustration des services"
               class="img-fluid rounded"
             />
           </div>

@@ -14,7 +14,7 @@
                 <h2 class="heroSubtitle">{{ siteContent.about.hero.subtitle }}</h2>
                 <p class="heroDescription" v-html="siteContent.about.hero.description"></p>
                 <nuxt-link to="/contact">
-                  <nuxt-img :src="siteContent.about.hero.buttonContact" alt="Contact Us"
+                  <nuxt-img :src="siteContent.about.hero.buttonContact" alt="Nous contacter"
                     class="contactButton img-fluid fluid-img" />
                 </nuxt-link>
               </div>

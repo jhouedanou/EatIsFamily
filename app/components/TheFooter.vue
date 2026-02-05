@@ -13,13 +13,13 @@ onMounted(async () => {
 
 // Computed values from global settings
 const brandName = computed(() => `${settings.value?.brand?.name || 'Eat is'} ${settings.value?.brand?.highlight || 'Family'}`)
-const brandDescription = computed(() => settings.value?.footer?.tagline || 'Creating unforgettable culinary experiences.')
+const brandDescription = computed(() => settings.value?.footer?.tagline || 'Créer des expériences culinaires inoubliables.')
 const contactEmail = computed(() => settings.value?.footer?.contact_email || settings.value?.contact?.email || '')
 const contactPhone = computed(() => settings.value?.footer?.contact_phone || settings.value?.contact?.phone || '')
-const companyTitle = computed(() => settings.value?.footer?.company_title || 'Company')
-const policyTitle = computed(() => settings.value?.footer?.policy_title || 'Policy Info')
+const companyTitle = computed(() => settings.value?.footer?.company_title || 'Société')
+const policyTitle = computed(() => settings.value?.footer?.policy_title || 'Informations Légales')
 const showBackToTop = computed(() => settings.value?.footer?.show_back_to_top !== false)
-const backToTopText = computed(() => settings.value?.footer?.back_to_top_text || 'Back to top')
+const backToTopText = computed(() => settings.value?.footer?.back_to_top_text || 'Retour en haut')
 const copyrightText = computed(() => getCopyrightText())
 
 // Company links from footer settings (fallback to navigation links for backwards compatibility)

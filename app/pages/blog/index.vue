@@ -19,10 +19,10 @@ const featuredPosts = computed(() => posts.value?.slice(0, 2) || [])
 const allPosts = computed(() => posts.value?.slice(2) || [])
 
 // Contenu dynamique avec fallbacks
-const heroTitleLine1 = computed(() => blogContent.value?.hero?.title_line_1 || 'Insightful Stories From')
-const heroTitleLine2 = computed(() => blogContent.value?.hero?.title_line_2 || 'The Kitchen')
-const recentInsightsTitle = computed(() => blogContent.value?.sections?.recent_insights_title || 'Most Recent Insights')
-const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insights_title || 'Explore All Insight')
+const heroTitleLine1 = computed(() => blogContent.value?.hero?.title_line_1 || 'Histoires Inspirantes')
+const heroTitleLine2 = computed(() => blogContent.value?.hero?.title_line_2 || 'Des Coulisses')
+const recentInsightsTitle = computed(() => blogContent.value?.sections?.recent_insights_title || 'Articles les plus récents')
+const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insights_title || 'Explorer tous les articles')
 </script>
 
 <template>
@@ -77,7 +77,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
             </h3>
             <p class="post-excerpt">{{ featuredPosts[1].excerpt.rendered }}</p>
             <NuxtLink :to="`/blog/${featuredPosts[1].slug}`" class="bg-transparent border-0 p-0 m-0">
-              <NuxtImg :src="btnReadMore" alt="Read more" width="247"/>
+              <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
             </NuxtLink>
           </div>
         </article>
@@ -104,7 +104,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
               </h3>
               <p class="card-excerpt">{{ post.excerpt.rendered }}</p>
               <NuxtLink :to="`/blog/${post.slug}`" class="bg-transparent border-0 p-0 m-0 mt-1">
-                              <NuxtImg :src="btnReadMore" alt="Read more" width="247"/>
+                              <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
               </NuxtLink>
             </div>
           </article>

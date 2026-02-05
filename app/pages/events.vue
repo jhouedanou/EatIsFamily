@@ -54,7 +54,7 @@ const isValidSeoTitle = (title: string | undefined) => {
 useHead(() => ({
   title: isValidSeoTitle(content.value?.seo?.title) ? content.value.seo.title : 'Events - Eat Is Family',
   meta: [
-    { name: 'description', content: content.value?.seo?.description || 'Discover our food events and culinary experiences across France.' }
+    { name: 'description', content: content.value?.seo?.description || 'Découvrez nos événements culinaires et expériences gastronomiques à travers la France.' }
   ]
 }))
 </script>
@@ -94,7 +94,7 @@ useHead(() => ({
         </div>
 
         <div v-if="loading" class="loading">
-          Loading events...
+          Chargement des événements...
         </div>
 
         <div v-else-if="events.length > 0">
@@ -115,7 +115,7 @@ useHead(() => ({
         </div>
 
         <div v-else class="no-events">
-          No events found. ({{ events.length }} events)
+          Aucun événement trouvé. ({{ events.length }} événements)
         </div>
       </div>
     </section>

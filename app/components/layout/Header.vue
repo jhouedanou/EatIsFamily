@@ -25,7 +25,7 @@
           <NuxtLink to="/contact" class="contact-button-wrapper">
             <NuxtImg
               :src="btnGetInTouch"
-              alt="Get in touch"
+              alt="Nous contacter"
               class="contact-image"
             />
           </NuxtLink>
@@ -35,7 +35,7 @@
       <NuxtLink to="/contact" class="contact-button-wrapper mobile-only">
             <NuxtImg
               :src="btnGetInTouch"
-              alt="Get in touch"
+              alt="Nous contacter"
               class="contact-image"
             />
           </NuxtLink>

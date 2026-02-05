@@ -1,70 +1,70 @@
 <template>
   <div class="legal-page">
     <div class="container py-5">
-      <h1 class="font-heading display-4 fw-bold mb-4">Cookie Policy</h1>
-      <p class="text-muted mb-4">Last updated: January 2025</p>
+      <h1 class="font-heading display-4 fw-bold mb-4">Politique des Cookies</h1>
+      <p class="text-muted mb-4">Dernière mise à jour : Janvier 2025</p>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">1. What Are Cookies?</h2>
+        <h2 class="h3 mb-3">1. Qu'est-ce qu'un Cookie ?</h2>
         <p>
-          Cookies are small text files that are placed on your device when you visit our website. 
-          They help us provide you with a better experience by remembering your preferences and understanding how you use our site.
+          Les cookies sont de petits fichiers texte placés sur votre appareil lorsque vous visitez notre site web. 
+          Ils nous aident à vous offrir une meilleure expérience en mémorisant vos préférences et en comprenant comment vous utilisez notre site.
         </p>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">2. Types of Cookies We Use</h2>
+        <h2 class="h3 mb-3">2. Types de Cookies que Nous Utilisons</h2>
         
-        <h3 class="h5 mt-4 mb-2">Essential Cookies</h3>
+        <h3 class="h5 mt-4 mb-2">Cookies Essentiels</h3>
         <p>
-          These cookies are necessary for the website to function properly. They enable basic features like page navigation 
-          and access to secure areas. The website cannot function properly without these cookies.
+          Ces cookies sont nécessaires au bon fonctionnement du site. Ils permettent des fonctionnalités de base comme la navigation 
+          et l'accès aux zones sécurisées. Le site ne peut pas fonctionner correctement sans ces cookies.
         </p>
 
-        <h3 class="h5 mt-4 mb-2">Analytics Cookies</h3>
+        <h3 class="h5 mt-4 mb-2">Cookies Analytiques</h3>
         <p>
-          We use analytics cookies to understand how visitors interact with our website. This helps us improve our site's 
-          functionality and user experience. These cookies collect information anonymously.
+          Nous utilisons des cookies analytiques pour comprendre comment les visiteurs interagissent avec notre site. Cela nous aide à améliorer 
+          les fonctionnalités et l'expérience utilisateur. Ces cookies collectent des informations de manière anonyme.
         </p>
 
-        <h3 class="h5 mt-4 mb-2">Functional Cookies</h3>
+        <h3 class="h5 mt-4 mb-2">Cookies Fonctionnels</h3>
         <p>
-          These cookies allow the website to remember choices you make (such as your language preference) and provide 
-          enhanced, more personal features.
+          Ces cookies permettent au site de mémoriser vos choix (comme votre préférence de langue) et de fournir 
+          des fonctionnalités améliorées et plus personnalisées.
         </p>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">3. Cookies We Use</h2>
+        <h2 class="h3 mb-3">3. Cookies que Nous Utilisons</h2>
         <div class="table-responsive">
           <table class="table table-bordered">
             <thead class="table-light">
               <tr>
-                <th>Cookie Name</th>
-                <th>Purpose</th>
-                <th>Duration</th>
+                <th>Nom du Cookie</th>
+                <th>Finalité</th>
+                <th>Durée</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>_session</td>
-                <td>Session management</td>
+                <td>Gestion de session</td>
                 <td>Session</td>
               </tr>
               <tr>
                 <td>_ga</td>
-                <td>Google Analytics - tracking</td>
-                <td>2 years</td>
+                <td>Google Analytics - suivi</td>
+                <td>2 ans</td>
               </tr>
               <tr>
                 <td>_gid</td>
-                <td>Google Analytics - distinguishing users</td>
-                <td>24 hours</td>
+                <td>Google Analytics - distinction des utilisateurs</td>
+                <td>24 heures</td>
               </tr>
               <tr>
                 <td>cookie_consent</td>
-                <td>Stores your cookie preferences</td>
-                <td>1 year</td>
+                <td>Stocke vos préférences de cookies</td>
+                <td>1 an</td>
               </tr>
             </tbody>
           </table>
@@ -72,54 +72,54 @@
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">4. Managing Cookies</h2>
+        <h2 class="h3 mb-3">4. Gérer les Cookies</h2>
         <p>
-          You can control and manage cookies in various ways. Most browsers allow you to:
+          Vous pouvez contrôler et gérer les cookies de différentes manières. La plupart des navigateurs vous permettent de :
         </p>
         <ul>
-          <li>View what cookies are stored and delete them individually</li>
-          <li>Block third-party cookies</li>
-          <li>Block cookies from specific sites</li>
-          <li>Block all cookies</li>
-          <li>Delete all cookies when you close your browser</li>
+          <li>Voir quels cookies sont stockés et les supprimer individuellement</li>
+          <li>Bloquer les cookies tiers</li>
+          <li>Bloquer les cookies de sites spécifiques</li>
+          <li>Bloquer tous les cookies</li>
+          <li>Supprimer tous les cookies à la fermeture de votre navigateur</li>
         </ul>
         <p>
-          Please note that blocking all cookies may affect your experience on our website and limit certain functionalities.
+          Veuillez noter que le blocage de tous les cookies peut affecter votre expérience sur notre site et limiter certaines fonctionnalités.
         </p>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">5. Browser Settings</h2>
-        <p>Here's how to manage cookies in popular browsers:</p>
+        <h2 class="h3 mb-3">5. Paramètres du Navigateur</h2>
+        <p>Voici comment gérer les cookies dans les navigateurs populaires :</p>
         <ul>
           <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
-          <li><a href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer" target="_blank" rel="noopener">Mozilla Firefox</a></li>
-          <li><a href="https://support.apple.com/guide/safari/manage-cookies-sfri11471/mac" target="_blank" rel="noopener">Apple Safari</a></li>
-          <li><a href="https://support.microsoft.com/en-us/help/17442/windows-internet-explorer-delete-manage-cookies" target="_blank" rel="noopener">Microsoft Edge</a></li>
+          <li><a href="https://support.mozilla.org/fr/kb/cookies-informations-sites-enregistrent" target="_blank" rel="noopener">Mozilla Firefox</a></li>
+          <li><a href="https://support.apple.com/fr-fr/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Apple Safari</a></li>
+          <li><a href="https://support.microsoft.com/fr-fr/help/17442/windows-internet-explorer-delete-manage-cookies" target="_blank" rel="noopener">Microsoft Edge</a></li>
         </ul>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">6. Changes to This Policy</h2>
+        <h2 class="h3 mb-3">6. Modifications de cette Politique</h2>
         <p>
-          We may update this Cookie Policy from time to time. Any changes will be posted on this page with an updated 
-          "Last updated" date.
+          Nous pouvons mettre à jour cette Politique des Cookies de temps à autre. Toute modification sera publiée sur cette page avec une 
+          date de "Dernière mise à jour" actualisée.
         </p>
       </section>
 
       <section class="mb-5">
-        <h2 class="h3 mb-3">7. Contact Us</h2>
+        <h2 class="h3 mb-3">7. Nous Contacter</h2>
         <p>
-          If you have questions about our use of cookies, please contact us at:
+          Si vous avez des questions concernant notre utilisation des cookies, veuillez nous contacter à :
         </p>
         <address>
           <strong>Eat Is Family</strong><br>
-          Email: <a href="mailto:privacy@eatisfamily.com">privacy@eatisfamily.com</a>
+          Email : <a href="mailto:privacy@eatisfamily.com">privacy@eatisfamily.com</a>
         </address>
       </section>
 
       <div class="mt-5">
-        <NuxtLink to="/" class="btn btn-outline-dark">← Back to Home</NuxtLink>
+        <NuxtLink to="/" class="btn btn-outline-dark">← Retour à l'accueil</NuxtLink>
       </div>
     </div>
   </div>
@@ -127,9 +127,9 @@
 
 <script setup lang="ts">
 useHead({
-  title: 'Cookie Policy - Eat Is Family',
+  title: 'Politique des Cookies - Eat Is Family',
   meta: [
-    { name: 'description', content: 'Cookie Policy for Eat Is Family. Learn about how we use cookies on our website.' }
+    { name: 'description', content: 'Politique des Cookies d\'Eat Is Family. Découvrez comment nous utilisons les cookies sur notre site.' }
   ]
 })
 </script>

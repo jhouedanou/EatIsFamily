@@ -151,12 +151,12 @@ const goToMenuPage = (page: number) => {
               <span class="venue-info-text">{{ selectedVenue.location }}</span>
             </div>
             <div class="venue-info-item">
-              <span class="venue-info-label">Capacity:</span>
-              <span class="venue-info-value">{{ selectedVenue.capacity }} capacity facility</span>
+              <span class="venue-info-label">Capacité :</span>
+              <span class="venue-info-value">{{ selectedVenue.capacity }} places</span>
             </div>
             <div class="venue-info-item">
-              <span class="venue-info-label">Staff Members:</span>
-              <span class="venue-info-value">{{ selectedVenue.staff_members }} staffs</span>
+              <span class="venue-info-label">Personnel :</span>
+              <span class="venue-info-value">{{ selectedVenue.staff_members }} employés</span>
             </div>
           </div>
 
@@ -168,7 +168,7 @@ const goToMenuPage = (page: number) => {
             </div>
             <div class="venue-event-item">
               <span class="venue-event-label">INVITÉS SERVIS</span>
-              <span class="venue-event-value">{{ selectedVenue.guests_served }} Guest Served</span>
+              <span class="venue-event-value">{{ selectedVenue.guests_served }} invités servis</span>
             </div>
           </div>
 
@@ -180,21 +180,21 @@ const goToMenuPage = (page: number) => {
               :class="{ active: activeTab === 'overview' }"
               @click="setActiveTab('overview')"
             >
-              <span class="tab-icon"><nuxt-img :src="iconInfo" alt="Overview Icon" /></span> Présentation
+              <span class="tab-icon"><nuxt-img :src="iconInfo" alt="Icône Présentation" /></span> Présentation
             </button>
             <button
               class="venue-tab"
               :class="{ active: activeTab === 'shops' }"
               @click="setActiveTab('shops')"
             >
-              <span class="tab-icon"><nuxt-img :src="iconShop" alt="Shops Icon" /></span> BOUTIQUES ({{ selectedVenue.shops?.length || selectedVenue.shops_count }})
+              <span class="tab-icon"><nuxt-img :src="iconShop" alt="Icône Boutiques" /></span> BOUTIQUES ({{ selectedVenue.shops?.length || selectedVenue.shops_count }})
             </button>
             <button
               class="venue-tab"
               :class="{ active: activeTab === 'menus' }"
               @click="setActiveTab('menus')"
             >
-              <span class="tab-icon"><nuxt-img :src="iconFood" alt="Menus Icon" /></span> MENU ({{ selectedVenue.menu_items?.length || selectedVenue.menus_count }})
+              <span class="tab-icon"><nuxt-img :src="iconFood" alt="Icône Menu" /></span> MENU ({{ selectedVenue.menu_items?.length || selectedVenue.menus_count }})
             </button>
           </div>
 
@@ -305,7 +305,7 @@ const goToMenuPage = (page: number) => {
             :to="`/careers?venue=${encodeURIComponent(selectedVenue.location)}`"
             class="d-flex align-items-start justify-content-start venue-join-btn"
           >
-          <nuxt-img :src="btnJoinNow" alt="Join Now Button" class="img-fluid"></nuxt-img>
+          <nuxt-img :src="btnJoinNow" alt="Rejoignez-nous" class="img-fluid"></nuxt-img>
           </NuxtLink>
         </div>
 

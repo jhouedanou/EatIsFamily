@@ -21,10 +21,10 @@
             <p class="lead preserve-lines mb-4">{{ content.section2.text }}</p>
             <div class="d-flex gap-3 justify-content-center flex-wrap">
               <NuxtLink :to="content.section2.link1">
-                <NuxtImg :src="content.section2.btn1" alt="Apply for Jobs" />
+                <NuxtImg :src="content.section2.btn1" alt="Postuler aux offres" />
               </NuxtLink>
               <NuxtLink :to="content.section2.link2">
-                <NuxtImg :src="content.section2.btn2" alt="Explore Map" />
+                <NuxtImg :src="content.section2.btn2" alt="Explorer la carte" />
               </NuxtLink>
             </div>
           </div>
@@ -47,7 +47,7 @@
             <p class="mt-4 text-muted fst-italic">{{ content.section3.sous }}</p>
           </div>
           <div class="col-lg-6">
-            <NuxtImg :src="content.section3.image" alt="Our Services" class="img-fluid rounded shadow" />
+            <NuxtImg :src="content.section3.image" alt="Nos services" class="img-fluid rounded shadow" />
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@
             <p class="lead text-muted mb-4">{{ content.textedelapage.subtitle }}</p>
             <p class="preserve-lines mb-4">{{ content.textedelapage.description }}</p>
             <NuxtLink :to="content.textedelapage.link">
-              <NuxtImg :src="content.textedelapage.btn" alt="Contact Us" />
+              <NuxtImg :src="content.textedelapage.btn" alt="Nous contacter" />
             </NuxtLink>
           </div>
         </div>
@@ -94,9 +94,9 @@ onMounted(async () => {
 })
 
 useHead({
-  title: 'Activities & Consulting Services - Eat Is Family',
+  title: 'Activités & Services de Conseil - Eat Is Family',
   meta: [
-    { name: 'description', content: 'Discover our consulting services for restaurants, event venues, and food businesses. We help optimize workflows, scale operations, and launch new concepts.' }
+    { name: 'description', content: "Découvrez nos services de conseil pour restaurants, lieux d'événements et entreprises alimentaires. Nous aidons à optimiser les flux de travail, à faire évoluer les opérations et à lancer de nouveaux concepts." }
   ]
 })
 </script>

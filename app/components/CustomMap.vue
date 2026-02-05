@@ -165,7 +165,7 @@ watch(() => searchQuery.value, async () => {
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Search job title and category here"
+            placeholder="Rechercher un poste ou une catégorie"
             class="bg-transparent text-white placeholder:text-white/50 outline-none flex-1 font-body"
           />
         </div>
@@ -216,8 +216,8 @@ watch(() => searchQuery.value, async () => {
           </div>
 
           <div class="mt-4 flex gap-3">
-            <button class="btn-primary flex-1">View All Jobs</button>
-            <button class="btn-secondary">Get Directions</button>
+            <button class="btn-primary flex-1">Voir tous les postes</button>
+            <button class="btn-secondary">Itinéraire</button>
           </div>
         </div>
       </div>

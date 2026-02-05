@@ -252,7 +252,7 @@ onUnmounted(() => {
       <div class="container-fluid">
         <TwoColumnText :title="content.beautiful?.title" :text="content.beautiful?.text" />
         <div class="row mt-4">
-          <img :src="content.beautiful?.image" alt="Beautiful Moments We've Helped Create"
+          <img :src="content.beautiful?.image" alt="Les beaux moments que nous avons créés"
             class="img-fluid mx-auto d-block">
         </div>
         <div id="lasalle" class="row mt-4">

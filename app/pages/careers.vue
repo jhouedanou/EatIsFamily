@@ -218,7 +218,7 @@ const goToPage = (page: number) => {
             </div>
           </div>
           <div class="careers-hero-image col-12 col-lg-5 col-md-5">
-            <img :src="content.hero_default?.image" alt="Join our team"  />
+            <img :src="content.hero_default?.image" alt="Rejoignez notre équipe"  />
           </div>
         </div>
         <div id="limam" class="container d-flex flex-column justify-content-center text-center flex-wrap">
@@ -267,7 +267,7 @@ const goToPage = (page: number) => {
           <div class="flex-grow-1 position-relative musuc">
             <div id="neilcruz" class="d-flex align-items-center gap-3 px-3">
               <LucideSearch class="text-white opacity-75" style="width: 1.25rem; height: 1.25rem;" />
-              <input v-model="searchQuery" type="text" :placeholder="content.search_section?.search_placeholder || 'Search jobs...'"
+              <input v-model="searchQuery" type="text" :placeholder="content.search_section?.search_placeholder || 'Rechercher des offres...'"
                 class="bg-transparent text-white border-0 flex-grow-1 py-2 font-body search-input" />
             </div>
           </div>
@@ -366,11 +366,11 @@ const goToPage = (page: number) => {
                       <LucideMapPin style="width: 0.75rem; height: 0.75rem;" /> {{ getJobVenueLocation(job) }}
                     </span>-->
                     <span class="tag-lime d-flex align-items-center gap-1">
-                      <nuxt-img :src="iconBriefcase" alt="briefcase icon" width="16" height="16" />
+                      <nuxt-img :src="iconBriefcase" alt="Icône emploi" width="16" height="16" />
                       {{ getJobTypeLabel(job.job_type) || job.job_type }}
                     </span>
                     <span class="tag-yellow d-flex align-items-center gap-1">
-                      <nuxt-img :src="iconMoneybag" alt="money bag icon" width="16" height="16" />
+                      <nuxt-img :src="iconMoneybag" alt="Icône salaire" width="16" height="16" />
                       {{ job.salary }}
                     </span>
                   </div>
@@ -490,7 +490,13 @@ const goToPage = (page: number) => {
    ============================================ */
 .careers-hero-default {
   background-color: #FFF;
+  
+@media (min-width: 1024px) {
   padding-top: 6rem;
+}
+  @media (max-width: 1024px) {
+padding-top: 0rem;
+}
   margin:4em auto;
   
 }
@@ -614,8 +620,15 @@ const goToPage = (page: number) => {
   }
 
   .careers-hero-content {
+    @media (min-width: 1024px) {
+
     padding: 3rem 1.5rem;
   }
+  @media (max-width: 1024px) {
+
+    padding: 6rem 1.5rem 2em .5rem;
+  }
+    }
 
   .careers-hero-title {
     font-size: 2.25rem;
