@@ -2220,6 +2220,20 @@ padding-top:7em !important;
       font-size:30px !important;
     }
   }
+  .contact-page{
+    .contact-image{
+      height:150px !important;
+    }
+  }
+  .contact-content{
+    flex-direction: row !important;
+    .contact-image{
+      align-items: flex-start !important;
+      justify-content: flex-start !important;
+
+        height: 100% !important;
+    }
+  }
 }
 // ----- TABLET LANDSCAPE (max-width: 1200px) -----
 @media (max-width: 1200px) {
