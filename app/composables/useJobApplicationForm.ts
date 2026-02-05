@@ -25,7 +25,7 @@ export interface JobApplicationFormData {
   email: string
   phone: string
   linkedin?: string
-  resume: File | null
+  resumeLink: string
   coverLetter?: string
   jobTitle: string
   jobLocation: string
@@ -123,16 +123,13 @@ export const useJobApplicationForm = () => {
       email: formData.email,
       phone: formData.phone,
       linkedin: formData.linkedin,
+      resumeLink: formData.resumeLink,
       jobTitle: formData.jobTitle,
       jobLocation: formData.jobLocation,
-      jobSlug: formData.jobSlug,
-      hasResume: !!formData.resume,
-      resumeName: formData.resume?.name,
-      resumeSize: formData.resume?.size,
-      resumeType: formData.resume?.type
+      jobSlug: formData.jobSlug
     })
     
-    // Créer un FormData pour l'envoi (supporte les fichiers)
+    // Créer un FormData pour l'envoi
     const data = new FormData()
     
     // Mapper les champs du formulaire vers les noms de champs CF7
@@ -141,19 +138,11 @@ export const useJobApplicationForm = () => {
     data.append('your-email', formData.email)
     data.append('your-phone', formData.phone)
     data.append('your-linkedin', formData.linkedin || '')
+    data.append('your-resume-link', formData.resumeLink)
     data.append('your-message', formData.coverLetter || '')
     data.append('job-title', formData.jobTitle)
     data.append('job-location', formData.jobLocation)
     data.append('job-slug', formData.jobSlug)
-    
-    // Ajouter le fichier CV si présent
-    if (formData.resume) {
-      // S'assurer que le fichier est bien un objet File valide
-      console.log('[JobApplicationForm] Adding resume file:', formData.resume.name, formData.resume.size, 'bytes')
-      data.append('your-resume', formData.resume, formData.resume.name)
-    } else {
-      console.warn('[JobApplicationForm] No resume file provided')
-    }
     
     // Ajouter les champs requis par CF7 pour le traitement
     data.append('_wpcf7', formId)
@@ -223,6 +212,45 @@ export const useJobApplicationForm = () => {
   }
 
   /**
+   * Validate resume link URL (cloud storage services)
+   */
+  const isValidResumeLink = (url: string): boolean => {
+    // Vérifier si c'est une URL valide
+    try {
+      const urlObj = new URL(url)
+      
+      // Liste des domaines de services cloud autorisés
+      const allowedDomains = [
+        'drive.google.com',
+        'docs.google.com',
+        'onedrive.live.com',
+        '1drv.ms',
+        'dropbox.com',
+        'www.dropbox.com',
+        'dl.dropboxusercontent.com',
+        'icloud.com',
+        'www.icloud.com',
+        'box.com',
+        'www.box.com',
+        'app.box.com',
+        'wetransfer.com',
+        'we.tl',
+        'mega.nz',
+        'mega.io',
+        'sharepoint.com',
+        'linkedin.com',  // Pour les CV LinkedIn
+        'www.linkedin.com'
+      ]
+      
+      // Vérifier si le domaine est dans la liste autorisée
+      const hostname = urlObj.hostname.toLowerCase()
+      return allowedDomains.some(domain => hostname === domain || hostname.endsWith('.' + domain))
+    } catch {
+      return false
+    }
+  }
+
+  /**
    * Validate form data before submission
    */
   const validateForm = (formData: JobApplicationFormData): { valid: boolean; errors: string[] } => {
@@ -244,8 +272,10 @@ export const useJobApplicationForm = () => {
       errors.push('Le numéro de téléphone n\'est pas valide')
     }
     
-    if (!formData.resume) {
-      errors.push('Le CV est requis')
+    if (!formData.resumeLink.trim()) {
+      errors.push('Le lien vers votre CV est requis')
+    } else if (!isValidResumeLink(formData.resumeLink)) {
+      errors.push('Veuillez fournir un lien valide depuis Google Drive, OneDrive, Dropbox ou un autre service cloud reconnu')
     }
     
     if (!formData.consent) {
@@ -258,40 +288,12 @@ export const useJobApplicationForm = () => {
     }
   }
 
-  /**
-   * Validate file (CV/Resume)
-   */
-  const validateFile = (file: File): { valid: boolean; error?: string } => {
-    const allowedTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ]
-    const maxSize = 5 * 1024 * 1024 // 5MB
-    
-    if (!allowedTypes.includes(file.type)) {
-      return {
-        valid: false,
-        error: 'Format de fichier non autorisé. Utilisez PDF, DOC ou DOCX.'
-      }
-    }
-    
-    if (file.size > maxSize) {
-      return {
-        valid: false,
-        error: 'Le fichier est trop volumineux. Taille maximum : 5 Mo.'
-      }
-    }
-    
-    return { valid: true }
-  }
-
   return {
     submitJobApplication,
     validateForm,
-    validateFile,
     isValidEmail,
     isValidPhone,
+    isValidResumeLink,
     getFormId
   }
 }

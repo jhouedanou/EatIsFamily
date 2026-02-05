@@ -22,6 +22,29 @@
       <!-- Modal Body -->
       <div class="modal-body">
         <form v-if="!submitSuccess" @submit.prevent="handleSubmit" class="apply-form">
+          <!-- Avertissement pour le CV -->
+          <div class="cv-notice">
+            <div class="cv-notice-icon">
+              <LucideCloudUpload />
+            </div>
+            <div class="cv-notice-content">
+              <strong>📎 Important : CV en ligne requis</strong>
+              <p>Veuillez télécharger votre CV sur l'un des services suivants avant de postuler :</p>
+              <div class="cloud-services">
+                <a href="https://drive.google.com" target="_blank" rel="noopener" class="cloud-service">
+                  <span>📁</span> Google Drive
+                </a>
+                <a href="https://onedrive.live.com" target="_blank" rel="noopener" class="cloud-service">
+                  <span>📁</span> OneDrive
+                </a>
+                <a href="https://dropbox.com" target="_blank" rel="noopener" class="cloud-service">
+                  <span>📁</span> Dropbox
+                </a>
+              </div>
+              <p class="cv-notice-tip">💡 Assurez-vous que le lien est accessible publiquement ou partagé avec "Tous les utilisateurs disposant du lien".</p>
+            </div>
+          </div>
+
           <div class="form-row">
             <div class="form-group">
               <label for="apply-name">Nom complet *</label>
@@ -68,24 +91,18 @@
               </div>
 
               <div class="form-group">
-                <label for="apply-resume">CV *</label>
-                <div class="file-upload" :class="{ 'has-file': form.resumeName }">
+                <label for="apply-resume">Lien vers votre CV *</label>
+                <div class="resume-link-input">
+                  <LucideLink class="input-icon" />
                   <input
-                    type="file"
+                    v-model="form.resumeLink"
+                    type="url"
                     id="apply-resume"
-                    accept=".pdf,.doc,.docx"
+                    placeholder="https://drive.google.com/file/d/... ou autre lien de partage"
                     required
-                    @change="handleFileChange"
                   />
-                  <div class="file-upload-content">
-                    <LucideUpload />
-                    <span v-if="form.resumeName">{{ form.resumeName }}</span>
-                    <span v-else>
-                      <strong>Cliquez pour télécharger</strong> ou glissez-déposez<br/>
-                      PDF, DOC, DOCX (max 5 Mo)
-                    </span>
-                  </div>
                 </div>
+                <p class="form-hint">Collez le lien de partage de votre CV (Google Drive, OneDrive, Dropbox, etc.)</p>
               </div>
 
               <div class="form-group">
@@ -156,7 +173,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { LucideX, LucideBriefcase, LucideMapPin, LucideUpload, LucideSend, LucideCheck, LucideAlertCircle } from 'lucide-vue-next'
+import { LucideX, LucideBriefcase, LucideMapPin, LucideLink, LucideSend, LucideCheck, LucideAlertCircle, LucideCloudUpload } from 'lucide-vue-next'
 
 const props = defineProps<{
   isOpen: boolean
@@ -179,15 +196,14 @@ watch(() => props.isOpen, (newVal, oldVal) => {
 const emit = defineEmits(['close'])
 
 // Utiliser le composable CF7 pour les candidatures
-const { submitJobApplication, validateForm, validateFile } = useJobApplicationForm()
+const { submitJobApplication, validateForm } = useJobApplicationForm()
 
 const form = ref({
   name: '',
   email: '',
   phone: '',
   linkedin: '',
-  resume: null as File | null,
-  resumeName: '',
+  resumeLink: '',
   coverLetter: '',
   consent: false,
   website: '' // Honeypot field
@@ -199,24 +215,6 @@ const submitError = ref<string | null>(null)
 
 const close = () => {
   emit('close')
-}
-
-const handleFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (target.files && target.files[0]) {
-    const file = target.files[0]
-    
-    // Valider le fichier
-    const validation = validateFile(file)
-    if (!validation.valid) {
-      submitError.value = validation.error || 'Fichier invalide'
-      return
-    }
-    
-    form.value.resume = file
-    form.value.resumeName = file.name
-    submitError.value = null
-  }
 }
 
 const handleSubmit = async () => {
@@ -236,7 +234,7 @@ const handleSubmit = async () => {
     email: form.value.email,
     phone: form.value.phone,
     linkedin: form.value.linkedin,
-    resume: form.value.resume,
+    resumeLink: form.value.resumeLink,
     coverLetter: form.value.coverLetter,
     jobTitle: props.jobTitle,
     jobLocation: props.jobLocation,
@@ -341,6 +339,119 @@ watch(() => props.isOpen, (isOpen) => {
   pointer-events: none;
 }
 
+/* CV Notice Banner */
+.cv-notice {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border: 1px solid #F59E0B;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  
+  .cv-notice-icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #F59E0B;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+  
+  .cv-notice-content {
+    flex: 1;
+    
+    strong {
+      display: block;
+      color: #92400E;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+    
+    p {
+      color: #78350F;
+      font-size: 0.85rem;
+      margin: 0 0 0.75rem 0;
+      line-height: 1.5;
+    }
+    
+    .cv-notice-tip {
+      font-size: 0.8rem;
+      color: #92400E;
+      background: rgba(255, 255, 255, 0.5);
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.375rem;
+      margin-top: 0.75rem;
+    }
+  }
+  
+  .cloud-services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    
+    .cloud-service {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.375rem 0.75rem;
+      background: white;
+      border: 1px solid #D97706;
+      border-radius: 2rem;
+      color: #92400E;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: #F59E0B;
+        color: white;
+        border-color: #F59E0B;
+      }
+      
+      span {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+/* Resume Link Input */
+.resume-link-input {
+  position: relative;
+  
+  .input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #9CA3AF;
+    pointer-events: none;
+  }
+  
+  input {
+    padding-left: 2.75rem !important;
+  }
+}
+
+.form-hint {
+  font-size: 0.75rem;
+  color: #6B7280;
+  margin-top: 0.375rem;
+  margin-bottom: 0;
+}
+
 /* Error message styling */
 .error-message {
   display: flex;
@@ -357,6 +468,32 @@ watch(() => props.isOpen, (isOpen) => {
   svg {
     flex-shrink: 0;
     color: #DC2626;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .cv-notice {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    
+    .cv-notice-icon {
+      width: 2rem;
+      height: 2rem;
+      
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+    
+    .cloud-services {
+      .cloud-service {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+      }
+    }
   }
 }
 </style>
