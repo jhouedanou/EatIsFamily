@@ -40,15 +40,21 @@ export const useJobApplicationForm = () => {
   const wpBaseUrl = config.public.wordpressUrl || 'https://bigfive.dev/eatisfamily'
   
   // Get settings for CF7 form ID
-  const { settings } = useGlobalSettings()
+  const { settings, loadSettings } = useGlobalSettings()
   
   // Cache pour l'ID numérique résolu
   const resolvedNumericId = ref<string | null>(null)
   
   /**
    * Récupère l'ID du formulaire CF7 pour les candidatures
+   * Charge les settings si nécessaire
    */
-  const getFormId = (): string => {
+  const getFormId = async (): Promise<string> => {
+    // S'assurer que les settings sont chargées
+    if (!settings.value) {
+      console.log('[JobApplicationForm] Settings not loaded, loading now...')
+      await loadSettings()
+    }
     return settings.value?.contact_form?.cf7_job_application_form_id || ''
   }
   
@@ -97,7 +103,7 @@ export const useJobApplicationForm = () => {
    * Submit job application to Contact Form 7
    */
   const submitJobApplication = async (formData: JobApplicationFormData): Promise<CF7Response> => {
-    const formIdOrHash = getFormId()
+    const formIdOrHash = await getFormId()
     
     if (!formIdOrHash) {
       console.error('[JobApplicationForm] No form ID configured')
