@@ -1188,8 +1188,9 @@ filter: alpha(opacity=50); /* internet explorer */
 .venue-join-btn {
   border-top:1px solid #000;
   padding:1rem 0;   
-    width: 100%;
-    height: 104px;
+
+      width: 100%;
+        height:70px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1206,8 +1207,8 @@ filter: alpha(opacity=50); /* internet explorer */
     margin: 2rem auto 1rem auto;
     transition: all 0.2s ease;
     img{
-      width:287px;
-      height:60px;
+      width: auto;
+        height:70px;
     }
 }
 

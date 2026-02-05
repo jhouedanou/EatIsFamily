@@ -337,6 +337,11 @@ function eatisfamily_ajax_save_forms_v5() {
         update_option('eatisfamily_cf7_contact_form_id', sanitize_text_field($form_data['cf7_contact_form_id']));
     }
     
+    // Save CF7 Job Application Form ID separately
+    if (isset($form_data['cf7_job_application_form_id'])) {
+        update_option('eatisfamily_cf7_job_application_form_id', sanitize_text_field($form_data['cf7_job_application_form_id']));
+    }
+    
     // Save to database
     $result = update_option('eatisfamily_forms', $forms_content);
     

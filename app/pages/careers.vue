@@ -1195,10 +1195,9 @@ padding-top: 0rem;
     }
   }
   .matiti{
-    width:100vw;
-    height:100vh;
-      max-width: 298px;
-      max-height: 64px;
+    width:auto;
+    height:70px;
+ 
     img{
       width:100%;
       

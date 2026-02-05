@@ -1945,3 +1945,177 @@ add_action('wp_enqueue_scripts', 'eatisfamily_enqueue_scripts');
  * Include additional files
  */
 require_once get_template_directory() . '/inc/admin.php';
+
+/**
+ * ============================================================================
+ * FLAMINGO INTEGRATION - Separate entries by form type
+ * ============================================================================
+ * This customizes how Contact Form 7 submissions are stored in Flamingo
+ * to separate Contact form entries from Job Application entries.
+ */
+
+/**
+ * Customize Flamingo channel based on form type
+ * This creates separate "channels" in Flamingo for different form types
+ */
+add_filter('wpcf7_flamingo_inbound_message_parameters', 'eatisfamily_customize_flamingo_entry', 10, 2);
+
+function eatisfamily_customize_flamingo_entry($parameters, $result) {
+    // Get the current form
+    $form = WPCF7_ContactForm::get_current();
+    if (!$form) {
+        return $parameters;
+    }
+    
+    $form_id = $form->id();
+    $contact_form_id = get_option('eatisfamily_cf7_contact_form_id', '');
+    $job_application_form_id = get_option('eatisfamily_cf7_job_application_form_id', '');
+    
+    // Get submitted data
+    $submission = WPCF7_Submission::get_instance();
+    $posted_data = $submission ? $submission->get_posted_data() : array();
+    
+    // Determine form type and set appropriate channel and subject
+    if ($form_id == $contact_form_id || strpos($form->title(), 'Contact') !== false) {
+        // Contact Form
+        $parameters['channel'] = 'contact-form';
+        
+        // Set subject with event type
+        $event_type = isset($posted_data['event-type']) ? sanitize_text_field($posted_data['event-type']) : 'Général';
+        $parameters['subject'] = 'Nouvelle demande de contact - ' . $event_type;
+        
+        // Add meta for filtering
+        $parameters['meta'] = array_merge(
+            $parameters['meta'] ?? array(),
+            array('form_type' => 'contact')
+        );
+        
+    } elseif ($form_id == $job_application_form_id || strpos($form->title(), 'Job') !== false || strpos($form->title(), 'Candidature') !== false) {
+        // Job Application Form
+        $parameters['channel'] = 'job-applications';
+        
+        // Set subject with job title
+        $job_title = isset($posted_data['job-title']) ? sanitize_text_field($posted_data['job-title']) : 'Poste non spécifié';
+        $parameters['subject'] = 'Nouvelle candidature - ' . $job_title;
+        
+        // Add meta for filtering
+        $parameters['meta'] = array_merge(
+            $parameters['meta'] ?? array(),
+            array(
+                'form_type' => 'job_application',
+                'job_title' => $job_title,
+                'job_location' => isset($posted_data['job-location']) ? sanitize_text_field($posted_data['job-location']) : '',
+                'job_slug' => isset($posted_data['job-slug']) ? sanitize_text_field($posted_data['job-slug']) : '',
+            )
+        );
+    }
+    
+    return $parameters;
+}
+
+/**
+ * Add custom admin columns to Flamingo Inbound Messages
+ * This helps identify form type at a glance
+ */
+add_filter('manage_flamingo_inbound_posts_columns', 'eatisfamily_flamingo_custom_columns');
+
+function eatisfamily_flamingo_custom_columns($columns) {
+    $new_columns = array();
+    
+    foreach ($columns as $key => $value) {
+        $new_columns[$key] = $value;
+        
+        // Add "Form Type" column after "From" column
+        if ($key === 'from') {
+            $new_columns['form_type'] = __('Type', 'eatisfamily');
+        }
+    }
+    
+    return $new_columns;
+}
+
+/**
+ * Populate custom column content
+ */
+add_action('manage_flamingo_inbound_posts_custom_column', 'eatisfamily_flamingo_custom_column_content', 10, 2);
+
+function eatisfamily_flamingo_custom_column_content($column_name, $post_id) {
+    if ($column_name === 'form_type') {
+        $channel = get_post_meta($post_id, '_channel', true);
+        
+        if ($channel === 'contact-form') {
+            echo '<span style="background: #e7f3fe; color: #1565c0; padding: 3px 8px; border-radius: 3px; font-size: 11px;">📧 Contact</span>';
+        } elseif ($channel === 'job-applications') {
+            echo '<span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 3px; font-size: 11px;">💼 Candidature</span>';
+        } else {
+            echo '<span style="background: #f5f5f5; color: #666; padding: 3px 8px; border-radius: 3px; font-size: 11px;">Autre</span>';
+        }
+    }
+}
+
+/**
+ * Add filter dropdown to Flamingo admin to filter by form type
+ */
+add_action('restrict_manage_posts', 'eatisfamily_flamingo_filter_dropdown');
+
+function eatisfamily_flamingo_filter_dropdown() {
+    global $typenow;
+    
+    if ($typenow !== 'flamingo_inbound') {
+        return;
+    }
+    
+    $selected = isset($_GET['form_channel']) ? sanitize_text_field($_GET['form_channel']) : '';
+    
+    ?>
+    <select name="form_channel" id="form_channel" style="min-width: 180px;">
+        <option value=""><?php _e('🔍 Filtrer par type', 'eatisfamily'); ?></option>
+        <option value="contact-form" <?php selected($selected, 'contact-form'); ?>><?php _e('📧 Demandes de contact', 'eatisfamily'); ?></option>
+        <option value="job-applications" <?php selected($selected, 'job-applications'); ?>><?php _e('💼 Candidatures', 'eatisfamily'); ?></option>
+    </select>
+    <?php
+}
+
+/**
+ * Apply the filter using Flamingo's channel taxonomy
+ */
+add_filter('parse_query', 'eatisfamily_flamingo_filter_query');
+
+function eatisfamily_flamingo_filter_query($query) {
+    global $pagenow, $typenow;
+    
+    if (!is_admin() || $pagenow !== 'edit.php' || $typenow !== 'flamingo_inbound') {
+        return $query;
+    }
+    
+    if (isset($_GET['form_channel']) && !empty($_GET['form_channel'])) {
+        $channel = sanitize_text_field($_GET['form_channel']);
+        
+        // Flamingo uses 'flamingo_inbound_channel' taxonomy for channels
+        $query->query_vars['tax_query'] = array(
+            array(
+                'taxonomy' => 'flamingo_inbound_channel',
+                'field'    => 'slug',
+                'terms'    => $channel,
+            ),
+        );
+    }
+    
+    return $query;
+}
+
+/**
+ * Ensure the channel taxonomy term exists when saving
+ */
+add_action('wpcf7_before_send_mail', 'eatisfamily_ensure_flamingo_channels_exist');
+
+function eatisfamily_ensure_flamingo_channels_exist($contact_form) {
+    // Create channel terms if they don't exist
+    if (!term_exists('contact-form', 'flamingo_inbound_channel')) {
+        wp_insert_term('Contact Form', 'flamingo_inbound_channel', array('slug' => 'contact-form'));
+    }
+    
+    if (!term_exists('job-applications', 'flamingo_inbound_channel')) {
+        wp_insert_term('Job Applications', 'flamingo_inbound_channel', array('slug' => 'job-applications'));
+    }
+}

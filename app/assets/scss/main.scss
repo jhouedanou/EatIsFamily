@@ -565,10 +565,12 @@ body {
   }
 }
 #btnExplore {
-  width: 299px;
   height: 70px;
 }
+.sanga{
+  height: 70px;
 
+}
 #blusy {
   background: url(/images/heroBg.svg) no-repeat;
   background-size: contain;
@@ -704,10 +706,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: column;       width: auto;
+ height: 70px;
+
   img {
-    width: 283px;
-    height: auto;
+    width: auto;
+    height: 70px;
   }
 }
 
@@ -759,10 +763,13 @@ body {
     margin-top: 70px !important;
   }
   a {
-    width: 291px;
-    height: 74px;
+    
+      width: auto;
+        height:70px;
     img {
-      width: 100%;
+      
+      width: auto;
+        height:70px;
     }
   }
 }
@@ -830,11 +837,13 @@ body {
 
 #lasalle {
   a {
-    width: 271px;
-    height: 74px;
+ 
+      width: auto;
+        height:70px;
     img {
-      width: 100%;
-    }
+
+      width: auto;
+        height:70px;    }
   }
   .example {
     padding: 5px;
@@ -930,8 +939,8 @@ body {
   justify-content: space-around;
   a {
     display: inline-block;
-    width: 264px;
-    height: 73px;
+    width: auto;
+    height: 70px;
     img {
       width: 100%;
       height: 100%;
@@ -1273,10 +1282,11 @@ body {
 }
 #leforme {
   a {
-    width: 316px !important;
-    height: 74px !important;
+    width: auto;
+        height:70px;  
     img {
-      width: 100% !important;
+       width: auto;
+        height:70px;  
     }
   }
 }
