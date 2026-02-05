@@ -130,12 +130,29 @@
                                      }
               },
     "contact":  {
-                    "hero":  {
-                                 "title":  "",
-                                 "subtitle":  ""
+                    "hero_section":  {
+                                 "title":  {
+                                     "line_1": "Reach",
+                                     "highlight": "Out",
+                                     "line_2": "Let's Create",
+                                     "line_3": "Something Amazing"
+                                 },
+                                 "description":  "Ready to elevate your event with exceptional catering? Share your vision and we'll bring it to life.",
+                                 "image": {
+                                     "src": "",
+                                     "alt": "Delicious catering food"
+                                 }
                              },
-                    "form_title":  "",
-                    "form_subtitle":  ""
+                    "form":  {
+                        "name_placeholder": "Enter Name",
+                        "email_placeholder": "Enter Email Address",
+                        "event_type_placeholder": "Event Type",
+                        "location_placeholder": "Enter Location",
+                        "date_placeholder": "Date of Event",
+                        "guests_placeholder": "Number of Guests",
+                        "message_placeholder": "Enter Message",
+                        "submit_button": "Get In Touch"
+                    }
                 },
     "careers":  {
                     "seo":  {

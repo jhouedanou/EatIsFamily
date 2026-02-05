@@ -483,7 +483,40 @@ export const usePageContent = () => {
     // CONTACT PAGE
     // ============================================
     if (wpData.contact) {
-      result.contact = deepMerge(result.contact || {}, wpData.contact)
+      // Map WordPress structure to Nuxt expected structure
+      result.contact = result.contact || {}
+      
+      // Map hero -> hero_section
+      if (wpData.contact.hero) {
+        result.contact.hero_section = result.contact.hero_section || {}
+        
+        // Map the new structured title fields from WordPress
+        const wpHero = wpData.contact.hero
+        result.contact.hero_section.title = {
+          line_1: wpHero.title_line_1 || 'Reach',
+          highlight: wpHero.title_highlight || 'Out',
+          line_2: wpHero.title_line_2 || "Let's Create",
+          line_3: wpHero.title_line_3 || 'Something Amazing'
+        }
+        
+        // Map description
+        if (wpHero.description) {
+          result.contact.hero_section.description = wpHero.description
+        }
+        
+        // Map image
+        if (wpHero.image) {
+          result.contact.hero_section.image = {
+            src: wpHero.image,
+            alt: wpHero.image_alt || 'Delicious catering food'
+          }
+        }
+      }
+      
+      // Map form placeholders
+      if (wpData.contact.form) {
+        result.contact.form = deepMerge(result.contact.form || {}, wpData.contact.form)
+      }
     }
 
     // ============================================

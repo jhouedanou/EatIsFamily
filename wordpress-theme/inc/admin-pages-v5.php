@@ -2313,25 +2313,75 @@ function eatisfamily_pages_content_page_v5() {
                     <h4><?php _e('Hero Section', 'eatisfamily'); ?></h4>
                     <table class="form-table">
                         <tr>
-                            <th scope="row"><label for="contact_hero_title"><?php _e('Title', 'eatisfamily'); ?></label></th>
-                            <td><input type="text" name="contact_hero_title" id="contact_hero_title" value="<?php echo esc_attr($contact['hero']['title'] ?? ''); ?>" class="large-text"></td>
+                            <th scope="row"><label for="contact_hero_title_line1"><?php _e('Title Line 1', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_hero_title_line1" id="contact_hero_title_line1" value="<?php echo esc_attr($contact['hero']['title_line_1'] ?? 'Reach'); ?>" class="regular-text" placeholder="Reach"></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="contact_hero_subtitle"><?php _e('Subtitle', 'eatisfamily'); ?></label></th>
-                            <td><input type="text" name="contact_hero_subtitle" id="contact_hero_subtitle" value="<?php echo esc_attr($contact['hero']['subtitle'] ?? ''); ?>" class="large-text"></td>
+                            <th scope="row"><label for="contact_hero_title_highlight"><?php _e('Title Highlight (mot en surbrillance)', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_hero_title_highlight" id="contact_hero_title_highlight" value="<?php echo esc_attr($contact['hero']['title_highlight'] ?? 'Out'); ?>" class="regular-text" placeholder="Out"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_hero_title_line2"><?php _e('Title Line 2', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_hero_title_line2" id="contact_hero_title_line2" value="<?php echo esc_attr($contact['hero']['title_line_2'] ?? "Let's Create"); ?>" class="regular-text" placeholder="Let's Create"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_hero_title_line3"><?php _e('Title Line 3', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_hero_title_line3" id="contact_hero_title_line3" value="<?php echo esc_attr($contact['hero']['title_line_3'] ?? 'Something Amazing'); ?>" class="regular-text" placeholder="Something Amazing"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_hero_description"><?php _e('Description', 'eatisfamily'); ?></label></th>
+                            <td><textarea name="contact_hero_description" id="contact_hero_description" class="large-text" rows="3" placeholder="Ready to elevate your event with exceptional catering?"><?php echo esc_textarea($contact['hero']['description'] ?? ''); ?></textarea></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_hero_image"><?php _e('Image', 'eatisfamily'); ?></label></th>
+                            <td>
+                                <input type="text" name="contact_hero_image" id="contact_hero_image" value="<?php echo esc_attr($contact['hero']['image'] ?? ''); ?>" class="regular-text">
+                                <button type="button" class="button eatisfamily-upload-media" data-target="contact_hero_image"><?php _e('Select', 'eatisfamily'); ?></button>
+                                <?php if (!empty($contact['hero']['image'])): ?>
+                                <div style="margin-top:10px"><img src="<?php echo esc_url($contact['hero']['image']); ?>" style="max-width:200px;height:auto;border-radius:8px;"></div>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_hero_image_alt"><?php _e('Image Alt Text', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_hero_image_alt" id="contact_hero_image_alt" value="<?php echo esc_attr($contact['hero']['image_alt'] ?? 'Delicious catering food'); ?>" class="regular-text"></td>
                         </tr>
                     </table>
                 </div>
                 <div class="eatisfamily-section">
-                    <h4><?php _e('Form Section', 'eatisfamily'); ?></h4>
+                    <h4><?php _e('Form Placeholders', 'eatisfamily'); ?></h4>
                     <table class="form-table">
                         <tr>
-                            <th scope="row"><label for="contact_form_title"><?php _e('Form Title', 'eatisfamily'); ?></label></th>
-                            <td><input type="text" name="contact_form_title" id="contact_form_title" value="<?php echo esc_attr($contact['form_title'] ?? ''); ?>" class="large-text"></td>
+                            <th scope="row"><label for="contact_form_name_placeholder"><?php _e('Name Placeholder', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_form_name_placeholder" id="contact_form_name_placeholder" value="<?php echo esc_attr($contact['form']['name_placeholder'] ?? 'Enter Name'); ?>" class="regular-text"></td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="contact_form_subtitle"><?php _e('Form Subtitle', 'eatisfamily'); ?></label></th>
-                            <td><input type="text" name="contact_form_subtitle" id="contact_form_subtitle" value="<?php echo esc_attr($contact['form_subtitle'] ?? ''); ?>" class="large-text"></td>
+                            <th scope="row"><label for="contact_form_email_placeholder"><?php _e('Email Placeholder', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_form_email_placeholder" id="contact_form_email_placeholder" value="<?php echo esc_attr($contact['form']['email_placeholder'] ?? 'Enter Email Address'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_form_event_type_placeholder"><?php _e('Event Type Placeholder', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_form_event_type_placeholder" id="contact_form_event_type_placeholder" value="<?php echo esc_attr($contact['form']['event_type_placeholder'] ?? 'Event Type'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_form_location_placeholder"><?php _e('Location Placeholder', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_form_location_placeholder" id="contact_form_location_placeholder" value="<?php echo esc_attr($contact['form']['location_placeholder'] ?? 'Enter Location'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_form_date_placeholder"><?php _e('Date Placeholder', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_form_date_placeholder" id="contact_form_date_placeholder" value="<?php echo esc_attr($contact['form']['date_placeholder'] ?? 'Date of Event'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_form_guests_placeholder"><?php _e('Guests Placeholder', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_form_guests_placeholder" id="contact_form_guests_placeholder" value="<?php echo esc_attr($contact['form']['guests_placeholder'] ?? 'Number of Guests'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_form_message_placeholder"><?php _e('Message Placeholder', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_form_message_placeholder" id="contact_form_message_placeholder" value="<?php echo esc_attr($contact['form']['message_placeholder'] ?? 'Enter Message'); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="contact_form_submit_button"><?php _e('Submit Button Text', 'eatisfamily'); ?></label></th>
+                            <td><input type="text" name="contact_form_submit_button" id="contact_form_submit_button" value="<?php echo esc_attr($contact['form']['submit_button'] ?? 'Get In Touch'); ?>" class="regular-text"></td>
                         </tr>
                     </table>
                 </div>
@@ -3237,11 +3287,24 @@ function eatisfamily_build_pages_content_v5($data) {
         ),
         'contact' => array(
             'hero' => array(
-                'title' => sanitize_text_field($data['contact_hero_title'] ?? ''),
-                'subtitle' => sanitize_text_field($data['contact_hero_subtitle'] ?? ''),
+                'title_line_1' => sanitize_text_field($data['contact_hero_title_line1'] ?? 'Reach'),
+                'title_highlight' => sanitize_text_field($data['contact_hero_title_highlight'] ?? 'Out'),
+                'title_line_2' => sanitize_text_field($data['contact_hero_title_line2'] ?? "Let's Create"),
+                'title_line_3' => sanitize_text_field($data['contact_hero_title_line3'] ?? 'Something Amazing'),
+                'description' => sanitize_textarea_field($data['contact_hero_description'] ?? ''),
+                'image' => esc_url_raw($data['contact_hero_image'] ?? ''),
+                'image_alt' => sanitize_text_field($data['contact_hero_image_alt'] ?? 'Delicious catering food'),
             ),
-            'form_title' => sanitize_text_field($data['contact_form_title'] ?? ''),
-            'form_subtitle' => sanitize_text_field($data['contact_form_subtitle'] ?? ''),
+            'form' => array(
+                'name_placeholder' => sanitize_text_field($data['contact_form_name_placeholder'] ?? 'Enter Name'),
+                'email_placeholder' => sanitize_text_field($data['contact_form_email_placeholder'] ?? 'Enter Email Address'),
+                'event_type_placeholder' => sanitize_text_field($data['contact_form_event_type_placeholder'] ?? 'Event Type'),
+                'location_placeholder' => sanitize_text_field($data['contact_form_location_placeholder'] ?? 'Enter Location'),
+                'date_placeholder' => sanitize_text_field($data['contact_form_date_placeholder'] ?? 'Date of Event'),
+                'guests_placeholder' => sanitize_text_field($data['contact_form_guests_placeholder'] ?? 'Number of Guests'),
+                'message_placeholder' => sanitize_text_field($data['contact_form_message_placeholder'] ?? 'Enter Message'),
+                'submit_button' => sanitize_text_field($data['contact_form_submit_button'] ?? 'Get In Touch'),
+            ),
         ),
         'careers' => array(
             'seo' => array(
