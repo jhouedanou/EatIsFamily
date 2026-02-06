@@ -45,7 +45,11 @@ const submitForm = async () => {
     // Soumettre via Contact Form 7 API
     const response = await submitContactForm(form.value)
     
-    if (response.status === 'mail_sent') {
+    console.log('[Contact] Form submission response:', response)
+    
+    // Si CF7 a bien reçu les données (posted_data_hash présent), considérer comme succès
+    // même si l'envoi d'email échoue côté serveur (mail_failed)
+    if (response.status === 'mail_sent' || response.posted_data_hash) {
       submitSuccess.value = true
       // Réinitialiser le formulaire
       form.value = {
@@ -61,6 +65,8 @@ const submitForm = async () => {
       // Afficher les erreurs de validation CF7
       validationErrors.value = response.invalid_fields.map(f => f.message)
     } else {
+      // Statut inconnu - logger pour debug
+      console.warn('[Contact] Unknown response status:', response.status, response)
       submitError.value = response.message || 'Une erreur est survenue. Veuillez réessayer.'
     }
   } catch (error) {
