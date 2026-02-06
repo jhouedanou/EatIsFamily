@@ -18,11 +18,26 @@ export interface JobTaxonomies {
 export const useJobTaxonomies = () => {
     const { fetchData } = useApi()
 
+    // Shared cache to avoid duplicate API calls
+    const _cachedTaxonomies = useState<JobTaxonomies | null>('_jobTaxonomiesCache', () => null)
+    const _taxFetchPromise = useState<Promise<JobTaxonomies | null> | null>('_jobTaxFetchPromise', () => null)
+
     /**
      * Get all job taxonomies (types d'emploi & départements)
      */
     const getJobTaxonomies = async (): Promise<JobTaxonomies | null> => {
-        return await fetchData<JobTaxonomies>('job-taxonomies', 'job-taxonomies.json')
+        if (_cachedTaxonomies.value) return _cachedTaxonomies.value
+        if (_taxFetchPromise.value) return await _taxFetchPromise.value
+
+        const promise = (async () => {
+            const data = await fetchData<JobTaxonomies>('job-taxonomies', 'job-taxonomies.json')
+            _cachedTaxonomies.value = data
+            _taxFetchPromise.value = null
+            return data
+        })()
+
+        _taxFetchPromise.value = promise
+        return await promise
     }
 
     /**

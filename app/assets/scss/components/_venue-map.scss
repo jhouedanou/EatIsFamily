@@ -16,6 +16,9 @@
 // Marqueur personnalisé avec icône stade
 .custom-venue-marker {
   cursor: pointer;
+  // iOS fix: force layer creation for proper rendering
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .venue-marker-container {
@@ -26,6 +29,9 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.25s ease;
+  // iOS fix: hardware acceleration
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 
   &:hover {
     transform: scale(1.5);
@@ -39,6 +45,17 @@
   object-fit: contain;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
   transition: transform 0.25s ease;
+  
+  // iOS/Safari fixes for SVG with embedded base64 images
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+  
+  // Force hardware acceleration on iOS
+  -webkit-perspective: 1000;
+  perspective: 1000;
 }
 
 // Logo de la venue en exposant (haut droite)
@@ -116,5 +133,42 @@
     & + button {
       border-top: 1px solid #eee !important;
     }
+  }
+}
+
+// iOS/Safari specific fixes for marker rendering
+// Safari on iOS has issues with drop-shadow on SVGs containing base64 images
+@supports (-webkit-touch-callout: none) {
+  .venue-marker-icon {
+    // Alternative shadow using simpler filter for iOS
+    -webkit-filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
+  
+  .custom-venue-marker,
+  .venue-marker-container,
+  .venue-marker-wrapper {
+    // Force GPU compositing on iOS
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+// Alternative: Mobile touch devices (covers iOS)
+@media (hover: none) and (pointer: coarse) {
+  .venue-marker-icon {
+    // Lighter shadow for better mobile performance
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25));
+  }
+  
+  .venue-marker-container {
+    // Slightly smaller markers on mobile for better visibility
+    width: 60px;
+    height: 64px;
+  }
+  
+  .venue-marker-icon {
+    width: 60px;
+    height: 64px;
   }
 }

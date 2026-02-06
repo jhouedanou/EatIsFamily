@@ -45,9 +45,17 @@ const mapCenter = computed<[number, number]>(() => {
 })
 
 const isMobile = ref(false)
+const isIOS = ref(false)
 
 const updateIsMobile = () => {
   isMobile.value = typeof window !== 'undefined' && window.innerWidth <= 1024
+}
+
+const detectIOS = () => {
+  if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+    isIOS.value = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  }
 }
 
 const mapZoom = computed(() => {
@@ -66,6 +74,23 @@ const maptilerStyle = computed(() => {
   return 'https://api.maptiler.com/maps/019bc79b-b5ae-7523-a6d0-a73039e2ca18/style.json?key=ktSs6eRMmo4o70YLtDSA'
 })
 
+// Helper to convert SVG path to PNG for iOS compatibility
+const convertToPngForIOS = (iconPath: string): string => {
+  if (!isIOS.value) return iconPath
+  
+  // On iOS, use PNG versions instead of complex SVGs with embedded base64
+  // This fixes rendering issues on Safari/iOS
+  if (iconPath.endsWith('.svg')) {
+    const pngPath = iconPath.replace('.svg', '.png')
+    // Check common icon names and use known PNG alternatives
+    if (iconPath.includes('stadiumIcon')) return '/images/stadium.png'
+    if (iconPath.includes('arena')) return '/images/arena.png'
+    if (iconPath.includes('festival')) return '/images/festival.png'
+    return pngPath
+  }
+  return iconPath
+}
+
 // Get marker image for venue type - first from venue_types props, then from global settings
 const getMarkerIcon = (venueType?: string): string => {
   const type = venueType?.toLowerCase() || ''
@@ -74,20 +99,21 @@ const getMarkerIcon = (venueType?: string): string => {
   if (props.venueTypes && props.venueTypes.length > 0) {
     const venueTypeData = props.venueTypes.find(vt => vt.id.toLowerCase() === type)
     if (venueTypeData?.map_icon) {
-      return venueTypeData.map_icon
+      return convertToPngForIOS(venueTypeData.map_icon)
     }
   }
 
   // Fallback to global settings markers
   const markers = settings.value?.markers
   if (markers) {
-    if (type === 'stadium' && markers.stadium) return markers.stadium
-    if (type === 'arena' && markers.arena) return markers.arena
-    if (type === 'festival' && markers.festival) return markers.festival
-    if (markers.default) return markers.default
+    if (type === 'stadium' && markers.stadium) return convertToPngForIOS(markers.stadium)
+    if (type === 'arena' && markers.arena) return convertToPngForIOS(markers.arena)
+    if (type === 'festival' && markers.festival) return convertToPngForIOS(markers.festival)
+    if (markers.default) return convertToPngForIOS(markers.default)
   }
 
-  return '/images/stadiumIcon.svg' // Final fallback
+  // Final fallback - use PNG on iOS
+  return isIOS.value ? '/images/stadium.png' : '/images/stadiumIcon.svg'
 }
 
 const createMarkers = (maplibregl: any) => {
@@ -123,6 +149,12 @@ const createMarkers = (maplibregl: any) => {
     venueIcon.className = 'venue-marker-icon'
     venueIcon.src = getMarkerIcon(venue.type)
     venueIcon.alt = venue.name || 'Venue'
+    // iOS fix: force image loading and prevent lazy loading issues
+    venueIcon.loading = 'eager'
+    venueIcon.decoding = 'sync'
+    // Ensure image is visible even before fully loaded
+    venueIcon.style.visibility = 'visible'
+    venueIcon.style.opacity = '1'
 
     containerDiv.appendChild(venueIcon)
 
@@ -133,6 +165,9 @@ const createMarkers = (maplibregl: any) => {
       const logoImg = document.createElement('img')
       logoImg.src = venue.logo
       logoImg.alt = `${venue.name} logo`
+      // iOS fix for logo as well
+      logoImg.loading = 'eager'
+      logoImg.decoding = 'sync'
       logoDiv.appendChild(logoImg)
       containerDiv.appendChild(logoDiv)
     }
@@ -157,6 +192,7 @@ const createMarkers = (maplibregl: any) => {
 
 onMounted(async () => {
   updateIsMobile()
+  detectIOS() // Detect iOS for marker compatibility
   if (typeof window !== 'undefined') {
     window.addEventListener('resize', updateIsMobile)
   }

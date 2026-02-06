@@ -67,11 +67,26 @@ export interface VenuesData {
 export const useVenues = () => {
     const { fetchData, fetchSingle, useLocalFallback } = useApi()
 
+    // Shared cache to avoid duplicate API calls
+    const _cachedVenues = useState<VenuesData | null>('_venuesCache', () => null)
+    const _venuesFetchPromise = useState<Promise<VenuesData | null> | null>('_venuesFetchPromise', () => null)
+
     /**
      * Get all venues data (metadata, event_types, stats, venues) from WordPress API or local fallback
      */
     const getVenuesData = async (): Promise<VenuesData | null> => {
-        return await fetchData<VenuesData>('venues', 'venues.json')
+        if (_cachedVenues.value) return _cachedVenues.value
+        if (_venuesFetchPromise.value) return await _venuesFetchPromise.value
+
+        const promise = (async () => {
+            const data = await fetchData<VenuesData>('venues', 'venues.json')
+            _cachedVenues.value = data
+            _venuesFetchPromise.value = null
+            return data
+        })()
+
+        _venuesFetchPromise.value = promise
+        return await promise
     }
 
     /**

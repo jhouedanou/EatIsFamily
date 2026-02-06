@@ -367,6 +367,10 @@ export interface PagesContent {
 export const usePageContent = () => {
   const { fetchData, fetchLocalData } = useApi()
 
+  // Shared cache for page content — avoids duplicate API calls across components
+  const _cachedContent = useState<PagesContent | null>('_pageContentCache', () => null)
+  const _fetchPromise = useState<Promise<PagesContent | null> | null>('_pageContentFetchPromise', () => null)
+
   /**
    * Deep merge two objects - WordPress data takes priority
    */
@@ -580,23 +584,46 @@ export const usePageContent = () => {
 
   /**
    * Get all pages content - fetches from WordPress API and merges with local structure
-   * Local data provides the template-compatible structure, WordPress data overrides values
+   * Uses shared cache to avoid duplicate API calls across components
    */
   const getPageContent = async (): Promise<PagesContent | null> => {
-    // Fetch local data for template-compatible structure (via /data/ path, not /api/)
-    const localData = await fetchLocalData<PagesContent>('pages-content.json')
-
-    // Fetch from WordPress API
-    const wpData = await fetchData<any>('pages-content')
-
-    if (wpData) {
-      console.log('%c[PageContent] 🔄 Merging WordPress data with local structure', 'color: #FF4D6D;')
-      return mapWordPressToNuxt(wpData, localData)
+    // Return cached content if available
+    if (_cachedContent.value) {
+      return _cachedContent.value
     }
 
-    // If WordPress API fails, use local data
-    console.log('%c[PageContent] ⚠️ WordPress API unavailable, using local data', 'color: orange;')
-    return localData
+    // If a fetch is already in progress, wait for it (deduplication)
+    if (_fetchPromise.value) {
+      return await _fetchPromise.value
+    }
+
+    // Start a new fetch and store the promise for deduplication
+    const fetchPromise = (async () => {
+      // Fetch local data for template-compatible structure (via /data/ path, not /api/)
+      const localData = await fetchLocalData<PagesContent>('pages-content.json')
+
+      // Fetch from WordPress API
+      const wpData = await fetchData<any>('pages-content')
+
+      let result: PagesContent | null
+
+      if (wpData) {
+        console.log('%c[PageContent] 🔄 Merging WordPress data with local structure', 'color: #FF4D6D;')
+        result = mapWordPressToNuxt(wpData, localData)
+      } else {
+        // If WordPress API fails, use local data
+        console.log('%c[PageContent] ⚠️ WordPress API unavailable, using local data', 'color: orange;')
+        result = localData
+      }
+
+      // Cache the result
+      _cachedContent.value = result
+      _fetchPromise.value = null
+      return result
+    })()
+
+    _fetchPromise.value = fetchPromise
+    return await fetchPromise
   }
 
   /**

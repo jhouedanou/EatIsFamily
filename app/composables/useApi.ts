@@ -5,13 +5,18 @@
  * - NUXT_PUBLIC_API_BASE_URL: WordPress API base URL
  * - NUXT_PUBLIC_USE_LOCAL_FALLBACK: Set to 'true' to use local JSON files
  */
+
+// Track whether we've already logged config (avoid spam in console)
+let _apiConfigLogged = false
+
 export const useApi = () => {
     const config = useRuntimeConfig()
     const apiBaseUrl = config.public.apiBaseUrl as string
     const useLocalFallback = config.public.useLocalFallback as boolean
 
-    // Log API configuration on initialization
-    if (import.meta.client) {
+    // Log API configuration only once
+    if (import.meta.client && !_apiConfigLogged) {
+        _apiConfigLogged = true
         console.log('%c[EatIsFamily API Configuration]', 'color: #FF4D6D; font-weight: bold;')
         console.log(`📡 API Base URL: ${apiBaseUrl}`)
         console.log(`💾 Local Fallback Mode: ${useLocalFallback ? 'ENABLED (using local JSON files)' : 'DISABLED (using WordPress API)'}`)
