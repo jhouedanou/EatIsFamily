@@ -92,7 +92,8 @@ export const useContactForm = () => {
   }
 
   /**
-   * Submit form data to Contact Form 7
+   * Submit form data to Contact Form 7 via server proxy
+   * Uses /api/contact/submit to avoid CORS issues
    */
   const submitContactForm = async (formData: ContactFormData): Promise<CF7Response> => {
     const formIdOrHash = getFormId()
@@ -105,43 +106,38 @@ export const useContactForm = () => {
       }
     }
     
-    // Résoudre l'ID numérique si nécessaire
-    const formId = await resolveNumericId(formIdOrHash)
-    const endpoint = `${wpBaseUrl}/wp-json/contact-form-7/v1/contact-forms/${formId}/feedback`
-    
-    console.log(`[ContactForm] Submitting to: ${endpoint}`)
-    
-    // Créer un FormData pour l'envoi
-    const data = new FormData()
-    
-    // Mapper les champs du formulaire vers les noms de champs CF7
-    // Ces noms doivent correspondre aux champs définis dans le formulaire CF7
-    data.append('your-name', formData.name)
-    data.append('your-email', formData.email)
-    data.append('event-type', formData.eventType)
-    data.append('location', formData.location)
-    data.append('event-date', formData.date)
-    data.append('guests', formData.guests)
-    data.append('your-message', formData.message)
-    
-    // Ajouter le referer pour la validation CORS
-    data.append('_wpcf7_unit_tag', `wpcf7-f${formId}-o1`)
+    console.log(`[ContactForm] Submitting via server proxy with form ID: ${formIdOrHash}`)
     
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch('/api/contact/submit', {
         method: 'POST',
-        body: data,
         headers: {
+          'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          eventType: formData.eventType,
+          location: formData.location,
+          date: formData.date,
+          guests: formData.guests,
+          message: formData.message,
+          formId: formIdOrHash,
+        }),
       })
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+      console.log(`[ContactForm] Proxy response status: ${response.status}`)
+      
+      const result = await response.json()
+      console.log(`[ContactForm] Proxy response:`, result)
+      
+      // Le proxy peut retourner l'erreur dans data (H3Error) ou directement
+      if (result.data && result.data.status) {
+        return result.data as CF7Response
       }
       
-      const result: CF7Response = await response.json()
-      return result
+      return result as CF7Response
       
     } catch (error) {
       console.error('[ContactForm] Error submitting form:', error)
