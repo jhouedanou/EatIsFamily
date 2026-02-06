@@ -172,7 +172,7 @@ onUnmounted(() => {
     </section>
     <section id="presentationEatIsFamily" class="py-5 bg-white">
       <div id="tromp" class="container">
-        <div class="kemiseba" v-html="content.intro_section?.texte"></div>
+        <div class="kemiseba" v-html="content.intro_section?.texte">{{}}</div>
         <NuxtLink to="/about" aria-label="En savoir plus sur nous" class="mt-4 d-inline-block mt-4">
           <NuxtImg :src="btnLearnMore" alt="En savoir plus sur nous" />
         </NuxtLink>
