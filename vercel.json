@@ -1,7 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nuxtjs",
-  "buildCommand": "npm run build",
+  "installCommand": "yarn install --ignore-optional",
+  "buildCommand": "yarn build",
   "outputDirectory": ".output/public",
   "env": {
     "NUXT_PUBLIC_USE_LOCAL_FALLBACK": "false",
