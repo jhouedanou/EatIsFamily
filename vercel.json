@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nuxtjs",
-  "installCommand": "yarn install --ignore-optional",
+  "installCommand": "yarn install --network-timeout 60000",
   "buildCommand": "yarn build",
   "outputDirectory": ".output/public",
   "env": {
