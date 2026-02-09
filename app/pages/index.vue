@@ -165,8 +165,8 @@ onUnmounted(() => {
                 {{ content.hero_section?.title?.line_3 }}
               </p>
               <div class="actionwrapper">
-                <PillButtonPink to="#mapPreview" label="Découvrir nos événements" />
-                <PillButtonOutline to="/contact" label="Nous contacter" />
+                <PillButton color="pink" to="/careers" label="Nos offres d'emploi" />
+                <PillButton variant="outline" to="#mapPreview" label="Nos concessions" />
               </div>
               </div>
             </div>
@@ -293,12 +293,14 @@ onUnmounted(() => {
                       <div class="recoleta mt-4 mb-4 preserve-lines">
                         <p v-html="service.description"></p>
                       </div>
-                      <NuxtLink :to="service.linkTo">
+                     <!--  --> <NuxtLink :to="service.linkTo">
                         <NuxtImg
                           :src="service.btnImage"
                           alt="En savoir plus sur nos services"
                         />
                       </NuxtLink>
+                                    <!--   <PillButtonPink :to="service.linkTo" label="Nous contacter" /> -->
+
                     </div>
                   </div>
                 </div>

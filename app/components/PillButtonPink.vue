@@ -11,7 +11,7 @@
 import { ref, onMounted } from 'vue'
 
 interface Props {
-  to: string
+  to?: string
   label?: string
   disabled?: boolean
 }
@@ -87,6 +87,7 @@ onMounted(() => {
   position: relative;
   display: inline-block;
   text-decoration: none;
+  max-width: 250px;
 }
 
 .btn-wrapper--disabled {
@@ -111,7 +112,7 @@ onMounted(() => {
   font-weight: bold;
   padding: 0 2rem;
   height: 60px;
-  min-width: 250px;
+  max-width: 250px;
   border: none;
   cursor: pointer;
   text-decoration: none;

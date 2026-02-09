@@ -13,7 +13,7 @@
 import { ref, onMounted } from 'vue'
 
 interface Props {
-  to: string
+  to?: string
   label?: string
   disabled?: boolean
 }
@@ -104,8 +104,8 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 70px;
-  min-width: 250px;
+  height: 60px;
+  max-width: 250px;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;

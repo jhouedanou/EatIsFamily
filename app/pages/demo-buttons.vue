@@ -7,24 +7,24 @@
       <!-- Section fond clair -->
       <section class="demo-section demo-section--light">
         <h2 class="section-title">Sur fond clair</h2>
-        
+
         <div class="button-group">
           <div class="button-demo">
-            <h3>PillButtonWhite</h3>
+            <h3>White</h3>
             <p class="color-code">Fond: #FFFFFF | Bordure: #000000</p>
-            <PillButtonWhite to="/contact">Contactez nous</PillButtonWhite>
+            <PillButton color="white" to="/contact">Contactez nous</PillButton>
           </div>
 
           <div class="button-demo">
-            <h3>PillButtonYellow</h3>
+            <h3>Yellow</h3>
             <p class="color-code">Fond: #FFE600 | Bordure: #000000</p>
-            <PillButtonYellow to="/register">S'inscrire</PillButtonYellow>
+            <PillButton color="yellow" to="/register">S'inscrire</PillButton>
           </div>
 
           <div class="button-demo">
-            <h3>PillButtonPink</h3>
+            <h3>Pink</h3>
             <p class="color-code">Fond: #F9375B | Bordure: #000000</p>
-            <PillButtonPink to="/promo">Découvrir l'offre</PillButtonPink>
+            <PillButton color="pink" to="/promo">Découvrir l'offre</PillButton>
           </div>
         </div>
       </section>
@@ -32,24 +32,24 @@
       <!-- Section fond sombre -->
       <section class="demo-section demo-section--dark">
         <h2 class="section-title">Sur fond sombre</h2>
-        
+
         <div class="button-group">
           <div class="button-demo">
-            <h3>PillButtonTransparent</h3>
+            <h3>Transparent</h3>
             <p class="color-code">Fond: transparent | Bordure: #FFFFFF</p>
-            <PillButtonTransparent to="/about">En savoir plus</PillButtonTransparent>
+            <PillButton color="transparent" to="/about">En savoir plus</PillButton>
           </div>
 
           <div class="button-demo">
-            <h3>PillButtonPink</h3>
+            <h3>Pink</h3>
             <p class="color-code">Fond: #F9375B | Bordure: #000000</p>
-            <PillButtonPink to="/events">Nos événements</PillButtonPink>
+            <PillButton color="pink" to="/events">Nos événements</PillButton>
           </div>
 
           <div class="button-demo">
-            <h3>PillButtonYellow</h3>
+            <h3>Yellow</h3>
             <p class="color-code">Fond: #FFE600 | Bordure: #000000</p>
-            <PillButtonYellow to="/menu">Voir le menu</PillButtonYellow>
+            <PillButton color="yellow" to="/menu">Voir le menu</PillButton>
           </div>
         </div>
       </section>
@@ -57,16 +57,16 @@
       <!-- Section avec fond coloré -->
       <section class="demo-section demo-section--green">
         <h2 class="section-title">Sur fond vert (comme la page Contact)</h2>
-        
+
         <div class="button-group">
           <div class="button-demo">
-            <h3>PillButtonWhite</h3>
-            <PillButtonWhite to="/contact">Nous contacter</PillButtonWhite>
+            <h3>White</h3>
+            <PillButton color="white" to="/contact">Nous contacter</PillButton>
           </div>
 
           <div class="button-demo">
-            <h3>PillButtonPink</h3>
-            <PillButtonPink to="/careers">Rejoignez-nous</PillButtonPink>
+            <h3>Pink</h3>
+            <PillButton color="pink" to="/careers">Rejoignez-nous</PillButton>
           </div>
         </div>
       </section>
@@ -74,16 +74,16 @@
       <!-- Section états -->
       <section class="demo-section demo-section--light">
         <h2 class="section-title">États des boutons</h2>
-        
+
         <div class="button-group">
           <div class="button-demo">
             <h3>Normal</h3>
-            <PillButtonYellow to="/test">Bouton actif</PillButtonYellow>
+            <PillButton color="yellow" to="/test">Bouton actif</PillButton>
           </div>
 
           <div class="button-demo">
             <h3>Désactivé</h3>
-            <PillButtonYellow to="/test" disabled>Bouton désactivé</PillButtonYellow>
+            <PillButton color="yellow" to="/test" disabled>Bouton désactivé</PillButton>
           </div>
         </div>
       </section>
@@ -91,15 +91,32 @@
       <!-- Section combinaisons -->
       <section class="demo-section demo-section--light">
         <h2 class="section-title">Combinaisons de boutons</h2>
-        
+
         <div class="button-row">
-          <PillButtonYellow to="/primary">Action principale</PillButtonYellow>
-          <PillButtonWhite to="/secondary">Action secondaire</PillButtonWhite>
+          <PillButton color="yellow" to="/primary">Action principale</PillButton>
+          <PillButton color="white" to="/secondary">Action secondaire</PillButton>
         </div>
 
         <div class="button-row" style="margin-top: 2rem;">
-          <PillButtonPink to="/cta">Offre spéciale</PillButtonPink>
-          <PillButtonWhite to="/info">Plus d'infos</PillButtonWhite>
+          <PillButton color="pink" to="/cta">Offre spéciale</PillButton>
+          <PillButton color="white" to="/info">Plus d'infos</PillButton>
+        </div>
+      </section>
+
+      <!-- Outline variants -->
+      <section class="demo-section demo-section--dark">
+        <h2 class="section-title">Outline</h2>
+
+        <div class="button-group">
+          <div class="button-demo">
+            <h3>Outline light</h3>
+            <PillButton variant="outline" to="/test">Outline clair</PillButton>
+          </div>
+
+          <div class="button-demo">
+            <h3>Outline dark</h3>
+            <PillButton variant="outline" color="dark" to="/test">Outline sombre</PillButton>
+          </div>
         </div>
       </section>
 
@@ -171,13 +188,13 @@ const regenerate = () => {
 
 .demo-section--dark {
   background: #1a1a2e;
-  
+
   .section-title,
   h3,
   .color-code {
     color: #fff;
   }
-  
+
   .color-code {
     color: #aaa;
   }
@@ -185,7 +202,7 @@ const regenerate = () => {
 
 .demo-section--green {
   background: #b8e986;
-  
+
   .section-title,
   h3 {
     color: #1a1a1a;
@@ -208,14 +225,14 @@ const regenerate = () => {
 
 .button-demo {
   text-align: center;
-  
+
   h3 {
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: #333;
   }
-  
+
   .color-code {
     font-size: 0.85rem;
     color: #888;
@@ -249,7 +266,7 @@ const regenerate = () => {
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: #555;
     transform: translateY(-2px);
@@ -259,12 +276,12 @@ const regenerate = () => {
 .back-link {
   text-align: center;
   margin-top: 3rem;
-  
+
   a {
     color: #333;
     text-decoration: none;
     font-weight: 500;
-    
+
     &:hover {
       text-decoration: underline;
     }
@@ -275,15 +292,15 @@ const regenerate = () => {
   .demo-page {
     padding: 1rem;
   }
-  
+
   .demo-title {
     font-size: 2rem;
   }
-  
+
   .demo-section {
     padding: 1.5rem;
   }
-  
+
   .button-group {
     gap: 2rem;
   }
