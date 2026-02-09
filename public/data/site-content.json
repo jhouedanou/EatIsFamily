@@ -1,4 +1,4 @@
-ï»¿{
+{
     "brand":  {
                   "logo":  "",
                   "logo_dark":  "",
@@ -23,7 +23,7 @@
                                          "to":  "/about"
                                      },
                                      {
-                                         "text":  "ActivitÃ©s",
+                                         "text":  "Activités",
                                          "to":  "/activities"
                                      },
                                      {
@@ -31,7 +31,7 @@
                                          "to":  "/events"
                                      },
                                      {
-                                         "text":  "CarriÃ¨res",
+                                         "text":  "Carrières",
                                          "to":  "/careers"
                                      },
                                      {
@@ -47,7 +47,7 @@
     "footer":  {
                    "logo":  "",
                    "tagline":  "",
-                   "copyright":  "Â© {year} Eat is Family.",
+                   "copyright":  "© {year} Eat is Family.",
                    "show_back_to_top":  true,
                    "back_to_top_text":  "Back to top",
                    "company_title":  "Company",
@@ -57,7 +57,7 @@
                    "logoFooter":  "",
                    "brand_name":  "Eat Is Friday",
                    "brand_description":  "",
-                   "copyright_template":  "Â© {year} Eat Is Friday. All rights reserved.",
+                   "copyright_template":  "© {year} Eat Is Friday. All rights reserved.",
                    "back_to_top":  "Back to top"
                },
     "map":  {
@@ -78,7 +78,7 @@
                 },
     "seo":  {
                 "default_title":  "Eat Is Family",
-                "title_template":  "http://localhost:8080/wp-content/themes/eatisfamily | Eat Is Family",
+                "title_template":  "https://bigfive.dev/eatisfamily/wp-content/themes/eatisfamily | Eat Is Family",
                 "default_description":  "",
                 "keywords":  "",
                 "og_image":  "",
