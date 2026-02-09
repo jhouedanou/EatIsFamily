@@ -165,8 +165,11 @@ onUnmounted(() => {
                 {{ content.hero_section?.title?.line_3 }}
               </p>
               <div class="actionwrapper">
-                <PillButton color="pink" to="/careers" label="Nos offres d'emploi" />
-                <PillButton variant="outline" to="#mapPreview" label="Nos concessions" />
+<!--                 <PillButton color="pink" to="/careers" label="Nos offres d'emploi" />
+ -->                 <PillButton color="pink"  to="/careers" label="Nos offres d'emploi"/>
+                <!-- <PillButton variant="outline" to="#mapPreview" label="Nos concessions" />
+                                 <PillButton color="pink"  to="/careers" label="Nos offres d'emploi"/> -->
+                  <PillButton color="transparent" variant="outline" to="#mapPreview" label="Nos concessions" />
               </div>
               </div>
             </div>
