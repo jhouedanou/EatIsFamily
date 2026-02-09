@@ -16,7 +16,8 @@
       "WebFetch(domain:bigfive.dev)",
       "Bash(npx nuxi build)",
       "Bash(npx md-to-pdf:*)",
-      "Bash(npx nuxt build:*)"
+      "Bash(npx nuxt build:*)",
+      "Bash(del \"C:\\\\Users\\\\socialmedia\\\\Documents\\\\EatIsFriday\\\\app\\\\pages\\\\guide-buttons.vue\")"
     ]
   }
 }

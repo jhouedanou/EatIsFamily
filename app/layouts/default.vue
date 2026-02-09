@@ -69,6 +69,7 @@ useHead(() => ({
     </main>
 
     <LayoutFooter />
+    <BackToTop />
   </div>
 </template>
 
