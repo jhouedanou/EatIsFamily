@@ -15,7 +15,8 @@
       "Bash(docker exec:*)",
       "WebFetch(domain:bigfive.dev)",
       "Bash(npx nuxi build)",
-      "Bash(npx md-to-pdf:*)"
+      "Bash(npx md-to-pdf:*)",
+      "Bash(npx nuxt build:*)"
     ]
   }
 }
