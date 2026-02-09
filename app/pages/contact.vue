@@ -319,7 +319,6 @@ useHead(() => ({
   font-weight: 700;
   line-height: 1.1;
   color: #1a1a1a;
-  margin: 0 0 1.5rem;
 
   .highlight {
     position: relative;
