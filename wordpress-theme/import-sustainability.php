@@ -1,15 +1,24 @@
 <?php
 /**
  * Script d'importation des données de durabilité
- * Accéder via: http://localhost:8080/wp-content/themes/eatisfamily/import-sustainability.php
+ * SÉCURITÉ : Réservé aux administrateurs connectés.
+ * Ce fichier devrait être SUPPRIMÉ en production.
  */
 
 // Charger WordPress
 require_once($_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
 
-// Vérifier si l'utilisateur est admin
-if (!current_user_can('manage_options')) {
-    wp_die('Accès non autorisé. Veuillez vous connecter en tant qu\'administrateur.');
+// SECURITY: Vérifier si l'utilisateur est admin connecté
+if (!is_user_logged_in() || !current_user_can('manage_options')) {
+    status_header(403);
+    wp_die('Accès non autorisé. Veuillez vous connecter en tant qu\'administrateur.', 'Accès refusé', array('response' => 403));
+}
+
+// SECURITY: Vérifier nonce si action d'import
+if (isset($_GET['action']) && $_GET['action'] === 'import') {
+    if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'eatisfamily_import_sustainability')) {
+        wp_die('Vérification de sécurité échouée.', 'Erreur de sécurité', array('response' => 403));
+    }
 }
 
 // Données de durabilité à importer

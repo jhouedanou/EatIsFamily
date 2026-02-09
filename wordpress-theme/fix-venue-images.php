@@ -2,17 +2,24 @@
 /**
  * Fix Venue Images with FALSE values
  * 
- * This script finds and fixes venue images that have boolean false instead of empty string
- * 
- * Usage: Navigate to: yourdomain.com/wp-content/themes/eatisfamily/fix-venue-images.php
+ * SECURITY WARNING: This file should be REMOVED from production.
+ * Only use locally for maintenance.
  */
 
 // Load WordPress
 require_once('../../../wp-load.php');
 
-// Check if user has permission
-if (!current_user_can('manage_options')) {
-    die('Access denied. You must be an administrator.');
+// SECURITY: Check if user is logged-in admin
+if (!is_user_logged_in() || !current_user_can('manage_options')) {
+    status_header(403);
+    wp_die('Access denied. You must be logged in as an administrator.', 'Access Denied', array('response' => 403));
+}
+
+// SECURITY: Verify nonce on POST to prevent CSRF
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'eatisfamily_fix_venue_images')) {
+        wp_die('Security check failed.', 'Security Error', array('response' => 403));
+    }
 }
 
 ?>

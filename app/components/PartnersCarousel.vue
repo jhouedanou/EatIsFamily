@@ -47,13 +47,13 @@ defineProps<{
       }"
       class="partners-swiper"
     >
-      <SwiperSlide v-for="(partner, index) in partners" :key="index">
+      <SwiperSlide v-for="(partner, index) in partners" :key="index" :id="`partner-slide-${index}`">
         <div class="partner-slide">
           <img v-if="partner.logo" :src="partner.logo" :alt="partner.alt" class="partner-logo" />
         </div>
       </SwiperSlide>
       <!-- Duplicate slides for seamless loop -->
-      <SwiperSlide v-for="(partner, index) in partners" :key="`dup-${index}`">
+      <SwiperSlide v-for="(partner, index) in partners" :key="`dup-${index}`" :id="`partner-slide-dup-${index}`">
         <div class="partner-slide">
           <img v-if="partner.logo" :src="partner.logo" :alt="partner.alt" class="partner-logo" />
         </div>

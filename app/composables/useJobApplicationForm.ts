@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Composable for Job Application Form via Contact Form 7 API
  * 
  * Contact Form 7 REST API endpoint:
@@ -37,20 +37,20 @@ export const useJobApplicationForm = () => {
   const config = useRuntimeConfig()
   
   // WordPress base URL
-  const wpBaseUrl = config.public.wordpressUrl || 'https://bigfive.dev/eatisfamily'
+  const wpBaseUrl = config.public.wordpressUrl || 'https://www.eatisfamily.fr/api'
   
   // Get settings for CF7 form ID
   const { settings, loadSettings } = useGlobalSettings()
   
-  // Cache pour l'ID numérique résolu
+  // Cache pour l'ID numÃ©rique rÃ©solu
   const resolvedNumericId = ref<string | null>(null)
   
   /**
-   * Récupère l'ID du formulaire CF7 pour les candidatures
-   * Charge les settings si nécessaire
+   * RÃ©cupÃ¨re l'ID du formulaire CF7 pour les candidatures
+   * Charge les settings si nÃ©cessaire
    */
   const getFormId = async (): Promise<string> => {
-    // S'assurer que les settings sont chargées
+    // S'assurer que les settings sont chargÃ©es
     if (!settings.value) {
       console.log('[JobApplicationForm] Settings not loaded, loading now...')
       await loadSettings()
@@ -59,28 +59,28 @@ export const useJobApplicationForm = () => {
   }
   
   /**
-   * Vérifie si l'ID est un hash (lettres et chiffres, généralement 7 caractères)
-   * ou un ID numérique
+   * VÃ©rifie si l'ID est un hash (lettres et chiffres, gÃ©nÃ©ralement 7 caractÃ¨res)
+   * ou un ID numÃ©rique
    */
   const isHashId = (id: string): boolean => {
     return /^[a-f0-9]{7}$/i.test(id)
   }
   
   /**
-   * Résout l'ID numérique depuis un hash ID si nécessaire
+   * RÃ©sout l'ID numÃ©rique depuis un hash ID si nÃ©cessaire
    */
   const resolveNumericId = async (formIdOrHash: string): Promise<string> => {
-    // Si c'est déjà un ID numérique, le retourner
+    // Si c'est dÃ©jÃ  un ID numÃ©rique, le retourner
     if (/^\d+$/.test(formIdOrHash)) {
       return formIdOrHash
     }
     
-    // Si on a déjà résolu cet ID
+    // Si on a dÃ©jÃ  rÃ©solu cet ID
     if (resolvedNumericId.value) {
       return resolvedNumericId.value
     }
     
-    // Si c'est un hash, essayer de résoudre via l'API
+    // Si c'est un hash, essayer de rÃ©soudre via l'API
     if (isHashId(formIdOrHash)) {
       try {
         const response = await fetch(`${wpBaseUrl}/wp-json/eatisfamily/v1/cf7-form-id/${formIdOrHash}`)
@@ -109,11 +109,11 @@ export const useJobApplicationForm = () => {
       console.error('[JobApplicationForm] No form ID configured')
       return {
         status: 'mail_failed',
-        message: 'Le formulaire de candidature n\'est pas configuré. Contactez l\'administrateur.',
+        message: 'Le formulaire de candidature n\'est pas configurÃ©. Contactez l\'administrateur.',
       }
     }
     
-    // Résoudre l'ID numérique si nécessaire
+    // RÃ©soudre l'ID numÃ©rique si nÃ©cessaire
     const formId = await resolveNumericId(formIdOrHash)
     const endpoint = `${wpBaseUrl}/wp-json/contact-form-7/v1/contact-forms/${formId}/feedback`
     
@@ -129,11 +129,11 @@ export const useJobApplicationForm = () => {
       jobSlug: formData.jobSlug
     })
     
-    // Créer un FormData pour l'envoi
+    // CrÃ©er un FormData pour l'envoi
     const data = new FormData()
     
     // Mapper les champs du formulaire vers les noms de champs CF7
-    // Ces noms doivent correspondre aux champs définis dans le formulaire CF7
+    // Ces noms doivent correspondre aux champs dÃ©finis dans le formulaire CF7
     data.append('your-name', formData.name)
     data.append('your-email', formData.email)
     data.append('your-phone', formData.phone)
@@ -186,10 +186,10 @@ export const useJobApplicationForm = () => {
     } catch (error) {
       console.error('[JobApplicationForm] Error submitting form:', error)
       
-      // Retourner une réponse d'erreur
+      // Retourner une rÃ©ponse d'erreur
       return {
         status: 'mail_failed',
-        message: 'Une erreur est survenue lors de l\'envoi de votre candidature. Veuillez réessayer.',
+        message: 'Une erreur est survenue lors de l\'envoi de votre candidature. Veuillez rÃ©essayer.',
       }
     }
   }
@@ -215,11 +215,11 @@ export const useJobApplicationForm = () => {
    * Validate resume link URL (cloud storage services)
    */
   const isValidResumeLink = (url: string): boolean => {
-    // Vérifier si c'est une URL valide
+    // VÃ©rifier si c'est une URL valide
     try {
       const urlObj = new URL(url)
       
-      // Liste des domaines de services cloud autorisés
+      // Liste des domaines de services cloud autorisÃ©s
       const allowedDomains = [
         'drive.google.com',
         'docs.google.com',
@@ -242,7 +242,7 @@ export const useJobApplicationForm = () => {
         'www.linkedin.com'
       ]
       
-      // Vérifier si le domaine est dans la liste autorisée
+      // VÃ©rifier si le domaine est dans la liste autorisÃ©e
       const hostname = urlObj.hostname.toLowerCase()
       return allowedDomains.some(domain => hostname === domain || hostname.endsWith('.' + domain))
     } catch {
@@ -267,9 +267,9 @@ export const useJobApplicationForm = () => {
     }
     
     if (!formData.phone.trim()) {
-      errors.push('Le numéro de téléphone est requis')
+      errors.push('Le numÃ©ro de tÃ©lÃ©phone est requis')
     } else if (!isValidPhone(formData.phone)) {
-      errors.push('Le numéro de téléphone n\'est pas valide')
+      errors.push('Le numÃ©ro de tÃ©lÃ©phone n\'est pas valide')
     }
     
     if (!formData.resumeLink.trim()) {
@@ -279,7 +279,7 @@ export const useJobApplicationForm = () => {
     }
     
     if (!formData.consent) {
-      errors.push('Vous devez accepter la politique de confidentialité')
+      errors.push('Vous devez accepter la politique de confidentialitÃ©')
     }
     
     return {

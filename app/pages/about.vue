@@ -684,6 +684,11 @@ useHead(() => ({
 }
 
 /* Timeline Styles */
+/* Séparateurs pointillés entre sections */
+.about-page section + section {
+  border-top: 2px dotted #D81B60;
+}
+
 #timeline {
   padding: 80px 20px 60px;
   background: #fff;
@@ -875,26 +880,27 @@ useHead(() => ({
   //margin: 350px auto 0; /* Center horizontally */
 }
 
-/* Dashed center line - Horizon line */
+/* Dotted center line - Replaces sound wave */
 .center-line {
   position: absolute;
   top: 73%;
   left: 0;
   right: 0;
-  height: 1px;
-  border-top: 1px dashed rgba(0, 0, 0, 0.15);
+  height: 2px;
+  border-top: 2px dotted #D81B60;
   transform: translateY(-50%);
   z-index: 5;
 }
 
 /* Organic Sound Wave - Single centered bars */
+/* MASQUÉ: remplacé par un trait pointillé */
 .sound-wave {
-  display: flex;
-  align-items: center; /* Centre les barres sur l'axe horizontal */
+  display: none !important;
+  align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
-  gap: 3px; /* Espacement entre les traits */
+  gap: 3px;
   position: absolute;
   top: 0;
   left: 0;
@@ -1208,45 +1214,24 @@ useHead(() => ({
     top: 0;
     bottom: 0;
     left: 50%;
-    width: 1px;
+    width: 2px;
     height: 100%;
     border-top: none;
-    border-left: 1px dashed rgba(0, 0, 0, 0.15);
+    border-left: 2px dotted #D81B60;
     transform: translateX(-50%);
   }
 
-  /* Vertical Sound Wave */
+  /* Vertical Sound Wave - MASQUÉ: remplacé par trait pointillé */
   .sound-wave {
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    width: 100%;
-    gap: 1px;
-    margin-top: 0;
-    padding: 5px 0;
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: none !important;
   }
 
   .wave-bar-wrapper {
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: auto;
-    flex: 1;
-    min-width: auto;
-    min-height: 1px;
-    display: flex;
+    display: none !important;
   }
 
   .wave-bar {
-    height: 2px !important;
-    min-height: 2px;
-    border-radius: 20px;
-    background: #D81B60;
+    display: none !important;
   }
 
   /* Vertical Playhead */

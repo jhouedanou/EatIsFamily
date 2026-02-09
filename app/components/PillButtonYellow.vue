@@ -103,17 +103,21 @@ onMounted(() => {
 
 .btn {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-family: FONTSPRINGDEMO-RecoletaSemiBold, Georgia, serif;
-  font-size: 1.2rem;
+  font-size: 18px;
   font-weight: bold;
-  padding: 0.9rem 2rem;
+  padding: 0 2rem;
+  height: 70px;
+  min-width: 250px;
   border: none;
   cursor: pointer;
   text-decoration: none;
   line-height: 1.4;
   transition: all 0.2s ease;
-  font-style: italic;
+  font-style: normal;
   z-index: 1;
 }
 

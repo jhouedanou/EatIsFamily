@@ -1,5 +1,6 @@
 # EatIsFamily WordPress Theme - Security Rules
-# This file helps bypass mod_security restrictions for admin forms
+# Only whitelist specific mod_security rules that cause false positives
+# SECURITY: Never disable the entire WAF engine
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
@@ -9,17 +10,8 @@
     RewriteRule .* - [L]
 </IfModule>
 
-# Disable mod_security for this directory (admin forms)
-<IfModule mod_security.c>
-    SecFilterEngine Off
-    SecFilterScanPOST Off
-</IfModule>
-
-<IfModule mod_security2.c>
-    SecRuleEngine Off
-</IfModule>
-
-# Alternative: Whitelist specific rules that cause 403
+# Whitelist specific mod_security rules that cause 403 on admin forms
+# Do NOT disable the entire engine — it protects against SQL injection and XSS
 <IfModule mod_security2.c>
     SecRuleRemoveById 300015
     SecRuleRemoveById 300016

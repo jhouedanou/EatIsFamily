@@ -88,13 +88,45 @@ add_action('after_setup_theme', 'eatisfamily_theme_setup');
 
 /**
  * Allow SVG uploads in WordPress Media Library
+ * SECURITY: Restricted to administrators only + SVG sanitisation
  */
 function eatisfamily_allow_svg_upload($mimes) {
-    $mimes['svg'] = 'image/svg+xml';
-    $mimes['svgz'] = 'image/svg+xml';
+    // Only allow admins to upload SVGs (they can contain JavaScript)
+    if (current_user_can('manage_options')) {
+        $mimes['svg'] = 'image/svg+xml';
+    }
     return $mimes;
 }
 add_filter('upload_mimes', 'eatisfamily_allow_svg_upload');
+
+/**
+ * Sanitize SVG uploads to prevent Stored XSS attacks
+ * Removes <script> tags, event handlers (onclick, onload, etc.), and other dangerous content
+ */
+function eatisfamily_sanitize_svg_upload($file) {
+    if (isset($file['type']) && $file['type'] === 'image/svg+xml') {
+        $svg_content = file_get_contents($file['tmp_name']);
+        if ($svg_content === false) {
+            $file['error'] = __('Could not read SVG file.', 'eatisfamily');
+            return $file;
+        }
+        // Remove script tags
+        $svg_content = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $svg_content);
+        // Remove event handlers (onclick, onload, onmouseover, etc.)
+        $svg_content = preg_replace('/\bon\w+\s*=\s*["\'][^"\'>]*["\']|\bon\w+\s*=\s*[^\s>]+/i', '', $svg_content);
+        // Remove javascript: URIs
+        $svg_content = preg_replace('/href\s*=\s*["\']\s*javascript:[^"\'>]*["\']|href\s*=\s*javascript:[^\s>]+/i', '', $svg_content);
+        // Remove data: URIs in xlink:href (can embed malicious content)
+        $svg_content = preg_replace('/xlink:href\s*=\s*["\']\s*data:[^"\'>]*["\']|xlink:href\s*=\s*data:[^\s>]+/i', '', $svg_content);
+        // Remove <use> referencing external files
+        $svg_content = preg_replace('/<use[^>]*href\s*=\s*["\']https?:\/\/[^"\'>]*["\'][^>]*\/?>/', '', $svg_content);
+        // Remove <foreignObject> (can embed arbitrary HTML)
+        $svg_content = preg_replace('/<foreignObject\b[^>]*>(.*?)<\/foreignObject>/is', '', $svg_content);
+        file_put_contents($file['tmp_name'], $svg_content);
+    }
+    return $file;
+}
+add_filter('wp_handle_upload_prefilter', 'eatisfamily_sanitize_svg_upload');
 
 /**
  * Fix SVG display in Media Library
@@ -1821,11 +1853,8 @@ function eatisfamily_get_global_settings($request) {
         // UI Icons
         'icons' => $customizer_settings['icons'] ?? array(),
         
-        // Contact Form 7 Configuration
-        'contact_form' => array(
-            'cf7_form_id' => get_option('eatisfamily_cf7_contact_form_id', ''),
-            'cf7_job_application_form_id' => get_option('eatisfamily_cf7_job_application_form_id', ''),
-        ),
+        // SECURITY: CF7 form IDs are not exposed in public API
+        // They are only used server-side in server/api/contact/submit.post.ts
     );
     
     return rest_ensure_response($settings);
@@ -1840,13 +1869,42 @@ function eatisfamily_get_global_settings($request) {
  */
 
 /**
+ * CORS Configuration - Whitelist of allowed origins
+ * SECURITY: Never use '*' with credentials in production
+ */
+function eatisfamily_get_allowed_origins() {
+    return array(
+        'https://www.eatisfamily.fr',
+        'https://eatisfamily.fr',
+        'https://www.eatisfamily.com',
+        'https://eatisfamily.com',
+        'https://eatisfamily.vercel.app',
+        'https://bigfive.dev',
+        'http://localhost:3000', // dev only
+        'http://localhost:8080', // dev only
+    );
+}
+
+function eatisfamily_get_cors_origin() {
+    $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+    $allowed = eatisfamily_get_allowed_origins();
+    if (in_array($origin, $allowed)) {
+        return $origin;
+    }
+    return ''; // No match = no CORS header
+}
+
+/**
  * Add CORS headers to ALL REST API responses
  */
 function eatisfamily_add_cors_headers_to_response($response) {
-    $response->header('Access-Control-Allow-Origin', '*');
-    $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    $response->header('Access-Control-Allow-Credentials', 'true');
+    $origin = eatisfamily_get_cors_origin();
+    if ($origin) {
+        $response->header('Access-Control-Allow-Origin', $origin);
+        $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+        $response->header('Access-Control-Allow-Credentials', 'true');
+    }
     return $response;
 }
 add_filter('rest_post_dispatch', 'eatisfamily_add_cors_headers_to_response', 10, 1);
@@ -1860,15 +1918,17 @@ function eatisfamily_handle_preflight() {
     $is_rest_request = (strpos($_SERVER['REQUEST_URI'], '/' . $rest_prefix . '/') !== false);
     
     if ($is_rest_request) {
-        // Send CORS headers for all REST requests
-        header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
-        header("Access-Control-Allow-Credentials: true");
+        $origin = eatisfamily_get_cors_origin();
+        if ($origin) {
+            header('Access-Control-Allow-Origin: ' . $origin);
+            header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+            header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+            header('Access-Control-Allow-Credentials: true');
+        }
         
         // If this is a preflight OPTIONS request, respond and exit
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-            header("Access-Control-Max-Age: 86400"); // Cache preflight for 24 hours
+            header('Access-Control-Max-Age: 86400');
             status_header(200);
             exit();
         }
@@ -1877,25 +1937,23 @@ function eatisfamily_handle_preflight() {
 add_action('init', 'eatisfamily_handle_preflight', 1);
 
 /**
- * Also add headers via send_headers action for extra coverage
+ * REMOVED: eatisfamily_send_cors_headers on send_headers
+ * SECURITY: This was applying CORS to ALL pages including wp-admin.
+ * CORS headers are now only added to REST API responses via the hooks above.
  */
-function eatisfamily_send_cors_headers() {
-    if (!headers_sent()) {
-        header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
-    }
-}
-add_action('send_headers', 'eatisfamily_send_cors_headers');
 
 /**
  * Add CORS headers specifically for Contact Form 7 REST API
  */
 add_filter('wpcf7_feedback_response', function($response, $result) {
     if (!headers_sent()) {
-        header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type");
+        $origin = eatisfamily_get_cors_origin();
+        if ($origin) {
+            header('Access-Control-Allow-Origin: ' . $origin);
+            header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+            header('Access-Control-Allow-Headers: Content-Type');
+            header('Access-Control-Allow-Credentials: true');
+        }
     }
     return $response;
 }, 10, 2);

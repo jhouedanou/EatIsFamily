@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nuxtjs",
   "installCommand": "yarn install --network-timeout 60000",
@@ -6,7 +6,7 @@
   "outputDirectory": ".output/public",
   "env": {
     "NUXT_PUBLIC_USE_LOCAL_FALLBACK": "false",
-    "NUXT_PUBLIC_API_BASE_URL": "https://bigfive.dev/eatisfamily/wp-json/eatisfamily/v1"
+    "NUXT_PUBLIC_API_BASE_URL": "https://www.eatisfamily.fr/api/wp-json/eatisfamily/v1"
   },
   "headers": [
     {

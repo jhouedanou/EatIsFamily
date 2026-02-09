@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Composable for Contact Form 7 API integration
  * 
  * Contact Form 7 REST API endpoint:
@@ -38,12 +38,12 @@ export const useContactForm = () => {
   const config = useRuntimeConfig()
   
   // WordPress base URL
-  const wpBaseUrl = config.public.wordpressUrl || 'https://bigfive.dev/eatisfamily'
+  const wpBaseUrl = config.public.wordpressUrl || 'https://www.eatisfamily.fr/api'
   
-  // Contact Form 7 form ID (à configurer dans WordPress)
+  // Contact Form 7 form ID (Ã  configurer dans WordPress)
   const { settings } = useGlobalSettings()
   
-  // Cache pour l'ID numérique résolu
+  // Cache pour l'ID numÃ©rique rÃ©solu
   const resolvedNumericId = ref<string | null>(null)
   
   const getFormId = (): string => {
@@ -51,28 +51,28 @@ export const useContactForm = () => {
   }
   
   /**
-   * Vérifie si l'ID est un hash (lettres et chiffres, généralement 7 caractères)
-   * ou un ID numérique
+   * VÃ©rifie si l'ID est un hash (lettres et chiffres, gÃ©nÃ©ralement 7 caractÃ¨res)
+   * ou un ID numÃ©rique
    */
   const isHashId = (id: string): boolean => {
     return /^[a-f0-9]{7}$/i.test(id)
   }
   
   /**
-   * Résout l'ID numérique depuis un hash ID si nécessaire
+   * RÃ©sout l'ID numÃ©rique depuis un hash ID si nÃ©cessaire
    */
   const resolveNumericId = async (formIdOrHash: string): Promise<string> => {
-    // Si c'est déjà un ID numérique, le retourner
+    // Si c'est dÃ©jÃ  un ID numÃ©rique, le retourner
     if (/^\d+$/.test(formIdOrHash)) {
       return formIdOrHash
     }
     
-    // Si on a déjà résolu cet ID
+    // Si on a dÃ©jÃ  rÃ©solu cet ID
     if (resolvedNumericId.value) {
       return resolvedNumericId.value
     }
     
-    // Si c'est un hash, essayer de résoudre via l'API
+    // Si c'est un hash, essayer de rÃ©soudre via l'API
     if (isHashId(formIdOrHash)) {
       try {
         const response = await fetch(`${wpBaseUrl}/wp-json/eatisfamily/v1/cf7-form-id/${formIdOrHash}`)
@@ -102,7 +102,7 @@ export const useContactForm = () => {
       console.error('[ContactForm] No form ID configured')
       return {
         status: 'mail_failed',
-        message: 'Le formulaire de contact n\'est pas configuré. Contactez l\'administrateur.',
+        message: 'Le formulaire de contact n\'est pas configurÃ©. Contactez l\'administrateur.',
       }
     }
     
@@ -142,10 +142,10 @@ export const useContactForm = () => {
     } catch (error) {
       console.error('[ContactForm] Error submitting form:', error)
       
-      // Retourner une réponse d'erreur
+      // Retourner une rÃ©ponse d'erreur
       return {
         status: 'mail_failed',
-        message: 'Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.',
+        message: 'Une erreur est survenue lors de l\'envoi du formulaire. Veuillez rÃ©essayer.',
       }
     }
   }

@@ -1,4 +1,4 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+﻿// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
 
@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     manifest: {
       name: 'Eat Is Family',
       short_name: 'EatIsFamily',
-      description: 'Découvrez des expériences culinaires incroyables, rejoignez des événements gastronomiques passionnants et explorez des opportunités de carrière.',
+      description: 'DÃ©couvrez des expÃ©riences culinaires incroyables, rejoignez des Ã©vÃ©nements gastronomiques passionnants et explorez des opportunitÃ©s de carriÃ¨re.',
       theme_color: '#fe002f',
       background_color: '#f5f5f0',
       display: 'standalone',
@@ -45,7 +45,7 @@ export default defineNuxtConfig({
       globPatterns: ['**/*.{js,css,html,svg,ico,woff,woff2}'],
       // Augmenter la limite de taille pour les fichiers en cache
       maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB
-      // Exclure les grandes images du précache
+      // Exclure les grandes images du prÃ©cache
       globIgnores: [
         '**/images/client/**',
         '**/images/**/*.{png,jpg,jpeg}',
@@ -115,7 +115,7 @@ export default defineNuxtConfig({
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }
       ]
     },
-    // Préserve la position de scroll lors de la navigation
+    // PrÃ©serve la position de scroll lors de la navigation
     pageTransition: { name: 'page', mode: 'out-in' }
   },
 
@@ -145,10 +145,10 @@ export default defineNuxtConfig({
   // Configuration de l'API WordPress
   runtimeConfig: {
     public: {
-      // URL de l'API WordPress - peut être modifiée via variable d'environnement
+      // URL de l'API WordPress - peut Ãªtre modifiÃ©e via variable d'environnement
       // Local Docker: http://localhost:8080/wp-json/eatisfamily/v1
-      // Production: https://bigfive.dev/eatisfamily/wp-json/eatisfamily/v1
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_API_BASE_URL || 'https://bigfive.dev/eatisfamily/wp-json/eatisfamily/v1',
+      // Production: https://www.eatisfamily.fr/api/wp-json/eatisfamily/v1
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_API_BASE_URL || 'https://www.eatisfamily.fr/api/wp-json/eatisfamily/v1',
       // Fallback vers les fichiers JSON locaux si l'API est indisponible
       useLocalFallback: process.env.NUXT_PUBLIC_USE_LOCAL_FALLBACK === 'true'
     }

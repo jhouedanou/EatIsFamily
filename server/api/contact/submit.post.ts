@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Contact Form Proxy API Endpoint
  * POST /api/contact/submit
  * 
@@ -44,13 +44,13 @@ export default defineEventHandler(async (event: H3Event) => {
     }
 
     // URL de base WordPress
-    const wpBaseUrl = process.env.NUXT_PUBLIC_WP_BASE_URL || 'https://bigfive.dev/eatisfamily'
+    const wpBaseUrl = process.env.NUXT_PUBLIC_WP_BASE_URL || 'https://www.eatisfamily.fr/api'
     
-    // Résoudre l'ID numérique si nécessaire
+    // RÃ©soudre l'ID numÃ©rique si nÃ©cessaire
     let numericFormId = formId
     
     if (formId && !/^\d+$/.test(formId)) {
-      // C'est un hash, essayer de résoudre
+      // C'est un hash, essayer de rÃ©soudre
       try {
         const resolveResponse = await fetch(`${wpBaseUrl}/wp-json/eatisfamily/v1/cf7-form-id/${formId}`)
         if (resolveResponse.ok) {
@@ -69,7 +69,7 @@ export default defineEventHandler(async (event: H3Event) => {
         statusMessage: 'Bad Request',
         data: { 
           status: 'mail_failed',
-          message: 'Le formulaire de contact n\'est pas configuré (ID manquant).' 
+          message: 'Le formulaire de contact n\'est pas configurÃ© (ID manquant).' 
         }
       })
     }
@@ -77,7 +77,7 @@ export default defineEventHandler(async (event: H3Event) => {
     const endpoint = `${wpBaseUrl}/wp-json/contact-form-7/v1/contact-forms/${numericFormId}/feedback`
     console.log(`[Contact Proxy] Submitting to: ${endpoint}`)
 
-    // Créer le FormData pour CF7
+    // CrÃ©er le FormData pour CF7
     const formData = new FormData()
     formData.append('your-name', name || '')
     formData.append('your-email', email || '')
@@ -88,7 +88,7 @@ export default defineEventHandler(async (event: H3Event) => {
     formData.append('your-message', message || '')
     formData.append('_wpcf7_unit_tag', `wpcf7-f${numericFormId}-o1`)
 
-    // Envoyer à WordPress CF7
+    // Envoyer Ã  WordPress CF7
     const cf7Response = await fetch(endpoint, {
       method: 'POST',
       body: formData,
@@ -109,11 +109,11 @@ export default defineEventHandler(async (event: H3Event) => {
     } catch (parseError) {
       console.error('[Contact Proxy] Failed to parse CF7 response:', parseError)
       
-      // Si la requête HTTP a réussi, le mail a probablement été envoyé
+      // Si la requÃªte HTTP a rÃ©ussi, le mail a probablement Ã©tÃ© envoyÃ©
       if (cf7Response.ok) {
         return {
           status: 'mail_sent',
-          message: 'Votre message a été envoyé avec succès.'
+          message: 'Votre message a Ã©tÃ© envoyÃ© avec succÃ¨s.'
         }
       }
       
@@ -127,24 +127,24 @@ export default defineEventHandler(async (event: H3Event) => {
       })
     }
 
-    // Retourner la réponse CF7 telle quelle
+    // Retourner la rÃ©ponse CF7 telle quelle
     return result
 
   } catch (error: any) {
     console.error('[Contact Proxy] Error:', error)
     
-    // Si l'erreur est déjà une H3Error, la propager
+    // Si l'erreur est dÃ©jÃ  une H3Error, la propager
     if (error.statusCode) {
       throw error
     }
 
-    // Erreur réseau ou autre
+    // Erreur rÃ©seau ou autre
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal Server Error',
       data: {
         status: 'mail_failed',
-        message: 'Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.'
+        message: 'Une erreur est survenue lors de l\'envoi du formulaire. Veuillez rÃ©essayer.'
       }
     })
   }

@@ -1,10 +1,16 @@
 <?php
 /**
  * Script de diagnostic des données Homepage
- * Accéder via: http://localhost:8080/wp-content/themes/eatisfamily/diagnostic-homepage.php
+ * Réservé aux administrateurs connectés.
  */
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+
+// SECURITY: Require admin authentication
+if (!is_user_logged_in() || !current_user_can('manage_options')) {
+    status_header(403);
+    wp_die(__('Accès non autorisé. Vous devez être connecté en tant qu\'administrateur.', 'eatisfamily'), 'Accès refusé', array('response' => 403));
+}
 
 header('Content-Type: text/html; charset=utf-8');
 ?>

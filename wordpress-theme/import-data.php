@@ -2,28 +2,26 @@
 /**
  * Data Import Script for Eat Is Family Theme
  * 
- * IMPORTANT: This file should be secured or removed after use.
- * To trigger import, visit: yoursite.com/?import_eatisfamily_data=SECRET_KEY
+ * SECURITY WARNING: This file should be REMOVED from production.
+ * Only use locally for initial data import.
  * 
  * @package EatIsFamily
  */
 
-// Security check - change this key before use
-define('IMPORT_SECRET_KEY', 'your_secret_key_here_change_this');
-
-// Only run if the secret key matches
-if (!isset($_GET['import_eatisfamily_data']) || $_GET['import_eatisfamily_data'] !== IMPORT_SECRET_KEY) {
-    return;
-}
-
-// Load WordPress
+// Load WordPress first
 if (!defined('ABSPATH')) {
     require_once('../../../wp-load.php');
 }
 
-// Check user permissions
-if (!current_user_can('manage_options')) {
-    wp_die('Unauthorized access');
+// SECURITY: Require admin authentication (replaces insecure GET-based secret key)
+if (!is_user_logged_in() || !current_user_can('manage_options')) {
+    status_header(403);
+    wp_die('Unauthorized access. You must be logged in as an administrator.', 'Access Denied', array('response' => 403));
+}
+
+// SECURITY: Verify nonce to prevent CSRF
+if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'eatisfamily_import_data')) {
+    wp_die('Security check failed. Please use the link from the WordPress admin dashboard.', 'Security Error', array('response' => 403));
 }
 
 /**
