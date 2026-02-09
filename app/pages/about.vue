@@ -686,7 +686,7 @@ useHead(() => ({
 /* Timeline Styles */
 /* Séparateurs pointillés entre sections */
 .about-page section + section {
-  border-top: 2px dotted #D81B60;
+  //border-top: 2px dotted #D81B60;
 }
 
 #timeline {
