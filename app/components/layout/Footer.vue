@@ -55,9 +55,8 @@ onMounted(async () => {
 <style scoped lang="scss">
 .footer {
   background: black;
-  color: white;
+  color: #fff6f0 !important;
   padding: 3rem 0 1rem;
-  margin-top: 4rem;
   li{
     
   font-family: FONTSPRINGDEMO-Recoleta;

@@ -13,15 +13,16 @@ defineProps<Props>()
 </script>
 
 <template>
-  <section id="ready-to-make-an-impact" class="py-5 bg-white position-relative">
+  <section id="ready-to-make-an-impact" class="py-5 new-white position-relative">
     <div id="mero" class="container-fluid position-relative d-flex justify-content-center align-items-center p-4">
       <!-- <img :src="image" alt="" /> -->
       <div id="leforme" class="position-absolute d-flex flex-column justify-content-center align-items-center text-center p-4 mx-auto">
         <h2>{{ title }}</h2>
         <p class="preserve-lines" v-html="description"></p>
-        <nuxt-link :to="link">
+    <!--     <nuxt-link>
           <nuxt-img :src="buttonImage" :alt="title"></nuxt-img>
-        </nuxt-link>
+        </nuxt-link> -->
+        <PillButton  color="yellow" :to="link" width="320px" inset="-1px" label="Découvrir nos offres et postuler" /> 
       </div>
     </div>
     <CtaBlock

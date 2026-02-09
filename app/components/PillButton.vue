@@ -2,8 +2,8 @@
   <NuxtLink :to="to" class="btn-wrapper" :class="{ 'btn-wrapper--disabled': disabled }" :style="wrapperStyle">
     <!-- Filled variant: clip-path -->
     <template v-if="variant === 'filled'">
-      <div class="btn-outline-bg" :style="{ clipPath: clipPath }"></div>
-      <span class="btn" :style="[{ clipPath: clipPath }, btnColorStyle]">
+      <div class="btn-outline-bg" :style="{ clipPath: clipPath, inset: props.inset }"></div>
+      <span class="btn" :style="[{ clipPath: clipPath }, btnColorStyle, widthStyle]">
         <slot>{{ label }}</slot>
       </span>
     </template>
@@ -27,14 +27,16 @@ interface Props {
   to?: string
   label?: string
   disabled?: boolean
-  color?: 'pink' | 'yellow' | 'white' | 'transparent' | 'dark' | 'light'
+  color?: 'pink' | 'yellow' | 'white' | 'transparent' | 'dark' | 'light' | 'fuchsia'
   variant?: 'filled' | 'outline'
   width?: string
+  inset?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   color: 'pink',
   variant: 'filled',
+  inset: '-4px',
 })
 
 const clipPath = ref('')
@@ -45,6 +47,7 @@ const colorMap: Record<string, { bg: string; text: string }> = {
   yellow: { bg: '#FFE600', text: '#000' },
   white: { bg: '#ffffff', text: '#000' },
   transparent: { bg: 'transparent', text: '#fff' },
+  fuchsia: { bg: '#ff2e84', text: '#fff' },
 }
 
 const btnColorStyle = computed(() => {
@@ -59,6 +62,11 @@ const wrapperStyle = computed(() => {
   const s: Record<string, string> = {}
   if (props.width) s.maxWidth = props.width
   return s
+})
+
+const widthStyle = computed(() => {
+  if (!props.width) return {}
+  return { maxWidth: props.width, minWidth: props.width }
 })
 
 function rand(min: number, max: number): number {
@@ -223,8 +231,8 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: FONTSPRINGDEMO-RecoletaSemiBold, Georgia, serif;
-  font-size: 18px;
+  font-family: FONTSPRINGDEMO-RecoletaBold, Georgia, serif;
+  font-size: 17px;
   font-weight: bold;
   padding: 0 2rem;
   height: 60px;

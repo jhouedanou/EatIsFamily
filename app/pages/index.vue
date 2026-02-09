@@ -143,34 +143,43 @@ onUnmounted(() => {
           >
             <!-- hero texte -->
             <div class="txtwrapper">
-             
               <div class="maoulid">
- <h1
-                id="heroTitle"
-                ref="heroTitle"
-                class="font-heading display-1 fw-bold lh-1 text-brand-dark m-0"
-              >
-                {{ content.hero_section?.title?.line_1 }}
-              </h1>
-              <h1
-                id="heroTitleAlt"
-                ref="heroTitle"
-                class="font-heading display-1 fw-bold lh-1 text-brand-dark m-0"
-              >
-                {{ content.hero_section?.title?.line_2 }}
-              </h1>
-              <p
-                class="position-relative d-inline-block m-0 recoleta mb-4 mt-4"
-              >
-                {{ content.hero_section?.title?.line_3 }}
-              </p>
-              <div class="actionwrapper">
-<!--                 <PillButton color="pink" to="/careers" label="Nos offres d'emploi" />
- -->                 <PillButton color="pink"  to="/careers" label="Nos offres d'emploi"/>
-                <!-- <PillButton variant="outline" to="#mapPreview" label="Nos concessions" />
+                <h1
+                  id="heroTitle"
+                  ref="heroTitle"
+                  class="font-heading display-1 fw-bold lh-1 text-brand-dark m-0"
+                >
+                  {{ content.hero_section?.title?.line_1 }}
+                </h1>
+                <h1
+                  id="heroTitleAlt"
+                  ref="heroTitle"
+                  class="font-heading display-1 fw-bold lh-1 text-brand-dark m-0"
+                >
+                  {{ content.hero_section?.title?.line_2 }}
+                </h1>
+                <p
+                  class="position-relative d-inline-block m-0 recoleta mb-4 mt-4"
+                >
+                  {{ content.hero_section?.title?.line_3 }}
+                </p>
+                <div class="actionwrapper">
+                  <!--                 <PillButton color="pink" to="/careers" label="Nos offres d'emploi" />
+ -->
+                  <PillButton
+                    color="pink"
+                    to="/careers"
+                    label="Nos offres d'emploi"
+                  />
+                  <!-- <PillButton variant="outline" to="#mapPreview" label="Nos concessions" />
                                  <PillButton color="pink"  to="/careers" label="Nos offres d'emploi"/> -->
-                  <PillButton color="transparent" variant="outline" to="#mapPreview" label="Nos concessions" />
-              </div>
+                  <PillButton
+                    color="transparent"
+                    variant="outline"
+                    to="#mapPreview"
+                    label="Nos concessions"
+                  />
+                </div>
               </div>
             </div>
 
@@ -296,14 +305,25 @@ onUnmounted(() => {
                       <div class="recoleta mt-4 mb-4 preserve-lines">
                         <p v-html="service.description"></p>
                       </div>
-                     <!--  --> <NuxtLink :to="service.linkTo">
+                      <!--  -->
+                      <!-- <NuxtLink :to="service.linkTo">
                         <NuxtImg
                           :src="service.btnImage"
                           alt="En savoir plus sur nos services"
                         />
-                      </NuxtLink>
-                                    <!--   <PillButtonPink :to="service.linkTo" label="Nous contacter" /> -->
+                      </NuxtLink> -->
+                      <PillButton
+                        :color="i % 2 === 0 ? 'pink' : 'yellow'"
+                        width="260px"
+                        :to="service.linkTo"
+                        :label="
+                          i % 2 === 0
+                            ? 'Nous contacter'
+                            : 'Parlons food & beverage'
+                        "
+                      />
 
+                      <!--   <PillButtonPink :to="service.linkTo" label="Nous contacter" /> -->
                     </div>
                   </div>
                 </div>
@@ -373,9 +393,21 @@ onUnmounted(() => {
               <div class="inner-example">
                 <h4>{{ example.title }}</h4>
                 <div v-html="example.texte"></div>
-                <NuxtLink :to="example.link">
+                <!-- <NuxtLink :to="example.link">
                   <NuxtImg :src="example.btn" :alt="example.title" />
-                </NuxtLink>
+                </NuxtLink> -->
+                <PillButton
+                  width="250px"
+                  :inset="index % 2 === 0 ? '-4px' : '0px'"
+                  :label="
+                    index % 2 === 0
+                      ? 'Voir nos concessions'
+                      : 'Voir nos évènements'
+                  "
+                  :color="index % 2 === 0 ? 'dark' : 'fuchsia'"
+                  :variant="index % 2 === 0 ? 'outline' : 'filled'"
+                  :to="example.link"
+                />
               </div>
             </div>
           </div>
@@ -801,9 +833,9 @@ nuxt-link:has(img) {
     color: #000;
   }
 }
-.maoulid{
-  z-index:0;
-  position:relative;
+.maoulid {
+  z-index: 0;
+  position: relative;
 }
 
 .actionwrapper {
@@ -816,34 +848,34 @@ nuxt-link:has(img) {
 }
 
 .txtwrapper {
-    z-index: 150;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    height: 100%;
-    width: 100vw;
+  z-index: 150;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  height: 100%;
+  width: 100vw;
   background-color: rgba(0, 0, 0, 0.36);
-    max-width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    text-align:center;
-   p{
-    color:white;
-    text-align:center;
-   }
-   h1{
-    color:white;
-    text-align:center;    z-index: 150;
-    font-size:75px !important;
-    &::before{
-      display:none !important;
+  max-width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+  p {
+    color: white;
+    text-align: center;
+  }
+  h1 {
+    color: white;
+    text-align: center;
+    z-index: 150;
+    font-size: 75px !important;
+    &::before {
+      display: none !important;
     }
-
-   }
+  }
 }
 </style>

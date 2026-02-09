@@ -301,12 +301,13 @@ const goToMenuPage = (page: number) => {
           </div>
 
           <!-- Join Now Button -->
-          <NuxtLink
+       <!--    <NuxtLink
             :to="`/careers?venue=${encodeURIComponent(selectedVenue.location)}`"
             class="d-flex align-items-start justify-content-start venue-join-btn"
           >
           <nuxt-img :src="btnJoinNow" alt="Rejoignez-nous" class="img-fluid"></nuxt-img>
-          </NuxtLink>
+          </NuxtLink> -->
+           <PillButton color="fuchsia" :to="`/careers?venue=${encodeURIComponent(selectedVenue.location)}`" label="Rejoignez-nous" width="250px"/>
         </div>
 
         <!-- Default content -->
