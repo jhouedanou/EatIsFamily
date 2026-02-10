@@ -55,10 +55,23 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
               </NuxtLink>
             </h3>
             <p class="post-excerpt">{{ featuredPosts[0].excerpt.rendered }}</p>
-            <NuxtLink :to="`/blog/${featuredPosts[0].slug}`" class="bg-transparent border-0 p-0 m-0">
+           <!--  <NuxtLink :to="`/blog/${featuredPosts[0].slug}`" class="bg-transparent border-0 p-0 m-0">
               <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
-            </NuxtLink>
-          </div>
+            </NuxtLink> -->
+
+<PillButton
+              color="dark"
+              variant="outline"
+              :to="`/blog/${featuredPosts[0].slug}`"
+              label="Lire l'article"
+              width="250px"
+              bg-left="-8px"
+              bg-right="-8px"
+              bg-top="-6px"
+              bg-bottom="-6px"
+              bg-width="110%"
+            />
+                    </div>
         </article>
 
         <!-- Featured Post 2 - Image Right -->
@@ -76,9 +89,21 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
               </NuxtLink>
             </h3>
             <p class="post-excerpt">{{ featuredPosts[1].excerpt.rendered }}</p>
-            <NuxtLink :to="`/blog/${featuredPosts[1].slug}`" class="bg-transparent border-0 p-0 m-0">
+          <!--   <NuxtLink :to="`/blog/${featuredPosts[1].slug}`" class="bg-transparent border-0 p-0 m-0">
               <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
-            </NuxtLink>
+            </NuxtLink> -->
+             <PillButton
+              color="dark"
+              variant="outline"
+              :to="`/blog/${featuredPosts[1].slug}`"
+              label="Lire l'article"
+              width="250px"
+              bg-left="-8px"
+              bg-right="-8px"
+              bg-top="-6px"
+              bg-bottom="-6px"
+              bg-width="110%"
+            />
           </div>
         </article>
       </div>
@@ -103,9 +128,21 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
                 </NuxtLink>
               </h3>
               <p class="card-excerpt">{{ post.excerpt.rendered }}</p>
-              <NuxtLink :to="`/blog/${post.slug}`" class="bg-transparent border-0 p-0 m-0 mt-1">
+              <!-- <NuxtLink :to="`/blog/${post.slug}`" class="bg-transparent border-0 p-0 m-0 mt-1">
                               <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
-              </NuxtLink>
+              </NuxtLink> -->
+<PillButton
+              color="dark"
+              variant="outline"
+              :to="`/blog/${post.slug}`" 
+              label="Lire l'article"
+              width="250px"
+              bg-left="-8px"
+              bg-right="-8px"
+              bg-top="-6px"
+              bg-bottom="-6px"
+              bg-width="110%"
+            />
             </div>
           </article>
         </div>
@@ -127,11 +164,12 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
     background-repeat: no-repeat;
     background-size: cover;
     max-width: 1400px;
-    max-height: 405px;
-    margin: 0 auto;
+    max-height: 266px;
+    margin: 24px auto 0;
     height: 100vh;
     display: flex;
     align-items: center;
+    border-radius: 10px;
 }
 
 .hero-decoration.pink-blob {
