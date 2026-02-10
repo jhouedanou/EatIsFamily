@@ -2,110 +2,153 @@
   <div class="apply-activities-page">
     <!-- Loading Screen -->
     <LoadingScreen v-if="!content" />
-    
+
     <template v-else>
-    <section v-if="content?.page_hero" id="future" class="page-hero">
-      <div class="container-fluid p-0 mt-0 text-center">
-        <h1 class="mt-4 mb-4">{{ content.page_hero.title }}</h1>
-        <img
-          v-if="content.page_hero.image?.src"
-          :src="content.page_hero.image.src"
-          :alt="content.page_hero.image.alt"
-          class="neil"
-        />
-      </div>
-    </section>
-    <section v-if="content?.section2" id="mouf" class="booba mb-4">
-      <div
-        id="denzel"
-        class="container d-flex flex-column justify-content-center align-items-center"
-      >
-        <h1
-          class="preserve-lines text-center"
-          v-html="content.section2.text"
-        ></h1>
+      <section v-if="content?.page_hero" id="future" class="page-hero">
+        <div class="container-fluid p-0 mt-0 text-center">
+          <h1 class="mt-4 mb-4">{{ content.page_hero.title }}</h1>
+          <img
+            v-if="content.page_hero.image?.src"
+            :src="content.page_hero.image.src"
+            :alt="content.page_hero.image.alt"
+            class="neil"
+          />
+        </div>
+      </section>
+      <section v-if="content?.section2" id="mouf" class="booba mb-4">
         <div
-          id="rohff"
-          class="d-flex justify-content-center align-items-center text-center gap-4 flex-wrap"
+          id="denzel"
+          class="container d-flex flex-column justify-content-center align-items-center"
         >
-          <NuxtLink
+          <h1
+            class="preserve-lines text-center"
+            v-html="content.section2.text"
+          ></h1>
+          <div
+            id="rohff"
+            class="d-flex justify-content-center align-items-center text-center gap-4 flex-wrap"
+          >
+            <PillButton
+              color="pink"
+              to="/careers"
+              label="Postuler"
+              width="250px"
+            />
+
+            <PillButton
+              color="dark"
+              variant="outline"
+              to="#mapPreview"
+              label="Explorer nos sites"
+              width="250px"
+              bg-left="-8px"
+              bg-right="-8px"
+              bg-top="-6px"
+              bg-bottom="-6px"
+              bg-width="110%"
+            />
+            <!--  <PillButtonPink
+    label="Commander"
+    bg-left="-8px"
+    bg-right="-8px"
+    bg-top="-6px"
+    bg-bottom="-6px"
+    bg-width="110%"
+  /> -->
+            <!--  <NuxtLink
             v-if="content.section2.btn1"
             :to="content.section2.link1 || '#'"
           >
             <img :src="content.section2.btn1" alt="Button 1" />
-          </NuxtLink>
-          <NuxtLink
+          </NuxtLink> -->
+            <!-- <NuxtLink
             v-if="content.section2.btn2"
             :to="content.section2.link2 || '#'"
           >
             <img :src="content.section2.btn2" alt="Button 2" />
-          </NuxtLink>
+          </NuxtLink> -->
+          </div>
         </div>
-      </div>
-    </section>
-    <section v-if="activities" class="explore-section mt-4">
-      <HomeExploreSection />
-    </section>
+      </section>
+      <section v-if="activities" class="explore-section mt-4">
+        <HomeExploreSection />
+      </section>
 
-    <section class="mb-5" v-if="activities && content?.textedelapage">
-      <div id="baks" class="container p-0 mx-auto d-flex flex-column">
-        <h3 class="font-header">{{ content.textedelapage.title }}</h3>
-        <div id="viber" class="row  d-flex flex-wrap">
-          <div id="ludacris" class="col-12 col-lg-6 col-md-6 pt-0 pb-0">
-            <p v-html="content.textedelapage.subtitle"></p>
-            <p v-html="content.textedelapage.description"></p>
-            <NuxtLink :to="content.textedelapage.link">
-              <img :src="content.textedelapage.btn" />
-            </NuxtLink>
-          </div>
-          <div class="col-12 col-lg-6 col-md-6  p-0 m-0">
-            <img
-              :src="content.textedelapage.image"
-              alt="Illustration des services"
-              class="img-fluid rounded"
+      <section class="mb-5" v-if="activities && content?.textedelapage">
+        <div id="baks" class="container p-0 mx-auto d-flex flex-column">
+          <h3 class="font-header">{{ content.textedelapage.title }}</h3>
+          <div id="viber" class="row d-flex flex-wrap">
+            <div id="ludacris" class="col-12 col-lg-6 col-md-6 pt-0 pb-0">
+              <p v-html="content.textedelapage.subtitle"></p>
+              <p v-html="content.textedelapage.description"></p>
+             <!--  <NuxtLink :to="content.textedelapage.link">
+                <img :src="content.textedelapage.btn" />
+              </NuxtLink> -->
+                       <PillButton
+              color="dark"
+              variant="outline"
+              to="#mapPreview"
+              label="Contactez nous"
+              width="250px"
+              bg-left="-8px"
+              bg-right="-8px"
+              bg-top="-6px"
+              bg-bottom="-6px"
+              bg-width="110%"
             />
+            </div>
+            <div class="col-12 col-lg-6 col-md-6 p-0 m-0">
+              <img
+                :src="content.textedelapage.image"
+                alt="Illustration des services"
+                class="img-fluid rounded"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-    <section
-      v-if="content?.weHelpWith"
-      id="weHelpwith"
-      class="container mx-auto mb-5"
-      :style="{ '--bg-image': `url(${content.weHelpWith.image})` }"
-    >
-      <img :src="content.weHelpWith.image" alt="" class="img-fluid weHelpWith-image" />
-      <div id="seeAboutYa">
-        <h3>{{ content.weHelpWith.title }}</h3>
-        <ul>
-          <li
-            v-for="(item, index) in content.weHelpWith.items"
-            :key="index"
-            v-html="item"
-          ></li>
-        </ul>
-        <p>{{ content.weHelpWith.sous }}</p>
-      </div>
-    </section>
-    <section class="mt-4">
-      <!-- parteners  -->
-      <PartnersSection
-        v-if="homepageContent"
-        :title="homepageContent.partners_title"
-        :partners="
-          (homepageContent.partners || []).map((p: any) => ({
-            ...p,
-            name: p.alt,
-          }))
-        "
-      />
-      <!-- gallery grid 1 - Activities specific -->
-      <GalleryGrid
-        v-if="activitiesGalleryImages.length > 0"
-        :images="activitiesGalleryImages"
-      />
-      <!--  ready to make an impact -->
-     <!--  <HomepageCTA
+      </section>
+      <section
+        v-if="content?.weHelpWith"
+        id="weHelpwith"
+        class="container mx-auto mb-5"
+        :style="{ '--bg-image': `url(${content.weHelpWith.image})` }"
+      >
+        <img
+          :src="content.weHelpWith.image"
+          alt=""
+          class="img-fluid weHelpWith-image"
+        />
+        <div id="seeAboutYa">
+          <h3>{{ content.weHelpWith.title }}</h3>
+          <ul>
+            <li
+              v-for="(item, index) in content.weHelpWith.items"
+              :key="index"
+              v-html="item"
+            ></li>
+          </ul>
+          <p>{{ content.weHelpWith.sous }}</p>
+        </div>
+      </section>
+      <section class="mt-4">
+        <!-- parteners  -->
+        <PartnersSection
+          v-if="homepageContent"
+          :title="homepageContent.partners_title"
+          :partners="
+            (homepageContent.partners || []).map((p: any) => ({
+              ...p,
+              name: p.alt,
+            }))
+          "
+        />
+        <!-- gallery grid 1 - Activities specific -->
+        <GalleryGrid
+          v-if="activitiesGalleryImages.length > 0"
+          :images="activitiesGalleryImages"
+        />
+        <!--  ready to make an impact -->
+        <!--  <HomepageCTA
         v-if="homepageContent?.homepageCTA"
         :image="homepageContent.homepageCTA.image"
         :title="homepageContent.homepageCTA.title"
@@ -115,11 +158,15 @@
         :additional-text="homepageContent.homepageCTA.additionalText"
         :button-image2="homepageContent.homepageCTA.button2"
       /> -->
-    <section v-if="siteContent?.about?.vision" id="vision" class="my-5">
-      <div id="inver" class="container-fluid">
-        <h3 class="font-header text-align-center text-center d-flex justify-content-center align-items-center"> Le souci du détail fait la différence </h3>
-        <!-- Consulting section from pages-content -->
-        <!-- <div v-if="pageContent?.consulting" class="consulting-section text-center p-4 cta-block d-flex flex-column justify-content-center align-items-center text-center p-4 mx-auto mt-4"> 
+        <section v-if="siteContent?.about?.vision" id="vision" class="my-5">
+          <div id="inver" class="container-fluid">
+            <h3
+              class="font-header text-align-center text-center d-flex justify-content-center align-items-center"
+            >
+              Le souci du détail fait la différence
+            </h3>
+            <!-- Consulting section from pages-content -->
+            <!-- <div v-if="pageContent?.consulting" class="consulting-section text-center p-4 cta-block d-flex flex-column justify-content-center align-items-center text-center p-4 mx-auto mt-4"> 
           <p v-html="pageContent.consulting.description" class="preserve-lines mb-4"></p>
           <NuxtLink 
             v-if="pageContent.consulting.cta?.link" 
@@ -135,25 +182,25 @@
             <span v-else>{{ pageContent.consulting.cta?.text || 'Nous contacter' }}</span>
           </NuxtLink>
         </div> -->
-             <HomepageCTA
-      v-if="homepageContent?.homepageCTA"
-      :image="homepageContent.homepageCTA.image"
-      :title="homepageContent.homepageCTA.title"
-      :description="homepageContent.homepageCTA.description"
-      :link="homepageContent.homepageCTA.link"
-      :button-image="homepageContent.homepageCTA.button"
-      :additional-text="homepageContent.homepageCTA.additionalText"
-      :button-image2="homepageContent.homepageCTA.button2"
-    />
-      </div>
-    </section>
-   
-      <!-- gallery grid 2 - Activities specific -->
-     <!--  <GalleryGrid
+            <HomepageCTA
+              v-if="homepageContent?.homepageCTA"
+              :image="homepageContent.homepageCTA.image"
+              :title="homepageContent.homepageCTA.title"
+              :description="homepageContent.homepageCTA.description"
+              :link="homepageContent.homepageCTA.link"
+              :button-image="homepageContent.homepageCTA.button"
+              :additional-text="homepageContent.homepageCTA.additionalText"
+              :button-image2="homepageContent.homepageCTA.button2"
+            />
+          </div>
+        </section>
+
+        <!-- gallery grid 2 - Activities specific -->
+        <!--  <GalleryGrid
         v-if="activitiesGalleryImages2.length > 0"
         :images="activitiesGalleryImages2"
       /> -->
-    </section>
+      </section>
     </template>
   </div>
 </template>
@@ -201,12 +248,18 @@ onMounted(async () => {
 
 // Helper pour valider si un titre SEO est valide (pas une URL)
 const isValidSeoTitle = (title: string | undefined) => {
-  if (!title) return false
-  return !title.includes('http') && !title.includes('wp-content') && !title.includes('themes')
-}
+  if (!title) return false;
+  return (
+    !title.includes("http") &&
+    !title.includes("wp-content") &&
+    !title.includes("themes")
+  );
+};
 
 useHead(() => ({
-  title: isValidSeoTitle(content.value?.seo?.title) ? content.value.seo.title : "Activities - Eat Is Family",
+  title: isValidSeoTitle(content.value?.seo?.title)
+    ? content.value.seo.title
+    : "Activities - Eat Is Family",
   meta: [
     {
       name: "description",
@@ -217,14 +270,15 @@ useHead(() => ({
 </script>
 
 <style scoped lang="scss">
-
 .loading {
   text-align: center;
   padding: 4rem 0;
   font-size: 1.25rem;
   color: #718096;
 }
-
+.btn-label{
+  width:100% !important;
+}
 #future.page-hero {
   background: white !important;
   text-align: center;
@@ -286,8 +340,8 @@ useHead(() => ({
     }
   }
 }
-#viber{
-  margin-top:4em;
+#viber {
+  margin-top: 4em;
 }
 #mouf {
   background: url("/images/unsplash_6vfYbDwOuMo.svg");
@@ -330,9 +384,11 @@ useHead(() => ({
   padding: 20px 0;
 
   a {
+    width: 250px !important;
+    /* 
     display: inline-block;
-    min-width: 150px;
-
+    min-width: 0px !important;
+    max-width:100% !important; */
     img {
       display: block;
       max-width: 100%;
@@ -349,25 +405,24 @@ useHead(() => ({
   object-fit: cover;
 }
 
-#baks{
-  h3{
-    max-width:800px;
+#baks {
+  h3 {
+    max-width: 800px;
   }
 }
 
 /* Section weHelpWith - Mobile background image */
 #weHelpwith {
   position: relative;
-  
+
   .weHelpWith-image {
     display: block;
   }
 }
 
 @media (max-width: 1024px) {
-
   #weHelpwith {
-      background-image: var(--bg-image);
+    background-image: var(--bg-image);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -375,7 +430,7 @@ useHead(() => ({
     border-radius: 12px;
     position: relative;
     /* Overlay pour améliorer la lisibilité du texte */
-  /*   &::before {
+    /*   &::before {
       content: '';
       position: absolute;
       top: 0;
@@ -386,12 +441,12 @@ useHead(() => ({
       border-radius: 12px;
       z-index: 0;
     } */
-    
+
     /* Cacher l'image sur mobile */
     .weHelpWith-image {
       display: none !important;
     }
-    
+
     /* S'assurer que le contenu est au-dessus de l'overlay */
     #seeAboutYa {
       position: relative;
@@ -399,5 +454,4 @@ useHead(() => ({
     }
   }
 }
-
 </style>

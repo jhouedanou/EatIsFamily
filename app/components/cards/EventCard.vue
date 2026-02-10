@@ -14,13 +14,19 @@
       <div class="torn-edge" :class="{ 'torn-edge-right': isEven, 'torn-edge-left': !isEven }"></div>
       <h3 class="preserve-lines">{{ event.title }}</h3>
       <p class="description preserve-lines" v-html="event.description"></p>
-      <NuxtLink :to="`/contact`">
-        <img
-          :src="isEven ? '/images/contact-even.svg' : '/images/contact-odd.svg'"
-          alt="Contact"
-          class="contact-image"
-        />
-      </NuxtLink>
+      <PillButton
+        to="/contact"
+        label="Nous contacter"
+        :variant="pillConfig.variant"
+        :color="pillConfig.color"
+        :inset="pillConfig.inset"
+        :width="pillConfig.width"
+        :bg-left="pillConfig.bgLeft"
+        :bg-right="pillConfig.bgRight"
+        :bg-top="pillConfig.bgTop"
+        :bg-bottom="pillConfig.bgBottom"
+        :bg-width="pillConfig.bgWidth"
+      />
     </div>
   </div>
 </template>
@@ -52,6 +58,23 @@ const currentColor = computed(() => colors[currentIndex.value])
 const colorClass = computed(() => `color-${colorNames[currentIndex.value]}`)
 
 const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
+
+type PillButtonOptions = {
+  variant: 'filled' | 'outline'
+  color: 'pink' | 'dark' | 'light'
+  [key: string]: any
+}
+
+const pillButtonMap: Record<string, PillButtonOptions> = {
+  green:     { variant: 'outline', color: 'dark' },
+  white:     { variant: 'filled',  color: 'pink', inset: '-1px', width: '250px', bgLeft: '-2px', bgRight: '-2px', bgTop: '0px', bgBottom: '0px', bgWidth: '102%' },
+  purple:    { variant: 'outline', color: 'dark' },
+  blue:      { variant: 'outline', color: 'dark' },
+  'white-alt': { variant: 'outline', color: 'dark' },
+  red:       { variant: 'outline', color: 'light' },
+}
+
+const pillConfig = computed(() => pillButtonMap[colorNames[currentIndex.value]] ?? { variant: 'outline', color: 'dark' })
 </script>
 
 <style scoped lang="scss">
@@ -104,6 +127,7 @@ const isEven = computed(() => (props.colorIndex ?? 0) % 2 === 0)
 }
 
 .event-type-badge {
+  display:none !important;
   position: absolute;
   top: 1rem;
   right: 1rem;

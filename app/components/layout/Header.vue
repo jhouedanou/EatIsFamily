@@ -22,7 +22,7 @@
         <nav class="nav-left desktop-only">
           <NuxtLink to="/careers" class="nav-link" :class="{ 'nav-active': isActiveLink('/careers') }">{{ content.nav_links.careers }}</NuxtLink>
           <NuxtLink to="/blog" class="nav-link" :class="{ 'nav-active': isActiveLink('/blog') }">{{ content.nav_links.blogs }}</NuxtLink>
-          <PillButton color="pink" to="/contact" label="Nous contacter" />
+          <PillButton color="pink" to="/contact" label="Contactez nous" />
         </nav>
 
         <!-- Mobile Menu Toggle -->

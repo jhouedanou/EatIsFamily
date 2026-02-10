@@ -71,9 +71,24 @@ useHead(() => ({
         <div class="loris">
           <h1>{{ content.page_hero.title }}</h1>
           <p class="subtitle" v-html="content.page_hero.subtitle"></p>
-          <NuxtLink v-if="content.page_hero.link" :to="content.page_hero.link" class="mt-4">
+          <!-- <NuxtLink v-if="content.page_hero.link" :to="content.page_hero.link" class="mt-4">
             <nuxt-img :src="content.page_hero.btn" />
-          </NuxtLink>
+          </NuxtLink> -->
+            <PillButton
+                    color="pink"
+                    to="/contacts"
+                    label="Contactez nous"
+    bg-left="-5px"
+    bg-right="-5px"
+    bg-top="0px"
+    bg-bottom="0px"
+    bg-width="105%"
+    width="200px"
+
+    
+    inset: -1px -4px -2px 11px;
+    width: 91%;
+                  />
         </div>
 
       </div>

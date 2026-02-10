@@ -1156,7 +1156,8 @@ body {
     justify-content: flex-start;
     align-items: center;
     height: 70px;
-    margin: 4em auto;
+    //margin: 4em auto;
+    margin:4em 0;
     img {
       height: 70px;
     }
@@ -3046,10 +3047,11 @@ padding-top:7em !important;
 .torn-paper-container{
   
 }
+.accueil{
+  .new-white, #homepageGallery{
+      background-color: #fff6f0 !important;
 
-.new-white{
-    background-color: #fff6f0 !important;
-
+  }
 }
 .swiper-slide{
   display:flex !important;

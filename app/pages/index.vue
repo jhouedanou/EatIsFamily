@@ -110,8 +110,8 @@ onUnmounted(() => {
 });
 </script>
 
-<template>
-  <div class="overflow-hidden">
+<template class="accueil-demer">
+  <div class="overflow-hidden accueil">
     <!-- Loading state -->
     <div
       v-if="!content"
@@ -125,7 +125,7 @@ onUnmounted(() => {
     </div>
 
     <!-- Main content -->
-    <template v-else>
+    <template v-else class="mouff">
       <!-- Hero Section -->
       <section
         id="hero"
