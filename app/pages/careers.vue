@@ -217,9 +217,9 @@ const goToPage = (page: number) => {
               
             </div>
           </div>
-          <div class="careers-hero-image col-12 col-lg-5 col-md-5">
+         <!--  <div class="careers-hero-image col-12 col-lg-5 col-md-5">
             <img :src="content.hero_default?.image" alt="Rejoignez notre équipe"  />
-          </div>
+          </div> -->
         </div>
         <div id="limam" class="container d-flex flex-column justify-content-center text-center flex-wrap">
           <h3> {{ content.join_box?.title }}</h3>
@@ -383,12 +383,26 @@ const goToPage = (page: number) => {
 
                 <!-- Buttons -->
                 <div id="matuidicharo" class="d-flex gap-3 mt-auto">
-                  <NuxtLink class="matiti":to="`/jobs/${job.slug}`">
+                  <!-- <NuxtLink class="matiti" :to="`/jobs/${job.slug}`   ">
                     <nuxt-img :src="btnApply"></nuxt-img>
                   </NuxtLink>
-                  <NuxtLink class="matiti" :to="`/jobs/${job.slug}`">
+                  <NuxtLink class="matiti" >
                     <nuxt-img :src="btnView"></nuxt-img>
-                  </NuxtLink>
+                  </NuxtLink> -->
+                  <PillButton
+                  :to="`/jobs/${job.slug}`"
+                  color="pink"
+                  label="Postuler"
+                  width="210px"
+                  inset="-2px"
+                  />
+                  <PillButton
+                  :to="`/jobs/${job.slug}`"
+                  color="dark"
+                  variant="outline"
+                  label="Afficher les détails"
+                  width="250px"
+                  />
                 </div>
               </div>
             </div>
@@ -451,9 +465,16 @@ const goToPage = (page: number) => {
             <button class="btn-secondary fs-5 px-5 py-3">
               {{ content.cta_section?.general_application_button }}
             </button> -->
-            <NuxtLink to="/careers">
+<!--             <NuxtLink to="/careers">
               <NuxtImg :src="btnDiscoverApply" width="316" />
-            </NuxtLink>
+            </NuxtLink> -->
+              <PillButton
+                  to="/apply-activities#mapPreview"
+                  color="yellow"
+                  label="Trouver et postuler à des emplois"
+                  width="330px"
+                  inset="-2px"
+                  />
           </div>
         </div>
       </section>
@@ -497,11 +518,10 @@ const goToPage = (page: number) => {
   @media (max-width: 1024px) {
 padding-top: 0rem;
 }
-  margin:4em auto;
-  
+  margin:4em auto 0em auto; 
 }
 
-.careers-hero-container {
+/* .careers-hero-container {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -514,6 +534,23 @@ padding-top: 0rem;
   height: 100vh;
   width: 100vw;
   margin: 1em auto;
+
+} */
+
+.careers-hero-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    background: url(/images/dida.svg) #d7a8ff;
+    background-repeat: no-repeat;
+    background-size: contain;
+    max-width: 1400px;
+    margin: 0 auto;
+    max-height: 260px;
+    height: 100vh;
+    width: 100vw;
+    margin: 1em auto;
+    border-radius: 13px;
 }
 
 .careers-hero-image {
@@ -537,7 +574,7 @@ padding-top: 0rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4rem;
+  padding: 0 4rem;
   margin:0 !important;
   
 }
@@ -1046,7 +1083,7 @@ padding-top: 0rem;
   #limam{
     width:100vw;
     max-width:1400px;
-    padding:4em 0 0 0 ;
+    padding:1em 0 0 0 ;
     h3{
         font-family: FONTSPRINGDEMO-RecoletaBold;
   font-size: 50px;

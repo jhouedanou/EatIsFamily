@@ -176,9 +176,20 @@ useHead(() => ({
               <h3>Prêt à rejoindre notre équipe ?</h3>
               <p>Postulez maintenant et faites partie d'une aventure exceptionnelle</p>
             </div>
-            <button id="apply-button" class="border-0 bg-transparent" @click="openApplyModal">
+           <!--  <button id="apply-button" class="border-0 bg-transparent" @click="openApplyModal">
               <nuxt-img :src="iconApplyForThis" alt="Icône postuler" width="16" height="16" />
-            </button>
+            </button> -->
+            <PillButton
+            @click="openApplyModal"
+              color="pink"
+              label="Postuler"
+              bg-left="-4px"
+              bg-right="-4px"
+              bg-top="-4px"
+              bg-bottom="-4px"
+              bg-width="104%"
+              width="200px"
+            />
           </div>
 
           <!-- Life at Location Section -->
@@ -265,9 +276,20 @@ useHead(() => ({
             <div class="info-card card-blue">
               <h3>Vous connaissez quelqu'un de parfait pour ce poste ?</h3>
               <p>Partagez cette offre avec cette personne</p>
-              <button class="btn-sharesd border-0 background-transparent bg-transparent" @click="shareJob">
+             <!--  <button class="btn-sharesd border-0 background-transparent bg-transparent" @click="shareJob">
                 <nuxtImg :src="iconShareJob" alt="Partager cette offre" width="240" height="" />
-              </button>
+              </button> -->
+                <PillButton
+            @click="shareJob"
+              color="pink"
+              label="Partager cette offre d'emploi"
+              bg-left="-4px"
+              bg-right="-4px"
+              bg-top="-4px"
+              bg-bottom="-4px"
+              bg-width="104%"
+              width="300px"
+            />
             </div>
           </div>
 
