@@ -1,6 +1,6 @@
 <template>
   <NuxtLink :to="to" class="btn-wrapper" :class="{ 'btn-wrapper--disabled': disabled }">
-    <div class="btn-outline" :style="{ clipPath: clipPath }"></div>
+    <div class="btn-outline" :style="{ clipPath: clipPath, left: props.bgLeft, right: props.bgRight, top: props.bgTop, bottom: props.bgBottom, width: props.bgWidth }"></div>
     <span class="btn btn--white" :style="{ clipPath: clipPath }">
       <slot>{{ label }}</slot>
     </span>
@@ -14,9 +14,14 @@ interface Props {
   to?: string
   label?: string
   disabled?: boolean
+  bgLeft?: string
+  bgRight?: string
+  bgTop?: string
+  bgBottom?: string
+  bgWidth?: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const clipPath = ref('')
 

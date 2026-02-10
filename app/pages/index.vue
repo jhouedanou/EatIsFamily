@@ -398,7 +398,7 @@ onUnmounted(() => {
                 </NuxtLink> -->
                 <PillButton
                   width="250px"
-                  :inset="index % 2 === 0 ? '-4px' : '0px'"
+                  :inset="index % 2 === 0 ? '-4px' : '1px'"
                   :label="
                     index % 2 === 0
                       ? 'Voir nos concessions'
@@ -407,6 +407,7 @@ onUnmounted(() => {
                   :color="index % 2 === 0 ? 'dark' : 'fuchsia'"
                   :variant="index % 2 === 0 ? 'outline' : 'filled'"
                   :to="example.link"
+                  
                 />
               </div>
             </div>

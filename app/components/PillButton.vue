@@ -2,7 +2,7 @@
   <NuxtLink :to="to" class="btn-wrapper" :class="{ 'btn-wrapper--disabled': disabled }" :style="wrapperStyle">
     <!-- Filled variant: clip-path -->
     <template v-if="variant === 'filled'">
-      <div class="btn-outline-bg" :style="{ clipPath: clipPath, inset: props.inset }"></div>
+      <div class="btn-outline-bg" :style="{ clipPath: clipPath, inset: props.inset, left: props.bgLeft, right: props.bgRight, top: props.bgTop, bottom: props.bgBottom, width: props.bgWidth }"></div>
       <span class="btn" :style="[{ clipPath: clipPath }, btnColorStyle, widthStyle]">
         <slot>{{ label }}</slot>
       </span>
@@ -31,6 +31,11 @@ interface Props {
   variant?: 'filled' | 'outline'
   width?: string
   inset?: string
+  bgLeft?: string
+  bgRight?: string
+  bgTop?: string
+  bgBottom?: string
+  bgWidth?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {

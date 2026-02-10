@@ -2,108 +2,194 @@
   <div class="about-page">
     <!-- Loading Screen -->
     <LoadingScreen v-if="!siteContent" />
-    
+
     <template v-else>
-    <section id="aboutHero" class="page-hero">
-      <div class="container-fluid d-flex flex-column justify-content-center align-items-center h-100 mt-5">
-        <h1 class="heroTitle">{{ siteContent.about.hero.title }}</h1>
-        <div class="d-flex container">
-          <div class="row">
-            <div class="col-12 col-md-6 d-flex flex-column">
-              <div class="heroTextContainer d-flex flex-column">
-                <h2 class="heroSubtitle">{{ siteContent.about.hero.subtitle }}</h2>
-                <p class="heroDescription" v-html="siteContent.about.hero.description"></p>
-                <nuxt-link to="/contact">
+      <section id="aboutHero" class="page-hero">
+        <div
+          class="container-fluid d-flex flex-column justify-content-center align-items-center h-100 mt-5"
+        >
+          <h1 class="heroTitle">{{ siteContent.about.hero.title }}</h1>
+          <div class="d-flex container">
+            <div class="row">
+              <div class="col-12 col-md-6 d-flex flex-column">
+                <div class="heroTextContainer d-flex flex-column">
+                  <h2 class="heroSubtitle">
+                    {{ siteContent.about.hero.subtitle }}
+                  </h2>
+                  <p
+                    class="heroDescription"
+                    v-html="siteContent.about.hero.description"
+                  ></p>
+                  <!--    <nuxt-link to="/contact">
                   <nuxt-img :src="siteContent.about.hero.buttonContact" alt="Nous contacter"
                     class="contactButton img-fluid fluid-img" />
-                </nuxt-link>
+                </nuxt-link> -->
+                  <PillButton
+                    color="pink"
+                    to="/contact"
+                    width="220px"
+                    inset="-3px"
+                    label="Contactez nous"
+                  />
+                </div>
+              </div>
+              <div
+                class="col-12 col-md-6 d-flex justify-content-center align-items-center"
+              >
+                <img
+                  :src="siteContent.about.hero.image.src"
+                  :alt="siteContent.about.hero.image.alt"
+                  class="img-fluid heroImage rounded-pill"
+                />
               </div>
             </div>
-            <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
-              <img :src="siteContent.about.hero.image.src" :alt="siteContent.about.hero.image.alt"
-                class="img-fluid heroImage rounded-pill" />
-            </div>
           </div>
         </div>
-      </div>
+      </section>
+      <section id="timeline">
+        <h3 class="timeline-title white-text recoleta preserve-lines">
+          {{ siteContent.about.timeline.title }}
+        </h3>
 
-    </section>
-    <section id="timeline">
-      <h3 class="timeline-title white-text recoleta preserve-lines">{{ siteContent.about.timeline.title }}</h3>
-
-      <div class="timeline-wrapper">
-        <!-- Navigation arrows (desktop only) -->
-        <button v-if="allEvents.length > 1" class="timeline-nav timeline-nav-prev" :class="{ disabled: !canGoPrev }"
-          :disabled="!canGoPrev" @click="goToPrevEvent">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </button>
-        <button v-if="allEvents.length > 1" class="timeline-nav timeline-nav-next" :class="{ disabled: !canGoNext }"
-          :disabled="!canGoNext" @click="goToNextEvent">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </button>
-
-        <!-- Mobile Vertical Timeline -->
-        <div class="mobile-timeline-events">
-          <div 
-            v-for="(event, index) in allEvents" 
-            :key="'mobile-' + event.id" 
-            class="mobile-event-item"
-            :style="{ '--marker-color': getMarkerColor(index as number) }"
+        <div class="timeline-wrapper">
+          <!-- Navigation arrows (desktop only) -->
+          <button
+            v-if="allEvents.length > 1"
+            class="timeline-nav timeline-nav-prev"
+            :class="{ disabled: !canGoPrev }"
+            :disabled="!canGoPrev"
+            @click="goToPrevEvent"
           >
-            <span class="mobile-event-year">{{ getYearFromDate(event.year) }}</span>
-            <div v-if="event.eventImage" class="mobile-event-image">
-              <nuxt-img :src="event.eventImage" :alt="event.title" />
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <button
+            v-if="allEvents.length > 1"
+            class="timeline-nav timeline-nav-next"
+            :class="{ disabled: !canGoNext }"
+            :disabled="!canGoNext"
+            @click="goToNextEvent"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+
+          <!-- Mobile Vertical Timeline -->
+          <div class="mobile-timeline-events">
+            <div
+              v-for="(event, index) in allEvents"
+              :key="'mobile-' + event.id"
+              class="mobile-event-item"
+              :style="{ '--marker-color': getMarkerColor(index as number) }"
+            >
+              <span class="mobile-event-year">{{
+                getYearFromDate(event.year)
+              }}</span>
+              <div v-if="event.eventImage" class="mobile-event-image">
+                <nuxt-img :src="event.eventImage" :alt="event.title" />
+              </div>
+              <h4 class="mobile-event-title">{{ event.title }}</h4>
+              <p class="mobile-event-date">{{ event.year }}</p>
+              <p class="mobile-event-description" v-html="event.event"></p>
             </div>
-            <h4 class="mobile-event-title">{{ event.title }}</h4>
-            <p class="mobile-event-date">{{ event.year }}</p>
-            <p class="mobile-event-description" v-html="event.event"></p>
           </div>
-        </div>
 
-        <!-- Sound Wave with Playhead (desktop & mobile vertical) -->
-        <div ref="soundWaveContainer" class="sound-wave-container">
-          <!-- Dashed center line -->
-          <div class="center-line"></div>
+          <!-- Sound Wave with Playhead (desktop & mobile vertical) -->
+          <div ref="soundWaveContainer" class="sound-wave-container">
+            <!-- Dashed center line -->
+            <div class="center-line"></div>
 
-          <!-- Playhead (moves horizontally on desktop, vertically on mobile) -->
-          <div class="playhead" :class="{ 'dragging': isDragging }" 
-            :style="isMobile ? { top: playheadY + '%', left: '50%' } : { left: playheadX + '%' }"
-            @mousedown="startDrag" @touchstart="startDrag">
-            <!-- Top square -->
-            <div class="playhead-top-marker"></div>
-            <!-- Vertical line -->
-            <div class="playhead-line"></div>
-            <!-- Circle on the wave line -->
-            <div class="playhead-circle"></div>
-            <!-- Year label at bottom -->
-            <div class="playhead-year">{{ selectedEvent ?
-              getYearFromDate(selectedEvent.year) : '2015' }}</div>
+            <!-- Playhead (moves horizontally on desktop, vertically on mobile) -->
+            <div
+              class="playhead"
+              :class="{ dragging: isDragging }"
+              :style="
+                isMobile
+                  ? { top: playheadY + '%', left: '50%' }
+                  : { left: playheadX + '%' }
+              "
+              @mousedown="startDrag"
+              @touchstart="startDrag"
+            >
+              <!-- Top square -->
+              <div class="playhead-top-marker"></div>
+              <!-- Vertical line -->
+              <div class="playhead-line"></div>
+              <!-- Circle on the wave line -->
+              <div class="playhead-circle"></div>
+              <!-- Year label at bottom -->
+              <div class="playhead-year">
+                {{
+                  selectedEvent ? getYearFromDate(selectedEvent.year) : "2015"
+                }}
+              </div>
 
-            <!-- Event Card (positioned relative to playhead) -->
-            <div v-if="selectedEvent && isCardVisible" class="event-card" :class="{ 'event-card-left': isLastEvent }">
-              <div class="event-card-content">
-                <!-- Close button -->
-                <button class="event-card-close" @click.stop="closeEventCard">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                      stroke-linejoin="round" />
-                  </svg>
-                </button>
-                <div class="event-card-image">
-                  <nuxt-img v-if="selectedEvent.eventImage" :src="selectedEvent.eventImage"
-                    :alt="selectedEvent.title" />
-                </div>
-                <div class="event-card-info">
-                  <h4 class="event-card-title">{{ selectedEvent.title }}</h4>
-                  <p class="event-card-date">{{ selectedEvent.year }}</p>
-                  <p class="event-card-description" v-html="selectedEvent.event"></p>
-                  <!-- <button class="share-button">
+              <!-- Event Card (positioned relative to playhead) -->
+              <div
+                v-if="selectedEvent && isCardVisible"
+                class="event-card"
+                :class="{ 'event-card-left': isLastEvent }"
+              >
+                <div class="event-card-content">
+                  <!-- Close button -->
+                  <button class="event-card-close" @click.stop="closeEventCard">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M18 6L6 18M6 6L18 18"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <div class="event-card-image">
+                    <nuxt-img
+                      v-if="selectedEvent.eventImage"
+                      :src="selectedEvent.eventImage"
+                      :alt="selectedEvent.title"
+                    />
+                  </div>
+                  <div class="event-card-info">
+                    <h4 class="event-card-title">{{ selectedEvent.title }}</h4>
+                    <p class="event-card-date">{{ selectedEvent.year }}</p>
+                    <p
+                      class="event-card-description"
+                      v-html="selectedEvent.event"
+                    ></p>
+                    <!-- <button class="share-button">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
                         d="M12 5.5C13.1046 5.5 14 4.60457 14 3.5C14 2.39543 13.1046 1.5 12 1.5C10.8954 1.5 10 2.39543 10 3.5C10 4.60457 10.8954 5.5 12 5.5Z"
@@ -118,221 +204,325 @@
                     </svg>
                     Share This Story
                   </button> -->
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-            
 
-          <!-- Sound wave bars - Organic waveform with cosine curve -->
-                            <div class="sound-wave">
-            <div v-for="(bar, i) in waveBarData" :key="i" class="wave-bar-wrapper">
-              <div class="wave-bar" :style="isMobile ? { width: bar.height + '%', height: '2px' } : { height: bar.height + '%' }"></div>
+            <!-- Sound wave bars - Organic waveform with cosine curve -->
+            <div class="sound-wave">
+              <div
+                v-for="(bar, i) in waveBarData"
+                :key="i"
+                class="wave-bar-wrapper"
+              >
+                <div
+                  class="wave-bar"
+                  :style="
+                    isMobile
+                      ? { width: bar.height + '%', height: '2px' }
+                      : { height: bar.height + '%' }
+                  "
+                ></div>
+              </div>
+            </div>
+
+            <!-- Event markers (dots on the center line at peaks) -->
+            <div
+              v-for="(event, index) in allEvents"
+              :key="'marker-' + event.id"
+              class="wave-marker"
+              :class="{ active: selectedEvent?.id === event.id }"
+              :style="
+                isMobile
+                  ? {
+                      top: getMarkerPosition(index as number) + '%',
+                      left: '50%',
+                    }
+                  : { left: getMarkerPosition(index as number) + '%' }
+              "
+              @click="selectEvent(event, index as number)"
+            >
+              <div
+                class="wave-marker-dot"
+                :style="{ background: getMarkerColor(index as number) }"
+              ></div>
             </div>
           </div>
+        </div>
 
-          <!-- Event markers (dots on the center line at peaks) -->
-          <div v-for="(event, index) in allEvents" :key="'marker-' + event.id" class="wave-marker"
-            :class="{ active: selectedEvent?.id === event.id }"
-            :style="isMobile ? { top: getMarkerPosition(index as number) + '%', left: '50%' } : { left: getMarkerPosition(index as number) + '%' }" 
-            @click="selectEvent(event, index as number)">
-            <div class="wave-marker-dot" :style="{ background: getMarkerColor(index as number) }"></div>
-          </div>
+        <p class="timeline-instruction">
+          {{ siteContent.about.timeline.subtitle }}
+        </p>
+      </section>
+      <section v-if="siteContent?.about?.mission" id="mission">
+        <div class="container">
+          <h3 class="font-heading preserve-lines mt-5">
+            {{ siteContent.about.mission.title }}
+          </h3>
+          <img
+            v-if="siteContent.about.mission.image"
+            :src="siteContent.about.mission.image"
+            :alt="siteContent.about.mission.title"
+            class="img-fluid my-4"
+          />
         </div>
-      </div>
-
-      <p class="timeline-instruction">{{ siteContent.about.timeline.subtitle }}</p>
-    </section>
-    <section v-if="siteContent?.about?.mission" id="mission">
-      <div class="container">
-        <h3 class="font-heading preserve-lines mt-5">{{ siteContent.about.mission.title }}</h3>
-        <img v-if="siteContent.about.mission.image" :src="siteContent.about.mission.image" :alt="siteContent.about.mission.title" class="img-fluid my-4" />
-      </div>
-      <div id="lasalle" class="container row mt-4 p-3">
-        <div v-for="(encadre, index) in siteContent.about.mission.encadres" :key="index" :id="`encadres-${index}`"
-          class="col-md-6 decradr">
-          <div class="inner-encadre">
-            <h3 class="mb-2">{{ encadre.title }}</h3>
-            <p class="djoib mt-5 mb-5">{{ encadre.desc }}</p>
-            <a v-if="encadre.link && encadre.btn" :href="encadre.link" class="btn"><img :src="encadre.btn" alt=""></a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section v-if="siteContent?.about?.chiffresCles" id="chiffres-cles" ref="chiffresSection">
-      <div class="container">
-        <div class="chiffres-grid">
-          <div v-for="(stat, index) in siteContent.about.chiffresCles.stats" :key="index" class="chiffre-card">
-            <span class="chiffre-number" :data-target="parseNumber(stat.number)"
-              :data-suffix="parseSuffix(stat.number)">
-              0{{ parseSuffix(stat.number) }}
-            </span>
-            <span class="chiffre-label preserve-lines">{{ stat.label }}</span>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section v-if="siteContent?.about?.vision" id="vision" class="my-5">
-      <div class="container-fluid">
-        <h3 class="font-header text-align-center text-center d-flex justify-content-center align-items-center"> {{ siteContent.about.vision.title }} </h3>
-        <!-- Consulting section from pages-content -->
-        <div v-if="pageContent?.consulting" class="consulting-section text-center p-4 cta-block d-flex flex-column justify-content-center align-items-center text-center p-4 mx-auto mt-4"> 
-          <p v-html="pageContent.consulting.description" class="preserve-lines mb-4"></p>
-          <NuxtLink 
-            v-if="pageContent.consulting.cta?.link" 
-            :to="pageContent.consulting.cta.link"
-            class="mof"
+        <div id="lasalle" class="container row mt-4 p-3">
+          <div
+            v-for="(encadre, index) in siteContent.about.mission.encadres"
+            :key="index"
+            :id="`encadres-${index}`"
+            class="col-md-6 decradr"
           >
-            <img 
-              v-if="pageContent.consulting.cta?.button" 
-              :src="pageContent.consulting.cta.button" 
-              :alt="pageContent.consulting.cta?.text || 'Nous contacter'"
-              class="img-fluid"
-            />
-            <span v-else>{{ pageContent.consulting.cta?.text || 'Nous contacter' }}</span>
-          </NuxtLink>
+            <div class="inner-encadre">
+              <h3 class="mb-2">{{ encadre.title }}</h3>
+              <p class="djoib mt-5 mb-5">{{ encadre.desc }}</p>
+              <!-- <a v-if="encadre.link && encadre.btn" :href="encadre.link" class="btn"><img :src="encadre.btn" alt=""></a> -->
+              <PillButton
+                v-if="encadre.link && encadre.btn"
+                color="pink"
+                to="/contact"
+                width="220px"
+                label="Contactez nous"
+                bg-left="-5px"
+                bg-right="-5px"
+                bg-top="0px"
+                bg-bottom="1px"
+                bg-width="105%"
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
-    <GalleryGrid v-if="siteContent?.about?.gallery_section?.images"
-      :images="siteContent.about.gallery_section.images" />
-    <PartnersSection v-if="homepageContent" :title="homepageContent.partners_title"
-      :partners="(homepageContent.partners || []).map((p: any) => ({ ...p, name: p.alt }))" />
-    
-      <GalleryGrid v-if="siteContent?.about?.gallery_section2?.images"
-      :images="siteContent.about.gallery_section2.images" />
+      </section>
+      <section
+        v-if="siteContent?.about?.chiffresCles"
+        id="chiffres-cles"
+        ref="chiffresSection"
+      >
+        <div class="container">
+          <div class="chiffres-grid">
+            <div
+              v-for="(stat, index) in siteContent.about.chiffresCles.stats"
+              :key="index"
+              class="chiffre-card"
+            >
+              <span
+                class="chiffre-number"
+                :data-target="parseNumber(stat.number)"
+                :data-suffix="parseSuffix(stat.number)"
+              >
+                0{{ parseSuffix(stat.number) }}
+              </span>
+              <span class="chiffre-label preserve-lines">{{ stat.label }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section v-if="siteContent?.about?.vision" id="vision" class="my-5">
+        <div class="container-fluid">
+          <h3
+            class="font-header text-align-center text-center d-flex justify-content-center align-items-center"
+          >
+            {{ siteContent.about.vision.title }}
+          </h3>
+          <!-- Consulting section from pages-content -->
+          <div
+            v-if="pageContent?.consulting"
+            class="consulting-section text-center p-4 cta-block d-flex flex-column justify-content-center align-items-center text-center p-4 mx-auto mt-4"
+          >
+            <p
+              v-html="pageContent.consulting.description"
+              class="preserve-lines mb-4"
+            ></p>
+           <!--  <NuxtLink
+              v-if="pageContent.consulting.cta?.link"
+              :to="pageContent.consulting.cta.link"
+              class="mof"
+            >
+              <img
+                v-if="pageContent.consulting.cta?.button"
+                :src="pageContent.consulting.cta.button"
+                :alt="pageContent.consulting.cta?.text || 'Nous contacter'"
+                class="img-fluid"
+              />
+              <span v-else>{{
+                pageContent.consulting.cta?.text || "Nous contacter"
+              }}</span>
+            </NuxtLink> -->
+            <PillButton
+                color="pink"
+                to="/contact"
+                width="220px"
+                label="Contactez nous"
+                bg-left="-5px"
+                bg-right="-5px"
+                bg-top="-3px"
+                bg-bottom="-3px"
+                bg-width="105%"
+              />
+          </div>
+        </div>
+      </section>
+      <GalleryGrid
+        v-if="siteContent?.about?.gallery_section?.images"
+        :images="siteContent.about.gallery_section.images"
+      />
+      <PartnersSection
+        v-if="homepageContent"
+        :title="homepageContent.partners_title"
+        :partners="
+          (homepageContent.partners || []).map((p: any) => ({
+            ...p,
+            name: p.alt,
+          }))
+        "
+      />
+
+      <GalleryGrid
+        v-if="siteContent?.about?.gallery_section2?.images"
+        :images="siteContent.about.gallery_section2.images"
+      />
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { gsap } from 'gsap'
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { gsap } from "gsap";
 
-const { getSiteContent } = useSiteContent()
-const { getContentByPath, getHomepageContent } = usePageContent()
+const { getSiteContent } = useSiteContent();
+const { getContentByPath, getHomepageContent } = usePageContent();
 
-const siteContent = ref<any>(null)
-const pageContent = ref<any>(null)
-const homepageContent = ref<any>(null)
-const selectedEvent = ref<any>(null)
-const playheadX = ref<number>(10) // Initial position at first event (horizontal)
-const playheadY = ref<number>(10) // Initial position for vertical mobile
-const isLastEvent = ref<boolean>(false) // To position card on left for last event
-const playheadColor = ref<string>('#FFD600') // Default playhead color (yellow)
-const selectedEventIndex = ref<number>(0) // Track current event index
-const isCardVisible = ref<boolean>(false) // Control card visibility
-const isMobile = ref<boolean>(false) // Track if mobile view
+const siteContent = ref<any>(null);
+const pageContent = ref<any>(null);
+const homepageContent = ref<any>(null);
+const selectedEvent = ref<any>(null);
+const playheadX = ref<number>(10); // Initial position at first event (horizontal)
+const playheadY = ref<number>(10); // Initial position for vertical mobile
+const isLastEvent = ref<boolean>(false); // To position card on left for last event
+const playheadColor = ref<string>("#FFD600"); // Default playhead color (yellow)
+const selectedEventIndex = ref<number>(0); // Track current event index
+const isCardVisible = ref<boolean>(false); // Control card visibility
+const isMobile = ref<boolean>(false); // Track if mobile view
 
 // Organic wave pattern configuration
 // More bars between peaks for denser waveform like in the reference image
-const BARS_BETWEEN_PEAKS = 35
-const PEAK_DISTANCE = BARS_BETWEEN_PEAKS + 1
-const PADDING_BARS = 20 // Bars before first and after last peak
-const MIN_HEIGHT = 8   // Hauteur du creux (en %) - plus petit pour contraste
-const MAX_HEIGHT = 100 // Hauteur du pic (en %)
+const BARS_BETWEEN_PEAKS = 35;
+const PEAK_DISTANCE = BARS_BETWEEN_PEAKS + 1;
+const PADDING_BARS = 20; // Bars before first and after last peak
+const MIN_HEIGHT = 8; // Hauteur du creux (en %) - plus petit pour contraste
+const MAX_HEIGHT = 100; // Hauteur du pic (en %)
 
 // Check if mobile
 const checkMobile = () => {
-  isMobile.value = window.innerWidth <= 768
-}
+  isMobile.value = window.innerWidth <= 768;
+};
 
 // Total bars needed
 const totalBars = computed(() => {
-  const numEvents = allEvents.value.length || 1
-  if (numEvents === 0) return 100
+  const numEvents = allEvents.value.length || 1;
+  if (numEvents === 0) return 100;
   // Distance from first to last peak is (numEvents - 1) * PEAK_DISTANCE
   // Plus padding on both sides
-  return PADDING_BARS + (Math.max(0, numEvents - 1) * PEAK_DISTANCE) + PADDING_BARS
-})
+  return (
+    PADDING_BARS + Math.max(0, numEvents - 1) * PEAK_DISTANCE + PADDING_BARS
+  );
+});
 
 // Drag state
-const isDragging = ref<boolean>(false)
-const soundWaveContainer = ref<HTMLElement | null>(null)
+const isDragging = ref<boolean>(false);
+const soundWaveContainer = ref<HTMLElement | null>(null);
 
 // Chiffres clés
-const chiffresSection = ref<HTMLElement | null>(null)
-const chiffresAnimated = ref<boolean>(false)
+const chiffresSection = ref<HTMLElement | null>(null);
+const chiffresAnimated = ref<boolean>(false);
 
 // All events (no pagination)
-const allEvents = computed(() => siteContent.value?.about?.timeline?.events || [])
+const allEvents = computed(
+  () => siteContent.value?.about?.timeline?.events || [],
+);
 
 // Navigation computed properties
-const canGoNext = computed(() => selectedEventIndex.value < allEvents.value.length - 1)
-const canGoPrev = computed(() => selectedEventIndex.value > 0)
+const canGoNext = computed(
+  () => selectedEventIndex.value < allEvents.value.length - 1,
+);
+const canGoPrev = computed(() => selectedEventIndex.value > 0);
 
 // Parse number from string like "250+" or "300,000" or "100%"
 const parseNumber = (str: string): number => {
   // Remove all non-numeric characters except dots
-  const numStr = str.replace(/[^0-9.]/g, '')
-  return parseFloat(numStr) || 0
-}
+  const numStr = str.replace(/[^0-9.]/g, "");
+  return parseFloat(numStr) || 0;
+};
 
 // Get suffix like "+", "%", or nothing
 const parseSuffix = (str: string): string => {
-  if (str.includes('%')) return '%'
-  if (str.includes('+')) return '+'
-  return ''
-}
+  if (str.includes("%")) return "%";
+  if (str.includes("+")) return "+";
+  return "";
+};
 
 // Format number with commas (or K format on mobile for large numbers)
 const formatNumber = (num: number): string => {
   // Sur mobile, convertir les grands nombres en format K (ex: 300000 -> 300K)
   if (isMobile.value && num >= 1000) {
-    const thousands = num / 1000
-    return thousands.toLocaleString('en-US', { maximumFractionDigits: 0 }) + 'K'
+    const thousands = num / 1000;
+    return (
+      thousands.toLocaleString("en-US", { maximumFractionDigits: 0 }) + "K"
+    );
   }
-  return num.toLocaleString('en-US', { maximumFractionDigits: 0 })
-}
+  return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
+};
 
 // Animate chiffres when section is visible
 const animateChiffres = () => {
-  if (chiffresAnimated.value || !chiffresSection.value) return
-  chiffresAnimated.value = true
+  if (chiffresAnimated.value || !chiffresSection.value) return;
+  chiffresAnimated.value = true;
 
-  const numberElements = chiffresSection.value.querySelectorAll('.chiffre-number')
+  const numberElements =
+    chiffresSection.value.querySelectorAll(".chiffre-number");
 
   numberElements.forEach((el) => {
-    const target = parseFloat(el.getAttribute('data-target') || '0')
-    const suffix = el.getAttribute('data-suffix') || ''
-    const obj = { value: 0 }
+    const target = parseFloat(el.getAttribute("data-target") || "0");
+    const suffix = el.getAttribute("data-suffix") || "";
+    const obj = { value: 0 };
 
     gsap.to(obj, {
       value: target,
       duration: 2,
-      ease: 'power2.out',
+      ease: "power2.out",
       onUpdate: () => {
-        el.textContent = formatNumber(Math.round(obj.value)) + suffix
-      }
-    })
-  })
-}
+        el.textContent = formatNumber(Math.round(obj.value)) + suffix;
+      },
+    });
+  });
+};
 
 onMounted(async () => {
-  siteContent.value = await getSiteContent()
-  pageContent.value = await getContentByPath('about')
-  homepageContent.value = await getHomepageContent()
+  siteContent.value = await getSiteContent();
+  pageContent.value = await getContentByPath("about");
+  homepageContent.value = await getHomepageContent();
 
   // Check mobile on mount
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
+  checkMobile();
+  window.addEventListener("resize", checkMobile);
 
   // Initialize playhead position to first event (but don't show card)
   if (siteContent.value?.about?.timeline?.events?.length > 0) {
-    const firstEvent = siteContent.value.about.timeline.events[0]
-    selectedEvent.value = firstEvent
-    selectedEventIndex.value = 0
-    playheadX.value = getMarkerPosition(0)
-    playheadY.value = getMarkerPosition(0)
-    playheadColor.value = '#FFD600' // Keep playhead yellow
-    isCardVisible.value = false // Don't show card initially
+    const firstEvent = siteContent.value.about.timeline.events[0];
+    selectedEvent.value = firstEvent;
+    selectedEventIndex.value = 0;
+    playheadX.value = getMarkerPosition(0);
+    playheadY.value = getMarkerPosition(0);
+    playheadColor.value = "#FFD600"; // Keep playhead yellow
+    isCardVisible.value = false; // Don't show card initially
   }
 
   // Add global mouse event listeners for drag
-  document.addEventListener('mousemove', handleMouseMove)
-  document.addEventListener('mouseup', handleMouseUp)
-  document.addEventListener('touchmove', handleTouchMove)
-  document.addEventListener('touchend', handleTouchEnd)
+  document.addEventListener("mousemove", handleMouseMove);
+  document.addEventListener("mouseup", handleMouseUp);
+  document.addEventListener("touchmove", handleTouchMove);
+  document.addEventListener("touchend", handleTouchEnd);
 
   // Intersection Observer for chiffres clés animation
   if (chiffresSection.value) {
@@ -340,256 +530,267 @@ onMounted(async () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            animateChiffres()
-            observer.disconnect()
+            animateChiffres();
+            observer.disconnect();
           }
-        })
+        });
       },
-      { threshold: 0.3 }
-    )
-    observer.observe(chiffresSection.value)
+      { threshold: 0.3 },
+    );
+    observer.observe(chiffresSection.value);
   }
-})
+});
 
 onUnmounted(() => {
   // Clean up event listeners
-  document.removeEventListener('mousemove', handleMouseMove)
-  document.removeEventListener('mouseup', handleMouseUp)
-  document.removeEventListener('touchmove', handleTouchMove)
-  document.removeEventListener('touchend', handleTouchEnd)
-  window.removeEventListener('resize', checkMobile)
-})
+  document.removeEventListener("mousemove", handleMouseMove);
+  document.removeEventListener("mouseup", handleMouseUp);
+  document.removeEventListener("touchmove", handleTouchMove);
+  document.removeEventListener("touchend", handleTouchEnd);
+  window.removeEventListener("resize", checkMobile);
+});
 
 // Extract year from date string like "13 JUNE 2015"
 const getYearFromDate = (dateStr: string) => {
-  const parts = dateStr.split(' ')
-  return parts[parts.length - 1] || '2015'
-}
+  const parts = dateStr.split(" ");
+  return parts[parts.length - 1] || "2015";
+};
 
 // Get marker position as percentage
 // Markers are placed exactly at the peak indices
 const getMarkerPosition = (index: number): number => {
-  if (allEvents.value.length === 0) return 50
-  
+  if (allEvents.value.length === 0) return 50;
+
   // Peak index for this event
-  const peakIndex = PADDING_BARS + (index * PEAK_DISTANCE)
-  
+  const peakIndex = PADDING_BARS + index * PEAK_DISTANCE;
+
   // Convert to percentage of total width
   // We use (peakIndex + 0.5) to center it on the bar
-  return ((peakIndex + 0.5) / totalBars.value) * 100
-}
+  return ((peakIndex + 0.5) / totalBars.value) * 100;
+};
 
 // Seeded random number generator for consistent "randomness"
 const seededRandom = (seed: number): number => {
-  const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453
-  return x - Math.floor(x)
-}
+  const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
+  return x - Math.floor(x);
+};
 
 // Calculate wave bar data - Organic waveform with natural variations
 const waveBarData = computed(() => {
-  const bars: { height: number }[] = []
-  const count = totalBars.value
-  
+  const bars: { height: number }[] = [];
+  const count = totalBars.value;
+
   for (let i = 0; i < count; i++) {
     // Calculate position relative to nearest peak
-    const relativePos = i - PADDING_BARS
-    const peakIndex = Math.round(relativePos / PEAK_DISTANCE) * PEAK_DISTANCE + PADDING_BARS
-    
+    const relativePos = i - PADDING_BARS;
+    const peakIndex =
+      Math.round(relativePos / PEAK_DISTANCE) * PEAK_DISTANCE + PADDING_BARS;
+
     // Distance from current bar to nearest peak
-    const dist = i - peakIndex
-    
+    const dist = i - peakIndex;
+
     // Calculate position in cycle (0 to 1) where 0 = peak, 0.5 = trough
-    const positionInCycle = Math.abs(dist) / (PEAK_DISTANCE / 2)
-    
+    const positionInCycle = Math.abs(dist) / (PEAK_DISTANCE / 2);
+
     // Base cosine curve for smooth envelope
-    const baseMultiplier = 0.5 + 0.5 * Math.cos(Math.PI * positionInCycle)
-    
+    const baseMultiplier = 0.5 + 0.5 * Math.cos(Math.PI * positionInCycle);
+
     // Add multiple layers of "noise" for organic feel
     // Layer 1: Medium frequency variation (like audio amplitude)
-    const noise1 = seededRandom(i * 0.7) * 0.3 - 0.15
-    
+    const noise1 = seededRandom(i * 0.7) * 0.3 - 0.15;
+
     // Layer 2: High frequency micro-variations
-    const noise2 = seededRandom(i * 2.3 + 100) * 0.15 - 0.075
-    
+    const noise2 = seededRandom(i * 2.3 + 100) * 0.15 - 0.075;
+
     // Layer 3: Very subtle wobble based on position
-    const wobble = Math.sin(i * 0.4) * 0.08
-    
+    const wobble = Math.sin(i * 0.4) * 0.08;
+
     // Combine: base curve + variations (more variation near peaks, less at troughs)
-    const variationStrength = 0.3 + baseMultiplier * 0.7 // More variation when taller
-    const totalNoise = (noise1 + noise2 + wobble) * variationStrength
-    
+    const variationStrength = 0.3 + baseMultiplier * 0.7; // More variation when taller
+    const totalNoise = (noise1 + noise2 + wobble) * variationStrength;
+
     // Apply noise to multiplier
-    let finalMultiplier = baseMultiplier + totalNoise
-    
+    let finalMultiplier = baseMultiplier + totalNoise;
+
     // Clamp to valid range
-    finalMultiplier = Math.max(0.05, Math.min(1, finalMultiplier))
-    
+    finalMultiplier = Math.max(0.05, Math.min(1, finalMultiplier));
+
     // Calculate final height
-    const heightPercent = MIN_HEIGHT + (MAX_HEIGHT - MIN_HEIGHT) * finalMultiplier
-    
-    bars.push({ height: heightPercent })
+    const heightPercent =
+      MIN_HEIGHT + (MAX_HEIGHT - MIN_HEIGHT) * finalMultiplier;
+
+    bars.push({ height: heightPercent });
   }
 
-  return bars
-})
+  return bars;
+});
 
 // Get marker color based on index - alternating colors as in reference
 // Colors: Cyan, Coral, Yellow, Light Blue
 const getMarkerColor = (index: number): string => {
-  const colors: string[] = ['#4ECDC4', '#FF6B6B', '#FFD700', '#45B7D1']
-  return colors[index % colors.length] || '#4ECDC4'
-}
+  const colors: string[] = ["#4ECDC4", "#FF6B6B", "#FFD700", "#45B7D1"];
+  return colors[index % colors.length] || "#4ECDC4";
+};
 
 // Select event and move playhead
 const selectEvent = (event: any, index: number) => {
-  selectedEvent.value = event
-  selectedEventIndex.value = index
+  selectedEvent.value = event;
+  selectedEventIndex.value = index;
   // Move playhead to the marker position (both horizontal and vertical)
-  const position = getMarkerPosition(index)
-  playheadX.value = position
-  playheadY.value = position
+  const position = getMarkerPosition(index);
+  playheadX.value = position;
+  playheadY.value = position;
   // Playhead color stays yellow
-  playheadColor.value = '#FFD600'
+  playheadColor.value = "#FFD600";
   // Check if this is the last event (for card positioning)
-  isLastEvent.value = index >= allEvents.value.length - 2
+  isLastEvent.value = index >= allEvents.value.length - 2;
   // Show the card
-  isCardVisible.value = true
-}
+  isCardVisible.value = true;
+};
 
 // Close the event card
 const closeEventCard = () => {
-  isCardVisible.value = false
-}
+  isCardVisible.value = false;
+};
 
 // Drag handlers
 const startDrag = (e: MouseEvent | TouchEvent) => {
-  e.preventDefault()
-  isDragging.value = true
-}
+  e.preventDefault();
+  isDragging.value = true;
+};
 
 const handleMouseMove = (e: MouseEvent) => {
-  if (!isDragging.value) return
+  if (!isDragging.value) return;
   if (isMobile.value) {
-    updatePlayheadPositionVertical(e.clientY)
+    updatePlayheadPositionVertical(e.clientY);
   } else {
-    updatePlayheadPosition(e.clientX)
+    updatePlayheadPosition(e.clientX);
   }
-}
+};
 
 const handleTouchMove = (e: TouchEvent) => {
-  if (!isDragging.value || !e.touches[0]) return
+  if (!isDragging.value || !e.touches[0]) return;
   if (isMobile.value) {
-    updatePlayheadPositionVertical(e.touches[0].clientY)
+    updatePlayheadPositionVertical(e.touches[0].clientY);
   } else {
-    updatePlayheadPosition(e.touches[0].clientX)
+    updatePlayheadPosition(e.touches[0].clientX);
   }
-}
+};
 
 const handleMouseUp = () => {
   if (isDragging.value) {
-    isDragging.value = false
-    snapToNearestEvent()
+    isDragging.value = false;
+    snapToNearestEvent();
   }
-}
+};
 
 const handleTouchEnd = () => {
   if (isDragging.value) {
-    isDragging.value = false
-    snapToNearestEvent()
+    isDragging.value = false;
+    snapToNearestEvent();
   }
-}
+};
 
 const updatePlayheadPosition = (clientX: number) => {
-  const container = soundWaveContainer.value
-  if (!container) return
+  const container = soundWaveContainer.value;
+  if (!container) return;
 
-  const rect = container.getBoundingClientRect()
-  const x = clientX - rect.left
-  const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
-  playheadX.value = percentage
-}
+  const rect = container.getBoundingClientRect();
+  const x = clientX - rect.left;
+  const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+  playheadX.value = percentage;
+};
 
 const updatePlayheadPositionVertical = (clientY: number) => {
-  const container = soundWaveContainer.value
-  if (!container) return
+  const container = soundWaveContainer.value;
+  if (!container) return;
 
-  const rect = container.getBoundingClientRect()
-  const y = clientY - rect.top
-  const percentage = Math.max(0, Math.min(100, (y / rect.height) * 100))
-  playheadY.value = percentage
-}
+  const rect = container.getBoundingClientRect();
+  const y = clientY - rect.top;
+  const percentage = Math.max(0, Math.min(100, (y / rect.height) * 100));
+  playheadY.value = percentage;
+};
 
 const snapToNearestEvent = () => {
-  const events = allEvents.value
-  if (!events || events.length === 0) return
+  const events = allEvents.value;
+  if (!events || events.length === 0) return;
 
   // Find nearest event marker
-  let nearestIndex = 0
-  let nearestDistance = Infinity
-  const currentPosition = isMobile.value ? playheadY.value : playheadX.value
+  let nearestIndex = 0;
+  let nearestDistance = Infinity;
+  const currentPosition = isMobile.value ? playheadY.value : playheadX.value;
 
   events.forEach((_event: any, index: number) => {
-    const markerPos = getMarkerPosition(index)
-    const distance = Math.abs(currentPosition - markerPos)
+    const markerPos = getMarkerPosition(index);
+    const distance = Math.abs(currentPosition - markerPos);
     if (distance < nearestDistance) {
-      nearestDistance = distance
-      nearestIndex = index
+      nearestDistance = distance;
+      nearestIndex = index;
     }
-  })
+  });
 
   // Select the nearest event
-  selectEvent(events[nearestIndex], nearestIndex)
-}
+  selectEvent(events[nearestIndex], nearestIndex);
+};
 
 // Navigation functions - navigate between individual events
 const goToNextEvent = () => {
   if (canGoNext.value) {
-    const nextIndex = selectedEventIndex.value + 1
-    selectEvent(allEvents.value[nextIndex], nextIndex)
+    const nextIndex = selectedEventIndex.value + 1;
+    selectEvent(allEvents.value[nextIndex], nextIndex);
   }
-}
+};
 
 const goToPrevEvent = () => {
   if (canGoPrev.value) {
-    const prevIndex = selectedEventIndex.value - 1
-    selectEvent(allEvents.value[prevIndex], prevIndex)
+    const prevIndex = selectedEventIndex.value - 1;
+    selectEvent(allEvents.value[prevIndex], prevIndex);
   }
-}
-
+};
 
 // Helper pour valider si un titre SEO est valide (pas une URL)
 const isValidSeoTitle = (title: string | undefined) => {
-  if (!title) return false
-  return !title.includes('http') && !title.includes('wp-content') && !title.includes('themes')
-}
+  if (!title) return false;
+  return (
+    !title.includes("http") &&
+    !title.includes("wp-content") &&
+    !title.includes("themes")
+  );
+};
 
 useHead(() => ({
-  title: isValidSeoTitle(pageContent.value?.seo?.title) ? pageContent.value.seo.title : 'About Us - Eat Is Family',
+  title: isValidSeoTitle(pageContent.value?.seo?.title)
+    ? pageContent.value.seo.title
+    : "About Us - Eat Is Family",
   meta: [
-    { name: 'description', content: pageContent.value?.seo?.meta_description || 'Learn about Eat Is Family, our mission, vision, and the team behind our culinary experiences.' }
-  ]
-}))
+    {
+      name: "description",
+      content:
+        pageContent.value?.seo?.meta_description ||
+        "Learn about Eat Is Family, our mission, vision, and the team behind our culinary experiences.",
+    },
+  ],
+}));
 </script>
 
 <style scoped lang="scss">
-@media (max-width:1024px){
-   #aboutHero{
-    background:url('/images/bgMobile.svg') center 0% #a7f49d !important;
-    background-size:contain !important;
-    background-repeat:no-repeat !important;
-    height:auto !important;
-    font-size:50px !important;
+@media (max-width: 1024px) {
+  #aboutHero {
+    background: url("/images/bgMobile.svg") center 0% #a7f49d !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    height: auto !important;
+    font-size: 50px !important;
   }
 }
-@media (min-width:1024px){
+@media (min-width: 1024px) {
   #aboutHero {
-      background: url(/images/vectorBgAbout.svg) no-repeat center 20% #a7f49d !important;
-      .d-flex{
-
-       .col-6{
-        width:100% !important;
-       }
+    background: url(/images/vectorBgAbout.svg) no-repeat center 20% #a7f49d !important;
+    .d-flex {
+      .col-6 {
+        width: 100% !important;
       }
+    }
   }
 }
 #aboutHero {
@@ -648,7 +849,7 @@ useHead(() => ({
   h3 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #FF4D6D;
+    color: #ff4d6d;
   }
 }
 
@@ -672,7 +873,7 @@ useHead(() => ({
   }
 
   .role {
-    color: #FF4D6D;
+    color: #ff4d6d;
     font-weight: 600;
     margin-bottom: 1rem;
   }
@@ -707,7 +908,7 @@ useHead(() => ({
 
 /* Instruction text below timeline */
 .timeline-instruction {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 16px;
   text-align: center;
   margin-top: 147px;
@@ -832,7 +1033,7 @@ useHead(() => ({
 
 .event-card-date {
   font-size: 12px;
-  color: #FF2E84;
+  color: #ff2e84;
   font-weight: 700;
   margin: 0 0 12px 0;
   text-transform: uppercase;
@@ -853,7 +1054,7 @@ useHead(() => ({
   gap: 8px;
   background: transparent;
   border: none;
-  color: #FF2E84;
+  color: #ff2e84;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -887,7 +1088,7 @@ useHead(() => ({
   left: 0;
   right: 0;
   height: 2px;
-  border-top: 2px dotted #D81B60;
+  border-top: 2px dotted #d81b60;
   transform: translateY(-50%);
   z-index: 5;
 }
@@ -919,7 +1120,7 @@ useHead(() => ({
 
 .wave-bar {
   width: 2px;
-  background: #D81B60; /* Rose/Magenta vif */
+  background: #d81b60; /* Rose/Magenta vif */
   border-radius: 20px; /* Extrémités arrondies (capsule) */
   transition: height 0.3s ease;
 }
@@ -947,17 +1148,17 @@ useHead(() => ({
 .playhead-top-marker {
   width: 14px;
   height: 14px;
-  background: #FFD600;
+  background: #ffd600;
 }
 
 .playhead-line {
   width: 3px;
   height: 300px;
-  background: #FFD600;
+  background: #ffd600;
 }
 
 .playhead-circle {
-  display:none;
+  display: none;
   position: absolute;
   top: 24%;
   left: 50%;
@@ -965,20 +1166,19 @@ useHead(() => ({
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #FFD600;
+  background: #ffd600;
   margin-top: 210px;
 }
 
 .playhead-year {
-  font-family: 'Arial Black', Arial, sans-serif;
+  font-family: "Arial Black", Arial, sans-serif;
   font-size: 14px;
   font-weight: 900;
   padding: 8px 14px;
   color: #000;
-  background: #FFD600;
+  background: #ffd600;
   margin-top: 8px;
 }
-
 
 .wave-marker {
   position: absolute;
@@ -1217,7 +1417,7 @@ useHead(() => ({
     width: 2px;
     height: 100%;
     border-top: none;
-    border-left: 2px dotted #D81B60;
+    border-left: 2px dotted #d81b60;
     transform: translateX(-50%);
   }
 
@@ -1259,7 +1459,7 @@ useHead(() => ({
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    background: #FFD600;
+    background: #ffd600;
   }
 
   .playhead-circle {
@@ -1271,7 +1471,7 @@ useHead(() => ({
     margin: 0;
     width: 16px;
     height: 16px;
-    background: #FFD600;
+    background: #ffd600;
     border-radius: 50%;
     z-index: 5;
   }
@@ -1284,7 +1484,7 @@ useHead(() => ({
     font-size: 10px;
     padding: 4px 6px;
     white-space: nowrap;
-    background: #FFD600;
+    background: #ffd600;
   }
 
   /* Event Card - positioned to the right of vertical timeline */
@@ -1429,7 +1629,7 @@ useHead(() => ({
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: rgba(255, 255, 255, 0.85)
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Responsive Chiffres Clés */

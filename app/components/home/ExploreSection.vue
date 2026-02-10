@@ -869,10 +869,12 @@ filter: alpha(opacity=50); /* internet explorer */
 /* Tab Content */
 .tab-content {
   flex: 1;
- // overflow-y: auto;
   position:relative;
 }
 
+.btn-wrapper{
+  margin:26px  0 0 5px !important;
+}
 .venue-about {
   //margin-bottom: 1.5rem;
 }
