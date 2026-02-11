@@ -16,6 +16,7 @@ const btnJoinNow = computed(() => settings.value?.icons?.btn_join_now || '/image
 const activeVenueFilter = ref<string | undefined>(undefined)
 const selectedVenue = ref<Venue | null>(null)
 const activeTab = ref<'overview' | 'shops' | 'menus'>('overview')
+const venueDetailsRef = ref<HTMLElement | null>(null)
 
 // Load locations data
 onMounted(async () => {
@@ -44,6 +45,13 @@ const handleVenueClick = (venue: Venue) => {
   activeTab.value = 'overview'
   shopsPage.value = 0
   menuPage.value = 0
+
+  // On mobile, smooth scroll to venue details
+  if (window.innerWidth <= 1024) {
+    nextTick(() => {
+      venueDetailsRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
 }
 
 const closeVenueDetails = () => {
@@ -125,7 +133,7 @@ const goToMenuPage = (page: number) => {
       <!-- Content on the right -->
       <div class="explore-content">
         <!-- Venue details when selected -->
-        <div v-if="selectedVenue" class="venue-details">
+        <div v-if="selectedVenue" ref="venueDetailsRef" class="venue-details">
           <!-- Images grid -->
           <div class="venue-images-grid">
             <div class="venue-image-wrapper">

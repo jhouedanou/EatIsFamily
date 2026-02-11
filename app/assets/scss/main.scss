@@ -1355,6 +1355,24 @@ body {
   }
 }
 @media (max-width: 1024px) {
+  .torn-paper-content{
+      .btn-outline-bg{
+      inset:-3px 10px -4px -5px !important;
+    }
+  }
+.example{
+    .btn{
+      max-width:205px !important;
+      min-width:205px !important;
+    }
+    .btn-outline{
+      inset:-10px -15px -10px -15px
+    }
+}
+
+#tromp,  .kemiseba{
+    background:white !important;
+  }
   #ready-to-make-an-impact{
     .cta-block{
       padding:1em !important

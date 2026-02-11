@@ -247,13 +247,21 @@ onUnmounted(() => {
       <section id="presentationEatIsFamily" class="py-5 new-white">
         <div id="tromp" class="container">
           <div class="kemiseba" v-html="content.intro_section?.texte"></div>
-          <NuxtLink
+          <!-- <NuxtLink
             to="/about"
             aria-label="En savoir plus sur nous"
             class="mt-4 d-inline-block mt-4"
           >
             <NuxtImg :src="btnLearnMore" alt="En savoir plus sur nous" />
-          </NuxtLink>
+          </NuxtLink> -->
+
+             <PillButton
+                    color="dark"
+                    variant="outline"
+                    to="/about"
+                    label="En savoir plus sur nous"
+                    width="300px"
+                  />
         </div>
       </section>
       <!-- Map Preview Section - Explore Where We Operate -->
@@ -535,7 +543,7 @@ nuxt-link:has(img) {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 100%;
   overflow: hidden;
   z-index: 0;
