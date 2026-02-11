@@ -50,9 +50,11 @@ if (isset($_GET['action']) && $_GET['action'] === 'import') {
  */
 function eatisfamily_get_default_buttons_data() {
     // Essayer de charger depuis le fichier JSON d'abord
+    // Priorité : dossier du thème > public/data > chemin relatif
     $json_paths = array(
-        ABSPATH . 'public/data/buttons.json',
         get_template_directory() . '/data/buttons.json',
+        dirname(__FILE__) . '/data/buttons.json',
+        ABSPATH . 'public/data/buttons.json',
         dirname(__FILE__) . '/../public/data/buttons.json',
     );
     

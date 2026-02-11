@@ -1101,12 +1101,18 @@ function eatisfamily_get_buttons($request) {
     
     // Default buttons if none imported yet
     if (empty($buttons)) {
-        // Try loading from local JSON file
-        $json_file = ABSPATH . 'public/data/buttons.json';
-        if (file_exists($json_file)) {
-            $json_data = json_decode(file_get_contents($json_file), true);
-            if (json_last_error() === JSON_ERROR_NONE && !empty($json_data)) {
-                $buttons = $json_data;
+        // Try loading from JSON file (theme data/ first, then public/data/)
+        $json_paths = array(
+            get_template_directory() . '/data/buttons.json',
+            ABSPATH . 'public/data/buttons.json',
+        );
+        foreach ($json_paths as $json_file) {
+            if (file_exists($json_file)) {
+                $json_data = json_decode(file_get_contents($json_file), true);
+                if (json_last_error() === JSON_ERROR_NONE && !empty($json_data)) {
+                    $buttons = $json_data;
+                    break;
+                }
             }
         }
     }

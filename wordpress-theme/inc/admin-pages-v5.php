@@ -4149,11 +4149,12 @@ function eatisfamily_buttons_page_v5() {
         echo '<div class="notice notice-success is-dismissible"><p>✅ Boutons sauvegardés avec succès ! (' . count($buttons) . ' boutons)</p></div>';
     }
     
-    // Handle import from JSON
+    // Handle import from JSON file on server
     if (isset($_POST['eatisfamily_import_buttons_nonce']) && wp_verify_nonce($_POST['eatisfamily_import_buttons_nonce'], 'eatisfamily_import_buttons_from_json')) {
+        // Priorité : dossier du thème > public/data
         $json_paths = array(
-            ABSPATH . 'public/data/buttons.json',
             get_template_directory() . '/data/buttons.json',
+            ABSPATH . 'public/data/buttons.json',
         );
         
         $imported = false;
@@ -4163,7 +4164,7 @@ function eatisfamily_buttons_page_v5() {
                 $data = json_decode($json_content, true);
                 if (json_last_error() === JSON_ERROR_NONE && !empty($data)) {
                     update_option('eatisfamily_buttons', $data);
-                    echo '<div class="notice notice-success is-dismissible"><p>✅ Import réussi ! ' . count($data) . ' boutons importés depuis <code>' . esc_html(basename($json_file)) . '</code></p></div>';
+                    echo '<div class="notice notice-success is-dismissible"><p>✅ Import réussi ! ' . count($data) . ' boutons importés depuis <code>' . esc_html($json_file) . '</code></p></div>';
                     $imported = true;
                     break;
                 }
@@ -4171,7 +4172,49 @@ function eatisfamily_buttons_page_v5() {
         }
         
         if (!$imported) {
-            echo '<div class="notice notice-error is-dismissible"><p>❌ Fichier buttons.json introuvable ou invalide.</p></div>';
+            echo '<div class="notice notice-error is-dismissible"><p>❌ Fichier buttons.json introuvable sur le serveur. Chemins recherchés :<br>';
+            foreach ($json_paths as $p) {
+                echo '<code>' . esc_html($p) . '</code> ' . (file_exists($p) ? '✅' : '❌') . '<br>';
+            }
+            echo 'Vous pouvez aussi uploader un fichier JSON ci-dessous.</p></div>';
+        }
+    }
+    
+    // Handle upload of JSON file
+    if (isset($_POST['eatisfamily_upload_buttons_nonce']) && wp_verify_nonce($_POST['eatisfamily_upload_buttons_nonce'], 'eatisfamily_upload_buttons_json')) {
+        if (!empty($_FILES['buttons_json_file']['tmp_name']) && $_FILES['buttons_json_file']['error'] === UPLOAD_ERR_OK) {
+            $json_content = file_get_contents($_FILES['buttons_json_file']['tmp_name']);
+            $data = json_decode($json_content, true);
+            
+            if (json_last_error() === JSON_ERROR_NONE && !empty($data)) {
+                // Validate structure: each entry should have at least 'label' and 'color'
+                $valid = true;
+                foreach ($data as $key => $btn) {
+                    if (!isset($btn['label']) || !isset($btn['color'])) {
+                        $valid = false;
+                        break;
+                    }
+                }
+                
+                if ($valid) {
+                    update_option('eatisfamily_buttons', $data);
+                    
+                    // Also save a copy to the theme data/ directory for future imports
+                    $theme_json_path = get_template_directory() . '/data/buttons.json';
+                    $theme_data_dir = get_template_directory() . '/data';
+                    if (is_dir($theme_data_dir) && is_writable($theme_data_dir)) {
+                        file_put_contents($theme_json_path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+                    }
+                    
+                    echo '<div class="notice notice-success is-dismissible"><p>✅ Upload réussi ! ' . count($data) . ' boutons importés depuis <code>' . esc_html($_FILES['buttons_json_file']['name']) . '</code></p></div>';
+                } else {
+                    echo '<div class="notice notice-error is-dismissible"><p>❌ Structure JSON invalide. Chaque bouton doit avoir au minimum <code>label</code> et <code>color</code>.</p></div>';
+                }
+            } else {
+                echo '<div class="notice notice-error is-dismissible"><p>❌ Fichier JSON invalide : ' . esc_html(json_last_error_msg()) . '</p></div>';
+            }
+        } else {
+            echo '<div class="notice notice-error is-dismissible"><p>❌ Aucun fichier sélectionné ou erreur d\'upload.</p></div>';
         }
     }
     
@@ -4231,12 +4274,38 @@ function eatisfamily_buttons_page_v5() {
         
         <!-- Import from JSON -->
         <div style="background: #f0f6fc; border: 1px solid #c8d8e9; border-radius: 6px; padding: 16px; margin: 15px 0;">
-            <form method="post" style="display: inline;">
-                <?php wp_nonce_field('eatisfamily_import_buttons_from_json', 'eatisfamily_import_buttons_nonce'); ?>
-                <strong>📥 Import rapide :</strong> 
-                <input type="submit" class="button button-secondary" value="Importer depuis buttons.json" onclick="return confirm('Cela écrasera tous les boutons actuels. Continuer ?');" />
-                <span class="description" style="margin-left: 10px;">Charge les boutons depuis le fichier <code>public/data/buttons.json</code></span>
-            </form>
+            <h3 style="margin-top: 0;">📥 Importer des boutons</h3>
+            
+            <!-- Option 1: Import from server file -->
+            <div style="margin-bottom: 12px;">
+                <form method="post" style="display: inline;">
+                    <?php wp_nonce_field('eatisfamily_import_buttons_from_json', 'eatisfamily_import_buttons_nonce'); ?>
+                    <strong>Depuis le serveur :</strong> 
+                    <input type="submit" class="button button-secondary" value="Importer depuis le thème" onclick="return confirm('Cela écrasera tous les boutons actuels. Continuer ?');" />
+                    <?php
+                    $theme_json = get_template_directory() . '/data/buttons.json';
+                    $public_json = ABSPATH . 'public/data/buttons.json';
+                    if (file_exists($theme_json)) {
+                        echo '<span class="description" style="margin-left: 8px;">✅ <code>' . esc_html($theme_json) . '</code></span>';
+                    } elseif (file_exists($public_json)) {
+                        echo '<span class="description" style="margin-left: 8px;">✅ <code>' . esc_html($public_json) . '</code></span>';
+                    } else {
+                        echo '<span class="description" style="margin-left: 8px; color: #dc3545;">❌ Aucun fichier buttons.json trouvé sur le serveur</span>';
+                    }
+                    ?>
+                </form>
+            </div>
+            
+            <!-- Option 2: Upload JSON file -->
+            <div style="padding-top: 12px; border-top: 1px solid #c8d8e9;">
+                <form method="post" enctype="multipart/form-data" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <?php wp_nonce_field('eatisfamily_upload_buttons_json', 'eatisfamily_upload_buttons_nonce'); ?>
+                    <strong>Uploader un fichier :</strong>
+                    <input type="file" name="buttons_json_file" accept=".json,application/json" />
+                    <input type="submit" class="button button-secondary" value="📤 Uploader et importer" onclick="return confirm('Cela écrasera tous les boutons actuels avec le fichier uploadé. Continuer ?');" />
+                    <span class="description">Format attendu : fichier <code>buttons.json</code></span>
+                </form>
+            </div>
         </div>
         
         <form method="post" action="">
