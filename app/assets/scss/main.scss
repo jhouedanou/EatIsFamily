@@ -1355,9 +1355,43 @@ body {
   }
 }
 @media (max-width: 1024px) {
+
+  #lasalle{
+    .btn-wrapper{
+      margin:1em auto 0 ;
+    }
+    #example-1{
+      .btn{
+        min-width:270px !important;
+
+      }
+    }
+  }
+  .service-wrapper{
+    display:flex;
+    text-align:center; 
+    justify-content:center;
+    .btn-wrapper{
+      margin:0 auto;
+    }
+  }
+  .btn-wrapper{
+    display:flex !important;
+    justify-content:center !important; 
+    align-items:center !important;
+    width:100% !important;
+  }
+  .actionwrapper{
+         .btn-outline-bg{
+      inset:-2px -4px -4px -5px !important
+    }
+    .btn{
+      width:250px !important;
+    }
+  }
   .torn-paper-content{
       .btn-outline-bg{
-      inset:-3px 10px -4px -5px !important;
+      inset:-2px -4px -4px -5px !important
     }
   }
 .example{
@@ -1365,11 +1399,20 @@ body {
       max-width:205px !important;
       min-width:205px !important;
     }
-    .btn-outline{
-      inset:-10px -15px -10px -15px
+    .btn-outline-bg{
+      inset:-10px -15px -10px -15px !important;
     }
 }
-
+#leforme{
+     .btn-outline-bg{
+      inset:-5px -36px -7px -35px !important;
+    }
+}
+.heroTextContainer{
+       .btn-outline-bg{
+      inset:-4px -25px -4px -26px !important
+    }
+}
 #tromp,  .kemiseba{
     background:white !important;
   }
@@ -1599,7 +1642,7 @@ body {
   }
   #heroTitle,
   #heroTitleAlt {
-    font-size: 45px !important;
+    font-size:36px !important;
     line-height: 1.3 !important;
   }
   //presentation eat is famaily
@@ -1816,13 +1859,14 @@ body {
     max-height: 410px !important;
     .inner {
       background-size: contain !important;
-      max-width: 90vw !important;
+      max-width: 86vw !important;
       margin: 0 auto !important;
       max-height: none !important;
       padding: 20px !important;
       h4 {
         padding: 0 !important;
         margin: 0 !important;
+        font-size: 18px !important;
       }
     }
   }

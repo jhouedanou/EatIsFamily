@@ -537,6 +537,7 @@ const goToMenuPage = (page: number) => {
 
   .explore-stats {
     justify-content: center;
+    min-height:200px !important;
   }
 }
 
@@ -1226,11 +1227,11 @@ filter: alpha(opacity=50); /* internet explorer */
 /* Mobile responsiveness for tabs */
 @media (max-width: 768px) {
   .shops-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 
   .menus-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 0.75rem;
   }
 
@@ -1260,12 +1261,12 @@ filter: alpha(opacity=50); /* internet explorer */
 
 @media (max-width: 480px) {
   .shops-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 0.75rem;
   }
 
   .menus-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 0.5rem;
   }
 
