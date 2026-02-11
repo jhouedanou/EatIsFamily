@@ -6,6 +6,7 @@ const route = useRoute()
 const router = useRouter()
 const { getJobWithVenue } = useJobs()
 const { settings, getString } = useGlobalSettings()
+const { getButton, loadButtons } = useButtons()
 
 const job = ref<JobWithVenue | null>(null)
 const isLoading = ref(true)
@@ -28,6 +29,7 @@ const galleryImages = [
 ]
 
 onMounted(async () => {
+  await loadButtons()
   const slug = route.params.slug as string
   job.value = await getJobWithVenue(slug)
   isLoading.value = false
@@ -181,14 +183,14 @@ useHead(() => ({
             </button> -->
             <PillButton
             @click="openApplyModal"
-              color="pink"
-              label="Postuler"
+              :color="getButton('job_apply').color"
+              :label="getButton('job_apply').label"
               bg-left="-4px"
               bg-right="-4px"
               bg-top="-4px"
               bg-bottom="-4px"
               bg-width="104%"
-              width="200px"
+              :width="getButton('job_apply').width"
             />
           </div>
 
@@ -281,14 +283,14 @@ useHead(() => ({
               </button> -->
                 <PillButton
             @click="shareJob"
-              color="pink"
-              label="Partager cette offre d'emploi"
+              :color="getButton('job_share').color"
+              :label="getButton('job_share').label"
               bg-left="-4px"
               bg-right="-4px"
               bg-top="-4px"
               bg-bottom="-4px"
               bg-width="104%"
-              width="300px"
+              :width="getButton('job_share').width"
             />
             </div>
           </div>

@@ -25,11 +25,11 @@
                     class="contactButton img-fluid fluid-img" />
                 </nuxt-link> -->
                   <PillButton
-                    color="pink"
-                    to="/contact"
-                    width="220px"
-                    inset="-3px"
-                    label="Contactez nous"
+                    :color="getButton('about_hero_cta').color"
+                    :to="getButton('about_hero_cta').to"
+                    :width="getButton('about_hero_cta').width"
+                    :inset="getButton('about_hero_cta').inset"
+                    :label="getButton('about_hero_cta').label"
                   />
                 </div>
               </div>
@@ -280,10 +280,10 @@
               <!-- <a v-if="encadre.link && encadre.btn" :href="encadre.link" class="btn"><img :src="encadre.btn" alt=""></a> -->
               <PillButton
                 v-if="encadre.link && encadre.btn"
-                color="pink"
-                to="/contact"
-                width="220px"
-                label="Contactez nous"
+                :color="getButton('about_mission_cta').color"
+                :to="getButton('about_mission_cta').to"
+                :width="getButton('about_mission_cta').width"
+                :label="getButton('about_mission_cta').label"
                 bg-left="-5px"
                 bg-right="-5px"
                 bg-top="0px"
@@ -350,10 +350,10 @@
               }}</span>
             </NuxtLink> -->
             <PillButton
-                color="pink"
-                to="/contact"
-                width="220px"
-                label="Contactez nous"
+                :color="getButton('about_vision_cta').color"
+                :to="getButton('about_vision_cta').to"
+                :width="getButton('about_vision_cta').width"
+                :label="getButton('about_vision_cta').label"
                 bg-left="-5px"
                 bg-right="-5px"
                 bg-top="-3px"
@@ -392,6 +392,7 @@ import { gsap } from "gsap";
 
 const { getSiteContent } = useSiteContent();
 const { getContentByPath, getHomepageContent } = usePageContent();
+const { getButton, loadButtons } = useButtons();
 
 const siteContent = ref<any>(null);
 const pageContent = ref<any>(null);
@@ -499,6 +500,7 @@ const animateChiffres = () => {
 };
 
 onMounted(async () => {
+  await loadButtons();
   siteContent.value = await getSiteContent();
   pageContent.value = await getContentByPath("about");
   homepageContent.value = await getHomepageContent();

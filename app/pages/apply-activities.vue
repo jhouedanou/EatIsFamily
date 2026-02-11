@@ -29,18 +29,18 @@
             class="d-flex justify-content-center align-items-center text-center gap-4 flex-wrap"
           >
             <PillButton
-              color="pink"
-              to="/careers"
-              label="Postuler"
-              width="250px"
+              :color="getButton('apply_cta_apply').color"
+              :to="getButton('apply_cta_apply').to"
+              :label="getButton('apply_cta_apply').label"
+              :width="getButton('apply_cta_apply').width"
             />
 
             <PillButton
-              color="dark"
-              variant="outline"
-              to="#mapPreview"
-              label="Explorer nos sites"
-              width="250px"
+              :color="getButton('apply_cta_explore').color"
+              :variant="getButton('apply_cta_explore').variant"
+              :to="getButton('apply_cta_explore').to"
+              :label="getButton('apply_cta_explore').label"
+              :width="getButton('apply_cta_explore').width"
               bg-left="-8px"
               bg-right="-8px"
               bg-top="-6px"
@@ -85,11 +85,11 @@
                 <img :src="content.textedelapage.btn" />
               </NuxtLink> -->
                        <PillButton
-              color="dark"
-              variant="outline"
-              to="#mapPreview"
-              label="Contactez nous"
-              width="250px"
+              :color="getButton('apply_cta_contact').color"
+              :variant="getButton('apply_cta_contact').variant"
+              :to="getButton('apply_cta_contact').to"
+              :label="getButton('apply_cta_contact').label"
+              :width="getButton('apply_cta_contact').width"
               bg-left="-8px"
               bg-right="-8px"
               bg-top="-6px"
@@ -208,6 +208,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 const { getSiteContent } = useSiteContent();
+const { getButton, loadButtons } = useButtons();
 
 const { getActivities } = useActivities();
 const { getContentByPath, getHomepageContent } = usePageContent();
@@ -236,6 +237,7 @@ const activitiesGalleryImages2 = computed(() => {
 });
 
 onMounted(async () => {
+  await loadButtons();
   content.value = await getContentByPath("apply_activities");
   pageContent.value = await getContentByPath("about");
   console.log("Content loaded:", content.value);

@@ -1,4 +1,4 @@
--4<script setup lang="ts">
+<script setup lang="ts">
 interface Props {
   image: string
   title: string
@@ -10,6 +10,12 @@ interface Props {
 }
 
 defineProps<Props>()
+
+const { getButton, loadButtons } = useButtons()
+
+onMounted(async () => {
+  await loadButtons()
+})
 </script>
 
 <template>
@@ -22,7 +28,13 @@ defineProps<Props>()
     <!--     <nuxt-link>
           <nuxt-img :src="buttonImage" :alt="title"></nuxt-img>
         </nuxt-link> -->
-        <PillButton  color="yellow" :to="link" width="320px" inset="-1px" label="Découvrir nos offres et postuler" /> 
+        <PillButton
+          :color="getButton('homepage_cta').color"
+          :to="link"
+          :width="getButton('homepage_cta').width"
+          :inset="getButton('homepage_cta').inset"
+          :label="getButton('homepage_cta').label"
+        />
       </div>
     </div>
     <CtaBlock

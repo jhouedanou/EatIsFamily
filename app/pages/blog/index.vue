@@ -4,6 +4,7 @@ import { computed } from 'vue'
 const { getBlogPosts } = useBlog()
 const { settings } = useGlobalSettings()
 const { getBlogPageContent } = usePageContent()
+const { getButton, loadButtons } = useButtons()
 
 // Dynamic button URL with fallback
 const btnReadMore = computed(() => settings.value?.icons?.btn_read_more || '/images/btnReadMore.svg')
@@ -13,6 +14,9 @@ const { data: posts } = await useAsyncData('blog-posts', () => getBlogPosts())
 
 // Charger le contenu de la page blog depuis WordPress
 const { data: blogContent } = await useAsyncData('blog-page-content', () => getBlogPageContent())
+
+// Charger les boutons
+await loadButtons()
 
 // Les 2 premiers posts sont "featured", les autres dans la grille
 const featuredPosts = computed(() => posts.value?.slice(0, 2) || [])
@@ -60,11 +64,11 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
             </NuxtLink> -->
 
 <PillButton
-              color="dark"
-              variant="outline"
+              :color="getButton('blog_read_article').color"
+              :variant="getButton('blog_read_article').variant"
               :to="`/blog/${featuredPosts[0].slug}`"
-              label="Lire l'article"
-              width="250px"
+              :label="getButton('blog_read_article').label"
+              :width="getButton('blog_read_article').width"
               bg-left="-8px"
               bg-right="-8px"
               bg-top="-6px"
@@ -93,11 +97,11 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
               <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
             </NuxtLink> -->
              <PillButton
-              color="dark"
-              variant="outline"
+              :color="getButton('blog_read_article').color"
+              :variant="getButton('blog_read_article').variant"
               :to="`/blog/${featuredPosts[1].slug}`"
-              label="Lire l'article"
-              width="250px"
+              :label="getButton('blog_read_article').label"
+              :width="getButton('blog_read_article').width"
               bg-left="-8px"
               bg-right="-8px"
               bg-top="-6px"
@@ -132,11 +136,11 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
                               <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
               </NuxtLink> -->
 <PillButton
-              color="dark"
-              variant="outline"
-              :to="`/blog/${post.slug}`" 
-              label="Lire l'article"
-              width="250px"
+              :color="getButton('blog_read_article').color"
+              :variant="getButton('blog_read_article').variant"
+              :to="`/blog/${post.slug}`"
+              :label="getButton('blog_read_article').label"
+              :width="getButton('blog_read_article').width"
               bg-left="-8px"
               bg-right="-8px"
               bg-top="-6px"

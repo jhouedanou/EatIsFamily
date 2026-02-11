@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from "vue";
 import type { Event } from "~/composables/useEvents";
 const { getSiteContent } = useSiteContent();
 const { getContentByPath, getHomepageContent } = usePageContent();
+const { getButton, loadButtons } = useButtons();
 const homepageContent = ref<any>(null);
 const siteContent = ref<any>(null);
 const pageContent = ref<any>(null);
@@ -27,6 +28,7 @@ const eventsGalleryImages2 = computed(() => {
 });
 
 onMounted(async () => {
+  await loadButtons();
   // Charger le contenu de la page
   content.value = await getContentByPath("events");
   // Charger le site content pour la galerie
@@ -88,15 +90,15 @@ useHead(() => ({
             <nuxt-img :src="content.page_hero.btn" />
           </NuxtLink> -->
             <PillButton
-              color="pink"
-              to="/contacts"
-              label="Contactez nous"
+              :color="getButton('events_hero_cta').color"
+              :to="getButton('events_hero_cta').to"
+              :label="getButton('events_hero_cta').label"
+              :width="getButton('events_hero_cta').width"
               bg-left="-4px"
               bg-right="-4px"
               bg-top="2px"
               bg-bottom="2px"
               bg-width="104%"
-              width="200px"
             />
           </div>
         </div>

@@ -18,7 +18,8 @@
       "Bash(npx md-to-pdf:*)",
       "Bash(npx nuxt build:*)",
       "Bash(del \"C:\\\\Users\\\\socialmedia\\\\Documents\\\\EatIsFriday\\\\app\\\\pages\\\\guide-buttons.vue\")",
-      "WebFetch(domain:www.eatisfamily.fr)"
+      "WebFetch(domain:www.eatisfamily.fr)",
+      "Bash(npx nuxi typecheck:*)"
     ]
   }
 }

@@ -8,6 +8,7 @@ import type { JobType } from '~/composables/useJobTaxonomies'
 
 const route = useRoute()
 const { getCareersContent } = usePageContent()
+const { getButton, loadButtons } = useButtons()
 const { getJobsWithVenues, getJobVenueOptions } = useJobs()
 const { getVenues } = useVenues()
 const { settings } = useGlobalSettings()
@@ -45,6 +46,7 @@ const activeVenue = computed(() => {
 
 onMounted(async () => {
   isLoadingJobs.value = true
+  await loadButtons()
   content.value = await getCareersContent()
   
   // Charger les types d'emploi depuis l'API
@@ -391,17 +393,17 @@ const goToPage = (page: number) => {
                   </NuxtLink> -->
                   <PillButton
                   :to="`/jobs/${job.slug}`"
-                  color="pink"
-                  label="Postuler"
-                  width="210px"
-                  inset="-2px"
+                  :color="getButton('careers_job_apply').color"
+                  :label="getButton('careers_job_apply').label"
+                  :width="getButton('careers_job_apply').width"
+                  :inset="getButton('careers_job_apply').inset"
                   />
                   <PillButton
                   :to="`/jobs/${job.slug}`"
-                  color="dark"
-                  variant="outline"
-                  label="Afficher les détails"
-                  width="250px"
+                  :color="getButton('careers_job_details').color"
+                  :variant="getButton('careers_job_details').variant"
+                  :label="getButton('careers_job_details').label"
+                  :width="getButton('careers_job_details').width"
                   />
                 </div>
               </div>
@@ -469,11 +471,11 @@ const goToPage = (page: number) => {
               <NuxtImg :src="btnDiscoverApply" width="316" />
             </NuxtLink> -->
               <PillButton
-                  to="/apply-activities#mapPreview"
-                  color="yellow"
-                  label="Trouver et postuler à des emplois"
-                  width="330px"
-                  inset="-2px"
+                  :to="getButton('careers_bottom_cta').to"
+                  :color="getButton('careers_bottom_cta').color"
+                  :label="getButton('careers_bottom_cta').label"
+                  :width="getButton('careers_bottom_cta').width"
+                  :inset="getButton('careers_bottom_cta').inset"
                   />
           </div>
         </div>

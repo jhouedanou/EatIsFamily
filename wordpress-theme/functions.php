@@ -1082,8 +1082,40 @@ function eatisfamily_register_api_routes() {
         'callback' => 'eatisfamily_get_job_taxonomies',
         'permission_callback' => '__return_true',
     ));
+    
+    // Buttons (CTA) endpoint
+    register_rest_route($namespace, '/buttons', array(
+        'methods' => 'GET',
+        'callback' => 'eatisfamily_get_buttons',
+        'permission_callback' => '__return_true',
+    ));
 }
 add_action('rest_api_init', 'eatisfamily_register_api_routes');
+
+/**
+ * API Callback - Buttons (CTA)
+ * Returns all button configurations from WordPress options
+ */
+function eatisfamily_get_buttons($request) {
+    $buttons = get_option('eatisfamily_buttons', array());
+    
+    // Default buttons if none imported yet
+    if (empty($buttons)) {
+        // Try loading from local JSON file
+        $json_file = ABSPATH . 'public/data/buttons.json';
+        if (file_exists($json_file)) {
+            $json_data = json_decode(file_get_contents($json_file), true);
+            if (json_last_error() === JSON_ERROR_NONE && !empty($json_data)) {
+                $buttons = $json_data;
+            }
+        }
+    }
+    
+    // Decode any HTML entities in labels
+    $buttons = eatisfamily_decode_html_entities($buttons);
+    
+    return rest_ensure_response($buttons);
+}
 
 /**
  * API Callback - Job Taxonomies (Types d'emploi & Départements)

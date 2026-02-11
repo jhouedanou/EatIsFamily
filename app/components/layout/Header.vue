@@ -22,11 +22,20 @@
         <nav class="nav-left desktop-only">
           <NuxtLink to="/careers" class="nav-link" :class="{ 'nav-active': isActiveLink('/careers') }">{{ content.nav_links.careers }}</NuxtLink>
           <NuxtLink to="/blog" class="nav-link" :class="{ 'nav-active': isActiveLink('/blog') }">{{ content.nav_links.blogs }}</NuxtLink>
-          <PillButton color="pink" to="/contact" label="Contactez nous" />
+          <PillButton
+            :color="getButton('header_cta').color"
+            :to="getButton('header_cta').to"
+            :label="getButton('header_cta').label"
+          />
         </nav>
 
         <!-- Mobile Menu Toggle -->
-      <PillButton color="pink" to="/contact" label="Contact" class="mobile-only" />
+      <PillButton
+        :color="getButton('header_cta_mobile').color"
+        :to="getButton('header_cta_mobile').to"
+        :label="getButton('header_cta_mobile').label"
+        class="mobile-only"
+      />
       </div>
     </TornPaperContainer>
   </header>
@@ -36,6 +45,7 @@
 const route = useRoute()
 const { getHeaderContent } = usePageContent()
 const { settings } = useGlobalSettings()
+const { getButton, loadButtons } = useButtons()
 const content = ref<any>(null)
 
 // Dynamic button URL with fallback
@@ -50,6 +60,7 @@ const isActiveLink = (linkTo: string) => {
 }
 
 onMounted(async () => {
+  await loadButtons()
   content.value = await getHeaderContent()
 })
 </script>

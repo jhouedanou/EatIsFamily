@@ -1,0 +1,175 @@
+{
+  "header_cta": {
+    "label": "Contactez nous",
+    "color": "pink",
+    "variant": "filled",
+    "to": "/contact"
+  },
+  "header_cta_mobile": {
+    "label": "Contact",
+    "color": "pink",
+    "variant": "filled",
+    "to": "/contact"
+  },
+  "hero_primary": {
+    "label": "Nos offres d'emploi",
+    "color": "pink",
+    "variant": "filled",
+    "to": "/careers"
+  },
+  "hero_secondary": {
+    "label": "Nos concessions",
+    "color": "transparent",
+    "variant": "outline",
+    "to": "#mapPreview"
+  },
+  "intro_cta": {
+    "label": "En savoir plus sur nous",
+    "color": "dark",
+    "variant": "outline",
+    "to": "/about",
+    "width": "300px"
+  },
+  "services_cta_even": {
+    "label": "Nous contacter",
+    "color": "pink",
+    "variant": "filled",
+    "to": "/contact",
+    "width": "260px"
+  },
+  "services_cta_odd": {
+    "label": "Parlons food & beverage",
+    "color": "yellow",
+    "variant": "filled",
+    "to": "/contact",
+    "width": "260px"
+  },
+  "examples_cta_even": {
+    "label": "Voir nos concessions",
+    "color": "dark",
+    "variant": "outline",
+    "width": "250px"
+  },
+  "examples_cta_odd": {
+    "label": "Voir nos évènements",
+    "color": "fuchsia",
+    "variant": "filled",
+    "width": "250px"
+  },
+  "homepage_cta": {
+    "label": "Découvrir nos offres et postuler",
+    "color": "yellow",
+    "variant": "filled",
+    "width": "320px",
+    "inset": "-1px"
+  },
+  "about_hero_cta": {
+    "label": "Contactez nous",
+    "color": "pink",
+    "variant": "filled",
+    "to": "/contact",
+    "width": "220px",
+    "inset": "-3px"
+  },
+  "about_mission_cta": {
+    "label": "Contactez nous",
+    "color": "pink",
+    "variant": "filled",
+    "to": "/contact",
+    "width": "220px"
+  },
+  "about_vision_cta": {
+    "label": "Contactez nous",
+    "color": "pink",
+    "variant": "filled",
+    "to": "/contact",
+    "width": "220px"
+  },
+  "careers_job_apply": {
+    "label": "Postuler",
+    "color": "pink",
+    "variant": "filled",
+    "width": "210px",
+    "inset": "-2px"
+  },
+  "careers_job_details": {
+    "label": "Afficher les détails",
+    "color": "dark",
+    "variant": "outline",
+    "width": "250px"
+  },
+  "careers_bottom_cta": {
+    "label": "Trouver et postuler à des emplois",
+    "color": "yellow",
+    "variant": "filled",
+    "to": "/apply-activities#mapPreview",
+    "width": "330px",
+    "inset": "-2px"
+  },
+  "apply_cta_apply": {
+    "label": "Postuler",
+    "color": "pink",
+    "variant": "filled",
+    "to": "/careers",
+    "width": "250px"
+  },
+  "apply_cta_explore": {
+    "label": "Explorer nos sites",
+    "color": "dark",
+    "variant": "outline",
+    "to": "#mapPreview",
+    "width": "250px"
+  },
+  "apply_cta_contact": {
+    "label": "Contactez nous",
+    "color": "dark",
+    "variant": "outline",
+    "to": "#mapPreview",
+    "width": "250px"
+  },
+  "explore_join": {
+    "label": "Rejoignez-nous",
+    "color": "fuchsia",
+    "variant": "filled",
+    "width": "250px"
+  },
+  "events_hero_cta": {
+    "label": "Contactez nous",
+    "color": "pink",
+    "variant": "filled",
+    "to": "/contact",
+    "width": "200px"
+  },
+  "ctablock_cta": {
+    "label": "Contactez nous",
+    "color": "pink",
+    "variant": "filled",
+    "to": "/contact",
+    "width": "220px",
+    "inset": "-3px"
+  },
+  "job_apply": {
+    "label": "Postuler",
+    "color": "pink",
+    "variant": "filled",
+    "width": "200px"
+  },
+  "job_share": {
+    "label": "Partager cette offre d'emploi",
+    "color": "pink",
+    "variant": "filled",
+    "width": "300px"
+  },
+  "blog_read_article": {
+    "label": "Lire l'article",
+    "color": "dark",
+    "variant": "outline",
+    "width": "250px"
+  },
+  "eventcard_cta": {
+    "label": "Nous contacter",
+    "color": "dark",
+    "variant": "outline",
+    "to": "/contact"
+  }
+}

@@ -4,6 +4,7 @@ import type { LocationsData, Venue } from '~/composables/useLocations'
 const { getLocations } = useLocations()
 const locationsData = ref<LocationsData | null>(null)
 const { settings } = useGlobalSettings()
+const { getButton, loadButtons } = useButtons()
 
 // Dynamic icon URLs with fallbacks
 const iconMap = computed(() => settings.value?.icons?.icon_map || '/images/mapIcon.svg')
@@ -20,6 +21,7 @@ const venueDetailsRef = ref<HTMLElement | null>(null)
 
 // Load locations data
 onMounted(async () => {
+  await loadButtons()
   locationsData.value = await getLocations()
 })
 
@@ -315,7 +317,12 @@ const goToMenuPage = (page: number) => {
           >
           <nuxt-img :src="btnJoinNow" alt="Rejoignez-nous" class="img-fluid"></nuxt-img>
           </NuxtLink> -->
-           <PillButton color="fuchsia" :to="`/careers?venue=${encodeURIComponent(selectedVenue.location)}`" label="Rejoignez-nous" width="250px"/>
+           <PillButton
+             :color="getButton('explore_join').color"
+             :to="`/careers?venue=${encodeURIComponent(selectedVenue.location)}`"
+             :label="getButton('explore_join').label"
+             :width="getButton('explore_join').width"
+           />
         </div>
 
         <!-- Default content -->

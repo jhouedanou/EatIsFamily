@@ -15,8 +15,8 @@
       <h3 class="preserve-lines">{{ event.title }}</h3>
       <p class="description preserve-lines" v-html="event.description"></p>
       <PillButton
-        to="/contact"
-        label="Nous contacter"
+        :to="getButton('eventcard_cta').to"
+        :label="getButton('eventcard_cta').label"
         :variant="pillConfig.variant"
         :color="pillConfig.color"
         :inset="pillConfig.inset"
@@ -32,8 +32,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import type { Event } from '~/composables/useEvents'
+
+const { getButton, loadButtons } = useButtons()
+
+onMounted(async () => {
+  await loadButtons()
+})
 
 const props = defineProps<{
   event: Event

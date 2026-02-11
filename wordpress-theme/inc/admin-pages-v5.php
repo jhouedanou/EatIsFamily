@@ -145,6 +145,16 @@ function eatisfamily_register_admin_menus_v5() {
         'eatisfamily_job_taxonomies_page'
     );
     
+    // Submenu - Buttons (CTA)
+    add_submenu_page(
+        'eatisfamily-dashboard',
+        __('Boutons (CTA)', 'eatisfamily'),
+        __('Boutons (CTA)', 'eatisfamily'),
+        'manage_options',
+        'eatisfamily-buttons',
+        'eatisfamily_buttons_page_v5'
+    );
+    
     // Submenu - Data Management
     add_submenu_page(
         'eatisfamily-dashboard',
@@ -4101,4 +4111,281 @@ function eatisfamily_get_departments_dropdown_dynamic() {
     }
     
     return $options;
+}
+
+/**
+ * ============================================================================
+ * BUTTONS (CTA) ADMIN PAGE - V5
+ * Allows managing all CTA button labels, colors, links from WordPress admin
+ * ============================================================================
+ */
+function eatisfamily_buttons_page_v5() {
+    // Handle save
+    if (isset($_POST['eatisfamily_buttons_nonce']) && wp_verify_nonce($_POST['eatisfamily_buttons_nonce'], 'eatisfamily_save_buttons')) {
+        $buttons = array();
+        
+        if (isset($_POST['buttons']) && is_array($_POST['buttons'])) {
+            foreach ($_POST['buttons'] as $btn_id => $btn_data) {
+                $btn_id = sanitize_key($btn_id);
+                $buttons[$btn_id] = array(
+                    'label' => sanitize_text_field(wp_unslash($btn_data['label'])),
+                    'color' => sanitize_text_field($btn_data['color']),
+                    'variant' => sanitize_text_field($btn_data['variant']),
+                );
+                
+                if (!empty($btn_data['to'])) {
+                    $buttons[$btn_id]['to'] = sanitize_text_field($btn_data['to']);
+                }
+                if (!empty($btn_data['width'])) {
+                    $buttons[$btn_id]['width'] = sanitize_text_field($btn_data['width']);
+                }
+                if (!empty($btn_data['inset'])) {
+                    $buttons[$btn_id]['inset'] = sanitize_text_field($btn_data['inset']);
+                }
+            }
+        }
+        
+        update_option('eatisfamily_buttons', $buttons);
+        echo '<div class="notice notice-success is-dismissible"><p>✅ Boutons sauvegardés avec succès ! (' . count($buttons) . ' boutons)</p></div>';
+    }
+    
+    // Handle import from JSON
+    if (isset($_POST['eatisfamily_import_buttons_nonce']) && wp_verify_nonce($_POST['eatisfamily_import_buttons_nonce'], 'eatisfamily_import_buttons_from_json')) {
+        $json_paths = array(
+            ABSPATH . 'public/data/buttons.json',
+            get_template_directory() . '/data/buttons.json',
+        );
+        
+        $imported = false;
+        foreach ($json_paths as $json_file) {
+            if (file_exists($json_file)) {
+                $json_content = file_get_contents($json_file);
+                $data = json_decode($json_content, true);
+                if (json_last_error() === JSON_ERROR_NONE && !empty($data)) {
+                    update_option('eatisfamily_buttons', $data);
+                    echo '<div class="notice notice-success is-dismissible"><p>✅ Import réussi ! ' . count($data) . ' boutons importés depuis <code>' . esc_html(basename($json_file)) . '</code></p></div>';
+                    $imported = true;
+                    break;
+                }
+            }
+        }
+        
+        if (!$imported) {
+            echo '<div class="notice notice-error is-dismissible"><p>❌ Fichier buttons.json introuvable ou invalide.</p></div>';
+        }
+    }
+    
+    $buttons = get_option('eatisfamily_buttons', array());
+    
+    $available_colors = array('pink', 'yellow', 'white', 'transparent', 'dark', 'light', 'fuchsia');
+    $available_variants = array('filled', 'outline');
+    
+    // Group buttons by section for better organization
+    $button_sections = array(
+        'Header / Navigation' => array('header_cta', 'header_cta_mobile'),
+        'Page d\'accueil (Hero)' => array('hero_primary', 'hero_secondary'),
+        'Page d\'accueil (Sections)' => array('intro_cta', 'services_cta_even', 'services_cta_odd', 'examples_cta_even', 'examples_cta_odd', 'homepage_cta'),
+        'Page À propos' => array('about_hero_cta', 'about_mission_cta', 'about_vision_cta'),
+        'Page Carrières' => array('careers_job_apply', 'careers_job_details', 'careers_bottom_cta'),
+        'Page Candidature' => array('apply_cta_apply', 'apply_cta_explore', 'apply_cta_contact'),
+        'Page Événements' => array('events_hero_cta', 'eventcard_cta'),
+        'Page Détail Emploi' => array('job_apply', 'job_share'),
+        'Blog' => array('blog_read_article'),
+        'Composants' => array('ctablock_cta', 'explore_join'),
+    );
+    
+    // Button ID descriptions for admin clarity
+    $button_descriptions = array(
+        'header_cta' => 'Bouton CTA dans le header (desktop)',
+        'header_cta_mobile' => 'Bouton CTA dans le header (mobile)',
+        'hero_primary' => 'Bouton principal du hero (homepage)',
+        'hero_secondary' => 'Bouton secondaire du hero (homepage)',
+        'intro_cta' => 'Bouton de la section introduction',
+        'services_cta_even' => 'Bouton services (lignes paires)',
+        'services_cta_odd' => 'Bouton services (lignes impaires)',
+        'examples_cta_even' => 'Bouton exemples (lignes paires)',
+        'examples_cta_odd' => 'Bouton exemples (lignes impaires)',
+        'homepage_cta' => 'Bouton CTA recrutement (homepage)',
+        'about_hero_cta' => 'Bouton hero (page À propos)',
+        'about_mission_cta' => 'Bouton section mission',
+        'about_vision_cta' => 'Bouton section vision',
+        'careers_job_apply' => 'Bouton postuler (liste emplois)',
+        'careers_job_details' => 'Bouton détails (liste emplois)',
+        'careers_bottom_cta' => 'Bouton CTA bas de page carrières',
+        'apply_cta_apply' => 'Bouton postuler (page candidature)',
+        'apply_cta_explore' => 'Bouton explorer (page candidature)',
+        'apply_cta_contact' => 'Bouton contact (page candidature)',
+        'explore_join' => 'Bouton rejoignez-nous',
+        'events_hero_cta' => 'Bouton hero (page événements)',
+        'ctablock_cta' => 'Bouton composant CTA Block',
+        'job_apply' => 'Bouton postuler (page détail emploi)',
+        'job_share' => 'Bouton partager (page détail emploi)',
+        'blog_read_article' => 'Bouton lire l\'article (blog)',
+        'eventcard_cta' => 'Bouton carte événement',
+    );
+    
+    ?>
+    <div class="wrap">
+        <h1>🎯 <?php _e('Gestion des Boutons (CTA)', 'eatisfamily'); ?></h1>
+        <p class="description">Gérez les textes, couleurs et liens de tous les boutons du site. Les modifications sont immédiatement visibles sur le frontend.</p>
+        
+        <!-- Import from JSON -->
+        <div style="background: #f0f6fc; border: 1px solid #c8d8e9; border-radius: 6px; padding: 16px; margin: 15px 0;">
+            <form method="post" style="display: inline;">
+                <?php wp_nonce_field('eatisfamily_import_buttons_from_json', 'eatisfamily_import_buttons_nonce'); ?>
+                <strong>📥 Import rapide :</strong> 
+                <input type="submit" class="button button-secondary" value="Importer depuis buttons.json" onclick="return confirm('Cela écrasera tous les boutons actuels. Continuer ?');" />
+                <span class="description" style="margin-left: 10px;">Charge les boutons depuis le fichier <code>public/data/buttons.json</code></span>
+            </form>
+        </div>
+        
+        <form method="post" action="">
+            <?php wp_nonce_field('eatisfamily_save_buttons', 'eatisfamily_buttons_nonce'); ?>
+            
+            <?php foreach ($button_sections as $section_name => $section_ids): ?>
+            <div class="postbox" style="margin-top: 20px;">
+                <div class="postbox-header">
+                    <h2 class="hndle" style="padding: 10px 16px;"><?php echo esc_html($section_name); ?></h2>
+                </div>
+                <div class="inside">
+                    <table class="widefat striped" style="border: 0;">
+                        <thead>
+                            <tr>
+                                <th style="width: 200px;">Bouton</th>
+                                <th style="width: 250px;">Label (texte affiché)</th>
+                                <th style="width: 120px;">Couleur</th>
+                                <th style="width: 110px;">Variante</th>
+                                <th style="width: 180px;">Lien (to)</th>
+                                <th style="width: 100px;">Largeur</th>
+                                <th style="width: 80px;">Inset</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($section_ids as $btn_id):
+                                $btn = isset($buttons[$btn_id]) ? $buttons[$btn_id] : array();
+                                $label = isset($btn['label']) ? $btn['label'] : '';
+                                $color = isset($btn['color']) ? $btn['color'] : 'pink';
+                                $variant = isset($btn['variant']) ? $btn['variant'] : 'filled';
+                                $to = isset($btn['to']) ? $btn['to'] : '';
+                                $width = isset($btn['width']) ? $btn['width'] : '';
+                                $inset = isset($btn['inset']) ? $btn['inset'] : '';
+                                $desc = isset($button_descriptions[$btn_id]) ? $button_descriptions[$btn_id] : $btn_id;
+                            ?>
+                            <tr>
+                                <td>
+                                    <strong><?php echo esc_html($btn_id); ?></strong><br>
+                                    <span class="description" style="font-size: 11px;"><?php echo esc_html($desc); ?></span>
+                                </td>
+                                <td>
+                                    <input type="text" name="buttons[<?php echo esc_attr($btn_id); ?>][label]" value="<?php echo esc_attr($label); ?>" class="regular-text" style="width: 100%;" placeholder="Texte du bouton" />
+                                </td>
+                                <td>
+                                    <select name="buttons[<?php echo esc_attr($btn_id); ?>][color]" style="width: 100%;">
+                                        <?php foreach ($available_colors as $c): ?>
+                                        <option value="<?php echo esc_attr($c); ?>" <?php selected($color, $c); ?>><?php echo esc_html($c); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="buttons[<?php echo esc_attr($btn_id); ?>][variant]" style="width: 100%;">
+                                        <?php foreach ($available_variants as $v): ?>
+                                        <option value="<?php echo esc_attr($v); ?>" <?php selected($variant, $v); ?>><?php echo esc_html($v); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" name="buttons[<?php echo esc_attr($btn_id); ?>][to]" value="<?php echo esc_attr($to); ?>" style="width: 100%;" placeholder="/contact" />
+                                </td>
+                                <td>
+                                    <input type="text" name="buttons[<?php echo esc_attr($btn_id); ?>][width]" value="<?php echo esc_attr($width); ?>" style="width: 100%;" placeholder="250px" />
+                                </td>
+                                <td>
+                                    <input type="text" name="buttons[<?php echo esc_attr($btn_id); ?>][inset]" value="<?php echo esc_attr($inset); ?>" style="width: 100%;" placeholder="-2px" />
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            
+            <?php
+            // Show any orphan buttons (in DB but not in sections above)
+            $all_section_ids = array();
+            foreach ($button_sections as $ids) {
+                $all_section_ids = array_merge($all_section_ids, $ids);
+            }
+            $orphan_buttons = array_diff_key($buttons, array_flip($all_section_ids));
+            
+            if (!empty($orphan_buttons)): ?>
+            <div class="postbox" style="margin-top: 20px;">
+                <div class="postbox-header">
+                    <h2 class="hndle" style="padding: 10px 16px;">⚠️ Boutons supplémentaires (non catégorisés)</h2>
+                </div>
+                <div class="inside">
+                    <table class="widefat striped" style="border: 0;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Label</th>
+                                <th>Couleur</th>
+                                <th>Variante</th>
+                                <th>Lien</th>
+                                <th>Largeur</th>
+                                <th>Inset</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($orphan_buttons as $btn_id => $btn): ?>
+                            <tr>
+                                <td><strong><?php echo esc_html($btn_id); ?></strong></td>
+                                <td><input type="text" name="buttons[<?php echo esc_attr($btn_id); ?>][label]" value="<?php echo esc_attr(isset($btn['label']) ? $btn['label'] : ''); ?>" class="regular-text" style="width: 100%;" /></td>
+                                <td>
+                                    <select name="buttons[<?php echo esc_attr($btn_id); ?>][color]" style="width: 100%;">
+                                        <?php foreach ($available_colors as $c): ?>
+                                        <option value="<?php echo esc_attr($c); ?>" <?php selected(isset($btn['color']) ? $btn['color'] : '', $c); ?>><?php echo esc_html($c); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="buttons[<?php echo esc_attr($btn_id); ?>][variant]" style="width: 100%;">
+                                        <?php foreach ($available_variants as $v): ?>
+                                        <option value="<?php echo esc_attr($v); ?>" <?php selected(isset($btn['variant']) ? $btn['variant'] : '', $v); ?>><?php echo esc_html($v); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td><input type="text" name="buttons[<?php echo esc_attr($btn_id); ?>][to]" value="<?php echo esc_attr(isset($btn['to']) ? $btn['to'] : ''); ?>" style="width: 100%;" /></td>
+                                <td><input type="text" name="buttons[<?php echo esc_attr($btn_id); ?>][width]" value="<?php echo esc_attr(isset($btn['width']) ? $btn['width'] : ''); ?>" style="width: 100%;" /></td>
+                                <td><input type="text" name="buttons[<?php echo esc_attr($btn_id); ?>][inset]" value="<?php echo esc_attr(isset($btn['inset']) ? $btn['inset'] : ''); ?>" style="width: 100%;" /></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <?php endif; ?>
+            
+            <p class="submit">
+                <input type="submit" class="button button-primary button-hero" value="💾 Sauvegarder les boutons" />
+            </p>
+        </form>
+        
+        <div style="background: #f0f6fc; border: 1px solid #c8d8e9; border-radius: 6px; padding: 16px; margin: 20px 0;">
+            <h3 style="margin-top: 0;">📖 Informations</h3>
+            <p><strong>Endpoint REST :</strong> <code>GET /wp-json/eatisfamily/v1/buttons</code></p>
+            <p><strong>Option WordPress :</strong> <code>eatisfamily_buttons</code></p>
+            <p><strong>Nombre de boutons :</strong> <?php echo count($buttons); ?></p>
+            <p style="margin-bottom: 0;"><strong>Couleurs disponibles :</strong> 
+                <span style="background: #f9375b; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;">pink</span>
+                <span style="background: #FFE600; color: #333; padding: 2px 8px; border-radius: 10px; font-size: 11px;">yellow</span>
+                <span style="background: #fff; color: #333; padding: 2px 8px; border-radius: 10px; font-size: 11px; border: 1px solid #ddd;">white</span>
+                <span style="background: #eee; color: #333; padding: 2px 8px; border-radius: 10px; font-size: 11px;">transparent</span>
+                <span style="background: #333; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;">dark</span>
+                <span style="background: #f5f5f5; color: #333; padding: 2px 8px; border-radius: 10px; font-size: 11px; border: 1px solid #ddd;">light</span>
+                <span style="background: #ff2e84; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;">fuchsia</span>
+            </p>
+        </div>
+    </div>
+    <?php
 }

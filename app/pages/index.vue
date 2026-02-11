@@ -12,6 +12,7 @@ import type { HomepageContent } from "~/composables/usePageContent";
 
 const heroTitle = ref(null);
 const { getHomepageContent } = usePageContent();
+const { getButton, loadButtons } = useButtons();
 const content = ref<HomepageContent | null>(null);
 const { settings } = useGlobalSettings();
 
@@ -90,6 +91,7 @@ onMounted(async () => {
     window.addEventListener("resize", checkMobile);
   }
 
+  await loadButtons();
   content.value = await getHomepageContent();
 
   if (heroTitle.value && content.value) {
@@ -167,17 +169,15 @@ onUnmounted(() => {
                   <!--                 <PillButton color="pink" to="/careers" label="Nos offres d'emploi" />
  -->
                   <PillButton
-                    color="pink"
-                    to="/careers"
-                    label="Nos offres d'emploi"
+                    :color="getButton('hero_primary').color"
+                    :to="getButton('hero_primary').to"
+                    :label="getButton('hero_primary').label"
                   />
-                  <!-- <PillButton variant="outline" to="#mapPreview" label="Nos concessions" />
-                                 <PillButton color="pink"  to="/careers" label="Nos offres d'emploi"/> -->
                   <PillButton
-                    color="transparent"
-                    variant="outline"
-                    to="#mapPreview"
-                    label="Nos concessions"
+                    :color="getButton('hero_secondary').color"
+                    :variant="getButton('hero_secondary').variant"
+                    :to="getButton('hero_secondary').to"
+                    :label="getButton('hero_secondary').label"
                   />
                 </div>
               </div>
@@ -256,11 +256,11 @@ onUnmounted(() => {
           </NuxtLink> -->
 
              <PillButton
-                    color="dark"
-                    variant="outline"
-                    to="/about"
-                    label="En savoir plus sur nous"
-                    width="300px"
+                    :color="getButton('intro_cta').color"
+                    :variant="getButton('intro_cta').variant"
+                    :to="getButton('intro_cta').to"
+                    :label="getButton('intro_cta').label"
+                    :width="getButton('intro_cta').width"
                   />
         </div>
       </section>
@@ -321,14 +321,10 @@ onUnmounted(() => {
                         />
                       </NuxtLink> -->
                       <PillButton
-                        :color="i % 2 === 0 ? 'pink' : 'yellow'"
-                        width="260px"
+                        :color="i % 2 === 0 ? getButton('services_cta_even').color : getButton('services_cta_odd').color"
+                        :width="i % 2 === 0 ? getButton('services_cta_even').width : getButton('services_cta_odd').width"
                         :to="service.linkTo"
-                        :label="
-                          i % 2 === 0
-                            ? 'Nous contacter'
-                            : 'Parlons food & beverage'
-                        "
+                        :label="i % 2 === 0 ? getButton('services_cta_even').label : getButton('services_cta_odd').label"
                       />
 
                       <!--   <PillButtonPink :to="service.linkTo" label="Nous contacter" /> -->
@@ -405,17 +401,12 @@ onUnmounted(() => {
                   <NuxtImg :src="example.btn" :alt="example.title" />
                 </NuxtLink> -->
                 <PillButton
-                  width="250px"
+                  :width="index % 2 === 0 ? getButton('examples_cta_even').width : getButton('examples_cta_odd').width"
                   :inset="index % 2 === 0 ? '2px -4px' : '1px'"
-                  :label="
-                    index % 2 === 0
-                      ? 'Voir nos concessions'
-                      : 'Voir nos évènements'
-                  "
-                  :color="index % 2 === 0 ? 'dark' : 'fuchsia'"
-                  :variant="index % 2 === 0 ? 'outline' : 'filled'"
+                  :label="index % 2 === 0 ? getButton('examples_cta_even').label : getButton('examples_cta_odd').label"
+                  :color="index % 2 === 0 ? getButton('examples_cta_even').color : getButton('examples_cta_odd').color"
+                  :variant="index % 2 === 0 ? getButton('examples_cta_even').variant : getButton('examples_cta_odd').variant"
                   :to="example.link"
-                  
                 />
               </div>
             </div>
