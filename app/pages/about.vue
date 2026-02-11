@@ -175,9 +175,8 @@
                       />
                     </svg>
                   </button>
-                  <div class="event-card-image">
+                  <div v-if="selectedEvent.eventImage" class="event-card-image">
                     <nuxt-img
-                      v-if="selectedEvent.eventImage"
                       :src="selectedEvent.eventImage"
                       :alt="selectedEvent.title"
                     />
@@ -636,6 +635,12 @@ const getMarkerColor = (index: number): string => {
 
 // Select event and move playhead
 const selectEvent = (event: any, index: number) => {
+  // If clicking the same event that's already visible, toggle (close) the card
+  if (selectedEvent.value?.id === event.id && isCardVisible.value) {
+    isCardVisible.value = false;
+    return;
+  }
+  
   selectedEvent.value = event;
   selectedEventIndex.value = index;
   // Move playhead to the marker position (both horizontal and vertical)

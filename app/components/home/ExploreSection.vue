@@ -532,6 +532,8 @@ const goToMenuPage = (page: number) => {
   .explore-content {
     flex: none;
     padding: 2rem 1.5rem;
+   max-height: none;
+    height: auto;  
   }
 
   .explore-title {

@@ -1320,6 +1320,7 @@ body {
   max-height: 100vh !important;
 }
 @media (min-width: 1024px) {
+
   .mobile-only {
     display: none !important;
   }
@@ -1348,6 +1349,11 @@ body {
   }
 }
 @media (max-width: 1024px) {
+    .inner-encadre{
+      .btn-outline-bg {
+      inset: -8px -4px -8px -4px !important;
+    }
+  }
   #lasalle {
     .btn-wrapper {
       margin: 1em auto 0;
@@ -2196,8 +2202,8 @@ body {
     .card-content {
       a {
         display: flex;
-        align-items: flex-start !important;
-        justify-content: flex-start !important;
+        align-items: center !important;
+        justify-content: center !important;
         width: 234px;
         height: 61px;
       }
