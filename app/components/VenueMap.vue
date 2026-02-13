@@ -182,7 +182,7 @@ const createMarkers = (maplibregl: any) => {
       emit('venue-clicked', venue)
     })
 
-    const marker = new maplibregl.Marker({ element: el })
+    const marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
       .setLngLat([venue.lng, venue.lat])
       .addTo(map)
 
