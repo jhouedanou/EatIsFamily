@@ -10,6 +10,34 @@ import { onUnmounted } from "vue";
 import gsap from "gsap";
 import type { HomepageContent } from "~/composables/usePageContent";
 
+/**
+ * Decode HTML entities that WordPress may leave in titles/excerpts
+ */
+const decodeHtml = (html: string): string => {
+  if (!html) return ''
+  return html
+    .replace(/&#038;/g, '&')
+    .replace(/&amp;/g, '&')
+    .replace(/&#8230;/g, '…')
+    .replace(/&hellip;/g, '…')
+    .replace(/\[…\]/g, '…')
+    .replace(/\[&hellip;\]/g, '…')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+}
+
+/**
+ * Strip HTML tags and decode entities for plain text excerpts
+ */
+const cleanExcerpt = (html: string): string => {
+  if (!html) return ''
+  const stripped = html.replace(/<[^>]*>/g, '').trim()
+  return decodeHtml(stripped)
+}
+
 const heroTitle = ref(null);
 const { getHomepageContent } = usePageContent();
 const { getButton, loadButtons } = useButtons();
@@ -151,19 +179,19 @@ onUnmounted(() => {
                   ref="heroTitle"
                   class="font-heading display-1 fw-bold lh-1 text-brand-dark m-0"
                 >
-                  {{ content.hero_section?.title?.line_1 }}
+                  {{ decodeHtml(content.hero_section?.title?.line_1 || '') }}
                 </h1>
                 <h1
                   id="heroTitleAlt"
                   ref="heroTitle"
                   class="font-heading display-1 fw-bold lh-1 text-brand-dark m-0"
                 >
-                  {{ content.hero_section?.title?.line_2 }}
+                  {{ decodeHtml(content.hero_section?.title?.line_2 || '') }}
                 </h1>
                 <p
                   class="position-relative d-inline-block m-0 recoleta mb-4 mt-4"
                 >
-                  {{ content.hero_section?.title?.line_3 }}
+                  {{ decodeHtml(content.hero_section?.title?.line_3 || '') }}
                 </p>
                 <div class="actionwrapper">
                   <!--                 <PillButton color="pink" to="/careers" label="Nos offres d'emploi" />
@@ -272,14 +300,14 @@ onUnmounted(() => {
         <div class="container-fluid m-0 p-0">
           <div id="makepe" class="text-left mb-5 p-4">
             <h2 class="font-heading display-4 fw-bold">
-              {{ content.services_section?.title?.line_1 }}<br />
+              {{ decodeHtml(content.services_section?.title?.line_1 || '') }}<br />
               <span class="position-relative d-inline-block">
-                {{ content.services_section?.title?.highlight }}
+                {{ decodeHtml(content.services_section?.title?.highlight || '') }}
                 <span
                   class="position-absolute bottom-0 start-0 w-100 bg-brand-blue highlight-bar"
                 ></span>
               </span>
-              {{ content.services_section?.title?.line_2 }}
+              {{ decodeHtml(content.services_section?.title?.line_2 || '') }}
             </h2>
           </div>
 
@@ -308,7 +336,7 @@ onUnmounted(() => {
                   <div class="col-lg-6 col-md-6 rounded p-2 service-desc">
                     <div class="innerService rounded p-2">
                       <h3 class="recoleta preserve-lines">
-                        {{ service.title }}
+                        {{ decodeHtml(service.title || '') }}
                       </h3>
                       <div class="recoleta mt-4 mb-4 preserve-lines">
                         <p v-html="service.description"></p>
@@ -356,7 +384,7 @@ onUnmounted(() => {
       <section id="sustan" class="py-5 new-white">
         <!-- une loop qui affiche les services durables -->
         <h3 class="font-header center text-center">
-          {{ content.sustainable_service_title }}
+          {{ decodeHtml(content.sustainable_service_title || '') }}
         </h3>
         <div id="brik" class="row mx-auto">
           <div
@@ -367,7 +395,7 @@ onUnmounted(() => {
           >
             <div class="inner">
               <img :src="service.icone" :alt="service.title" />
-              <h4>{{ service.title }}</h4>
+              <h4>{{ decodeHtml(service.title || '') }}</h4>
               <p v-html="service.description"></p>
             </div>
           </div>
@@ -395,7 +423,7 @@ onUnmounted(() => {
               class="col-md-6 example"
             >
               <div class="inner-example">
-                <h4>{{ example.title }}</h4>
+                <h4>{{ decodeHtml(example.title || '') }}</h4>
                 <div v-html="example.texte"></div>
                 <!-- <NuxtLink :to="example.link">
                   <NuxtImg :src="example.btn" :alt="example.title" />

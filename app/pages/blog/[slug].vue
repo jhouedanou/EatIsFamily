@@ -18,6 +18,25 @@ const goBack = () => {
   router.back()
 }
 
+/**
+ * Decode HTML entities that WordPress may leave in titles
+ */
+const decodeHtml = (html: string): string => {
+  if (!html) return ''
+  return html
+    .replace(/&#038;/g, '&')
+    .replace(/&amp;/g, '&')
+    .replace(/&#8230;/g, '…')
+    .replace(/&hellip;/g, '…')
+    .replace(/\[…\]/g, '…')
+    .replace(/\[&hellip;\]/g, '…')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+}
+
 // Formater la date
 const formatDate = (dateString: string) => {
   const date = new Date(dateString)
@@ -47,14 +66,14 @@ const formatDate = (dateString: string) => {
       <!-- Header -->
       <header class="article-header">
         <h1 class="article-title">
-          {{ article.title.rendered }}
+          {{ decodeHtml(article.title.rendered) }}
         </h1>
         <p class="article-date">{{ formatDate(article.date) }}</p>
       </header>
 
       <!-- Featured Image -->
       <div class="article-image">
-        <img :src="article.featured_media" :alt="article.title.rendered" />
+        <img :src="article.featured_media" :alt="decodeHtml(article.title.rendered)" />
       </div>
 
       <!-- Content -->
@@ -67,7 +86,7 @@ const formatDate = (dateString: string) => {
 .blog-detail-page {
   min-height: 100vh;
   background: #fff;
-  padding: 2rem 0 4rem;
+  padding: 11rem 0 4rem;
   position: relative;
 }
 

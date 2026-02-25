@@ -1279,14 +1279,20 @@ function eatisfamily_get_blog_post_by_slug($request) {
 }
 
 function eatisfamily_format_blog_post($post) {
+    $title = html_entity_decode(get_the_title($post->ID), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $excerpt = html_entity_decode(get_the_excerpt($post->ID), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    // Clean up WordPress [...] ellipsis artifacts
+    $excerpt = str_replace('[…]', '…', $excerpt);
+    $excerpt = str_replace('[&hellip;]', '…', $excerpt);
+    
     return array(
         'id' => $post->ID,
         'slug' => $post->post_name,
         'title' => array(
-            'rendered' => get_the_title($post->ID),
+            'rendered' => $title,
         ),
         'excerpt' => array(
-            'rendered' => get_the_excerpt($post->ID),
+            'rendered' => $excerpt,
         ),
         'content' => array(
             'rendered' => apply_filters('the_content', $post->post_content),

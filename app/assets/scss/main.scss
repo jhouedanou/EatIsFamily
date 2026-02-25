@@ -3135,3 +3135,14 @@ body {
   max-width: 233px !important;
   max-height: 69px !important;
 }
+.article-container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 1em !important;
+  img{
+   width: 100% !important;
+    border-radius: 10px !important;
+  }
+}

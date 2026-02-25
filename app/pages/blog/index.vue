@@ -1,5 +1,34 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
+
+/**
+ * Decode HTML entities that WordPress may leave in titles/excerpts
+ */
+const decodeHtml = (html: string): string => {
+  if (!html) return ''
+  return html
+    .replace(/&#038;/g, '&')
+    .replace(/&amp;/g, '&')
+    .replace(/&#8230;/g, '…')
+    .replace(/&hellip;/g, '…')
+    .replace(/\[…\]/g, '…')
+    .replace(/\[&hellip;\]/g, '…')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+}
+
+/**
+ * Strip HTML tags and decode entities for plain text excerpts
+ */
+const cleanExcerpt = (html: string): string => {
+  if (!html) return ''
+  // Remove HTML tags first, then decode entities
+  const stripped = html.replace(/<[^>]*>/g, '').trim()
+  return decodeHtml(stripped)
+}
 
 const { getBlogPosts } = useBlog()
 const { settings } = useGlobalSettings()
@@ -21,6 +50,66 @@ await loadButtons()
 // Les 2 premiers posts sont "featured", les autres dans la grille
 const featuredPosts = computed(() => posts.value?.slice(0, 2) || [])
 const allPosts = computed(() => posts.value?.slice(2) || [])
+
+// Infinite scroll : afficher 4 articles au départ, puis charger par lots de 4
+const postsPerLoad = 4
+const visibleCount = ref(postsPerLoad)
+const visiblePosts = computed(() => allPosts.value.slice(0, visibleCount.value))
+const hasMore = computed(() => visibleCount.value < allPosts.value.length)
+
+const loadMoreTrigger = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
+
+// Animation d'entrée pour les nouvelles cartes
+let cardObserver: IntersectionObserver | null = null
+
+function observeNewCards() {
+  nextTick(() => {
+    const cards = document.querySelectorAll('.post-card.card-hidden')
+    cards.forEach((card) => {
+      cardObserver?.observe(card)
+    })
+  })
+}
+
+onMounted(() => {
+  // Observer pour le défilement continu
+  nextTick(() => {
+    if (!loadMoreTrigger.value) return
+    observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore.value) {
+          visibleCount.value += postsPerLoad
+          // Observer les nouvelles cartes après chargement
+          nextTick(() => observeNewCards())
+        }
+      },
+      { rootMargin: '200px' }
+    )
+    observer.observe(loadMoreTrigger.value)
+  })
+
+  // Observer pour les animations d'entrée des cartes
+  cardObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('card-hidden')
+          entry.target.classList.add('card-visible')
+          cardObserver?.unobserve(entry.target)
+        }
+      })
+    },
+    { threshold: 0.1 }
+  )
+
+  observeNewCards()
+})
+
+onUnmounted(() => {
+  observer?.disconnect()
+  cardObserver?.disconnect()
+})
 
 // Contenu dynamique avec fallbacks
 const heroTitleLine1 = computed(() => blogContent.value?.hero?.title_line_1 || 'Histoires Inspirantes')
@@ -49,20 +138,16 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
         <article v-if="featuredPosts[0]" class="featured-post">
           <div class="post-image">
             <NuxtLink :to="`/blog/${featuredPosts[0].slug}`">
-              <img :src="featuredPosts[0].featured_media" :alt="featuredPosts[0].title.rendered" />
+              <img :src="featuredPosts[0].featured_media" :alt="decodeHtml(featuredPosts[0].title.rendered)" />
             </NuxtLink>
           </div>
           <div class="post-content d-flex align-items-center flex-wrap flex-row">
             <h3 class="post-title">
               <NuxtLink :to="`/blog/${featuredPosts[0].slug}`">
-                {{ featuredPosts[0].title.rendered }}
+                {{ decodeHtml(featuredPosts[0].title.rendered) }}
               </NuxtLink>
             </h3>
-            <p class="post-excerpt">{{ featuredPosts[0].excerpt.rendered }}</p>
-           <!--  <NuxtLink :to="`/blog/${featuredPosts[0].slug}`" class="bg-transparent border-0 p-0 m-0">
-              <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
-            </NuxtLink> -->
-
+            <p class="post-excerpt">{{ cleanExcerpt(featuredPosts[0].excerpt.rendered) }}</p>
 <PillButton
               :color="getButton('blog_read_article').color"
               :variant="getButton('blog_read_article').variant"
@@ -83,16 +168,16 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
         <article v-if="featuredPosts[1]" class="featured-post second">
           <div class="post-image">
             <NuxtLink :to="`/blog/${featuredPosts[1].slug}`">
-              <img :src="featuredPosts[1].featured_media" :alt="featuredPosts[1].title.rendered" />
+              <img :src="featuredPosts[1].featured_media" :alt="decodeHtml(featuredPosts[1].title.rendered)" />
             </NuxtLink>
           </div>
           <div class="post-content d-flex align-items-center flex-wrap flex-row">
             <h3 class="post-title">
               <NuxtLink :to="`/blog/${featuredPosts[1].slug}`">
-                {{ featuredPosts[1].title.rendered }}
+                {{ decodeHtml(featuredPosts[1].title.rendered) }}
               </NuxtLink>
             </h3>
-            <p class="post-excerpt">{{ featuredPosts[1].excerpt.rendered }}</p>
+            <p class="post-excerpt">{{ cleanExcerpt(featuredPosts[1].excerpt.rendered) }}</p>
           <!--   <NuxtLink :to="`/blog/${featuredPosts[1].slug}`" class="bg-transparent border-0 p-0 m-0">
               <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
             </NuxtLink> -->
@@ -119,36 +204,42 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
         <h2 class="section-title">{{ allInsightsTitle }}</h2>
 
         <div class="posts-grid">
-          <article v-for="post in allPosts" :key="post.id" class="post-card">
+          <article
+            v-for="post in visiblePosts"
+            :key="post.id"
+            class="post-card card-hidden"
+          >
             <div class="card-image">
               <NuxtLink :to="`/blog/${post.slug}`">
-                <img :src="post.featured_media" :alt="post.title.rendered" />
+                <img :src="post.featured_media" :alt="decodeHtml(post.title.rendered)" />
               </NuxtLink>
             </div>
             <div class="card-content">
               <h3 class="card-title">
                 <NuxtLink :to="`/blog/${post.slug}`">
-                  {{ post.title.rendered }}
+                  {{ decodeHtml(post.title.rendered) }}
                 </NuxtLink>
               </h3>
-              <p class="card-excerpt">{{ post.excerpt.rendered }}</p>
-              <!-- <NuxtLink :to="`/blog/${post.slug}`" class="bg-transparent border-0 p-0 m-0 mt-1">
-                              <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
-              </NuxtLink> -->
-<PillButton
-              :color="getButton('blog_read_article').color"
-              :variant="getButton('blog_read_article').variant"
-              :to="`/blog/${post.slug}`"
-              :label="getButton('blog_read_article').label"
-              :width="getButton('blog_read_article').width"
-              bg-left="-8px"
-              bg-right="-8px"
-              bg-top="-6px"
-              bg-bottom="-6px"
-              bg-width="110%"
-            />
+              <p class="card-excerpt">{{ cleanExcerpt(post.excerpt.rendered) }}</p>
+              <PillButton
+                :color="getButton('blog_read_article').color"
+                :variant="getButton('blog_read_article').variant"
+                :to="`/blog/${post.slug}`"
+                :label="getButton('blog_read_article').label"
+                :width="getButton('blog_read_article').width"
+                bg-left="-8px"
+                bg-right="-8px"
+                bg-top="-6px"
+                bg-bottom="-6px"
+                bg-width="110%"
+              />
             </div>
           </article>
+        </div>
+
+        <!-- Sentinelle pour le défilement continu -->
+        <div v-if="hasMore" ref="loadMoreTrigger" class="load-more-trigger">
+          <span class="loading-spinner"></span>
         </div>
       </div>
     </section>
@@ -356,6 +447,26 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
   }
 }
 
+// Infinite scroll trigger
+.load-more-trigger {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #eee;
+  border-top-color: #FF4D6D;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 // All Insights Section
 .all-insights {
   padding: 4rem 0;
@@ -368,17 +479,49 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
   gap: 2.5rem;
 }
 
+// Classic border card style
 .post-card {
-      display: flex;
-    flex-direction: column;
-    background: url(/images/bgBlogList.svg);
-    background-size: cover;
-    min-height: 772px;
-    max-width: 772px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 4px 4px 0 #1a1a1a;
+  }
 }
 
+// Scroll entry animation
+.post-card.card-hidden {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.post-card.card-visible {
+  animation: cardSlideIn 0.6s ease forwards;
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Stagger animation for cards in same batch
+.post-card.card-visible:nth-child(4n+2) { animation-delay: 0.1s; }
+.post-card.card-visible:nth-child(4n+3) { animation-delay: 0.2s; }
+.post-card.card-visible:nth-child(4n)   { animation-delay: 0.3s; }
+
 .card-image {
-  border-radius: 12px;
   overflow: hidden;
   margin-bottom: 1.25rem;
 
