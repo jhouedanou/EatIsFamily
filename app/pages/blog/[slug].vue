@@ -7,10 +7,20 @@ const { getBlogPostBySlug } = useBlog()
 
 // Récupérer l'article depuis le serveur
 const slug = route.params.slug as string
-const { data: article } = await useAsyncData(`blog-post-${slug}`, () => getBlogPostBySlug(slug))
+const { data: article, error, refresh } = await useAsyncData(
+  `blog-post-${slug}`,
+  () => getBlogPostBySlug(slug),
+  {
+    // Ne pas utiliser un cache null d'un fetch précédent raté
+    getCachedData(key) {
+      const cached = useNuxtApp().payload.data[key] ?? useNuxtApp().static.data[key]
+      return cached || undefined // undefined = re-fetcher
+    }
+  }
+)
 
-// Redirection si article non trouvé
-if (!article.value) {
+// Redirection uniquement si pas d'erreur réseau (vrai 404)
+if (!article.value && !error.value) {
   navigateTo('/blog')
 }
 
@@ -61,6 +71,12 @@ const formatDate = (dateString: string) => {
     <button class="close-btn" @click="goBack" aria-label="Fermer">
       <LucideX :size="24" />
     </button>
+
+    <!-- Erreur réseau : afficher un retry plutôt qu'une page blanche -->
+    <div v-if="error || (!article && !error)" class="article-error">
+      <p>Impossible de charger l'article.</p>
+      <button @click="refresh">Réessayer</button>
+    </div>
 
     <article v-if="article" class="article-container">
       <!-- Header -->
@@ -289,6 +305,25 @@ color: #000;
     &:hover {
       color: #e04460;
     }
+  }
+}
+
+// Error state
+.article-error {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+  text-align: center;
+  color: #666;
+
+  button {
+    margin-top: 1rem;
+    padding: 0.6rem 1.5rem;
+    background: #FFDD00;
+    border: 2px solid #1a1a1a;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
   }
 }
 
