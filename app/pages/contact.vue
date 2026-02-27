@@ -394,11 +394,57 @@ useHead(() => ({
   }
 }
 
+/* Sending overlay */
+.sending-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 4rem 2rem;
+}
+
+.sending-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(26, 26, 26, 0.15);
+  border-top-color: #1a1a1a;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.sending-text {
+  font-family: var(--font-heading, 'Recoleta', serif);
+  font-size: 1.25rem;
+  color: #1a1a1a;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 /* Form container */
 .form-container {
   max-width: 1000px;
   margin: 3rem auto 0;
   padding: 2rem;
+  position: relative;
 }
 
 .contact-form {
