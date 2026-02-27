@@ -70,6 +70,9 @@ useHead(() => ({
 
     <LayoutFooter />
     <BackToTop />
+    <ClientOnly>
+      <CookieConsent />
+    </ClientOnly>
   </div>
 </template>
 
