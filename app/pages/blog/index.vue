@@ -349,17 +349,63 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
   padding-bottom: 1rem;
   &:nth-of-type(1){
     .post-content{
-    background:#93cbff url(/images/bgFeatured1.svg);  
-        border-radius: 10px;      
+      background:#93cbff url(/images/bgFeatured1.svg);
+      border-radius: 10px;
+      position: relative;
+      isolation: isolate;
 
+      &::before {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        background: #93cbff;
+        border-radius: 14px;
+        filter: url(#rough-border);
+        z-index: -2;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: #93cbff url(/images/bgFeatured1.svg);
+        background-size: inherit;
+        background-repeat: inherit;
+        border-radius: 10px;
+        filter: url(#rough-border);
+        z-index: -1;
+      }
     }
   }
   &:nth-of-type(2){
     .post-content{
-    background: url(/images/bgFeatured.svg) #d7a8ff;
-    border-radius: 10px;      
+      background: url(/images/bgFeatured.svg) #d7a8ff;
+      border-radius: 10px;
+      position: relative;
+      isolation: isolate;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        background: #d7a8ff;
+        border-radius: 14px;
+        filter: url(#rough-border);
+        z-index: -2;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: url(/images/bgFeatured.svg) #d7a8ff;
+        background-size: inherit;
+        background-repeat: inherit;
+        border-radius: 10px;
+        filter: url(#rough-border);
+        z-index: -1;
+      }
     }
-  
   }
   
   &:last-child {
@@ -496,7 +542,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
   display: flex;
   flex-direction: column;
   position: relative;
-  isolation: isolate; // crée un stacking context sans toucher aux enfants
+  isolation: isolate;
   background: transparent;
   transition: transform 0.3s ease;
 
