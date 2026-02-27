@@ -563,6 +563,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
     object-fit: cover;
     display: block;
     transition: transform 0.3s ease;
+    border-radius:10px 10px 0 0;
   }
 
   &:hover img {
