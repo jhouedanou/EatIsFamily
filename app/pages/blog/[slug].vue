@@ -3,14 +3,14 @@ import { LucideX } from 'lucide-vue-next'
 
 const router = useRouter()
 const route = useRoute()
-const { getBlogPostBySlug } = useBlog()
+const { getBlogPostBySlug, getBlogPosts } = useBlog()
 
-// Récupérer l'article depuis le serveur
+// Récupérer l'article depuis le serveur (utilise le cache Nuxt + fallback API + fallback local)
 const slug = route.params.slug as string
-const { data: article } = await useAsyncData(`blog-post-${slug}`, () => getBlogPostBySlug(slug))
+const { data: article, error } = await useAsyncData(`blog-post-${slug}`, () => getBlogPostBySlug(slug))
 
-// Redirection si article non trouvé
-if (!article.value) {
+// Redirection si article non trouvé (et pas d'erreur en cours)
+if (!article.value && !error.value) {
   navigateTo('/blog')
 }
 

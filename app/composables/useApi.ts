@@ -53,6 +53,11 @@ export const useApi = () => {
             return data
         } catch (err) {
             console.error(`%c[API] ❌ Failed to fetch from API ${endpoint}:`, 'color: red;', err)
+            // Auto-fallback to local data when API fails (e.g., CORS on client-side navigation)
+            if (fallbackFile) {
+                console.log(`%c[API] 🔄 Auto-fallback to local: /data/${fallbackFile}`, 'color: orange;')
+                return await fetchLocalData<T>(fallbackFile)
+            }
             return null
         }
     }
