@@ -62,6 +62,12 @@ const formatDate = (dateString: string) => {
       <LucideX :size="24" />
     </button>
 
+    <!-- Erreur réseau : afficher un retry plutôt qu'une page blanche -->
+    <div v-if="error || (!article && !error)" class="article-error">
+      <p>Impossible de charger l'article.</p>
+      <button @click="refresh">Réessayer</button>
+    </div>
+
     <article v-if="article" class="article-container">
       <!-- Header -->
       <header class="article-header">
@@ -289,6 +295,25 @@ color: #000;
     &:hover {
       color: #e04460;
     }
+  }
+}
+
+// Error state
+.article-error {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+  text-align: center;
+  color: #666;
+
+  button {
+    margin-top: 1rem;
+    padding: 0.6rem 1.5rem;
+    background: #FFDD00;
+    border: 2px solid #1a1a1a;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
   }
 }
 

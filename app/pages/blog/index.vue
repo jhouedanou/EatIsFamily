@@ -119,6 +119,16 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
 </script>
 
 <template>
+  <!-- SVG Filters pour les bordures rugueuses -->
+  <svg width="0" height="0" style="position:absolute;overflow:hidden;">
+    <defs>
+      <filter id="rough-border">
+        <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="4" result="noise" seed="1"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
   <div class="blog-page">
     <!-- Hero Section -->
     <section class="blog-hero">
@@ -479,19 +489,39 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
   gap: 2.5rem;
 }
 
-// Classic border card style
+// Rough border card style
 .post-card {
   display: flex;
   flex-direction: column;
-  border: 2px solid #1a1a1a;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  isolation: isolate; // crée un stacking context sans toucher aux enfants
+  background: transparent;
+  transition: transform 0.3s ease;
+
+  // Contour noir rugueux (derrière tout le contenu)
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    background: #1a1a1a;
+    border-radius: 20px;
+    filter: url(#rough-border);
+    z-index: -2;
+  }
+
+  // Fond blanc rugueux (par-dessus le contour, derrière le contenu)
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    border-radius: 16px;
+    filter: url(#rough-border);
+    z-index: -1;
+  }
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 4px 4px 0 #1a1a1a;
   }
 }
 

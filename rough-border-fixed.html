@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rough Border - Texte net</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 40px;
+    background: #1a1a1a;
+  }
+
+  h1 {
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-align: center;
+  }
+
+  .cards-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    max-width: 1000px;
+  }
+
+  /* ============================================
+     LA SOLUTION : position relative + pseudo-element
+     Le filtre est sur le ::before uniquement,
+     le texte reste dans le flux normal, NET.
+     ============================================ */
+
+  /* --- Méthode 1 : Card blanche, bords rugueux --- */
+  .card {
+    position: relative;
+    padding: 32px;
+    max-width: 320px;
+    width: fit-content;
+    height: fit-content;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    border-radius: 16px;
+    filter: url(#rough-border);
+    z-index: 0;
+  }
+
+  .card > * {
+    position: relative;
+    z-index: 1; /* le contenu passe AU-DESSUS du fond déformé */
+  }
+
+  /* --- Méthode 2 : Avec contour noir visible --- */
+  .card-outlined {
+    position: relative;
+    padding: 32px;
+    max-width: 320px;
+    width: fit-content;
+    height: fit-content;
+  }
+
+  /* Contour noir rugueux */
+  .card-outlined::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    background: #000;
+    border-radius: 20px;
+    filter: url(#rough-border);
+    z-index: 0;
+  }
+
+  /* Fond blanc rugueux (par-dessus le contour) */
+  .card-outlined::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    border-radius: 16px;
+    filter: url(#rough-border);
+    z-index: 1;
+  }
+
+  .card-outlined > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* --- Méthode 3 : Effet plus intense --- */
+  .card-intense {
+    position: relative;
+    padding: 32px;
+    max-width: 320px;
+    width: fit-content;
+    height: fit-content;
+  }
+
+  .card-intense::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    border-radius: 16px;
+    filter: url(#rough-intense);
+    z-index: 0;
+  }
+
+  .card-intense > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Styles du contenu */
+  .card-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #888;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .card-text {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  .card-tag {
+    display: inline-block;
+    background: #f0f0f0;
+    color: #333;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-top: 14px;
+    font-weight: 500;
+  }
+
+  code {
+    background: #f0f0f0;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+
+  /* Code section */
+  .code-section {
+    background: #111;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 650px;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .code-section h3 {
+    color: #aaa;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+  .code-section pre {
+    color: #e0e0e0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .cm { color: #666; }
+  .pr { color: #7ec8e3; }
+  .vl { color: #c3e88d; }
+</style>
+</head>
+<body>
+
+<!-- SVG FILTERS -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="rough-border">
+      <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="4" result="noise" seed="1"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="rough-intense">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="5" result="noise" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<h1>✅ Bordures rugueuses — Texte parfaitement net</h1>
+
+<div class="cards-grid">
+
+  <!-- Card simple -->
+  <div class="card">
+    <div class="card-label">Méthode 1</div>
+    <div class="card-title">Fond déformé via ::before</div>
+    <div class="card-text">
+      Le filtre SVG est appliqué uniquement sur le <code>::before</code> qui porte le fond blanc. Le texte reste net et lisible.
+    </div>
+    <span class="card-tag">Texte net ✅</span>
+  </div>
+
+  <!-- Card avec contour noir -->
+  <div class="card-outlined">
+    <div class="card-label">Méthode 2</div>
+    <div class="card-title">Contour noir + fond blanc</div>
+    <div class="card-text">
+      <code>::before</code> = contour noir rugueux<br>
+      <code>::after</code> = fond blanc rugueux<br>
+      Contenu = net grâce au <code>z-index</code>
+    </div>
+    <span class="card-tag">Comme ton design 🎯</span>
+  </div>
+
+  <!-- Card intense -->
+  <div class="card-intense">
+    <div class="card-label">Méthode 3</div>
+    <div class="card-title">Effet plus prononcé</div>
+    <div class="card-text">
+      Scale plus élevé pour un rendu encore plus organique et manuscrit. Le texte reste impeccable.
+    </div>
+    <span class="card-tag">Intense</span>
+  </div>
+
+  <!-- Card contenu court -->
+  <div class="card">
+    <div class="card-label">Auto-fit</div>
+    <div class="card-title">Contenu court</div>
+    <div class="card-text">Ça s'ajuste !</div>
+  </div>
+
+  <!-- Card contenu long -->
+  <div class="card-outlined">
+    <div class="card-label">Auto-fit</div>
+    <div class="card-title">Contenu plus long</div>
+    <div class="card-text">
+      Cette card démontre que tout fonctionne avec un contenu variable. La hauteur s'adapte, les bords restent rugueux, et surtout le texte est parfaitement lisible sans aucune déformation. C'est la magie du <code>::before</code> / <code>::after</code> avec z-index.
+    </div>
+    <span class="card-tag">Flexible</span>
+  </div>
+
+</div>
+
+<!-- Code -->
+<div class="code-section">
+  <h3>📋 Le pattern à retenir</h3>
+  <pre><span class="cm">/* La card = juste un conteneur positionné */</span>
+<span class="pr">.card</span> {
+  <span class="pr">position</span>: <span class="vl">relative</span>;
+  <span class="pr">padding</span>: <span class="vl">32px</span>;
+  <span class="pr">width</span>: <span class="vl">fit-content</span>;
+}
+
+<span class="cm">/* Le fond déformé = pseudo-element */</span>
+<span class="pr">.card::before</span> {
+  <span class="pr">content</span>: <span class="vl">''</span>;
+  <span class="pr">position</span>: <span class="vl">absolute</span>;
+  <span class="pr">inset</span>: <span class="vl">0</span>;
+  <span class="pr">background</span>: <span class="vl">#fff</span>;
+  <span class="pr">border-radius</span>: <span class="vl">16px</span>;
+  <span class="pr">filter</span>: <span class="vl">url(#rough-border)</span>;
+  <span class="pr">z-index</span>: <span class="vl">0</span>;  <span class="cm">/* derrière */</span>
+}
+
+<span class="cm">/* Le contenu = au-dessus, PAS de filtre */</span>
+<span class="pr">.card > *</span> {
+  <span class="pr">position</span>: <span class="vl">relative</span>;
+  <span class="pr">z-index</span>: <span class="vl">1</span>;  <span class="cm">/* devant */</span>
+}</pre>
+</div>
+
+</body>
+</html>
