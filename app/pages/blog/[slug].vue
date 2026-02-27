@@ -3,16 +3,15 @@ import { LucideX } from 'lucide-vue-next'
 
 const router = useRouter()
 const route = useRoute()
-const { getBlogPostBySlug, getBlogPosts } = useBlog()
+const { getBlogPostBySlug } = useBlog()
 
-// Récupérer l'article depuis le serveur (utilise le cache Nuxt + fallback API + fallback local)
 const slug = route.params.slug as string
-const { data: article, error } = await useAsyncData(`blog-post-${slug}`, () => getBlogPostBySlug(slug))
 
-// Redirection si article non trouvé (et pas d'erreur en cours)
-if (!article.value && !error.value) {
-  navigateTo('/blog')
-}
+// Charger l'article via le proxy serveur (useLazyAsyncData évite de bloquer la navigation client)
+const { data: article, error, refresh, status } = useLazyAsyncData(
+  `blog-post-${slug}`,
+  () => getBlogPostBySlug(slug)
+)
 
 const goBack = () => {
   router.back()
@@ -20,9 +19,11 @@ const goBack = () => {
 
 /**
  * Decode HTML entities that WordPress may leave in titles
+ * Handles non-string inputs safely (objects, undefined, null)
  */
-const decodeHtml = (html: string): string => {
-  if (!html) return ''
+const decodeHtml = (input: unknown): string => {
+  if (!input) return ''
+  const html = typeof input === 'string' ? input : String(input)
   return html
     .replace(/&#038;/g, '&')
     .replace(/&amp;/g, '&')
@@ -38,8 +39,10 @@ const decodeHtml = (html: string): string => {
 }
 
 // Formater la date
-const formatDate = (dateString: string) => {
+const formatDate = (dateString: string | undefined) => {
+  if (!dateString) return ''
   const date = new Date(dateString)
+  if (isNaN(date.getTime())) return ''
   const now = new Date()
   const diffTime = Math.abs(now.getTime() - date.getTime())
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
@@ -62,28 +65,35 @@ const formatDate = (dateString: string) => {
       <LucideX :size="24" />
     </button>
 
-    <!-- Erreur réseau : afficher un retry plutôt qu'une page blanche -->
-    <div v-if="error || (!article && !error)" class="article-error">
-      <p>Impossible de charger l'article.</p>
-      <button @click="refresh">Réessayer</button>
+    <!-- Chargement en cours -->
+    <div v-if="status === 'pending'" class="article-loading">
+      <p>Chargement de l'article...</p>
     </div>
 
-    <article v-if="article" class="article-container">
+    <!-- Erreur réseau : afficher un retry plutôt qu'une page blanche -->
+    <div v-else-if="error || !article" class="article-error">
+      <p>Impossible de charger l'article.</p>
+      <button @click="refresh()">Réessayer</button>
+      <br />
+      <NuxtLink to="/blog" class="back-link">← Retour au blog</NuxtLink>
+    </div>
+
+    <article v-else class="article-container">
       <!-- Header -->
       <header class="article-header">
         <h1 class="article-title">
-          {{ decodeHtml(article.title.rendered) }}
+          {{ decodeHtml(article?.title?.rendered) }}
         </h1>
-        <p class="article-date">{{ formatDate(article.date) }}</p>
+        <p class="article-date">{{ formatDate(article?.date) }}</p>
       </header>
 
       <!-- Featured Image -->
-      <div class="article-image">
-        <img :src="article.featured_media" :alt="decodeHtml(article.title.rendered)" />
+      <div v-if="article?.featured_media" class="article-image">
+        <img :src="article.featured_media" :alt="decodeHtml(article?.title?.rendered)" />
       </div>
 
       <!-- Content -->
-      <div class="article-content" v-html="article.content.rendered"></div>
+      <div class="article-content" v-html="article?.content?.rendered || ''"></div>
     </article>
   </div>
 </template>
@@ -315,6 +325,22 @@ color: #000;
     font-weight: 600;
     cursor: pointer;
   }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #FF4D6D;
+    text-decoration: underline;
+  }
+}
+
+// Loading state
+.article-loading {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+  text-align: center;
+  color: #999;
 }
 
 // Responsive

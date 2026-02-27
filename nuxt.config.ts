@@ -115,8 +115,6 @@ export default defineNuxtConfig({
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }
       ]
     },
-    // PrÃ©serve la position de scroll lors de la navigation
-    pageTransition: { name: 'page', mode: 'out-in' }
   },
 
   css: [

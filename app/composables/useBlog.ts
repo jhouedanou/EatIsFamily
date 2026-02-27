@@ -25,42 +25,35 @@ export interface BlogPost {
 }
 
 export const useBlog = () => {
-    const { fetchData, fetchSingle, useLocalFallback } = useApi()
-
     /**
-     * Get all blog posts from WordPress API or local fallback
+     * Get all blog posts via the Nuxt server proxy (avoids CORS issues)
+     * The server route /api/blog-posts fetches from WordPress and falls back to local JSON
      */
     const getBlogPosts = async (): Promise<BlogPost[]> => {
-        const posts = await fetchData<BlogPost[]>('blog-posts', 'blog-posts.json')
-        return posts || []
+        try {
+            const posts = await $fetch<BlogPost[]>('/api/blog-posts')
+            return posts || []
+        } catch (err) {
+            console.error('[Blog] Failed to fetch blog posts:', err)
+            return []
+        }
     }
 
     /**
      * Get a single blog post by slug
-     * Uses cached data from blog index when available, then falls back to API/local
+     * Tries Nuxt cache first (from blog index), then fetches via server proxy
      */
     const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
-        // 1. Try cached blog posts from Nuxt data layer (already fetched by blog index)
+        // Try cached data from blog index first (avoids extra network request)
         try {
             const cachedPosts = useNuxtData<BlogPost[]>('blog-posts')
-            if (cachedPosts?.data?.value) {
-                const found = cachedPosts.data.value.find((post: BlogPost) => post.slug === slug)
-                if (found) {
-                    console.log(`%c[Blog] ✅ Found post in cache: ${slug}`, 'color: #C8F560;')
-                    return found
-                }
-            }
-        } catch (e) {
-            // useNuxtData may not be available in all contexts, continue with fetch
+            const cached = cachedPosts?.data?.value?.find((p) => p.slug === slug)
+            if (cached) return cached
+        } catch {
+            // useNuxtData may not be available in all contexts
         }
 
-        // 2. Try to fetch single post from API
-        if (!useLocalFallback) {
-            const post = await fetchSingle<BlogPost>('blog-posts', slug)
-            if (post) return post
-        }
-        
-        // 3. Fallback: fetch all posts and filter by slug
+        // Fallback: fetch all posts via server proxy
         const posts = await getBlogPosts()
         return posts.find(post => post.slug === slug) || null
     }

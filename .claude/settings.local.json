@@ -19,7 +19,11 @@
       "Bash(npx nuxt build:*)",
       "Bash(del \"C:\\\\Users\\\\socialmedia\\\\Documents\\\\EatIsFriday\\\\app\\\\pages\\\\guide-buttons.vue\")",
       "WebFetch(domain:www.eatisfamily.fr)",
-      "Bash(npx nuxi typecheck:*)"
+      "Bash(npx nuxi typecheck:*)",
+      "Bash(python -c \"import sys,json; posts=json.load\\(sys.stdin\\); [print\\(p[''slug'']\\) for p in posts[:5]]\")",
+      "Bash(node -e \"fetch\\(''http://localhost:3001/api/blog-posts''\\).then\\(r=>r.json\\(\\)\\).then\\(d=>d.forEach\\(p=>console.log\\(p.slug\\)\\)\\)\")",
+      "Bash(node -e \":*)",
+      "Bash(git diff app/pages/blog/[slug].vue)"
     ]
   }
 }

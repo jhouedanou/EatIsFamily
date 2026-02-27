@@ -349,13 +349,15 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
   padding-bottom: 1rem;
   &:nth-of-type(1){
     .post-content{
-    background:url(/images/bgFeatured1.svg);  
+    background:#93cbff url(/images/bgFeatured1.svg);  
+        border-radius: 10px;      
+
     }
   }
   &:nth-of-type(2){
     .post-content{
-    background:url(/images/bgFeatured.svg);
-      
+    background: url(/images/bgFeatured.svg) #d7a8ff;
+    border-radius: 10px;      
     }
   
   }

@@ -324,4 +324,5 @@ useHead(() => ({
   font-size: 1.25rem;
   color: #718096;
 }
+
 </style>
