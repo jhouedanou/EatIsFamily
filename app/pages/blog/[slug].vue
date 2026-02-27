@@ -134,7 +134,7 @@ const formatDate = (dateString: string | undefined) => {
 
 // Article container
 .article-container {
-  max-width: 800px;
+  max-width: 80vw;
   margin: 0 auto;
   padding: 0 2rem;
 }
@@ -191,6 +191,30 @@ color: #000;
 
 :deep(strong) {
   font-weight: bold;
+  }
+
+  :deep(ul:not(.user-list)) {
+    list-style: disc !important;
+    padding-left: 1.5rem !important;
+    margin: 1rem 0;
+
+    li {
+      list-style: disc !important;
+      display: list-item !important;
+      margin-bottom: 0.4rem;
+    }
+  }
+
+  :deep(ol) {
+    list-style: decimal !important;
+    padding-left: 1.5rem !important;
+    margin: 1rem 0;
+
+    li {
+      list-style: decimal !important;
+      display: list-item !important;
+      margin-bottom: 0.4rem;
+    }
   }
 
   /* User list styles */
@@ -339,7 +363,7 @@ color: #000;
 
 // Loading state
 .article-loading {
-  max-width: 800px;
+  max-width: 80vw;
   margin: 4rem auto;
   padding: 0 2rem;
   text-align: center;

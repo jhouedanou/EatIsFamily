@@ -1,7 +1,8 @@
 <?php
+defined('ABSPATH') || exit;
 /**
  * The main template file
- * 
+ *
  * @package EatIsFamily
  */
 

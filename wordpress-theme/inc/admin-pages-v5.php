@@ -4197,6 +4197,14 @@ function eatisfamily_buttons_page_v5() {
                 }
                 
                 if ($valid) {
+                    // Sanitize all values before storing
+                    foreach ($data as $key => $btn) {
+                        foreach ($btn as $field => $value) {
+                            if (is_string($value)) {
+                                $data[$key][$field] = $field === 'url' || $field === 'link' ? esc_url_raw($value) : sanitize_text_field($value);
+                            }
+                        }
+                    }
                     update_option('eatisfamily_buttons', $data);
                     
                     // Also save a copy to the theme data/ directory for future imports

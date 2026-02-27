@@ -27,3 +27,9 @@ logs
 backups/
 duplicator-pro-backup/
 nul
+
+# WordPress theme sensitive files
+wordpress-theme/functions.php
+wordpress-theme/import-*.php
+wordpress-theme/fix-*.php
+wordpress-theme/diagnostic-*.php

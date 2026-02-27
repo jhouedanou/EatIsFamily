@@ -1,7 +1,8 @@
 <?php
+defined('ABSPATH') || exit;
 /**
  * Single Activity Template
- * 
+ *
  * @package EatIsFamily
  */
 

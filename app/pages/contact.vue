@@ -15,24 +15,9 @@ const form = ref({
   location: '',
   date: '',
   guests: '',
-  message: ''
+  message: '',
+  attachmentUrl: ''
 })
-
-const attachment = ref<File | null>(null)
-const fileError = ref('')
-
-const handleFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.[0] || null
-  fileError.value = ''
-  if (file && file.size > 5 * 1024 * 1024) {
-    fileError.value = 'Le fichier ne doit pas dépasser 5 Mo.'
-    attachment.value = null
-    target.value = ''
-    return
-  }
-  attachment.value = file
-}
 
 const isSubmitting = ref(false)
 const submitSuccess = ref(false)
@@ -75,10 +60,9 @@ const submitForm = async () => {
         location: '',
         date: '',
         guests: '',
-        message: ''
+        message: '',
+        attachmentUrl: ''
       }
-      attachment.value = null
-      fileError.value = ''
     } else if (response.status === 'validation_failed' && response.invalid_fields) {
       // Afficher les erreurs de validation CF7
       validationErrors.value = response.invalid_fields.map(f => f.message)
@@ -171,6 +155,14 @@ useHead(() => ({
         </ul>
       </div>
       
+      <!-- Sending overlay -->
+      <Transition name="fade">
+        <div v-if="isSubmitting" class="sending-overlay">
+          <div class="sending-spinner"></div>
+          <p class="sending-text">Envoi en cours...</p>
+        </div>
+      </Transition>
+
       <form v-if="!submitSuccess" @submit.prevent="submitForm" class="contact-form">
         <!-- Row 1: Name & Email -->
         <div class="form-row">
@@ -242,22 +234,22 @@ useHead(() => ({
           </div>
         </div>
 
-        <!-- Row 5: File Attachment -->
+        <!-- Row 5: Attachment URL -->
         <div class="form-row full-width">
-          <div class="form-field file-field">
-            <label for="attachment" class="file-label">
-              <span class="file-icon">📎</span>
-              <span class="file-label-text">Fichier joint</span>
-              <span class="file-name">{{ attachment?.name || 'Aucun fichier sélectionné' }}</span>
-            </label>
+          <div class="form-field">
+            <div class="cloud-upload-notice">
+              <span class="cloud-icon">🔗</span>
+              <span>Partagez votre fichier via
+                <a href="https://drive.google.com" target="_blank" rel="noopener">Google Drive</a>,
+                <a href="https://www.dropbox.com" target="_blank" rel="noopener">Dropbox</a> ou
+                <a href="https://onedrive.live.com" target="_blank" rel="noopener">OneDrive</a>
+              </span>
+            </div>
             <input
-              type="file"
-              id="attachment"
-              @change="handleFileChange"
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-              class="file-input"
+              v-model="form.attachmentUrl"
+              type="url"
+              placeholder="Lien vers votre fichier (Google Drive, Dropbox, OneDrive...)"
             />
-            <p v-if="fileError" class="file-error">{{ fileError }}</p>
           </div>
         </div>
 
@@ -455,54 +447,31 @@ useHead(() => ({
     }
   }
 
-  .file-label {
+  .cloud-upload-notice {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    width: 100%;
-    padding: 1.125rem 1.25rem;
-    border: 2px solid #1a1a1a;
-    border-radius: 25px 15px 20px 18px / 18px 22px 15px 25px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
-    font-size: 1rem;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 12px;
+    font-size: 0.875rem;
     color: #1a1a1a;
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.3);
-      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.15);
+    .cloud-icon {
+      font-size: 1.1rem;
     }
-  }
 
-  .file-icon {
-    font-size: 1.25rem;
-  }
+    a {
+      color: #1a1a1a;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
 
-  .file-label-text {
-    font-weight: 600;
-  }
-
-  .file-name {
-    opacity: 0.7;
-    font-size: 0.9rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .file-input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    overflow: hidden;
-  }
-
-  .file-error {
-    color: #dc2626;
-    font-size: 0.85rem;
-    margin: 0.5rem 0 0 1rem;
+      &:hover {
+        opacity: 0.7;
+      }
+    }
   }
 
   textarea {

@@ -26,6 +26,7 @@ export interface ContactFormData {
   date: string
   guests: string
   message: string
+  attachmentUrl: string
 }
 
 const API_BASE = 'https://www.eatisfamily.fr/api'
@@ -35,6 +36,38 @@ export const useContactForm = () => {
 
   const getFormId = (): string => {
     return settings.value?.contact_form?.cf7_form_id || '342'
+  }
+
+  const allowedAttachmentDomains = [
+    'drive.google.com',
+    'docs.google.com',
+    'onedrive.live.com',
+    '1drv.ms',
+    'dropbox.com',
+    'www.dropbox.com',
+    'dl.dropboxusercontent.com',
+    'icloud.com',
+    'www.icloud.com',
+    'box.com',
+    'www.box.com',
+    'app.box.com',
+    'wetransfer.com',
+    'we.tl',
+    'mega.nz',
+    'mega.io',
+    'sharepoint.com',
+  ]
+
+  const isValidAttachmentUrl = (url: string): boolean => {
+    try {
+      const urlObj = new URL(url)
+      const hostname = urlObj.hostname.toLowerCase()
+      return allowedAttachmentDomains.some(domain =>
+        hostname === domain || hostname.endsWith('.' + domain)
+      )
+    } catch {
+      return false
+    }
   }
 
   /**
@@ -76,6 +109,7 @@ export const useContactForm = () => {
       body.append('event-date', formData.date)
       body.append('guests', formData.guests)
       body.append('your-message', formData.message)
+      body.append('attachment-url', formData.attachmentUrl)
       body.append('_wpcf7_unit_tag', `wpcf7-f${numericFormId}-o1`)
 
       const response = await fetch(endpoint, {
@@ -123,6 +157,10 @@ export const useContactForm = () => {
       errors.push('Le message est requis')
     }
 
+    if (formData.attachmentUrl.trim() && !isValidAttachmentUrl(formData.attachmentUrl)) {
+      errors.push('Le lien du fichier doit provenir d\'un service cloud autorisé (Google Drive, Dropbox, OneDrive, etc.)')
+    }
+
     return {
       valid: errors.length === 0,
       errors
@@ -133,6 +171,7 @@ export const useContactForm = () => {
     submitContactForm,
     validateForm,
     isValidEmail,
+    isValidAttachmentUrl,
     getFormId
   }
 }

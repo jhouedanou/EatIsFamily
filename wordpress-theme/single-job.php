@@ -1,7 +1,8 @@
 <?php
+defined('ABSPATH') || exit;
 /**
  * Single Job Template
- * 
+ *
  * @package EatIsFamily
  */
 
