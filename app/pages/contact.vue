@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, nextTick, onMounted } from 'vue'
 import { LucideX } from 'lucide-vue-next'
 
 const router = useRouter()
@@ -23,6 +23,13 @@ const isSubmitting = ref(false)
 const submitSuccess = ref(false)
 const submitError = ref('')
 const validationErrors = ref<string[]>([])
+const formContainer = ref<HTMLElement | null>(null)
+
+const scrollToErrors = () => {
+  nextTick(() => {
+    formContainer.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  })
+}
 
 const goBack = () => {
   router.back()
@@ -37,6 +44,7 @@ const submitForm = async () => {
   const validation = validateForm(form.value)
   if (!validation.valid) {
     validationErrors.value = validation.errors
+    scrollToErrors()
     return
   }
   
@@ -66,14 +74,17 @@ const submitForm = async () => {
     } else if (response.status === 'validation_failed' && response.invalid_fields) {
       // Afficher les erreurs de validation CF7
       validationErrors.value = response.invalid_fields.map(f => f.message)
+      scrollToErrors()
     } else {
       // Statut inconnu - logger pour debug
       console.warn('[Contact] Unknown response status:', response.status, response)
       submitError.value = response.message || 'Une erreur est survenue. Veuillez réessayer.'
+      scrollToErrors()
     }
   } catch (error) {
     console.error('Error submitting form:', error)
     submitError.value = 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer.'
+    scrollToErrors()
   } finally {
     isSubmitting.value = false
   }
@@ -144,7 +155,7 @@ useHead(() => ({
     </div>
 
     <!-- Form Section -->
-    <div class="form-container">
+    <div ref="formContainer" class="form-container">
       <!-- Error Messages -->
       <div v-if="validationErrors.length > 0 || submitError" class="form-errors">
         <div v-if="submitError" class="error-message">
