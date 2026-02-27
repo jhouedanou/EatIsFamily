@@ -3184,3 +3184,136 @@ body {
     letter-spacing: normal;
     text-align: left;
 }
+
+// ──────────────────────────────────────────────
+// Divi Builder Content - Global Styles
+// ──────────────────────────────────────────────
+.divi-content {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 18px;
+  line-height: 1.8;
+  letter-spacing: 1px;
+  color: #000;
+  word-wrap: break-word;
+
+  // Global text styles within Divi content
+  strong, b {
+    font-weight: 700;
+  }
+
+  a {
+    color: #c39d63;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #a88347;
+    }
+  }
+
+  // Headings
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading, 'Recoleta', serif);
+    font-weight: 700;
+    color: #000;
+    line-height: 1.3;
+  }
+
+  h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin: 2rem 0 1rem; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 2rem 0 1rem; text-align: center; }
+  h3 { font-size: clamp(1.25rem, 2.5vw, 1.5rem); margin: 1.5rem 0 0.75rem; }
+
+  p {
+    margin: 0 0 1.25rem;
+  }
+
+  ul, ol {
+    margin: 1rem 0 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  // Divi section spacing
+  .divi-section {
+    &:first-child {
+      padding-top: 0;
+    }
+
+    + .divi-section {
+      padding-top: 1rem;
+    }
+  }
+
+  // Divi row responsive
+  .divi-row {
+    @media (max-width: 768px) {
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  // Divi blurb cards
+  .divi-blurb {
+    border-radius: 12px;
+    padding: 1.5rem;
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  // Embedded video responsive
+  .divi-video {
+    max-width: 100%;
+  }
+
+  // Slider fullwidth
+  .divi-slider {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  // Button within Divi
+  .divi-button {
+    font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  }
+
+  // Image carousel
+  .divi-carousel {
+    .divi-carousel__item img {
+      border-radius: 8px;
+    }
+  }
+
+  // Raw HTML cleanup
+  .divi-raw-html {
+    margin: 1rem 0;
+
+    p {
+      margin: 0 0 1rem;
+    }
+  }
+
+  // Mobile adjustments
+  @media (max-width: 768px) {
+    font-size: 16px;
+    letter-spacing: 0;
+
+    h2 {
+      text-align: left;
+    }
+
+    .divi-blurb {
+      padding: 1rem;
+    }
+  }
+}

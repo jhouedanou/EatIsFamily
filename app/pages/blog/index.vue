@@ -21,9 +21,18 @@ const decodeHtml = (html: string): string => {
 }
 
 /**
- * Strip HTML tags and decode entities for plain text excerpts
+ * Strip HTML tags and decode entities for plain text excerpts.
+ * If the content is Divi-formatted, extract text from the Divi tree instead.
  */
-const cleanExcerpt = (html: string): string => {
+const cleanExcerpt = (html: string, fullContent?: string): string => {
+  // If excerpt is empty but we have Divi content, extract from content
+  if ((!html || html.trim() === '') && fullContent && isDiviContent(fullContent)) {
+    return getDiviExcerpt(fullContent, 200)
+  }
+  // If excerpt itself contains Divi shortcodes, extract plain text
+  if (html && isDiviContent(html)) {
+    return getDiviExcerpt(html, 200)
+  }
   if (!html) return ''
   // Remove HTML tags first, then decode entities
   const stripped = html.replace(/<[^>]*>/g, '').trim()
@@ -34,6 +43,7 @@ const { getBlogPosts } = useBlog()
 const { settings } = useGlobalSettings()
 const { getBlogPageContent } = usePageContent()
 const { getButton, loadButtons } = useButtons()
+const { isDiviContent, getDiviExcerpt } = useDiviParser()
 
 // Dynamic button URL with fallback
 const btnReadMore = computed(() => settings.value?.icons?.btn_read_more || '/images/btnReadMore.svg')
@@ -157,7 +167,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
                 {{ decodeHtml(featuredPosts[0].title.rendered) }}
               </NuxtLink>
             </h3>
-            <p class="post-excerpt">{{ cleanExcerpt(featuredPosts[0].excerpt.rendered) }}</p>
+            <p class="post-excerpt">{{ cleanExcerpt(featuredPosts[0].excerpt.rendered, featuredPosts[0].content.rendered) }}</p>
 <PillButton
               :color="getButton('blog_read_article').color"
               :variant="getButton('blog_read_article').variant"
@@ -187,7 +197,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
                 {{ decodeHtml(featuredPosts[1].title.rendered) }}
               </NuxtLink>
             </h3>
-            <p class="post-excerpt">{{ cleanExcerpt(featuredPosts[1].excerpt.rendered) }}</p>
+            <p class="post-excerpt">{{ cleanExcerpt(featuredPosts[1].excerpt.rendered, featuredPosts[1].content.rendered) }}</p>
           <!--   <NuxtLink :to="`/blog/${featuredPosts[1].slug}`" class="bg-transparent border-0 p-0 m-0">
               <NuxtImg :src="btnReadMore" alt="Lire la suite" width="247"/>
             </NuxtLink> -->
@@ -230,7 +240,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
                   {{ decodeHtml(post.title.rendered) }}
                 </NuxtLink>
               </h3>
-              <p class="card-excerpt">{{ cleanExcerpt(post.excerpt.rendered) }}</p>
+              <p class="card-excerpt">{{ cleanExcerpt(post.excerpt.rendered, post.content.rendered) }}</p>
               <PillButton
                 :color="getButton('blog_read_article').color"
                 :variant="getButton('blog_read_article').variant"

@@ -92,8 +92,11 @@ const formatDate = (dateString: string | undefined) => {
         <img :src="article.featured_media" :alt="decodeHtml(article?.title?.rendered)" />
       </div>
 
-      <!-- Content -->
-      <div class="article-content" v-html="article?.content?.rendered || ''"></div>
+      <!-- Content (Divi-aware rendering) -->
+      <DiviDiviContent
+        :content="article?.content?.rendered || ''"
+        wrapper-class="article-content"
+      />
     </article>
   </div>
 </template>
