@@ -240,19 +240,6 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
                   {{ decodeHtml(post.title.rendered) }}
                 </NuxtLink>
               </h3>
-              <p class="card-excerpt">{{ cleanExcerpt(post.excerpt.rendered, post.content.rendered) }}</p>
-              <PillButton
-                :color="getButton('blog_read_article').color"
-                :variant="getButton('blog_read_article').variant"
-                :to="`/blog/${post.slug}`"
-                :label="getButton('blog_read_article').label"
-                :width="getButton('blog_read_article').width"
-                bg-left="-8px"
-                bg-right="-8px"
-                bg-top="-6px"
-                bg-bottom="-6px"
-                bg-width="110%"
-              />
             </div>
           </article>
         </div>

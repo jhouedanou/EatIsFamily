@@ -93,7 +93,7 @@ const formatDate = (dateString: string | undefined) => {
       </div>
 
       <!-- Content (Divi-aware rendering) -->
-      <DiviDiviContent
+      <DiviContent
         :content="article?.content?.rendered || ''"
         wrapper-class="article-content"
       />
