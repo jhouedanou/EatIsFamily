@@ -446,9 +446,11 @@ const NUXT_STATIC_ROUTES = [
 /**
  * Rewrite internal WordPress URLs in HTML content to Nuxt routes.
  * - eatisfamily.fr/slug/ → /blog/slug (for blog posts)
- * - eatisfamily.fr/api/wp-content/uploads/ → eatisfamily.fr/sitewordpressOriginal/wp-content/uploads/
- * - eatisfamily.fr/wp-content/uploads/ → eatisfamily.fr/sitewordpressOriginal/wp-content/uploads/
  * - contact-cuisine-locale/#ancre → /contact#ancre
+ * 
+ * Note: les URLs d'images ne sont PAS réécrites ici.
+ * WordPress sert les images depuis /api/wp-content/uploads/.
+ * Apache fallback gère les anciens fichiers dans /sitewordpressOriginal/.
  */
 function rewriteInternalLinks(html: string): string {
   if (!html) return ''

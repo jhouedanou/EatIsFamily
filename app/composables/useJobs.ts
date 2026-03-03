@@ -35,8 +35,7 @@ export const useJobs = () => {
      */
     const getJobs = async (): Promise<Job[] | null> => {
         const jobs = await fetchData<Job[]>('jobs', 'jobs.json')
-        if (!jobs) return null
-        return jobs
+        return jobs || null
     }
 
     /**

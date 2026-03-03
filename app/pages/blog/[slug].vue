@@ -14,6 +14,10 @@ const { data: article, error, refresh, status } = useLazyAsyncData(
   () => getBlogPostBySlug(slug)
 )
 
+const featuredImageUrl = computed(() => {
+  return article.value?.featured_media || ''
+})
+
 const goBack = () => {
   router.back()
 }
@@ -89,8 +93,8 @@ const formatDate = (dateString: string | undefined) => {
       </header>
 
       <!-- Featured Image -->
-      <div v-if="article?.featured_media" class="article-image">
-        <img :src="article.featured_media" :alt="decodeHtml(article?.title?.rendered)" />
+      <div v-if="featuredImageUrl" class="article-image">
+        <img :src="featuredImageUrl" :alt="decodeHtml(article?.title?.rendered)" />
       </div>
 
       <!-- Content (Divi-aware rendering) -->

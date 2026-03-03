@@ -27,8 +27,7 @@ export const useActivities = () => {
      */
     const getActivities = async (): Promise<Activity[] | null> => {
         const activities = await fetchData<Activity[]>('activities', 'activities.json')
-        if (!activities) return null
-        return activities
+        return activities || null
     }
 
     /**
