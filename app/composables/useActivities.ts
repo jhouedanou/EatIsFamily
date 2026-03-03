@@ -26,7 +26,9 @@ export const useActivities = () => {
      * Get all activities from WordPress API or local fallback
      */
     const getActivities = async (): Promise<Activity[] | null> => {
-        return await fetchData<Activity[]>('activities', 'activities.json')
+        const activities = await fetchData<Activity[]>('activities', 'activities.json')
+        if (!activities) return null
+        return activities
     }
 
     /**

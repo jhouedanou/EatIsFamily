@@ -34,7 +34,9 @@ export const useJobs = () => {
      * Get all jobs from WordPress API or local fallback
      */
     const getJobs = async (): Promise<Job[] | null> => {
-        return await fetchData<Job[]>('jobs', 'jobs.json')
+        const jobs = await fetchData<Job[]>('jobs', 'jobs.json')
+        if (!jobs) return null
+        return jobs
     }
 
     /**

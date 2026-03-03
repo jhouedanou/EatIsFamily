@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { DiviNode } from '~/composables/useDiviParser'
 
+const { rewriteInternalLinks } = useDiviParser()
+
 const props = defineProps<{ node: DiviNode }>()
 
 const textColor = computed(() => props.node.attrs.text_text_color || '')
@@ -28,7 +30,7 @@ const textStyle = computed(() => {
 
 <template>
   <div class="divi-text" :style="textStyle">
-    <div v-html="node.content"></div>
+    <div v-html="rewriteInternalLinks(node.content)"></div>
     <DiviNodeRenderer
       v-for="(child, idx) in node.children"
       :key="`text-${idx}`"

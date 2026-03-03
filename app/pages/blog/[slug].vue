@@ -4,6 +4,7 @@ import { LucideX } from 'lucide-vue-next'
 const router = useRouter()
 const route = useRoute()
 const { getBlogPostBySlug } = useBlog()
+const { rewriteInternalLinks } = useDiviParser()
 
 const slug = route.params.slug as string
 

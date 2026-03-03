@@ -14,13 +14,14 @@ const props = defineProps<{
   wrapperClass?: string
 }>()
 
-const { parseDiviContent, isDiviContent } = useDiviParser()
+const { parseDiviContent, isDiviContent, rewriteInternalLinks } = useDiviParser()
 
 const hasDivi = computed(() => isDiviContent(props.content))
 const diviTree = computed(() => {
   if (!hasDivi.value) return []
   return parseDiviContent(props.content)
 })
+const rewrittenContent = computed(() => rewriteInternalLinks(props.content))
 </script>
 
 <template>
@@ -34,7 +35,7 @@ const diviTree = computed(() => {
   </div>
 
   <!-- Plain HTML content (non-Divi) -->
-  <div v-else :class="['article-content', wrapperClass]" v-html="content"></div>
+  <div v-else :class="['article-content', wrapperClass]" v-html="rewrittenContent"></div>
 </template>
 
 <style lang="scss">

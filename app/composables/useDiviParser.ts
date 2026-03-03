@@ -47,14 +47,20 @@ function decodeEntities(text: string): string {
     .replace(/\u003c/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/\u003e/g, '>')
+    .replace(/&apos;/g, "'")
     .replace(/&#8217;/g, "'")
     .replace(/&#8216;/g, "'")
     .replace(/&#8220;/g, '"')
     .replace(/&#8221;/g, '"')
+    .replace(/&#8211;/g, '–')
     .replace(/&#8230;/g, '…')
     .replace(/&hellip;/g, '…')
     .replace(/&#039;/g, "'")
     .replace(/&nbsp;/g, ' ')
+    .replace(/&rsquo;/g, "'")
+    .replace(/&lsquo;/g, "'")
+    .replace(/&rdquo;/g, '"')
+    .replace(/&ldquo;/g, '"')
     .replace(/\u0026Prime;/g, '"')
     .replace(/\u0026rsquo;/g, "'")
     .replace(/\u0026lsquo;/g, "'")
@@ -428,6 +434,80 @@ function extractFirstImage(nodes: DiviNode[]): string | null {
 }
 
 /**
+ * Known Nuxt static routes (not blog posts)
+ * These paths should NOT be prefixed with /blog/
+ */
+const NUXT_STATIC_ROUTES = [
+  'about', 'activities', 'apply-activities', 'apply-jobs',
+  'careers', 'contact', 'cookies', 'demo-buttons',
+  'events', 'jobs', 'privacy', 'terms', 'blog'
+]
+
+/**
+ * Rewrite internal WordPress URLs in HTML content to Nuxt routes.
+ * - eatisfamily.fr/slug/ → /blog/slug (for blog posts)
+ * - eatisfamily.fr/api/wp-content/uploads/ → eatisfamily.fr/sitewordpressOriginal/wp-content/uploads/
+ * - eatisfamily.fr/wp-content/uploads/ → eatisfamily.fr/sitewordpressOriginal/wp-content/uploads/
+ * - contact-cuisine-locale/#ancre → /contact#ancre
+ */
+function rewriteInternalLinks(html: string): string {
+  if (!html) return ''
+
+  let result = html
+
+  // Rewrite internal page links: eatisfamily.fr/contact-cuisine-locale/ → /contact
+  result = result.replace(
+    /href="https?:\/\/(?:www\.)?eatisfamily\.fr\/contact-cuisine-locale\/?([^"]*)"/g,
+    'href="/contact$1"'
+  )
+
+  // Rewrite internal links: eatisfamily.fr/slug/ → /blog/slug
+  // But NOT for known static routes, API paths, sitewordpressOriginal, or wp-content
+  result = result.replace(
+    /href="https?:\/\/(?:www\.)?eatisfamily\.fr\/([^"#?]+?)\/?([#?][^"]*)?">/g,
+    (_match, slug, hashOrQuery = '') => {
+      // Strip trailing slash from slug
+      const cleanSlug = slug.replace(/\/$/, '')
+
+      // Skip non-page URLs
+      if (
+        cleanSlug.startsWith('api/') ||
+        cleanSlug.startsWith('wp-') ||
+        cleanSlug.startsWith('sitewordpressOriginal/') ||
+        cleanSlug.includes('/wp-content/') ||
+        cleanSlug.includes('/wp-json/') ||
+        cleanSlug.includes('.php') ||
+        cleanSlug.includes('.css') ||
+        cleanSlug.includes('.js') ||
+        cleanSlug.includes('.jpg') ||
+        cleanSlug.includes('.png') ||
+        cleanSlug.includes('.webp') ||
+        cleanSlug.includes('.pdf')
+      ) {
+        return `href="https://www.eatisfamily.fr/${slug}${hashOrQuery}">`
+      }
+
+      // Check if it matches a known Nuxt static route
+      const firstSegment = cleanSlug.split('/')[0]
+      if (firstSegment && NUXT_STATIC_ROUTES.includes(firstSegment)) {
+        return `href="/${cleanSlug}${hashOrQuery}">`
+      }
+
+      // Everything else is a blog post slug
+      return `href="/blog/${cleanSlug}${hashOrQuery}">`
+    }
+  )
+
+  // Also catch simpler href patterns without trailing content
+  result = result.replace(
+    /href="https?:\/\/(?:www\.)?eatisfamily\.fr\/?">/g,
+    'href="/">'
+  )
+
+  return result
+}
+
+/**
  * Main composable
  */
 export const useDiviParser = () => {
@@ -480,6 +560,7 @@ export const useDiviParser = () => {
     isDiviContent,
     getDiviExcerpt,
     getDiviFirstImage,
-    decodeEntities
+    decodeEntities,
+    rewriteInternalLinks
   }
 }

@@ -1,0 +1,7 @@
+{
+  "name": "EatIsFriday",
+  "private": true,
+  "scripts": {
+    "start": "node .output/server/index.mjs"
+  }
+}
