@@ -27,11 +27,11 @@ export interface BlogPost {
 export const useBlog = () => {
     /**
      * Get all blog posts via the Nuxt server proxy (avoids CORS issues)
-     * The server route /api/blog-posts fetches from WordPress and falls back to local JSON
+     * The server route /nuxt-api/blog-posts fetches from WordPress and falls back to local JSON
      */
     const getBlogPosts = async (): Promise<BlogPost[]> => {
         try {
-            const posts = await $fetch<BlogPost[]>('/api/blog-posts')
+            const posts = await $fetch<BlogPost[]>('/nuxt-api/blog-posts')
             return posts || []
         } catch (err) {
             console.error('[Blog] Failed to fetch blog posts:', err)
