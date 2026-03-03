@@ -116,15 +116,17 @@
               </div>
 
               <!-- Honeypot field (hidden from users, trap for bots) -->
-              <div class="form-group honeypot-field" aria-hidden="true">
-                <label for="apply-website">Site web</label>
+              <div class="form-group honeypot-field" aria-hidden="true" style="opacity:0;position:absolute;top:0;left:0;height:0;width:0;z-index:-1;overflow:hidden;">
+                <label for="apply-fax-number">Fax</label>
                 <input
                   v-model="form.website"
                   type="text"
-                  id="apply-website"
-                  name="website"
-                  autocomplete="off"
+                  id="apply-fax-number"
+                  name="fax_number"
+                  autocomplete="nope"
                   tabindex="-1"
+                  data-1p-ignore
+                  data-lpignore="true"
                 />
               </div>
 

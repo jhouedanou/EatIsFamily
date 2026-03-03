@@ -160,11 +160,11 @@ useHead(() => ({
                 Département - {{ job.department || 'Culinaire' }}
               </span>
               <span class="tag tag-lime">
-                <nuxt-img :src="iconBriefcase" alt="Icône emploi" width="16" height="16" />
+                <img :src="iconBriefcase" alt="Icône emploi" width="16" height="16" />
                 {{ job.job_type }}
               </span>
               <span class="tag tag-yellow">
-               <nuxt-img :src="iconMoneybag" alt="Icône salaire" width="16" height="16" />
+               <img :src="iconMoneybag" alt="Icône salaire" width="16" height="16" />
                 {{ job.salary }}
               </span>
             </div>
@@ -302,10 +302,10 @@ useHead(() => ({
               <p>Rejoignez notre équipe et participez à la création d'expériences inoubliables dans l'un des lieux les plus passionnants de France.</p>
               <div class="bottom-cta-buttons">
                 <button class="bg-transparent border-0" @click="openApplyModal">
-                  <nuxt-img :src="btnApplyPosition" alt="Postuler" width="240" height="" />
+                  <img :src="btnApplyPosition" alt="Postuler" width="240" />
                 </button>
                 <button class="bg-transparent border-0" @click="goBack">
-                  <nuxt-img :src="btnGoBackJobs" alt="Retour" width="240" height="" />
+                  <img :src="btnGoBackJobs" alt="Retour" width="240" />
                 </button>
               </div>
             </div>

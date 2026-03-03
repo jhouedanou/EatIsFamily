@@ -368,11 +368,11 @@ const goToPage = (page: number) => {
                       <LucideMapPin style="width: 0.75rem; height: 0.75rem;" /> {{ getJobVenueLocation(job) }}
                     </span>-->
                     <span class="tag-lime d-flex align-items-center gap-1">
-                      <nuxt-img :src="iconBriefcase" alt="Icône emploi" width="16" height="16" />
+                      <img :src="iconBriefcase" alt="Icône emploi" width="16" height="16" />
                       {{ getJobTypeLabel(job.job_type) || job.job_type }}
                     </span>
                     <span class="tag-yellow d-flex align-items-center gap-1">
-                      <nuxt-img :src="iconMoneybag" alt="Icône salaire" width="16" height="16" />
+                      <img :src="iconMoneybag" alt="Icône salaire" width="16" height="16" />
                       {{ job.salary }}
                     </span>
                   </div>
@@ -386,10 +386,10 @@ const goToPage = (page: number) => {
                 <!-- Buttons -->
                 <div id="matuidicharo" class="d-flex gap-3 mt-auto">
                   <!-- <NuxtLink class="matiti" :to="`/jobs/${job.slug}`   ">
-                    <nuxt-img :src="btnApply"></nuxt-img>
+                    <img :src="btnApply" alt="Postuler" />
                   </NuxtLink>
                   <NuxtLink class="matiti" >
-                    <nuxt-img :src="btnView"></nuxt-img>
+                    <img :src="btnView" alt="Voir" />
                   </NuxtLink> -->
                   <PillButton
                   :to="`/jobs/${job.slug}`"
@@ -468,7 +468,7 @@ const goToPage = (page: number) => {
               {{ content.cta_section?.general_application_button }}
             </button> -->
 <!--             <NuxtLink to="/careers">
-              <NuxtImg :src="btnDiscoverApply" width="316" />
+              <img :src="btnDiscoverApply" width="316" alt="Découvrir et postuler" />
             </NuxtLink> -->
               <PillButton
                   :to="getButton('careers_bottom_cta').to"

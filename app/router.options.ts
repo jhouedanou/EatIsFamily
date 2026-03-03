@@ -26,6 +26,6 @@ export default <RouterConfig>{
     }
 
     // Le plugin scroll-to-top.client.ts gère le scroll pour les nouvelles navigations
-    return false
+    return { top: 0, left: 0, behavior: 'instant' }
   },
 }

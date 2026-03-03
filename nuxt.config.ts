@@ -9,6 +9,13 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt'
   ],
 
+  // Pas d'optimisation d'image côté serveur (sharp incompatible cross-OS)
+  // Les <NuxtImg> servent les images directement sans passer par /_ipx/
+  image: {
+    provider: 'none',
+    none: {},
+  },
+
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
