@@ -18,6 +18,36 @@ const featuredImageUrl = computed(() => {
   return article.value?.featured_media || ''
 })
 
+// Extraire un résumé texte brut depuis l'excerpt WordPress
+const plainExcerpt = computed(() => {
+  const raw = article.value?.excerpt?.rendered || ''
+  return raw
+    .replace(/<[^>]+>/g, '')       // retirer les balises HTML
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#8230;|&hellip;|\[…\]/g, '…')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .trim()
+    .slice(0, 200)
+})
+
+// Open Graph & SEO meta — mis à jour réactivement quand l'article est chargé
+useSeoMeta({
+  title: () => article.value ? decodeHtml(article.value.title?.rendered) + ' — Eat Is Family' : 'Eat Is Family Blog',
+  ogTitle: () => article.value ? decodeHtml(article.value.title?.rendered) : 'Eat Is Family Blog',
+  description: () => plainExcerpt.value || 'Découvrez cet article sur le blog Eat Is Family.',
+  ogDescription: () => plainExcerpt.value || 'Découvrez cet article sur le blog Eat Is Family.',
+  ogImage: () => featuredImageUrl.value || '/web-app-manifest-512x512.png',
+  ogType: 'article',
+  twitterCard: 'summary_large_image',
+  twitterTitle: () => article.value ? decodeHtml(article.value.title?.rendered) : 'Eat Is Family Blog',
+  twitterDescription: () => plainExcerpt.value || 'Découvrez cet article sur le blog Eat Is Family.',
+  twitterImage: () => featuredImageUrl.value || '/web-app-manifest-512x512.png',
+})
+
 const goBack = () => {
   router.back()
 }

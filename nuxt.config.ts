@@ -30,20 +30,16 @@ export default defineNuxtConfig({
       scope: '/',
       icons: [
         {
-          src: '/pwa-192x192.png',
+          src: '/web-app-manifest-192x192.png',
           sizes: '192x192',
-          type: 'image/png'
+          type: 'image/png',
+          purpose: 'maskable'
         },
         {
-          src: '/pwa-512x512.png',
-          sizes: '512x512',
-          type: 'image/png'
-        },
-        {
-          src: '/pwa-512x512.png',
+          src: '/web-app-manifest-512x512.png',
           sizes: '512x512',
           type: 'image/png',
-          purpose: 'any maskable'
+          purpose: 'maskable'
         }
       ]
     },
@@ -119,7 +115,11 @@ export default defineNuxtConfig({
         { name: 'apple-mobile-web-app-title', content: 'Eat Is Family' }
       ],
       link: [
-        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', sizes: '180x180' }
+        { rel: 'icon', type: 'image/png', href: '/favicon-96x96.png', sizes: '96x96' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'shortcut icon', href: '/favicon.ico' },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+        { rel: 'manifest', href: '/site.webmanifest' }
       ]
     },
   },
