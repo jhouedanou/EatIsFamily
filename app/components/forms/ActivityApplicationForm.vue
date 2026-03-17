@@ -95,10 +95,12 @@ const formData = ref({
 const isSubmitting = ref(false)
 const submitMessage = ref('')
 const submitStatus = ref('')
+const { trackFormSubmit, trackFormStart } = useAnalytics()
 
 onMounted(async () => {
   const formsContent = await getFormsContent()
   content.value = formsContent?.activity_registration_form || null
+  trackFormStart('activity_registration')
 })
 
 const handleSubmit = async () => {
@@ -110,6 +112,7 @@ const handleSubmit = async () => {
     isSubmitting.value = false
     submitStatus.value = 'success'
     submitMessage.value = content.value?.success_message || 'Registration successful!'
+    trackFormSubmit('activity_registration', { participants: formData.value.participants })
 
     // Reset form
     formData.value = {

@@ -7,6 +7,7 @@ const router = useRouter()
 const { getJobWithVenue } = useJobs()
 const { settings, getString } = useGlobalSettings()
 const { getButton, loadButtons } = useButtons()
+const { trackJobView, trackJobApplyStart, trackCTAClick } = useAnalytics()
 
 const job = ref<JobWithVenue | null>(null)
 const isLoading = ref(true)
@@ -33,6 +34,10 @@ onMounted(async () => {
   const slug = route.params.slug as string
   job.value = await getJobWithVenue(slug)
   isLoading.value = false
+  // Tracker la consultation de l'offre
+  if (job.value) {
+    trackJobView(slug, getJobTitle(job.value), getVenueLocation(job.value), job.value.job_type)
+  }
 })
 
 const getJobTitle = (j: JobWithVenue) => {
@@ -55,6 +60,9 @@ const getVenueLocation = (j: JobWithVenue) => {
 
 const openApplyModal = () => {
   showApplyModal.value = true
+  if (job.value) {
+    trackJobApplyStart(getJobTitle(job.value), route.params.slug as string)
+  }
 }
 
 const closeApplyModal = () => {
@@ -66,6 +74,7 @@ const goBack = () => {
 }
 
 const shareJob = () => {
+  trackCTAClick('share_job', 'job_detail', window.location.href)
   if (navigator.share) {
     navigator.share({
       title: job.value ? getJobTitle(job.value) : 'Offre d\'emploi',

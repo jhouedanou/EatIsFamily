@@ -3,6 +3,15 @@ import { ref, onMounted, computed } from 'vue'
 import { LucideLinkedin, LucideInstagram, LucideTwitter, LucideHeart } from 'lucide-vue-next'
 
 const { settings, loadSettings, getCopyrightText } = useGlobalSettings()
+const { trackSocialClick, trackNavClick } = useAnalytics()
+
+const handleSocialClick = (platform: string, url: string) => {
+  trackSocialClick(platform, url)
+}
+
+const handleFooterNavClick = (text: string, to: string) => {
+  trackNavClick(text, to, 'footer')
+}
 
 // Load settings if not already loaded
 onMounted(async () => {
@@ -97,6 +106,7 @@ const socialLinks = computed(() => {
               target="_blank"
               rel="noopener noreferrer"
               class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:bg-white hover:text-brand-dark transition-all duration-300"
+              @click="handleSocialClick(social.label, social.href)"
             >
               <component :is="social.icon" class="w-4 h-4" />
             </a>
@@ -111,6 +121,7 @@ const socialLinks = computed(() => {
               <NuxtLink
                 :to="link.to"
                 class="text-gray-400 hover:text-white transition-colors font-body text-sm"
+                @click="handleFooterNavClick(link.text, link.to)"
               >
                 {{ link.text }}
               </NuxtLink>
@@ -126,6 +137,7 @@ const socialLinks = computed(() => {
               <NuxtLink
                 :to="link.to"
                 class="text-gray-400 hover:text-white transition-colors font-body text-sm"
+                @click="handleFooterNavClick(link.text, link.to)"
               >
                 {{ link.text }}
               </NuxtLink>

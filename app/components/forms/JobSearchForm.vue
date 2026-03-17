@@ -94,6 +94,8 @@ const selectSiteAndSearch = (site: string) => {
   navigateTo(`/careers?venue=${encodeURIComponent(site)}`)
 }
 
+const { trackSearch, trackCTAClick } = useAnalytics()
+
 const handleSearch = () => {
   const query = new URLSearchParams()
   if (selectedJobTitle.value) {
@@ -102,6 +104,11 @@ const handleSearch = () => {
   if (selectedSite.value) {
     query.set('venue', selectedSite.value)
   }
+  trackSearch(
+    selectedJobTitle.value || selectedSite.value || 'browse_all',
+    'job_search_form',
+    jobs.value?.length
+  )
   navigateTo(`/careers${query.toString() ? '?' + query.toString() : ''}`)
 }
 

@@ -83,10 +83,12 @@ const formData = ref({
 const isSubmitting = ref(false)
 const submitMessage = ref('')
 const submitStatus = ref('')
+const { trackFormSubmit, trackFormStart } = useAnalytics()
 
 onMounted(async () => {
   const formsContent = await getFormsContent()
   content.value = formsContent?.job_application_form || null
+  trackFormStart('job_application')
 })
 
 const handleFileChange = (event: Event) => {
@@ -105,6 +107,7 @@ const handleSubmit = async () => {
     isSubmitting.value = false
     submitStatus.value = 'success'
     submitMessage.value = content.value?.success_message || 'Application submitted successfully!'
+    trackFormSubmit('job_application')
 
     // Reset form
     formData.value = {

@@ -5,6 +5,15 @@ import { LucideMenu, LucideX } from 'lucide-vue-next'
 const route = useRoute()
 const isOpen = ref(false)
 const { settings, loadSettings } = useGlobalSettings()
+const { trackNavClick, trackCTAClick } = useAnalytics()
+
+const handleNavClick = (text: string, to: string) => {
+  trackNavClick(text, to, 'header')
+}
+
+const handleCtaClick = (text: string, to: string) => {
+  trackCTAClick(text, 'header_cta', to)
+}
 
 // Check if a link is active
 const isActiveLink = (linkTo: string) => {
@@ -49,6 +58,7 @@ const siteLogo = computed(() => settings.value?.brand?.logo || '')
           :to="link.to"
           class="nav-link font-body font-medium transition-colors"
           :class="{ 'nav-active': isActiveLink(link.to) }"
+          @click="handleNavClick(link.text, link.to)"
         >
           {{ link.text }}
         </NuxtLink>
@@ -78,10 +88,11 @@ const siteLogo = computed(() => settings.value?.brand?.logo || '')
           :to="link.to"
           class="nav-link font-body font-medium transition-colors"
           :class="{ 'nav-active': isActiveLink(link.to) }"
+          @click="handleNavClick(link.text, link.to)"
         >
           {{ link.text }}
         </NuxtLink>
-        <NuxtLink :to="ctaLink" class="btn-primary text-sm">
+        <NuxtLink :to="ctaLink" class="btn-primary text-sm" @click="handleCtaClick(ctaText, ctaLink)">
           {{ ctaText }}
         </NuxtLink>
       </div>
@@ -111,7 +122,7 @@ const siteLogo = computed(() => settings.value?.brand?.logo || '')
             :to="link.to"
             class="nav-link text-lg font-body font-medium transition-colors"
             :class="{ 'nav-active': isActiveLink(link.to) }"
-            @click="isOpen = false"
+            @click="isOpen = false; handleNavClick(link.text, link.to)"
           >
             {{ link.text }}
           </NuxtLink>

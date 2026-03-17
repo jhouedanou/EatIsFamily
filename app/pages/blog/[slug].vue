@@ -5,6 +5,7 @@ const router = useRouter()
 const route = useRoute()
 const { getBlogPostBySlug } = useBlog()
 const { rewriteInternalLinks } = useDiviParser()
+const { trackBlogView } = useAnalytics()
 
 const slug = route.params.slug as string
 
@@ -13,6 +14,17 @@ const { data: article, error, refresh, status } = useLazyAsyncData(
   `blog-post-${slug}`,
   () => getBlogPostBySlug(slug)
 )
+
+// Tracker la consultation de l'article quand il est chargé
+watch(article, (post) => {
+  if (post) {
+    trackBlogView(
+      slug,
+      typeof post.title === 'string' ? post.title : post.title?.rendered || slug,
+      post.categories?.map((c: any) => c.name)
+    )
+  }
+})
 
 const featuredImageUrl = computed(() => {
   return article.value?.featured_media || ''

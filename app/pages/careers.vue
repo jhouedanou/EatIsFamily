@@ -13,6 +13,7 @@ const { getJobsWithVenues, getJobVenueOptions } = useJobs()
 const { getVenues } = useVenues()
 const { settings } = useGlobalSettings()
 const { getJobTypes } = useJobTaxonomies()
+const { trackSearch, trackFilter } = useAnalytics()
 
 // Dynamic icon URLs with fallbacks
 const iconBriefcase = computed(() => settings.value?.icons?.icon_briefcase || '/images/streamline-emojis_briefcase.png')
@@ -189,9 +190,22 @@ const paginatedJobs = computed(() => {
   return filteredJobs.value.slice(start, end)
 })
 
-// Reset to page 1 when filters change
+// Reset to page 1 when filters change + tracker les filtres
 watch([searchQuery, selectedJobType, selectedVenueId], () => {
   currentPage.value = 1
+  // Tracker recherche texte
+  if (searchQuery.value) {
+    trackSearch(searchQuery.value, 'jobs', filteredJobs.value.length)
+  }
+  // Tracker filtre par type d'emploi
+  if (selectedJobType.value) {
+    trackFilter('job_type', selectedJobType.value, 'careers')
+  }
+  // Tracker filtre par site/venue
+  if (selectedVenueId.value) {
+    const venue = allVenues.value.find(v => v.id === selectedVenueId.value)
+    trackFilter('venue', venue?.name || selectedVenueId.value, 'careers')
+  }
 })
 
 const goToPage = (page: number) => {

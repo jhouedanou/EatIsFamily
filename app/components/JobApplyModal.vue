@@ -199,6 +199,7 @@ const emit = defineEmits(['close'])
 
 // Utiliser le composable CF7 pour les candidatures
 const { submitJobApplication, validateForm } = useJobApplicationForm()
+const { trackJobApplySuccess, trackFormSubmit } = useAnalytics()
 
 const form = ref({
   name: '',
@@ -262,6 +263,8 @@ const handleSubmit = async () => {
     if (response.status === 'mail_sent' || response.posted_data_hash) {
       isSubmitting.value = false
       submitSuccess.value = true
+      trackJobApplySuccess(props.jobTitle, props.jobSlug)
+      trackFormSubmit('job_apply_modal', { job_title: props.jobTitle, job_slug: props.jobSlug })
       console.log('[JobApplyModal] Application submitted successfully')
     } else if (response.status === 'validation_failed' && response.invalid_fields) {
       isSubmitting.value = false

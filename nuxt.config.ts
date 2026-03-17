@@ -120,6 +120,17 @@ export default defineNuxtConfig({
         { rel: 'shortcut icon', href: '/favicon.ico' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
         { rel: 'manifest', href: '/site.webmanifest' }
+      ],
+      // Google Analytics - gtag.js avec Consent Mode v2
+      script: [
+        {
+          innerHTML: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{'analytics_storage':'denied','ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied'});gtag('js',new Date());gtag('config','G-RX0HPWBFPJ',{'send_page_view':false});`,
+          type: 'text/javascript'
+        },
+        {
+          src: 'https://www.googletagmanager.com/gtag/js?id=G-RX0HPWBFPJ',
+          async: true
+        }
       ]
     },
   },
