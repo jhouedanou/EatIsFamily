@@ -1,6 +1,6 @@
 /**
  * Job Application API Endpoint
- * POST /api/applications/apply
+ * POST /_api/applications/apply
  * 
  * Handles secure job application submissions with file upload
  */

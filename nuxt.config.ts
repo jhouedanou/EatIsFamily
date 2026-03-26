@@ -45,6 +45,7 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
+      navigateFallbackDenylist: [/^\/_api\//, /^\/api\//],
       globPatterns: ['**/*.{js,css,html,svg,ico,woff,woff2}'],
       // Augmenter la limite de taille pour les fichiers en cache
       maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB

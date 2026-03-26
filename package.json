@@ -8,7 +8,9 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "validate:json": "npx tsx scripts/validate-json.ts"
+    "validate:json": "npx tsx scripts/validate-json.ts",
+    "package": "npm run build && tar -czf eatisfamily-deploy.tar.gz .output app.cjs app.js uploads.ini --transform='s|package-for-deploy.json|package.json|' && echo Archive eatisfamily-deploy.tar.gz créée !",
+    "package:win": "powershell -ExecutionPolicy Bypass -File scripts/build-tarball.ps1"
   },
   "dependencies": {
     "@nuxtjs/leaflet": "^1.3.2",

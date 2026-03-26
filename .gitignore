@@ -28,6 +28,9 @@ backups/
 duplicator-pro-backup/
 nul
 
+# Deploy archives
+*.tar.gz
+
 # WordPress theme sensitive files
 wordpress-theme/functions.php
 wordpress-theme/import-*.php

@@ -1,7 +1,8 @@
 /**
  * Composable for Job Application Form with direct file upload
  *
- * Sends job applications with resume file to /api/applications/apply
+ * Submits job applications directly to WordPress CF7 REST API
+ * (same domain, no CORS issues, no need for Nuxt server proxy)
  */
 
 export interface JobApplicationResponse {
@@ -26,6 +27,11 @@ export interface JobApplicationFormData {
 const ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx']
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 
+// WordPress CF7 API base (WordPress is at /api/ on the same domain)
+const WP_CF7_BASE = '/api/wp-json/contact-form-7/v1/contact-forms'
+// Default CF7 form ID for job applications
+const DEFAULT_JOB_CF7_FORM_ID = '357'
+
 export const useJobApplicationForm = () => {
 
   const isValidFileType = (file: File): boolean => {
@@ -38,41 +44,80 @@ export const useJobApplicationForm = () => {
   }
 
   /**
-   * Submit job application with resume file upload
+   * Get the CF7 form ID for job applications from global settings
+   */
+  const getJobFormId = (): string => {
+    try {
+      const { settings } = useGlobalSettings()
+      return settings.value?.contact_form?.cf7_job_application_form_id || DEFAULT_JOB_CF7_FORM_ID
+    } catch {
+      return DEFAULT_JOB_CF7_FORM_ID
+    }
+  }
+
+  /**
+   * Submit job application directly to WordPress CF7 REST API
    */
   const submitJobApplication = async (formData: JobApplicationFormData): Promise<JobApplicationResponse> => {
     try {
+      const formId = getJobFormId()
+
+      // Build FormData with CF7 field names
       const body = new FormData()
-      body.append('name', formData.name)
-      body.append('email', formData.email)
-      body.append('phone', formData.phone)
-      body.append('linkedin', formData.linkedin || '')
-      body.append('coverLetter', formData.coverLetter || '')
-      body.append('jobSlug', formData.jobSlug)
-      body.append('jobTitle', formData.jobTitle)
-      body.append('jobLocation', formData.jobLocation)
+      body.append('your-name', formData.name)
+      body.append('your-email', formData.email)
+      body.append('your-phone', formData.phone)
+      body.append('your-linkedin', formData.linkedin || '')
+      body.append('your-message', formData.coverLetter || '')
+      body.append('job-title', formData.jobTitle)
+      body.append('job-location', formData.jobLocation)
+      body.append('job-slug', formData.jobSlug)
+      body.append('_wpcf7_unit_tag', `wpcf7-f${formId}-o1`)
 
       // Attach resume file
       if (formData.resumeFile) {
         body.append('resume', formData.resumeFile, formData.resumeFile.name)
       }
 
-      const response = await fetch('/api/applications/apply', {
+      const endpoint = `${WP_CF7_BASE}/${formId}/feedback`
+      console.log(`[JobApplication] Submitting directly to CF7: ${endpoint}`)
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         body,
         headers: { 'Accept': 'application/json' },
       })
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null)
+      console.log(`[JobApplication] CF7 response status: ${response.status}`)
+
+      const responseText = await response.text()
+
+      let result: any
+      try {
+        result = JSON.parse(responseText)
+      } catch (parseError) {
+        console.error('[JobApplication] Failed to parse CF7 response:', responseText.substring(0, 200))
+        if (response.ok) {
+          return {
+            success: true,
+            message: 'Votre candidature a été envoyée avec succès.',
+          }
+        }
         return {
           success: false,
-          message: errorData?.data?.message || errorData?.message || 'Une erreur est survenue. Veuillez réessayer.'
+          message: 'Erreur de communication avec le serveur. Veuillez réessayer.',
         }
       }
 
-      const result = await response.json()
-      return result as JobApplicationResponse
+      // CF7 returns status 'mail_sent' on success
+      const isSuccess = result.status === 'mail_sent' || !!result.posted_data_hash
+      return {
+        success: isSuccess,
+        message: result.message || (isSuccess
+          ? 'Votre candidature a été envoyée avec succès.'
+          : 'Une erreur est survenue. Veuillez réessayer.'),
+        applicationId: result.posted_data_hash,
+      }
 
     } catch (error) {
       console.error('[JobApplicationForm] Error submitting form:', error)

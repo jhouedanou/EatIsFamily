@@ -1,6 +1,6 @@
 /**
  * Contact Form Proxy API Endpoint
- * POST /api/contact/submit
+ * POST /_api/contact/submit
  *
  * Handles contact form submissions with optional file attachment
  * Stores file locally, then forwards form data to WordPress Contact Form 7 API
