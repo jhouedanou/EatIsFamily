@@ -27,12 +27,20 @@ export interface JobApplicationFormData {
 const ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx']
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 
-// WordPress CF7 API base (WordPress is at /api/ on the same domain)
-const WP_CF7_BASE = '/api/wp-json/contact-form-7/v1/contact-forms'
 // Default CF7 form ID for job applications
 const DEFAULT_JOB_CF7_FORM_ID = '357'
 
+/**
+ * Derive the CF7 API base URL from the runtime config apiBaseUrl.
+ */
+const getCf7BaseUrl = (apiBaseUrl: string): string => {
+  const wpRoot = apiBaseUrl.replace(/\/wp-json\/.*$/, '')
+  return `${wpRoot}/wp-json/contact-form-7/v1/contact-forms`
+}
+
 export const useJobApplicationForm = () => {
+  const config = useRuntimeConfig()
+  const WP_CF7_BASE = getCf7BaseUrl(config.public.apiBaseUrl as string)
 
   const isValidFileType = (file: File): boolean => {
     const ext = file.name.toLowerCase().slice(file.name.lastIndexOf('.'))

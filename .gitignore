@@ -37,3 +37,6 @@ wordpress-theme/import-*.php
 wordpress-theme/fix-*.php
 wordpress-theme/diagnostic-*.php
 .vercel
+*.gz
+eatisfamily-deploy.tar.gz
+*.gz

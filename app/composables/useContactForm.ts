@@ -32,10 +32,21 @@ export interface ContactFormData {
 const ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png', '.webp']
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 
-// WordPress CF7 API base (WordPress is at /api/ on the same domain)
-const WP_CF7_BASE = '/api/wp-json/contact-form-7/v1/contact-forms'
+/**
+ * Derive the CF7 API base URL from the runtime config apiBaseUrl.
+ * apiBaseUrl = "https://www.eatisfamily.fr/api/wp-json/eatisfamily/v1"
+ * → WP root  = "https://www.eatisfamily.fr/api"
+ * → CF7 base = "https://www.eatisfamily.fr/api/wp-json/contact-form-7/v1/contact-forms"
+ */
+const getCf7BaseUrl = (apiBaseUrl: string): string => {
+  const wpRoot = apiBaseUrl.replace(/\/wp-json\/.*$/, '')
+  return `${wpRoot}/wp-json/contact-form-7/v1/contact-forms`
+}
 
 export const useContactForm = () => {
+  const config = useRuntimeConfig()
+  const WP_CF7_BASE = getCf7BaseUrl(config.public.apiBaseUrl as string)
+
   const { settings } = useGlobalSettings()
 
   const getFormId = (): string => {
@@ -61,7 +72,8 @@ export const useContactForm = () => {
     }
     // Try to resolve hash to numeric ID via WordPress custom endpoint
     try {
-      const res = await fetch(`/api/wp-json/eatisfamily/v1/cf7-form-id/${formId}`)
+      const wpRoot = (config.public.apiBaseUrl as string).replace(/\/wp-json\/.*$/, '')
+      const res = await fetch(`${wpRoot}/wp-json/eatisfamily/v1/cf7-form-id/${formId}`)
       if (res.ok) {
         const data = await res.json()
         console.log(`[Contact] Resolved form hash ${formId} → ${data.numeric_id}`)
