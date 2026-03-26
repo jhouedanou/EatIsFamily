@@ -1,0 +1,35 @@
+{
+  "id": "93729293-b012-47ec-b6a4-61518dccaad1",
+  "jobSlug": "logisticien",
+  "jobTitle": "Logisticien",
+  "department": "Unknown",
+  "applicant": {
+    "name": "test",
+    "email": "jhouedanou@gmail.com",
+    "phone": "+33 6 00 00 00 00",
+    "linkedin": null
+  },
+  "coverLetter": null,
+  "resume": {
+    "originalFilename": "sample.pdf",
+    "storedFilename": "2a156194-deb5-43bb-9632-ba0d6d353c94-1774519245235.pdf",
+    "mimeType": "application/pdf",
+    "size": 18810
+  },
+  "routing": {
+    "recipients": [
+      "Adrien@eatisfamily.fr",
+      "juliette@eatisfamily.fr"
+    ],
+    "sentTo": [
+      "Adrien@eatisfamily.fr",
+      "juliette@eatisfamily.fr"
+    ]
+  },
+  "metadata": {
+    "submittedAt": "2026-03-26T10:00:45.239Z",
+    "ipAddress": "::1",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+  },
+  "status": "sent_to_cf7"
+}

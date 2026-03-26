@@ -13,8 +13,8 @@ export const ALLOWED_MIME_TYPES = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 ] as const
 
-// Maximum file size in bytes (5MB)
-export const MAX_FILE_SIZE = 5 * 1024 * 1024
+// Maximum file size in bytes (2MB)
+export const MAX_FILE_SIZE = 2 * 1024 * 1024
 
 /**
  * Sanitize text input to prevent XSS attacks

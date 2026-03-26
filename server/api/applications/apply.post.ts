@@ -125,7 +125,7 @@ export default defineEventHandler(async (event: H3Event) => {
             throw createError({
                 statusCode: 400,
                 statusMessage: 'File Too Large',
-                data: { message: 'Le fichier est trop volumineux. Taille maximum: 5MB' }
+                data: { message: 'Le fichier est trop volumineux. Taille maximum: 2MB' }
             })
         }
 
@@ -147,7 +147,7 @@ export default defineEventHandler(async (event: H3Event) => {
         // 8. Determine recipients
         let recipients: string[] = []
         let jobDepartment = 'Unknown'
-        let jobTitle = 'Unknown Position'
+        let jobTitle = fields.jobTitle || 'Unknown Position'
 
         try {
             // Read jobs data to find department
@@ -223,9 +223,51 @@ export default defineEventHandler(async (event: H3Event) => {
         const applicationFilePath = join(APPLICATIONS_DATA_DIR, `${applicationId}.json`)
         await writeFile(applicationFilePath, JSON.stringify(applicationRecord, null, 2))
 
-        // 11. Log successful submission (simulating email send)
+        // 11. Forward to WordPress Contact Form 7
+        const wpBaseUrl = process.env.NUXT_PUBLIC_WP_BASE_URL || 'https://www.eatisfamily.fr/api'
+        const cf7FormId = '357'
+
+        try {
+            const cf7FormData = new FormData()
+            cf7FormData.append('your-name', applicationData.name)
+            cf7FormData.append('your-email', applicationData.email)
+            cf7FormData.append('your-phone', applicationData.phone)
+            cf7FormData.append('your-linkedin', applicationData.linkedin || '')
+            cf7FormData.append('your-message', applicationData.coverLetter || '')
+            cf7FormData.append('job-title', fields.jobTitle || jobTitle)
+            cf7FormData.append('job-location', fields.jobLocation || '')
+            cf7FormData.append('job-slug', applicationData.jobSlug)
+            cf7FormData.append('_wpcf7_unit_tag', `wpcf7-f${cf7FormId}-o1`)
+
+            // Attach resume file to CF7
+            const blob = new Blob([new Uint8Array(resumeFile.data)], { type: resumeFile.type })
+            cf7FormData.append('resume', blob, resumeFile.filename)
+
+            const cf7Endpoint = `${wpBaseUrl}/wp-json/contact-form-7/v1/contact-forms/${cf7FormId}/feedback`
+            console.log(`[APPLICATION] Forwarding to CF7: ${cf7Endpoint}`)
+
+            const cf7Response = await fetch(cf7Endpoint, {
+                method: 'POST',
+                body: cf7FormData,
+                headers: { 'Accept': 'application/json' },
+            })
+
+            const cf7Result = await cf7Response.text()
+            console.log(`[APPLICATION] CF7 response status: ${cf7Response.status}`)
+            console.log(`[APPLICATION] CF7 response:`, cf7Result)
+
+            // Update application record with CF7 status
+            applicationRecord.status = cf7Response.ok ? 'sent_to_cf7' : 'cf7_error'
+            await writeFile(applicationFilePath, JSON.stringify(applicationRecord, null, 2))
+
+        } catch (cf7Error) {
+            console.error('[APPLICATION] CF7 forwarding failed:', cf7Error)
+            // Don't fail the whole request — the application is already saved locally
+            applicationRecord.status = 'cf7_error'
+            await writeFile(applicationFilePath, JSON.stringify(applicationRecord, null, 2))
+        }
+
         console.log(`[APPLICATION] New application ${applicationId} for ${jobTitle} (${jobDepartment})`)
-        console.log(`[MAILER] Sending notification to:`, recipients)
 
         // 12. Return success response
         return {

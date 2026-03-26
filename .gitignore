@@ -33,3 +33,4 @@ wordpress-theme/functions.php
 wordpress-theme/import-*.php
 wordpress-theme/fix-*.php
 wordpress-theme/diagnostic-*.php
+.vercel

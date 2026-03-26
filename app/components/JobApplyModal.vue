@@ -22,29 +22,6 @@
       <!-- Modal Body -->
       <div class="modal-body">
         <form v-if="!submitSuccess" @submit.prevent="handleSubmit" class="apply-form">
-          <!-- Avertissement pour le CV -->
-          <div class="cv-notice">
-            <div class="cv-notice-icon">
-              <LucideCloudUpload />
-            </div>
-            <div class="cv-notice-content">
-              <strong>📎 Important : CV en ligne requis</strong>
-              <p>Veuillez télécharger votre CV sur l'un des services suivants avant de postuler :</p>
-              <div class="cloud-services">
-                <a href="https://drive.google.com" target="_blank" rel="noopener" class="cloud-service">
-                  <span>📁</span> Google Drive
-                </a>
-                <a href="https://onedrive.live.com" target="_blank" rel="noopener" class="cloud-service">
-                  <span>📁</span> OneDrive
-                </a>
-                <a href="https://dropbox.com" target="_blank" rel="noopener" class="cloud-service">
-                  <span>📁</span> Dropbox
-                </a>
-              </div>
-              <p class="cv-notice-tip">💡 Assurez-vous que le lien est accessible publiquement ou partagé avec "Tous les utilisateurs disposant du lien".</p>
-            </div>
-          </div>
-
           <div class="form-row">
             <div class="form-group">
               <label for="apply-name">Nom complet *</label>
@@ -91,18 +68,25 @@
               </div>
 
               <div class="form-group">
-                <label for="apply-resume">Lien vers votre CV *</label>
-                <div class="resume-link-input">
-                  <LucideLink class="input-icon" />
-                  <input
-                    v-model="form.resumeLink"
-                    type="url"
-                    id="apply-resume"
-                    placeholder="https://drive.google.com/file/d/... ou autre lien de partage"
-                    required
-                  />
+                <label for="apply-resume">Votre CV *</label>
+                <div class="file-upload-zone">
+                  <label v-if="!form.resumeName" class="file-drop-label" for="apply-resume">
+                    <LucideUpload class="upload-icon" />
+                    <span class="upload-main-text">Cliquez pour sélectionner votre CV</span>
+                    <span class="upload-sub-text">PDF, DOC, DOCX — max 2MB</span>
+                    <input
+                      type="file"
+                      id="apply-resume"
+                      accept=".pdf,.doc,.docx"
+                      @change="handleResumeChange"
+                      class="file-input-hidden"
+                    />
+                  </label>
+                  <div v-else class="file-selected-display">
+                    <span class="file-info">📄 {{ form.resumeName }}</span>
+                    <button type="button" class="file-remove-btn" @click="removeResume">✕</button>
+                  </div>
                 </div>
-                <p class="form-hint">Collez le lien de partage de votre CV (Google Drive, OneDrive, Dropbox, etc.)</p>
               </div>
 
               <div class="form-group">
@@ -175,7 +159,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { LucideX, LucideBriefcase, LucideMapPin, LucideLink, LucideSend, LucideCheck, LucideAlertCircle, LucideCloudUpload } from 'lucide-vue-next'
+import { LucideX, LucideBriefcase, LucideMapPin, LucideUpload, LucideSend, LucideCheck, LucideAlertCircle } from 'lucide-vue-next'
 
 const props = defineProps<{
   isOpen: boolean
@@ -206,11 +190,25 @@ const form = ref({
   email: '',
   phone: '',
   linkedin: '',
-  resumeLink: '',
+  resumeFile: null as File | null,
+  resumeName: '',
   coverLetter: '',
   consent: false,
   website: '' // Honeypot field
 })
+
+const handleResumeChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    form.value.resumeFile = target.files[0]
+    form.value.resumeName = target.files[0].name
+  }
+}
+
+const removeResume = () => {
+  form.value.resumeFile = null
+  form.value.resumeName = ''
+}
 
 const isSubmitting = ref(false)
 const submitSuccess = ref(false)
@@ -237,57 +235,47 @@ const handleSubmit = async () => {
     email: form.value.email,
     phone: form.value.phone,
     linkedin: form.value.linkedin,
-    resumeLink: form.value.resumeLink,
+    resumeFile: form.value.resumeFile,
     coverLetter: form.value.coverLetter,
     jobTitle: props.jobTitle,
     jobLocation: props.jobLocation,
     jobSlug: props.jobSlug,
     consent: form.value.consent
   }
-  
+
   const validation = validateForm(formData)
   if (!validation.valid) {
     isSubmitting.value = false
     submitError.value = validation.errors.join('. ')
     return
   }
-  
+
   try {
-    // Soumettre via Contact Form 7 API
     const response = await submitJobApplication(formData)
-    
-    console.log('[JobApplyModal] CF7 response:', response)
-    
-    // Considérer comme succès si mail_sent OU si les données ont été traitées (posted_data_hash)
-    // Flamingo enregistre les données même si l'email échoue
-    if (response.status === 'mail_sent' || response.posted_data_hash) {
+
+    console.log('[JobApplyModal] API response:', response)
+
+    if (response.success) {
       isSubmitting.value = false
       submitSuccess.value = true
       trackJobApplySuccess(props.jobTitle, props.jobSlug)
       trackFormSubmit('job_apply_modal', { job_title: props.jobTitle, job_slug: props.jobSlug })
       console.log('[JobApplyModal] Application submitted successfully')
-    } else if (response.status === 'validation_failed' && response.invalid_fields) {
-      isSubmitting.value = false
-      const fieldErrors = response.invalid_fields.map(f => f.message).join('. ')
-      submitError.value = fieldErrors || response.message
     } else {
       isSubmitting.value = false
       submitError.value = response.message || 'Une erreur est survenue. Veuillez réessayer.'
     }
   } catch (error: any) {
     isSubmitting.value = false
-    
-    // Handle API errors
+
     if (error.data?.message) {
       submitError.value = error.data.message
-    } else if (error.data?.errors && Array.isArray(error.data.errors)) {
-      submitError.value = error.data.errors.join(', ')
     } else if (error.statusCode === 429) {
       submitError.value = 'Trop de candidatures envoyées. Veuillez réessayer plus tard.'
     } else {
       submitError.value = 'Une erreur est survenue. Veuillez réessayer.'
     }
-    
+
     console.error('Application submission error:', error)
   }
 }
@@ -302,7 +290,7 @@ watch(() => props.isOpen, (isOpen) => {
       email: '',
       phone: '',
       linkedin: '',
-      resume: null,
+      resumeFile: null,
       resumeName: '',
       coverLetter: '',
       consent: false,
@@ -348,117 +336,87 @@ watch(() => props.isOpen, (isOpen) => {
   pointer-events: none;
 }
 
-/* CV Notice Banner */
-.cv-notice {
+/* File Upload Zone */
+.file-upload-zone {
+  width: 100%;
+}
+
+.file-drop-label {
   display: flex;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-  border: 1px solid #F59E0B;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 2px dashed #D1D5DB;
   border-radius: 0.75rem;
-  margin-bottom: 1.5rem;
-  
-  .cv-notice-icon {
-    flex-shrink: 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    background: #F59E0B;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    
-    svg {
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-  }
-  
-  .cv-notice-content {
-    flex: 1;
-    
-    strong {
-      display: block;
-      color: #92400E;
-      margin-bottom: 0.5rem;
-      font-size: 0.95rem;
-    }
-    
-    p {
-      color: #78350F;
-      font-size: 0.85rem;
-      margin: 0 0 0.75rem 0;
-      line-height: 1.5;
-    }
-    
-    .cv-notice-tip {
-      font-size: 0.8rem;
-      color: #92400E;
-      background: rgba(255, 255, 255, 0.5);
-      padding: 0.5rem 0.75rem;
-      border-radius: 0.375rem;
-      margin-top: 0.75rem;
-    }
-  }
-  
-  .cloud-services {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    
-    .cloud-service {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.375rem;
-      padding: 0.375rem 0.75rem;
-      background: white;
-      border: 1px solid #D97706;
-      border-radius: 2rem;
-      color: #92400E;
-      font-size: 0.8rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      
-      &:hover {
-        background: #F59E0B;
-        color: white;
-        border-color: #F59E0B;
-      }
-      
-      span {
-        font-size: 1rem;
-      }
-    }
-  }
-}
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #F9FAFB;
 
-/* Resume Link Input */
-.resume-link-input {
-  position: relative;
-  
-  .input-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.25rem;
-    height: 1.25rem;
+  &:hover {
+    border-color: #FF4D6D;
+    background: #FFF5F7;
+  }
+
+  .upload-icon {
+    width: 2rem;
+    height: 2rem;
     color: #9CA3AF;
-    pointer-events: none;
   }
-  
-  input {
-    padding-left: 2.75rem !important;
+
+  .upload-main-text {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #374151;
+  }
+
+  .upload-sub-text {
+    font-size: 0.75rem;
+    color: #9CA3AF;
   }
 }
 
-.form-hint {
-  font-size: 0.75rem;
-  color: #6B7280;
-  margin-top: 0.375rem;
-  margin-bottom: 0;
+.file-input-hidden {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.file-selected-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1rem;
+  background: #F0FDF4;
+  border: 1px solid #86EFAC;
+  border-radius: 0.5rem;
+
+  .file-info {
+    font-size: 0.9rem;
+    color: #166534;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: calc(100% - 40px);
+  }
+
+  .file-remove-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #DC2626;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #FEE2E2;
+    }
+  }
 }
 
 /* Error message styling */
@@ -482,27 +440,8 @@ watch(() => props.isOpen, (isOpen) => {
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-  .cv-notice {
-    flex-direction: column;
-    align-items: flex-start;
+  .file-drop-label {
     padding: 1rem;
-    
-    .cv-notice-icon {
-      width: 2rem;
-      height: 2rem;
-      
-      svg {
-        width: 1rem;
-        height: 1rem;
-      }
-    }
-    
-    .cloud-services {
-      .cloud-service {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.75rem;
-      }
-    }
   }
 }
 </style>

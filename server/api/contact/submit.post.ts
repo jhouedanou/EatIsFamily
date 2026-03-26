@@ -1,15 +1,32 @@
-﻿/**
+/**
  * Contact Form Proxy API Endpoint
  * POST /api/contact/submit
- * 
- * Proxies contact form submissions to WordPress Contact Form 7 API
- * This avoids CORS issues when submitting from the frontend
+ *
+ * Handles contact form submissions with optional file attachment
+ * Stores file locally, then forwards form data to WordPress Contact Form 7 API
  */
 
-import { readBody, createError, H3Event } from 'h3'
+import { readMultipartFormData, createError, H3Event } from 'h3'
+import { writeFile, mkdir } from 'fs/promises'
+import { join } from 'path'
+import { existsSync } from 'fs'
+
+// Upload directory for contact attachments (outside public folder for security)
+const CONTACT_UPLOADS_DIR = join(process.cwd(), 'server', 'uploads', 'contact')
+
+// Allowed file extensions for contact attachments
+const ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png', '.webp']
+const ALLOWED_MIME_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'image/jpeg',
+  'image/png',
+  'image/webp'
+]
+const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 
 export default defineEventHandler(async (event: H3Event) => {
-  // Only accept POST requests
   if (event.method !== 'POST') {
     throw createError({
       statusCode: 405,
@@ -18,39 +35,99 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   try {
-    const body = await readBody(event)
-    
-    const {
-      name,
-      email,
-      eventType,
-      location,
-      date,
-      guests,
-      message,
-      formId
-    } = body
+    // Parse multipart form data (supports both file upload and text fields)
+    const multipartData = await readMultipartFormData(event)
+
+    if (!multipartData || multipartData.length === 0) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Bad Request',
+        data: { status: 'validation_failed', message: 'Données du formulaire manquantes.' }
+      })
+    }
+
+    // Extract fields and file
+    const fields: Record<string, string> = {}
+    let attachmentFile: { data: Buffer; filename: string; type: string } | null = null
+
+    for (const field of multipartData) {
+      if (field.name === 'attachment' && field.filename) {
+        attachmentFile = {
+          data: field.data,
+          filename: field.filename,
+          type: field.type || 'application/octet-stream'
+        }
+      } else if (field.name && field.data) {
+        fields[field.name] = field.data.toString('utf-8')
+      }
+    }
+
+    const { name, email, eventType, location, date, guests, message, formId } = fields
 
     // Validation basique
     if (!name || !email || !message) {
       throw createError({
         statusCode: 400,
         statusMessage: 'Bad Request',
-        data: { 
+        data: {
           status: 'validation_failed',
-          message: 'Les champs nom, email et message sont requis.' 
+          message: 'Les champs nom, email et message sont requis.'
         }
       })
     }
 
-    // URL de base WordPress
+    // Validate and store attachment file if present
+    let storedFilename = ''
+    if (attachmentFile) {
+      // Check extension
+      const ext = attachmentFile.filename.toLowerCase().slice(attachmentFile.filename.lastIndexOf('.'))
+      if (!ALLOWED_EXTENSIONS.includes(ext)) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Invalid File Type',
+          data: { status: 'validation_failed', message: `Type de fichier non autorisé. Formats acceptés: ${ALLOWED_EXTENSIONS.join(', ')}` }
+        })
+      }
+
+      // Check MIME type
+      if (!ALLOWED_MIME_TYPES.includes(attachmentFile.type)) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Invalid File Type',
+          data: { status: 'validation_failed', message: 'Type MIME non autorisé.' }
+        })
+      }
+
+      // Check size
+      if (attachmentFile.data.length > MAX_FILE_SIZE) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'File Too Large',
+          data: { status: 'validation_failed', message: 'Le fichier est trop volumineux. Taille maximum: 2MB.' }
+        })
+      }
+
+      // Create upload directory if needed
+      if (!existsSync(CONTACT_UPLOADS_DIR)) {
+        await mkdir(CONTACT_UPLOADS_DIR, { recursive: true })
+      }
+
+      // Generate secure filename
+      const uuid = crypto.randomUUID()
+      const timestamp = Date.now()
+      storedFilename = `${uuid}-${timestamp}${ext}`
+      const filePath = join(CONTACT_UPLOADS_DIR, storedFilename)
+
+      await writeFile(filePath, attachmentFile.data)
+      console.log(`[Contact] File saved: ${storedFilename} (${attachmentFile.data.length} bytes)`)
+    }
+
+    // WordPress CF7 submission
     const wpBaseUrl = process.env.NUXT_PUBLIC_WP_BASE_URL || 'https://www.eatisfamily.fr/api'
-    
-    // RÃ©soudre l'ID numÃ©rique si nÃ©cessaire
+
+    // Resolve form ID
     let numericFormId = formId
-    
     if (formId && !/^\d+$/.test(formId)) {
-      // C'est un hash, essayer de rÃ©soudre
       try {
         const resolveResponse = await fetch(`${wpBaseUrl}/wp-json/eatisfamily/v1/cf7-form-id/${formId}`)
         if (resolveResponse.ok) {
@@ -67,9 +144,9 @@ export default defineEventHandler(async (event: H3Event) => {
       throw createError({
         statusCode: 400,
         statusMessage: 'Bad Request',
-        data: { 
+        data: {
           status: 'mail_failed',
-          message: 'Le formulaire de contact n\'est pas configurÃ© (ID manquant).' 
+          message: 'Le formulaire de contact n\'est pas configuré (ID manquant).'
         }
       })
     }
@@ -77,7 +154,7 @@ export default defineEventHandler(async (event: H3Event) => {
     const endpoint = `${wpBaseUrl}/wp-json/contact-form-7/v1/contact-forms/${numericFormId}/feedback`
     console.log(`[Contact Proxy] Submitting to: ${endpoint}`)
 
-    // CrÃ©er le FormData pour CF7
+    // Build FormData for CF7
     const formData = new FormData()
     formData.append('your-name', name || '')
     formData.append('your-email', email || '')
@@ -88,13 +165,17 @@ export default defineEventHandler(async (event: H3Event) => {
     formData.append('your-message', message || '')
     formData.append('_wpcf7_unit_tag', `wpcf7-f${numericFormId}-o1`)
 
-    // Envoyer Ã  WordPress CF7
+    // If a file was uploaded, send it to CF7 as file attachment
+    if (attachmentFile && storedFilename) {
+      const blob = new Blob([new Uint8Array(attachmentFile.data)], { type: attachmentFile.type })
+      formData.append('attachment', blob, attachmentFile.filename)
+    }
+
+    // Send to WordPress CF7
     const cf7Response = await fetch(endpoint, {
       method: 'POST',
       body: formData,
-      headers: {
-        'Accept': 'application/json',
-      },
+      headers: { 'Accept': 'application/json' },
     })
 
     console.log(`[Contact Proxy] CF7 response status: ${cf7Response.status}`)
@@ -102,49 +183,37 @@ export default defineEventHandler(async (event: H3Event) => {
     const responseText = await cf7Response.text()
     console.log(`[Contact Proxy] CF7 response body:`, responseText)
 
-    // Tenter de parser le JSON
     let result
     try {
       result = JSON.parse(responseText)
     } catch (parseError) {
       console.error('[Contact Proxy] Failed to parse CF7 response:', parseError)
-      
-      // Si la requÃªte HTTP a rÃ©ussi, le mail a probablement Ã©tÃ© envoyÃ©
       if (cf7Response.ok) {
         return {
           status: 'mail_sent',
-          message: 'Votre message a Ã©tÃ© envoyÃ© avec succÃ¨s.'
+          message: 'Votre message a été envoyé avec succès.'
         }
       }
-      
       throw createError({
         statusCode: 502,
         statusMessage: 'Bad Gateway',
-        data: {
-          status: 'mail_failed',
-          message: 'Erreur de communication avec le serveur mail.'
-        }
+        data: { status: 'mail_failed', message: 'Erreur de communication avec le serveur mail.' }
       })
     }
 
-    // Retourner la rÃ©ponse CF7 telle quelle
     return result
 
   } catch (error: any) {
     console.error('[Contact Proxy] Error:', error)
-    
-    // Si l'erreur est dÃ©jÃ  une H3Error, la propager
     if (error.statusCode) {
       throw error
     }
-
-    // Erreur rÃ©seau ou autre
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal Server Error',
       data: {
         status: 'mail_failed',
-        message: 'Une erreur est survenue lors de l\'envoi du formulaire. Veuillez rÃ©essayer.'
+        message: 'Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.'
       }
     })
   }

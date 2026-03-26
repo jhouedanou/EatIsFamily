@@ -16,8 +16,23 @@ const form = ref({
   date: '',
   guests: '',
   message: '',
-  attachmentUrl: ''
+  attachmentFile: null as File | null
 })
+
+const attachmentName = ref('')
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    form.value.attachmentFile = target.files[0]
+    attachmentName.value = target.files[0].name
+  }
+}
+
+const removeFile = () => {
+  form.value.attachmentFile = null
+  attachmentName.value = ''
+}
 
 const isSubmitting = ref(false)
 const submitSuccess = ref(false)
@@ -69,8 +84,9 @@ const submitForm = async () => {
         date: '',
         guests: '',
         message: '',
-        attachmentUrl: ''
+        attachmentFile: null
       }
+      attachmentName.value = ''
     } else if (response.status === 'validation_failed' && response.invalid_fields) {
       // Afficher les erreurs de validation CF7
       validationErrors.value = response.invalid_fields.map(f => f.message)
@@ -245,22 +261,27 @@ useHead(() => ({
           </div>
         </div>
 
-        <!-- Row 5: Attachment URL -->
+        <!-- Row 5: File Attachment -->
         <div class="form-row full-width">
           <div class="form-field">
-            <div class="cloud-upload-notice">
-              <span class="cloud-icon">🔗</span>
-              <span>Partagez votre fichier via
-                <a href="https://drive.google.com" target="_blank" rel="noopener">Google Drive</a>,
-                <a href="https://www.dropbox.com" target="_blank" rel="noopener">Dropbox</a> ou
-                <a href="https://onedrive.live.com" target="_blank" rel="noopener">OneDrive</a>
-              </span>
+            <div class="file-upload-area">
+              <label v-if="!attachmentName" class="file-upload-label" for="contact-attachment">
+                <span class="upload-icon">📎</span>
+                <span class="upload-text">Joindre un fichier</span>
+                <span class="upload-hint">PDF, DOC, DOCX, JPG, PNG — max 2MB</span>
+                <input
+                  type="file"
+                  id="contact-attachment"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp"
+                  @change="handleFileChange"
+                  class="file-input-hidden"
+                />
+              </label>
+              <div v-else class="file-selected">
+                <span class="file-name">📄 {{ attachmentName }}</span>
+                <button type="button" class="file-remove" @click="removeFile">✕</button>
+              </div>
             </div>
-            <input
-              v-model="form.attachmentUrl"
-              type="url"
-              placeholder="Lien vers votre fichier (Google Drive, Dropbox, OneDrive...)"
-            />
           </div>
         </div>
 
@@ -504,29 +525,82 @@ useHead(() => ({
     }
   }
 
-  .cloud-upload-notice {
+  .file-upload-area {
+    width: 100%;
+  }
+
+  .file-upload-label {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.75rem;
-    background: rgba(255, 255, 255, 0.35);
-    border-radius: 12px;
-    font-size: 0.875rem;
-    color: #1a1a1a;
+    padding: 1.5rem;
+    border: 2px dashed #1a1a1a;
+    border-radius: 25px 15px 20px 18px / 18px 22px 15px 25px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.15);
 
-    .cloud-icon {
-      font-size: 1.1rem;
+    &:hover {
+      background: rgba(255, 255, 255, 0.35);
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.15);
     }
 
-    a {
-      color: #1a1a1a;
+    .upload-icon {
+      font-size: 1.5rem;
+    }
+
+    .upload-text {
       font-weight: 600;
-      text-decoration: underline;
-      text-underline-offset: 2px;
+      color: #1a1a1a;
+      font-size: 1rem;
+    }
+
+    .upload-hint {
+      font-size: 0.8rem;
+      color: rgba(26, 26, 26, 0.6);
+    }
+  }
+
+  .file-input-hidden {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .file-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border: 2px solid #1a1a1a;
+    border-radius: 25px 15px 20px 18px / 18px 22px 15px 25px;
+    background: rgba(255, 255, 255, 0.35);
+
+    .file-name {
+      font-size: 0.95rem;
+      color: #1a1a1a;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: calc(100% - 40px);
+    }
+
+    .file-remove {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      color: #1a1a1a;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 50%;
+      transition: all 0.2s ease;
 
       &:hover {
-        opacity: 0.7;
+        background: rgba(0, 0, 0, 0.1);
       }
     }
   }

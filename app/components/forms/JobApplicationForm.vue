@@ -70,6 +70,7 @@
 import { ref, onMounted } from 'vue'
 
 const { getFormsContent } = usePageContent()
+const { submitJobApplication, validateForm } = useJobApplicationForm()
 const content = ref<any>(null)
 
 const formData = ref({
@@ -101,23 +102,56 @@ const handleFileChange = (event: Event) => {
 const handleSubmit = async () => {
   isSubmitting.value = true
   submitMessage.value = ''
+  submitStatus.value = ''
 
-  // Simulate API call
-  setTimeout(() => {
+  // Build form data for the API
+  const applicationData = {
+    name: formData.value.name,
+    email: formData.value.email,
+    phone: formData.value.phone,
+    resumeFile: formData.value.resume,
+    coverLetter: formData.value.coverLetter,
+    jobTitle: '',
+    jobLocation: '',
+    jobSlug: 'general-application',
+    consent: true
+  }
+
+  const validation = validateForm(applicationData)
+  if (!validation.valid) {
     isSubmitting.value = false
-    submitStatus.value = 'success'
-    submitMessage.value = content.value?.success_message || 'Application submitted successfully!'
-    trackFormSubmit('job_application')
+    submitStatus.value = 'error'
+    submitMessage.value = validation.errors.join('. ')
+    return
+  }
 
-    // Reset form
-    formData.value = {
-      name: '',
-      email: '',
-      phone: '',
-      resume: null,
-      coverLetter: ''
+  try {
+    const response = await submitJobApplication(applicationData)
+
+    isSubmitting.value = false
+
+    if (response.success) {
+      submitStatus.value = 'success'
+      submitMessage.value = content.value?.success_message || 'Candidature envoyée avec succès !'
+      trackFormSubmit('job_application')
+
+      formData.value = {
+        name: '',
+        email: '',
+        phone: '',
+        resume: null,
+        coverLetter: ''
+      }
+    } else {
+      submitStatus.value = 'error'
+      submitMessage.value = response.message || 'Une erreur est survenue. Veuillez réessayer.'
     }
-  }, 1500)
+  } catch (error) {
+    isSubmitting.value = false
+    submitStatus.value = 'error'
+    submitMessage.value = 'Une erreur est survenue. Veuillez réessayer.'
+    console.error('[JobApplicationForm] Submission error:', error)
+  }
 }
 </script>
 

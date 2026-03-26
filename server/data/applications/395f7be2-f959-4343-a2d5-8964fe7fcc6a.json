@@ -1,0 +1,35 @@
+{
+  "id": "395f7be2-f959-4343-a2d5-8964fe7fcc6a",
+  "jobSlug": "logisticien",
+  "jobTitle": "Unknown Position",
+  "department": "Unknown",
+  "applicant": {
+    "name": "Test",
+    "email": "jeanluc@bigfiveparis.com",
+    "phone": "+33 6 00 00 00 00",
+    "linkedin": null
+  },
+  "coverLetter": "test",
+  "resume": {
+    "originalFilename": "sample.pdf",
+    "storedFilename": "c776b19d-34d8-4c87-9ae5-1d19a597f384-1774518697951.pdf",
+    "mimeType": "application/pdf",
+    "size": 18810
+  },
+  "routing": {
+    "recipients": [
+      "Adrien@eatisfamily.fr",
+      "juliette@eatisfamily.fr"
+    ],
+    "sentTo": [
+      "Adrien@eatisfamily.fr",
+      "juliette@eatisfamily.fr"
+    ]
+  },
+  "metadata": {
+    "submittedAt": "2026-03-26T09:51:37.953Z",
+    "ipAddress": "::1",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+  },
+  "status": "pending"
+}

@@ -1,8 +1,8 @@
 /**
- * Composable for Contact Form 7 API integration
+ * Composable for Contact Form submission with file upload
  *
- * API base: https://www.eatisfamily.fr/api
- * CF7 endpoint: POST /wp-json/contact-form-7/v1/contact-forms/{form_id}/feedback
+ * Submits form data with optional file attachment to the server API
+ * which proxies to WordPress Contact Form 7
  */
 
 export interface CF7Response {
@@ -26,10 +26,11 @@ export interface ContactFormData {
   date: string
   guests: string
   message: string
-  attachmentUrl: string
+  attachmentFile: File | null
 }
 
-const API_BASE = 'https://www.eatisfamily.fr/api'
+const ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png', '.webp']
+const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 
 export const useContactForm = () => {
   const { settings } = useGlobalSettings()
@@ -38,81 +39,45 @@ export const useContactForm = () => {
     return settings.value?.contact_form?.cf7_form_id || '342'
   }
 
-  const allowedAttachmentDomains = [
-    'drive.google.com',
-    'docs.google.com',
-    'onedrive.live.com',
-    '1drv.ms',
-    'dropbox.com',
-    'www.dropbox.com',
-    'dl.dropboxusercontent.com',
-    'icloud.com',
-    'www.icloud.com',
-    'box.com',
-    'www.box.com',
-    'app.box.com',
-    'wetransfer.com',
-    'we.tl',
-    'mega.nz',
-    'mega.io',
-    'sharepoint.com',
-  ]
+  const isValidFileType = (file: File): boolean => {
+    const ext = file.name.toLowerCase().slice(file.name.lastIndexOf('.'))
+    return ALLOWED_EXTENSIONS.includes(ext)
+  }
 
-  const isValidAttachmentUrl = (url: string): boolean => {
-    try {
-      const urlObj = new URL(url)
-      const hostname = urlObj.hostname.toLowerCase()
-      return allowedAttachmentDomains.some(domain =>
-        hostname === domain || hostname.endsWith('.' + domain)
-      )
-    } catch {
-      return false
-    }
+  const isValidFileSize = (file: File): boolean => {
+    return file.size <= MAX_FILE_SIZE
   }
 
   /**
-   * Submit form data to Contact Form 7 via the API
+   * Submit form data with optional file attachment
    */
   const submitContactForm = async (formData: ContactFormData): Promise<CF7Response> => {
     const formId = getFormId()
 
     if (!formId) {
-      console.error('[ContactForm] No form ID configured')
       return {
         status: 'mail_failed',
         message: 'Le formulaire de contact n\'est pas configuré. Contactez l\'administrateur.',
       }
     }
 
-    // Résoudre l'ID numérique si c'est un hash
-    let numericFormId = formId
-    if (!/^\d+$/.test(formId)) {
-      try {
-        const resolveResponse = await fetch(`${API_BASE}/wp-json/eatisfamily/v1/cf7-form-id/${formId}`)
-        if (resolveResponse.ok) {
-          const data = await resolveResponse.json()
-          numericFormId = String(data.numeric_id)
-        }
-      } catch (error) {
-        console.warn('[ContactForm] Could not resolve hash ID:', error)
-      }
-    }
-
-    const endpoint = `${API_BASE}/wp-json/contact-form-7/v1/contact-forms/${numericFormId}/feedback`
-
     try {
       const body = new FormData()
-      body.append('your-name', formData.name)
-      body.append('your-email', formData.email)
-      body.append('event-type', formData.eventType)
+      body.append('name', formData.name)
+      body.append('email', formData.email)
+      body.append('eventType', formData.eventType)
       body.append('location', formData.location)
-      body.append('event-date', formData.date)
+      body.append('date', formData.date)
       body.append('guests', formData.guests)
-      body.append('your-message', formData.message)
-      body.append('attachment-url', formData.attachmentUrl)
-      body.append('_wpcf7_unit_tag', `wpcf7-f${numericFormId}-o1`)
+      body.append('message', formData.message)
+      body.append('formId', formId)
 
-      const response = await fetch(endpoint, {
+      // Attach file if present
+      if (formData.attachmentFile) {
+        body.append('attachment', formData.attachmentFile, formData.attachmentFile.name)
+      }
+
+      const response = await fetch('/api/contact/submit', {
         method: 'POST',
         body,
         headers: { 'Accept': 'application/json' },
@@ -157,8 +122,13 @@ export const useContactForm = () => {
       errors.push('Le message est requis')
     }
 
-    if (formData.attachmentUrl.trim() && !isValidAttachmentUrl(formData.attachmentUrl)) {
-      errors.push('Le lien du fichier doit provenir d\'un service cloud autorisé (Google Drive, Dropbox, OneDrive, etc.)')
+    if (formData.attachmentFile) {
+      if (!isValidFileType(formData.attachmentFile)) {
+        errors.push(`Type de fichier non autorisé. Formats acceptés: ${ALLOWED_EXTENSIONS.join(', ')}`)
+      }
+      if (!isValidFileSize(formData.attachmentFile)) {
+        errors.push('Le fichier est trop volumineux. Taille maximum: 2MB')
+      }
     }
 
     return {
@@ -171,7 +141,8 @@ export const useContactForm = () => {
     submitContactForm,
     validateForm,
     isValidEmail,
-    isValidAttachmentUrl,
+    isValidFileType,
+    isValidFileSize,
     getFormId
   }
 }
