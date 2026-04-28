@@ -760,13 +760,17 @@ const goToMenuPage = (page: number) => {
 }
 
 .venue-event-banner {
-  display: flex;
-  background:url(/images/infoContainer.svg);background-repeat:no-repeat;
-  background-size:contain;
-  border-radius: 8px;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  gap: 1rem;
+      display: flex;
+    /* background: url(/images/infoContainer.svg); */
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    background: #93cbff !important;
+    border-radius: 10px;
+    border: 2px solid black;
 }
 
 .venue-event-item {

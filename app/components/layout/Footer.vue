@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="cpyright">
-        <div v-if="content">{{ content.copyright_template }}</div>
+        <div v-if="content">{{ content.copyright_template?.replace('{year}', new Date().getFullYear().toString()) }}</div>
       </div>
     </div>
   </footer>

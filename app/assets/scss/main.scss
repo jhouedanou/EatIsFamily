@@ -1748,6 +1748,13 @@ body {
       font-size: 24px;
       line-height: 1.67;
     }
+    ul {
+      margin-left:0px;
+      padding-left: 0em !important;
+      padding-bottom:2em !important;
+      li {
+      }
+    }
   }
   #tromp img {
     width: 224px !important;
