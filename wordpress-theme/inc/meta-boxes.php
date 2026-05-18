@@ -451,12 +451,37 @@ function eatisfamily_job_meta_box_callback($post) {
     $job_type = get_post_meta($post->ID, 'job_type', true);
     $salary = get_post_meta($post->ID, 'salary', true);
     $requirements = get_post_meta($post->ID, 'requirements', true);
+    $missions = get_post_meta($post->ID, 'missions', true);
     $benefits = get_post_meta($post->ID, 'benefits', true);
     $life_at_venue_images = get_post_meta($post->ID, 'life_at_venue_images', true);
+
+    // Per-job UI text overrides (all optional; fall back to defaults if empty)
+    $positions               = get_post_meta($post->ID, 'positions', true);
+    $cta_title               = get_post_meta($post->ID, 'cta_title', true);
+    $cta_subtitle            = get_post_meta($post->ID, 'cta_subtitle', true);
+    $life_section_title      = get_post_meta($post->ID, 'life_section_title', true);
+    $description_section_title = get_post_meta($post->ID, 'description_section_title', true);
+    $missions_title          = get_post_meta($post->ID, 'missions_title', true);
+    $missions_intro          = get_post_meta($post->ID, 'missions_intro', true);
+    $requirements_title      = get_post_meta($post->ID, 'requirements_title', true);
+    $requirements_intro      = get_post_meta($post->ID, 'requirements_intro', true);
+    $benefits_title          = get_post_meta($post->ID, 'benefits_title', true);
+    $quick_facts_title       = get_post_meta($post->ID, 'quick_facts_title', true);
+    $label_location          = get_post_meta($post->ID, 'label_location', true);
+    $label_department        = get_post_meta($post->ID, 'label_department', true);
+    $label_job_type          = get_post_meta($post->ID, 'label_job_type', true);
+    $label_positions         = get_post_meta($post->ID, 'label_positions', true);
+    $share_title             = get_post_meta($post->ID, 'share_title', true);
+    $share_subtitle          = get_post_meta($post->ID, 'share_subtitle', true);
+    $bottom_cta_title        = get_post_meta($post->ID, 'bottom_cta_title', true);
+    $bottom_cta_subtitle     = get_post_meta($post->ID, 'bottom_cta_subtitle', true);
     
     // Decode JSON if needed
     if (is_string($requirements)) {
         $requirements = json_decode($requirements, true);
+    }
+    if (is_string($missions)) {
+        $missions = json_decode($missions, true);
     }
     if (is_string($benefits)) {
         $benefits = json_decode($benefits, true);
@@ -517,6 +542,12 @@ function eatisfamily_job_meta_box_callback($post) {
             <?php eatisfamily_render_repeater_field('requirements', $requirements, __('Enter a requirement...', 'eatisfamily'), __('List the job requirements. Each item will be displayed as a bullet point.', 'eatisfamily')); ?>
         </div>
         
+        <!-- Missions (Repeater) -->
+        <div class="field-group">
+            <h4><?php _e('Missions (Vos missions)', 'eatisfamily'); ?></h4>
+            <?php eatisfamily_render_repeater_field('missions', $missions, __('Enter a mission...', 'eatisfamily'), __('List the job missions / responsibilities. Each item will be displayed as a bullet point in the "Vos missions" section.', 'eatisfamily')); ?>
+        </div>
+        
         <!-- Benefits (Repeater) -->
         <div class="field-group">
             <h4><?php _e('Benefits', 'eatisfamily'); ?></h4>
@@ -528,6 +559,144 @@ function eatisfamily_job_meta_box_callback($post) {
             <h4><?php _e('Life at Venue - Image Gallery', 'eatisfamily'); ?></h4>
             <p class="description"><?php _e('Add images that showcase the work environment and team culture at this venue.', 'eatisfamily'); ?></p>
             <?php eatisfamily_render_gallery_field('life_at_venue_images', $life_at_venue_images, __('These images will appear in the "Life at [Venue]" section on the job detail page.', 'eatisfamily')); ?>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- UI TEXT OVERRIDES (per job) - all optional, fall back to defaults -->
+        <!-- ============================================================ -->
+        <div class="field-group">
+            <h4><?php _e('Textes de la page (personnalisables par offre)', 'eatisfamily'); ?></h4>
+            <p class="description"><?php _e('Tous les champs ci-dessous sont optionnels. Si laissés vides, les textes par défaut du site seront utilisés. Vous pouvez surcharger ces textes pour cette offre uniquement.', 'eatisfamily'); ?></p>
+
+            <div class="field-row">
+                <label for="positions"><?php _e('Postes disponibles (valeur)', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('positions', $positions, '2 postes', __('Ex: "2 postes", "1 poste", "Plusieurs"', 'eatisfamily')); ?>
+                </div>
+            </div>
+
+            <hr>
+            <h4 style="margin-top:15px;"><?php _e('Bannière CTA (haut)', 'eatisfamily'); ?></h4>
+            <div class="field-row">
+                <label for="cta_title"><?php _e('Titre CTA haut', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('cta_title', $cta_title, 'Prêt à rejoindre notre équipe ?'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="cta_subtitle"><?php _e('Sous-titre CTA haut', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('cta_subtitle', $cta_subtitle, 'Postulez maintenant et faites partie d\'une aventure exceptionnelle'); ?>
+                </div>
+            </div>
+
+            <hr>
+            <h4 style="margin-top:15px;"><?php _e('Section "La vie à..."', 'eatisfamily'); ?></h4>
+            <div class="field-row">
+                <label for="life_section_title"><?php _e('Titre section vie au venue', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('life_section_title', $life_section_title, 'La vie à {venue}', __('Utilisez {venue} pour insérer dynamiquement le nom du lieu.', 'eatisfamily')); ?>
+                </div>
+            </div>
+
+            <hr>
+            <h4 style="margin-top:15px;"><?php _e('Section "Description du poste"', 'eatisfamily'); ?></h4>
+            <div class="field-row">
+                <label for="description_section_title"><?php _e('Titre section description', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('description_section_title', $description_section_title, 'Description du poste et prérequis'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="missions_title"><?php _e('Titre "Vos missions"', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('missions_title', $missions_title, 'Vos missions'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="missions_intro"><?php _e('Intro "Vos missions"', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('missions_intro', $missions_intro, 'Vous serez amené(e) à :'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="requirements_title"><?php _e('Titre "Profil recherché"', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('requirements_title', $requirements_title, 'Profil recherché'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="requirements_intro"><?php _e('Intro "Profil recherché"', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('requirements_intro', $requirements_intro, 'Voici les compétences et qualités que nous recherchons'); ?>
+                </div>
+            </div>
+
+            <hr>
+            <h4 style="margin-top:15px;"><?php _e('Cartes (Pourquoi nous rejoindre / En bref / Partager)', 'eatisfamily'); ?></h4>
+            <div class="field-row">
+                <label for="benefits_title"><?php _e('Titre carte "Pourquoi nous rejoindre"', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('benefits_title', $benefits_title, 'Pourquoi nous rejoindre'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="quick_facts_title"><?php _e('Titre carte "En bref"', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('quick_facts_title', $quick_facts_title, 'En bref'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="label_location"><?php _e('Label "LIEU"', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('label_location', $label_location, 'LIEU'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="label_department"><?php _e('Label "DÉPARTEMENT"', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('label_department', $label_department, 'DÉPARTEMENT'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="label_job_type"><?php _e('Label "TYPE DE CONTRAT"', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('label_job_type', $label_job_type, 'TYPE DE CONTRAT'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="label_positions"><?php _e('Label "POSTES DISPONIBLES"', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('label_positions', $label_positions, 'POSTES DISPONIBLES'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="share_title"><?php _e('Titre carte partage', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('share_title', $share_title, 'Vous connaissez quelqu\'un de parfait pour ce poste ?'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="share_subtitle"><?php _e('Sous-titre carte partage', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('share_subtitle', $share_subtitle, 'Partagez cette offre avec cette personne'); ?>
+                </div>
+            </div>
+
+            <hr>
+            <h4 style="margin-top:15px;"><?php _e('Section CTA (bas de page)', 'eatisfamily'); ?></h4>
+            <div class="field-row">
+                <label for="bottom_cta_title"><?php _e('Titre CTA bas', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('bottom_cta_title', $bottom_cta_title, 'Prêt à faire la différence ?'); ?>
+                </div>
+            </div>
+            <div class="field-row">
+                <label for="bottom_cta_subtitle"><?php _e('Sous-titre CTA bas', 'eatisfamily'); ?></label>
+                <div>
+                    <?php eatisfamily_render_text_field('bottom_cta_subtitle', $bottom_cta_subtitle, 'Rejoignez notre équipe et participez à la création d\'expériences inoubliables dans l\'un des lieux les plus passionnants de France.'); ?>
+                </div>
+            </div>
         </div>
     </div>
     <?php
@@ -559,11 +728,44 @@ function eatisfamily_save_job_meta_box($post_id) {
             update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
         }
     }
+
+    // Save per-job UI text overrides (sanitize_text_field; empty allowed = fall back to default)
+    $text_override_fields = array(
+        'positions',
+        'cta_title',
+        'cta_subtitle',
+        'life_section_title',
+        'description_section_title',
+        'missions_title',
+        'missions_intro',
+        'requirements_title',
+        'requirements_intro',
+        'benefits_title',
+        'quick_facts_title',
+        'label_location',
+        'label_department',
+        'label_job_type',
+        'label_positions',
+        'share_title',
+        'share_subtitle',
+        'bottom_cta_title',
+        'bottom_cta_subtitle',
+    );
+    foreach ($text_override_fields as $field) {
+        if (isset($_POST[$field])) {
+            update_post_meta($post_id, $field, sanitize_text_field(wp_unslash($_POST[$field])));
+        }
+    }
     
     // Save arrays
     if (isset($_POST['requirements'])) {
         $requirements = array_filter(array_map('sanitize_text_field', $_POST['requirements']));
         update_post_meta($post_id, 'requirements', $requirements);
+    }
+    
+    if (isset($_POST['missions'])) {
+        $missions = array_filter(array_map('sanitize_text_field', $_POST['missions']));
+        update_post_meta($post_id, 'missions', $missions);
     }
     
     if (isset($_POST['benefits'])) {

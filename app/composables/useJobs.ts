@@ -18,8 +18,29 @@ export interface Job {
     salary: string
     requirements: string[]
     benefits: string[]
+    missions: string[]
     featured_media: string
     date?: string
+    // Per-job UI text overrides (optional — fall back to defaults in the component)
+    positions?: string
+    cta_title?: string
+    cta_subtitle?: string
+    life_section_title?: string
+    description_section_title?: string
+    missions_title?: string
+    missions_intro?: string
+    requirements_title?: string
+    requirements_intro?: string
+    benefits_title?: string
+    quick_facts_title?: string
+    label_location?: string
+    label_department?: string
+    label_job_type?: string
+    label_positions?: string
+    share_title?: string
+    share_subtitle?: string
+    bottom_cta_title?: string
+    bottom_cta_subtitle?: string
 }
 
 export interface JobWithVenue extends Job {
