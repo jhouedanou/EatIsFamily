@@ -21,6 +21,8 @@ export interface JobApplicationFormData {
   jobTitle: string
   jobLocation: string
   jobSlug: string
+  selectedVenue?: string
+  selectedEvent?: string
   consent: boolean
 }
 
@@ -80,6 +82,8 @@ export const useJobApplicationForm = () => {
       body.append('job-title', formData.jobTitle)
       body.append('job-location', formData.jobLocation)
       body.append('job-slug', formData.jobSlug)
+      body.append('preferred-venue', formData.selectedVenue || '')
+      body.append('preferred-event', formData.selectedEvent || '')
       body.append('_wpcf7_unit_tag', `wpcf7-f${formId}-o1`)
 
       // Attach resume file

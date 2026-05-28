@@ -86,20 +86,12 @@ const shareJob = () => {
   }
 }
 
-// What you'll do - responsibilities (fallback if missions not set in WordPress)
-const responsibilities = [
-  'Diriger les opérations quotidiennes et garantir les normes de qualité',
-  'Collaborer avec les membres de l\'équipe pour atteindre l\'excellence',
-  'Maintenir les protocoles de sécurité et d\'hygiène',
-  'Contribuer à la planification des menus et à l\'innovation',
-  'Former et encadrer les membres juniors de l\'équipe'
-]
-
-const jobMissions = computed(() =>
-  (job.value?.missions && job.value.missions.length > 0)
-    ? job.value.missions
-    : responsibilities
-)
+const jobMissions = computed(() => {
+  if (job.value?.missions && job.value.missions.length > 0) {
+    return job.value.missions
+  }
+  return []
+})
 
 // --- Per-job UI text overrides with defaults ---
 // Helper: return the WP override if non-empty, otherwise the default
@@ -107,8 +99,11 @@ const pick = (override: string | undefined | null, fallback: string) =>
   (override && override.trim().length > 0) ? override : fallback
 
 const lifeSectionTitle = computed(() => {
-  const tpl = pick(job.value?.life_section_title, 'La vie à {venue}')
-  return tpl.replace('{venue}', getVenueName(job.value as JobWithVenue))
+  if (job.value?.life_section_title?.trim()) {
+    return job.value.life_section_title
+  }
+  const venue = job.value?.venue
+  return venue ? `La vie à ${venue.name}` : 'La vie au sein de nos équipes'
 })
 const ctaTitle           = computed(() => pick(job.value?.cta_title, 'Prêt à rejoindre notre équipe ?'))
 const ctaSubtitle        = computed(() => pick(job.value?.cta_subtitle, 'Postulez maintenant et faites partie d\'une aventure exceptionnelle'))

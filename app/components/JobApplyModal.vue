@@ -67,6 +67,28 @@
                 </div>
               </div>
 
+              <!-- Site préféré -->
+              <div class="form-row" v-if="allVenues.length > 0 || allEvents.length > 0">
+                <div class="form-group" v-if="allVenues.length > 0">
+                  <label for="apply-venue">Site / Lieu souhaité</label>
+                  <select v-model="form.selectedVenueId" id="apply-venue">
+                    <option value="">— Tous les sites —</option>
+                    <option v-for="venue in allVenues" :key="venue.id" :value="venue.id">
+                      {{ venue.name }} — {{ venue.location }}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group" v-if="allEvents.length > 0">
+                  <label for="apply-event">Événement souhaité</label>
+                  <select v-model="form.selectedEventId" id="apply-event">
+                    <option value="">— Tous les événements —</option>
+                    <option v-for="event in allEvents" :key="event.id" :value="String(event.id)">
+                      {{ event.title }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
               <div class="form-group">
                 <label for="apply-resume">Votre CV *</label>
                 <div class="file-upload-zone">
@@ -160,6 +182,8 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { LucideX, LucideBriefcase, LucideMapPin, LucideUpload, LucideSend, LucideCheck, LucideAlertCircle } from 'lucide-vue-next'
+import type { Venue } from '~/composables/useVenues'
+import type { Event } from '~/composables/useEvents'
 
 const props = defineProps<{
   isOpen: boolean
@@ -184,6 +208,17 @@ const emit = defineEmits(['close'])
 // Utiliser le composable CF7 pour les candidatures
 const { submitJobApplication, validateForm } = useJobApplicationForm()
 const { trackJobApplySuccess, trackFormSubmit } = useAnalytics()
+const { getVenues } = useVenues()
+const { getEvents } = useEvents()
+
+const allVenues = ref<Venue[]>([])
+const allEvents = ref<Event[]>([])
+
+onMounted(async () => {
+  const [venues, events] = await Promise.all([getVenues(), getEvents()])
+  allVenues.value = venues || []
+  allEvents.value = events || []
+})
 
 const form = ref({
   name: '',
@@ -193,6 +228,8 @@ const form = ref({
   resumeFile: null as File | null,
   resumeName: '',
   coverLetter: '',
+  selectedVenueId: '',
+  selectedEventId: '',
   consent: false,
   website: '' // Honeypot field
 })
@@ -230,6 +267,8 @@ const handleSubmit = async () => {
   submitError.value = null
   
   // Valider les données du formulaire
+  const selectedVenue = allVenues.value.find(v => v.id === form.value.selectedVenueId)
+  const selectedEvent = allEvents.value.find(e => String(e.id) === form.value.selectedEventId)
   const formData = {
     name: form.value.name,
     email: form.value.email,
@@ -238,8 +277,10 @@ const handleSubmit = async () => {
     resumeFile: form.value.resumeFile,
     coverLetter: form.value.coverLetter,
     jobTitle: props.jobTitle,
-    jobLocation: props.jobLocation,
+    jobLocation: selectedVenue ? `${selectedVenue.name} — ${selectedVenue.location}` : props.jobLocation,
     jobSlug: props.jobSlug,
+    selectedVenue: selectedVenue?.name || '',
+    selectedEvent: selectedEvent?.title || '',
     consent: form.value.consent
   }
 
@@ -293,6 +334,8 @@ watch(() => props.isOpen, (isOpen) => {
       resumeFile: null,
       resumeName: '',
       coverLetter: '',
+      selectedVenueId: '',
+      selectedEventId: '',
       consent: false,
       website: ''
     }
