@@ -186,8 +186,12 @@ useHead(() => ({
 
 .page-hero {
   background: url("/images/image4.jpg") center/cover no-repeat;
-  height: 90vh;
+  min-height: 90vh;
+  height: auto;
   margin: 0 0 0 0;
+  /* Réserve la hauteur du header fixe pour que le titre ne passe pas dessous */
+  padding-top: 120px;
+  box-sizing: border-box;
   justify-content: flex-end;
   display: flex;
   align-items: flex-end;

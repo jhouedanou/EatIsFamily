@@ -408,8 +408,19 @@ useHead(() => ({
 }
 
 #baks {
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+
   h3 {
     max-width: 800px;
+  }
+}
+
+@media (max-width: 1024px) {
+  #baks {
+    h3, p {
+      text-align: center;
+    }
   }
 }
 

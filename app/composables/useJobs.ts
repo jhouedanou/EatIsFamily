@@ -19,6 +19,7 @@ export interface Job {
     requirements: string[]
     benefits: string[]
     missions: string[]
+    life_at_venue_images?: string[]
     featured_media: string
     date?: string
     // Per-job UI text overrides (optional — fall back to defaults in the component)

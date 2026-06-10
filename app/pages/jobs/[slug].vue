@@ -22,12 +22,23 @@ const btnApplyPosition = computed(() => settings.value?.icons?.btn_apply_positio
 const btnGoBackJobs = computed(() => settings.value?.icons?.btn_go_back_jobs || '/images/btnGoBackToJobs.svg')
 
 // Gallery images for "Life at" section
-const galleryImages = [
-  '/images/gallery/stadium.jpg',
-  '/images/gallery/team.jpg',
-  '/images/gallery/kitchen.jpg',
-  '/images/gallery/venue.jpg'
-]
+// Priorité : images définies sur l'annonce (life_at_venue_images),
+// sinon images du lieu, sinon image par défaut. Toujours 4 vignettes.
+const galleryImages = computed<string[]>(() => {
+  const jobImages = (job.value?.life_at_venue_images || []).filter(Boolean)
+  if (jobImages.length > 0) {
+    return Array.from({ length: 4 }, (_, i) => jobImages[i % jobImages.length] as string)
+  }
+  const venueImages = [
+    job.value?.venue?.image,
+    job.value?.venue?.image2,
+    job.value?.featured_media
+  ].filter((src): src is string => Boolean(src))
+  if (venueImages.length > 0) {
+    return Array.from({ length: 4 }, (_, i) => venueImages[i % venueImages.length] as string)
+  }
+  return Array.from({ length: 4 }, () => '/images/events-hero.jpg')
+})
 
 onMounted(async () => {
   await loadButtons()
@@ -46,11 +57,6 @@ const getJobTitle = (j: JobWithVenue) => {
 
 const getJobExcerpt = (j: JobWithVenue) => {
   return typeof j.excerpt === 'string' ? j.excerpt : j.excerpt?.rendered || ''
-}
-
-// Helper pour obtenir le nom de la venue
-const getVenueName = (j: JobWithVenue) => {
-  return j.venue?.name || 'Plusieurs sites'
 }
 
 // Helper pour obtenir la location de la venue
@@ -99,11 +105,11 @@ const pick = (override: string | undefined | null, fallback: string) =>
   (override && override.trim().length > 0) ? override : fallback
 
 const lifeSectionTitle = computed(() => {
+  const venueName = job.value?.venue?.name || ''
   if (job.value?.life_section_title?.trim()) {
-    return job.value.life_section_title
+    return job.value.life_section_title.replace('{venue}', venueName)
   }
-  const venue = job.value?.venue
-  return venue ? `La vie à ${venue.name}` : 'La vie au sein de nos équipes'
+  return venueName ? `La vie à ${venueName}` : 'La vie au sein de nos équipes'
 })
 const ctaTitle           = computed(() => pick(job.value?.cta_title, 'Prêt à rejoindre notre équipe ?'))
 const ctaSubtitle        = computed(() => pick(job.value?.cta_subtitle, 'Postulez maintenant et faites partie d\'une aventure exceptionnelle'))
@@ -123,24 +129,6 @@ const shareTitle         = computed(() => pick(job.value?.share_title, 'Vous con
 const shareSubtitle      = computed(() => pick(job.value?.share_subtitle, 'Partagez cette offre avec cette personne'))
 const bottomCtaTitle     = computed(() => pick(job.value?.bottom_cta_title, 'Prêt à faire la différence ?'))
 const bottomCtaSubtitle  = computed(() => pick(job.value?.bottom_cta_subtitle, 'Rejoignez notre équipe et participez à la création d\'expériences inoubliables dans l\'un des lieux les plus passionnants de France.'))
-
-// Helper pour obtenir les images de la galerie
-const getGalleryImage = (j: JobWithVenue, index: number) => {
-  // Priorité: image venue, image2 venue, featured_media du job
-  const images = [
-    j.venue?.image,
-    j.venue?.image2,
-    j.featured_media,
-    j.venue?.image // répéter pour avoir 4 images
-  ].filter(Boolean)
-  
-  if (images.length > 0) {
-    return images[index % images.length] || images[0]
-  }
-  
-  // Image par défaut si rien n'est disponible
-  return '/images/events-hero.jpg'
-}
 
 // UI Strings from global settings with fallbacks
 const loadingText = computed(() => getString('loading') || 'Chargement...')
@@ -237,7 +225,7 @@ useHead(() => ({
             <h2 class="section-title">{{ lifeSectionTitle }}</h2>
             <div class="gallery-grid">
               <div v-for="(img, index) in galleryImages" :key="index" class="gallery-item">
-                <img :src="getGalleryImage(job, index)" :alt="`La vie à ${getVenueName(job)}`" />
+                <img :src="img" :alt="lifeSectionTitle" />
               </div>
             </div>
           </section>

@@ -1337,9 +1337,9 @@ body {
   }
   .musuc {
     background: url(/images/searcgBgContainer.svg);
-    width: 100vw !important;
+    width: 427px !important;
     height: 100vh !important;
-    max-width: 427px;
+    max-width: 100%;
     max-height: 74px !important;
     border: none;
     background-repeat: no-repeat !important;
@@ -1916,7 +1916,7 @@ body {
       margin: auto !important;
       max-width: 1098px;
       position: absolute;
-      width: 100vw;
+      width: calc(100% - 2rem);
       position: relative !important;
       max-height: none !important;
       position: relative !important;
@@ -2146,7 +2146,7 @@ body {
   }
   .cta-block {
     margin: 0 !important ;
-    padding: 0 !important  ;
+    padding: 0 1rem !important  ;
   }
   .events-page {
     span.event-type-badge {

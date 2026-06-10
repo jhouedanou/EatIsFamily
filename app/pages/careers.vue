@@ -98,14 +98,15 @@ const venueOptions = computed(() => {
   const venueIds = new Set<string>()
   allJobs.value.forEach(job => {
     if (job.venue_id) {
-      venueIds.add(job.venue_id)
+      venueIds.add(String(job.venue_id))
     }
   })
   // Get venue objects for display
   const venues = Array.from(venueIds)
-    .map(id => allVenues.value.find(v => v.id === id))
+    .map(id => allVenues.value.find(v => String(v.id) === id))
     .filter((v): v is Venue => v !== undefined)
-  return venues
+  // Si aucun job n'est rattaché à un lieu connu, proposer quand même tous les lieux
+  return venues.length > 0 ? venues : allVenues.value
 })
 
 // Helper pour obtenir le titre du job
@@ -173,9 +174,9 @@ const filteredJobs = computed(() => {
       normalizedJobType === normalizedSelectedType ||
       normalizedJobType.includes(normalizedSelectedType)
 
-    // Filtre par venue_id depuis le dropdown
+    // Filtre par venue_id depuis le dropdown (coercition en String : l'API peut renvoyer un id numérique)
     const matchesVenueFilter = selectedVenueId.value === '' ||
-      job.venue_id === selectedVenueId.value
+      String(job.venue_id) === String(selectedVenueId.value)
 
     return matchesSearch && matchesType && matchesVenueFilter
   })
@@ -223,14 +224,14 @@ const goToPage = (page: number) => {
       <!-- Hero Section WITHOUT venue (Default View) -->
       <!-- ========================================== -->
       <section v-if="!activeVenue" class="careers-hero-default">
-        <div class="careers-hero-container d-flex row">
+        <div v-if="content.hero_default?.title_line_1 || content.hero_default?.title_line_2" class="careers-hero-container d-flex row">
           <div class="careers-hero-content col-12 col-lg-7 col-md-7">
             <div class="careers-hero-inner">
               <h1 class="careers-hero-title">
                 {{ content.hero_default?.title_line_1 }}<br />
                 {{ content.hero_default?.title_line_2 }}<br />
               </h1>
-              
+
             </div>
           </div>
          <!--  <div class="careers-hero-image col-12 col-lg-5 col-md-5">
@@ -564,7 +565,7 @@ padding-top: 0rem;
     margin: 0 auto;
     max-height: 260px;
     height: 100vh;
-    width: 100vw;
+    width: 100%;
     margin: 1em auto;
     border-radius: 13px;
 }
@@ -679,7 +680,7 @@ padding-top: 0rem;
   }
   @media (max-width: 1024px) {
 
-    padding: 6rem 1.5rem 2em .5rem;
+    padding: 6rem 1.5rem 2em 1.25rem;
   }
     }
 
@@ -855,13 +856,13 @@ padding-top: 0rem;
     background: url(/images/le24.svg);
     max-height: 263px;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 100%;
     padding: 0em;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
-    width: 100vw;
+    width: calc(100% - 2rem);
     height: 100vh;
     &.has-active-venue {
         backdrop-filter: blur(20px);
@@ -969,7 +970,7 @@ padding-top: 0rem;
 
 .dropdown-menu-venue {
   width: 100%;
-  min-height: 300px !important;
+  max-height: 300px;
   overflow-y: auto;
 }
 
@@ -1097,9 +1098,9 @@ padding-top: 0rem;
   }
 }
   #limam{
-    width:100vw;
+    width:100%;
     max-width:1400px;
-    padding:1em 0 0 0 ;
+    padding:1em 1.5rem 0 1.5rem;
     h3{
         font-family: FONTSPRINGDEMO-RecoletaBold;
   font-size: 50px;
@@ -1297,6 +1298,14 @@ padding-top: 0rem;
   }
   #mahamad{
     background:#1a1a1a !important;
+  }
+  .careers-hero-title{
+    text-align:center;
+  }
+  #limam{
+    h3, p{
+      text-align:center;
+    }
   }
 }
 </style>

@@ -784,14 +784,82 @@ function eatisfamily_save_job_meta_box($post_id) {
 add_action('save_post_job', 'eatisfamily_save_job_meta_box');
 
 /**
- * ============================================================================
- * VENUE META BOX
- * ============================================================================
+ * Expose missions (and related array fields) in the WordPress REST API.
+ * This allows the eatisfamily/v1 custom endpoint and WP native REST API
+ * to return the missions field stored as a PHP array in post meta.
  */
+function eatisfamily_register_job_array_meta_for_rest() {
+    $array_schema = array(
+        'type'  => 'array',
+        'items' => array('type' => 'string'),
+    );
+    $array_meta_args = array(
+        'object_subtype' => 'job',
+        'type'           => 'array',
+        'single'         => true,
+        'show_in_rest'   => array('schema' => $array_schema),
+    );
+    register_post_meta('job', 'missions',     $array_meta_args);
+    register_post_meta('job', 'requirements', $array_meta_args);
+    register_post_meta('job', 'benefits',     $array_meta_args);
+    register_post_meta('job', 'life_at_venue_images', $array_meta_args);
+}
+add_action('init', 'eatisfamily_register_job_array_meta_for_rest');
 
 /**
- * Venue meta box callback
+ * Inject missions, missions_title and missions_intro into the response of the
+ * custom eatisfamily/v1/jobs endpoint, which is registered in functions.php
+ * and does not natively include these fields.
+ * Uses rest_post_dispatch so no changes to functions.php are required.
  */
+function eatisfamily_inject_missions_into_jobs_response($result, $server, $request) {
+    if (strpos($request->get_route(), '/eatisfamily/v1/jobs') === false) {
+        return $result;
+    }
+    $data = $result->get_data();
+    if (!is_array($data)) {
+        return $result;
+    }
+
+    // Helper: enrich one job array with meta fields if not already present
+    $enrich = function(&$job) {
+        if (!is_array($job) || empty($job['id'])) return;
+        $id = (int) $job['id'];
+        if (!array_key_exists('missions', $job)) {
+            $val = get_post_meta($id, 'missions', true);
+            $job['missions'] = is_array($val) ? array_values($val) : [];
+        }
+        if (!array_key_exists('missions_title', $job)) {
+            $job['missions_title'] = (string) get_post_meta($id, 'missions_title', true);
+        }
+        if (!array_key_exists('missions_intro', $job)) {
+            $job['missions_intro'] = (string) get_post_meta($id, 'missions_intro', true);
+        }
+        if (!array_key_exists('life_at_venue_images', $job)) {
+            $val = get_post_meta($id, 'life_at_venue_images', true);
+            // Legacy entries may be stored as a JSON string
+            if (is_string($val) && $val !== '') {
+                $decoded = json_decode($val, true);
+                $val = is_array($decoded) ? $decoded : array($val);
+            }
+            $job['life_at_venue_images'] = is_array($val) ? array_values(array_filter($val)) : [];
+        }
+    };
+
+    if (isset($data[0])) {
+        // List response
+        foreach ($data as &$job) { $enrich($job); }
+        unset($job);
+    } else {
+        // Single job response
+        $enrich($data);
+    }
+    $result->set_data($data);
+    return $result;
+}
+add_filter('rest_post_dispatch', 'eatisfamily_inject_missions_into_jobs_response', 10, 3);
+
+
 function eatisfamily_venue_meta_box_callback($post) {
     wp_nonce_field('eatisfamily_venue_meta_box', 'eatisfamily_venue_meta_box_nonce');
     
