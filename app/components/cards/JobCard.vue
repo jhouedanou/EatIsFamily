@@ -12,7 +12,7 @@
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
             <circle cx="12" cy="10" r="3"></circle>
           </svg>
-          {{ getVenueLocation() }}
+          {{ getVenueName() }}
         </span>
         <span class="meta-item">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -46,8 +46,15 @@ const getJobExcerpt = () => {
   return typeof props.job.excerpt === 'string' ? props.job.excerpt : props.job.excerpt?.rendered || ''
 }
 
-const getVenueLocation = () => {
-  return props.job.venue?.location || ''
+const getVenueName = () => {
+  if (props.job.venue?.name) {
+    const location = props.job.venue.location ? ` — ${props.job.venue.location}` : ''
+    return `${props.job.venue.name}${location}`
+  }
+  if (props.job.venue_id) {
+    return String(props.job.venue_id).replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+  }
+  return 'Tous les sites'
 }
 
 const getBadgeClass = () => {

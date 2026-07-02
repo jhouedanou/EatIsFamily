@@ -304,98 +304,26 @@ const pillConfig = computed(() => pillButtonMap[colorNames[currentIndex.value]] 
 .color-green{
   h3{
     z-index:1;
-    &::before{
- z-index: -1;
-      position: absolute;
-      content: "";
-      background: url(/images/decoHeaderBg.svg);
-      background-size: contain;
-      width: 100vw;
-      max-width: 400px;
-      height: 100vh;
-      max-height: 80px;
-      background-repeat: no-repeat;
-      top: 1vh;
-      left: -1vw;
-    }
   }
-
 }
 .color-white{
   h3{
     z-index:1;
-    &::before{
- z-index: -1;
-      position: absolute;
-      content: "";
-      background: url(/images/events/02.svg);
-      background-size: contain;
-      width: 100vw;
-      max-width: 400px;
-      height: 100vh;
-      max-height: 80px;
-      background-repeat: no-repeat;
-      top: 2vh;
-      left: -1vw;
-    }
   }
-
 }
 .color-purple{
   h3{
     z-index:1;
-    &::before{
- z-index: -1;
-      position: absolute;
-      content: "";
-      background: url(/images/decoHeaderBg.svg);
-      background-size: contain;
-      width: 100vw;
-      max-width: 400px;
-      height: 100vh;
-      max-height: 80px;
-      background-repeat: no-repeat;
-      top: 1vh;
-      left: -1vw;
-    }
   }
 }
 .color-blue{
   h3{
     z-index:1;
-    &::before{
- z-index: -1;
-      position: absolute;
-      content: "";
-      background: url(/images/decoHeaderBg.svg);
-      background-size: contain;
-      width: 100vw;
-      max-width: 400px;
-      height: 100vh;
-      max-height: 80px;
-      background-repeat: no-repeat;
-      top: 1vh;
-      left: -1vw;
-    }
   }
 }
 .color-white-alt{
   h3{
     z-index:1;
-    &::before{
- z-index: -1;
-      position: absolute;
-      content: "";
-      background: url(/images/events/03.svg);
-      background-size: contain;
-      width: 100vw;
-      max-width: 400px;
-      height: 100vh;
-      max-height: 80px;
-      background-repeat: no-repeat;
-      top: 1vh;
-      left: -1vw;
-    }
   }
 }
 .color-red{
@@ -405,22 +333,6 @@ const pillConfig = computed(() => pillButtonMap[colorNames[currentIndex.value]] 
   h3{
     z-index:1;
     color:white !important;
-    &::before{
-      display:none !important;
- z-index: -1;
-      position: absolute;
-      content: "";
-      background: url(/images/decoHeaderBg.svg);
-      background-size: contain;
-      width: 100vw;
-      max-width: 400px;
-      height: 100vh;
-      max-height: 80px;
-      background-repeat: no-repeat;
-      top: 1vh;
-      left: -1vw;
-    }
-  
   }
 }
 </style>

@@ -373,12 +373,12 @@ const goToMenuPage = (page: number) => {
 .explore-container {
   display: flex;
   flex-direction: row;
-  min-height: 80vh;
+  min-height: 100vh;
 }
 
 .explore-map {
   flex: 0 0 55%;
-  min-height: 80vh;
+  min-height: 100vh;
   position: relative;
 }
 
@@ -388,10 +388,33 @@ const goToMenuPage = (page: number) => {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  height: 80vh;
-  max-height: 80vh;
-  overflow: hidden;
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   box-sizing: border-box;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+  }
+}
+
+/* Écrans peu hauts (laptops 14" ~768px) : réduire les vignettes de filtre */
+@media (max-height: 800px) and (min-width: 1025px) {
+  .venue-filters .venue-filter-btn .venue-filter-image {
+    width: 120px;
+    height: 120px;
+  }
 }
 
 .explore-title {
@@ -438,6 +461,7 @@ const goToMenuPage = (page: number) => {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
+    justify-content: space-around;
 }
 
 .venue-filter-btn {
@@ -499,6 +523,7 @@ const goToMenuPage = (page: number) => {
   display: flex;
   align-items:center;
   justify-content:center;
+  text-align:center;
 }
 
 .stat-label {
@@ -785,7 +810,7 @@ const goToMenuPage = (page: number) => {
     content:"";
     height:100%;
     width:1px;
-    background:url(/images/divider.svg) no-repeat;
+    background:#1a1a1a;
     position:absolute;
     left:0;
   }}

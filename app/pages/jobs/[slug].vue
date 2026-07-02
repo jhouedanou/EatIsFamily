@@ -984,9 +984,8 @@ img{
 }
 
 #mahamad{
-    background: url(/images/ctaBgCareers.svg);
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: #1a1a1a;
+    border-radius: 20px;
     text-align: center;
     max-width: 1400px;
     width:100%;

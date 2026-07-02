@@ -75,7 +75,7 @@
       </section>
 
       <section class="mb-5" v-if="activities && content?.textedelapage">
-        <div id="baks" class="container p-0 mx-auto d-flex flex-column">
+        <div id="baks" class="container px-3 py-0 mx-auto d-flex flex-column">
           <h3 class="font-header">{{ content.textedelapage.title }}</h3>
           <div id="viber" class="row d-flex flex-wrap">
             <div id="ludacris" class="col-12 col-lg-6 col-md-6 pt-0 pb-0">
@@ -294,18 +294,6 @@ useHead(() => ({
   padding: 117px 0 0 0;
   height: 100%;
 
-  ::before {
-    content: "";
-    display: block;
-    background-image: url("/images/bgVector.svg");
-    background-size: contain;
-    width: 100%;
-    height: 300px;
-    background-repeat: no-repeat;
-    top: 10pc;
-    position: absolute;
-  }
-
   h1 {
     font-family: FONTSPRINGDEMO-RecoletaBold;
     font-size: 75px;
@@ -324,47 +312,19 @@ useHead(() => ({
     &::before {
       display: none !important;
     }
-
-    &::after {
-      content: "";
-      display: block;
-      background-image: url(/images/line5.svg);
-      background-size: contain;
-      width: 450px;
-      height: 100px;
-      background-repeat: no-repeat;
-      position: absolute;
-      z-index: -1;
-      margin: auto;
-      right: 0;
-      left: 0;
-      top: 0;
-    }
   }
 }
 #viber {
   margin-top: 4em;
 }
 #mouf {
-  background: url("/images/unsplash_6vfYbDwOuMo.svg");
-  background-size: cover;
-  padding: 4em 0 !important;
-  background-repeat: no-repeat;
+  background: #93cbff;
+  border-radius: 20px;
+  padding: 4em 1.5rem !important;
   position: relative;
   min-height: 66vh;
   margin-top: -10px;
   margin-bottom: 4em !important;
-  &:after {
-    background: url("/images/concession.svg");
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    right: 0;
-    bottom: 0;
-    width: 221px;
-    height: 195px;
-  }
 
   h1 {
     font-family: FONTSPRINGDEMO-RecoletaMedium;

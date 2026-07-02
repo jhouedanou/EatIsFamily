@@ -189,8 +189,8 @@ useHead(() => ({
   min-height: 90vh;
   height: auto;
   margin: 0 0 0 0;
-  /* Réserve la hauteur du header fixe pour que le titre ne passe pas dessous */
-  padding-top: 120px;
+  /* Réserve la hauteur du header fixe (103px) + marge pour que le titre ne passe pas dessous */
+  padding-top: calc(103px + 3rem);
   box-sizing: border-box;
   justify-content: flex-end;
   display: flex;
@@ -211,9 +211,8 @@ useHead(() => ({
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    background: url("/images/loris.svg");
-    background-size: cover;
-    background-repeat: no-repeat;
+    background: #93cbff;
+    border-radius: 20px;
     max-width: 915px;
     max-height: 472px;
     padding: 3em;
@@ -233,20 +232,6 @@ useHead(() => ({
     color: #000;
     z-index: 1;
     position: relative;
-    &::before {
-      z-index: -1;
-      position: absolute;
-      content: "";
-      background: url(/images/decoHeaderBg.svg);
-      background-size: contain;
-      width: 100vw;
-      max-width: 400px;
-      height: 100vh;
-      max-height: 80px;
-      background-repeat: no-repeat;
-      top: 1vh;
-      left: -1vw;
-    }
   }
 
   .subtitle {
@@ -265,10 +250,6 @@ useHead(() => ({
 .intro-section {
   padding: 4rem 0;
   background-color: white;
-  background-image: url("/images/vectorBgAbout.svg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
 
   .container {
     max-width: 1100px;

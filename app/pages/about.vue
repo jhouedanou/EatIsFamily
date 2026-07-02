@@ -783,16 +783,14 @@ useHead(() => ({
 <style scoped lang="scss">
 @media (max-width: 1024px) {
   #aboutHero {
-    background: url("/images/bgMobile.svg") center 0% #a7f49d !important;
-    background-size: contain !important;
-    background-repeat: no-repeat !important;
+    background: #a7f49d !important;
     height: auto !important;
     font-size: 50px !important;
   }
 }
 @media (min-width: 1024px) {
   #aboutHero {
-    background: url(/images/vectorBgAbout.svg) no-repeat center 20% #a7f49d !important;
+    background: #a7f49d !important;
     .d-flex {
       .col-6 {
         width: 100% !important;
@@ -993,19 +991,6 @@ useHead(() => ({
     width: 16px;
     height: 16px;
   }
-}
-
-.event-card-decoration {
-  height: 250px;
-  width: auto;
-  margin-left: -10px;
-  opacity: 0.9;
-}
-
-.event-card-decoration.decoration-left {
-  margin-left: 0;
-  margin-right: -10px;
-  transform: scaleX(-1);
 }
 
 .event-card-image {
@@ -1285,10 +1270,6 @@ useHead(() => ({
     width: 140px;
     height: 160px;
   }
-
-  .event-card-decoration {
-    height: 220px;
-  }
 }
 
 @media (max-width: 1200px) {
@@ -1299,10 +1280,6 @@ useHead(() => ({
   .event-card-image {
     width: 120px;
     height: 140px;
-  }
-
-  .event-card-decoration {
-    display: none;
   }
 
   .timeline-wrapper {

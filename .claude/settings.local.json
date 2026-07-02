@@ -39,7 +39,10 @@
       "Bash(tar -czf deploy-eatisfamily.tar.gz .output/ app.js app.cjs package.json yarn.lock public/data/ public/images/ public/fonts/ server/data/recipients.json)",
       "Bash(tar -czf deploy-eatisfamily.tar.gz .output/ app.js app.cjs package.json yarn.lock server/data/recipients.json)",
       "Bash(tar:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(grep -E \"\\\\.\\(json|ts|vue|js\\)$\")",
+      "Bash(xargs ls -la)",
+      "Bash(grep \"\\\\.php$\")"
     ]
   }
 }

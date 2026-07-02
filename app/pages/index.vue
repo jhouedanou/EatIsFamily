@@ -817,21 +817,24 @@ nuxt-link:has(img) {
 
 #sustainable-service-0 {
   .inner {
-    background-image: url("/images/sus1.svg");
+    background-color: #93cbff;
+    border: 2px solid #1a1a1a;
     transform: rotate(-356deg);
   }
 }
 
 #sustainable-service-1 {
   .inner {
-    background-image: url("/images/sus2.svg");
+    background-color: #fff;
+    border: 2px solid #1a1a1a;
     transform: rotate(-1deg);
   }
 }
 
 #sustainable-service-2 {
   .inner {
-    background-image: url("/images/sus3.svg");
+    background-color: #a7f49d;
+    border: 2px solid #1a1a1a;
     transform: rotate(-4deg);
   }
 }

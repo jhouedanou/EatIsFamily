@@ -37,7 +37,7 @@ const showVenueDropdown = ref(false)
 
 // Pagination
 const currentPage = ref(1)
-const itemsPerPage = 6
+const itemsPerPage = 20
 
 // Find the venue matching the selected venue ID
 const activeVenue = computed(() => {
@@ -93,7 +93,13 @@ const allSitesLabel = computed(() => {
   return content.value?.search_section.all_sites_label || 'Tous les sites'
 })
 
-// Extraire toutes les venues uniques des jobs
+// Transformer un slug en libellé lisible (fallback quand la venue est introuvable)
+const prettifySlug = (slug: string) =>
+  slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+
+// Extraire toutes les venues uniques des jobs.
+// On garde aussi les venue_id sans venue correspondante (incohérence de slug côté WP) :
+// le filtre reste fonctionnel, avec un libellé reconstruit depuis le slug.
 const venueOptions = computed(() => {
   const venueIds = new Set<string>()
   allJobs.value.forEach(job => {
@@ -101,13 +107,20 @@ const venueOptions = computed(() => {
       venueIds.add(String(job.venue_id))
     }
   })
-  // Get venue objects for display
-  const venues = Array.from(venueIds)
-    .map(id => allVenues.value.find(v => String(v.id) === id))
-    .filter((v): v is Venue => v !== undefined)
-  // Si aucun job n'est rattaché à un lieu connu, proposer quand même tous les lieux
-  return venues.length > 0 ? venues : allVenues.value
+  return Array.from(venueIds).map(id => {
+    const venue = allVenues.value.find(v => String(v.id) === id)
+    return {
+      id,
+      name: venue?.name || prettifySlug(id),
+      location: venue?.location || ''
+    }
+  })
 })
+
+// Option sélectionnée dans le dropdown (peut être un venue_id sans venue connue)
+const selectedVenueOption = computed(() =>
+  venueOptions.value.find(option => option.id === selectedVenueId.value) || null
+)
 
 // Helper pour obtenir le titre du job
 const getJobTitle = (job: JobWithVenue) => {
@@ -128,7 +141,9 @@ const getJobExcerpt = (job: JobWithVenue) => {
 
 // Helper pour obtenir le nom de la venue du job
 const getJobVenueName = (job: JobWithVenue) => {
-  return job.venue?.name || 'Plusieurs sites'
+  if (job.venue?.name) return job.venue.name
+  if (job.venue_id) return prettifySlug(String(job.venue_id))
+  return 'Tous les sites'
 }
 
 // Helper pour obtenir la location de la venue du job
@@ -174,8 +189,10 @@ const filteredJobs = computed(() => {
       normalizedJobType === normalizedSelectedType ||
       normalizedJobType.includes(normalizedSelectedType)
 
-    // Filtre par venue_id depuis le dropdown (coercition en String : l'API peut renvoyer un id numérique)
+    // Filtre par venue_id depuis le dropdown (coercition en String : l'API peut renvoyer un id numérique).
+    // Une annonce sans venue_id est valable sur tous les sites → toujours visible.
     const matchesVenueFilter = selectedVenueId.value === '' ||
+      !job.venue_id ||
       String(job.venue_id) === String(selectedVenueId.value)
 
     return matchesSearch && matchesType && matchesVenueFilter
@@ -294,7 +311,7 @@ const goToPage = (page: number) => {
             <button @click="showVenueDropdown = !showVenueDropdown; showJobTypeDropdown = false"
               class="border-start border-white border-opacity-25 px-4 py-2 d-flex align-items-center gap-3 text-white w-100 w-md-auto justify-content-between dropdown-btn">
               <LucideMapPin style="width: 1rem; height: 1rem;" class="opacity-75" />
-              <span>{{ activeVenue?.name || allSitesLabel }}</span>
+              <span>{{ selectedVenueOption?.name || allSitesLabel }}</span>
               <img :src="iconChevronDown" alt="chevron" class="chevron-icon" :class="{ 'rotated': showVenueDropdown }" />
             </button>
 
@@ -312,7 +329,7 @@ const goToPage = (page: number) => {
             <button v-for="venue in venueOptions" :key="venue.id"
               @click="selectedVenueId = venue.id; showVenueDropdown = false"
               :class="['w-100 text-start px-3 py-2 border-0 fw-medium dropdown-item-custom', selectedVenueId === venue.id ? 'active' : '']">
-              {{ venue.name }} - {{ venue.location }}
+              {{ venue.name }}{{ venue.location ? ` - ${venue.location}` : '' }}
             </button>
           </div>
         </Transition>
@@ -379,9 +396,9 @@ const goToPage = (page: number) => {
                   <!-- Tags Row -->
                   <div class="d-flex flex-wrap gap-2 mb-3">
                     <span class="tag-blue">{{ job.department }}</span>
-                   <!-- <span class="tag-outline d-flex align-items-center gap-1">
-                      <LucideMapPin style="width: 0.75rem; height: 0.75rem;" /> {{ getJobVenueLocation(job) }}
-                    </span>-->
+                    <span class="tag-outline d-flex align-items-center gap-1">
+                      <LucideMapPin style="width: 0.75rem; height: 0.75rem;" /> {{ getJobVenueName(job) }}
+                    </span>
                     <span class="tag-lime d-flex align-items-center gap-1">
                       <img :src="iconBriefcase" alt="Icône emploi" width="16" height="16" />
                       {{ getJobTypeLabel(job.job_type) || job.job_type }}
@@ -558,9 +575,7 @@ padding-top: 0rem;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    background: url(/images/dida.svg) #d7a8ff;
-    background-repeat: no-repeat;
-    background-size: contain;
+    background: #d7a8ff;
     max-width: 1400px;
     margin: 0 auto;
     max-height: 260px;
@@ -610,15 +625,6 @@ padding-top: 0rem;
   margin: 0 0 1.5rem;
   z-index:0;
   position:relative;
-  &::before{
-   content:"" ;
-    background:url(/images/decoHeaderBg.svg);
-    width:400px;
-  height:80px;
-    position:absolute;
-    z-index:-1;
-    
-  }
 }
 
 .careers-hero-subtitle {
@@ -680,7 +686,7 @@ padding-top: 0rem;
   }
   @media (max-width: 1024px) {
 
-    padding: 6rem 1.5rem 2em 1.25rem;
+    padding: 6rem 1.5rem 2em;
   }
     }
 
@@ -853,10 +859,9 @@ padding-top: 0rem;
     /* margin-bottom: 2rem; */
     z-index: 20;
     max-width: 1400px;
-    background: url(/images/le24.svg);
+    border: 2px solid #1a1a1a;
+    border-radius: 24px;
     max-height: 263px;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
     padding: 0em;
     display: flex;
     align-items: center;
@@ -1101,6 +1106,14 @@ padding-top: 0rem;
     width:100%;
     max-width:1400px;
     padding:1em 1.5rem 0 1.5rem;
+    /* Liste injectée en v-html : neutraliser l'indentation UL par défaut
+       qui déséquilibre les textes centrés sur mobile */
+    .kougar :deep(ul),
+    .kougar ul{
+      padding-left: 0;
+      list-style-position: inside;
+      margin-left: 0;
+    }
     h3{
         font-family: FONTSPRINGDEMO-RecoletaBold;
   font-size: 50px;
@@ -1181,20 +1194,6 @@ padding-top: 0rem;
     text-align: left;
     color: rgba(0, 0, 0, 0.8) !important;
     margin: 0;
-    &::before{
-         content: "";
-    background: url(/images/lineUnderSearchBar.svg);
-    width: 100%;
-    height: 1px;
-    position: absolute;
-    top: -13px;
-    left: 0;
-    background-repeat: no-repeat;
-    right: 0;
-    margin: auto;
-    background-position: center;
-    padding: 1em 0 0 0;
-    }
 }
   #jobgrid{
   max-width:1400px;
@@ -1258,9 +1257,8 @@ padding-top: 0rem;
     }
   }
 #mahamad{
-    background: url(/images/ctaBgCareers.svg);
-    background-repeat: no-repeat;
-    background-size: contain;
+    background: #1a1a1a;
+    border-radius: 20px;
     padding: 6em 0 !important;
     margin: 4em auto 0 auto;
     text-align: center;

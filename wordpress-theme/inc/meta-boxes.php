@@ -244,6 +244,67 @@ function eatisfamily_render_dropdown($name, $value, $options, $description = '')
 }
 
 /**
+ * Render the venue checkbox list for the Job meta box.
+ *
+ * Allows selecting one, several, or all venues. The first checked venue stays
+ * on the current post; each additional checked venue generates a new job post
+ * on save (see eatisfamily_save_job_meta_box).
+ *
+ * @param string $current_venue_id The venue_id currently stored on the post.
+ */
+function eatisfamily_render_venue_checkboxes($current_venue_id) {
+    $options = eatisfamily_get_venues_dropdown_options();
+    unset($options['']); // Drop the "-- Select a Venue --" placeholder
+
+    echo '<div class="eif-venues-wrapper" style="border:1px solid #ccc;background:#fff;padding:10px 12px;max-height:220px;overflow-y:auto;">';
+
+    // Master toggle: UI only, no name attribute so it is never posted.
+    echo '<label style="display:block;font-weight:600;border-bottom:1px solid #eee;padding-bottom:6px;margin-bottom:6px;">';
+    echo '<input type="checkbox" id="eif-venues-all"> ' . esc_html__('Tous les sites', 'eatisfamily');
+    echo '</label>';
+
+    foreach ($options as $venue_key => $venue_label) {
+        echo '<label style="display:block;margin:4px 0;">';
+        echo '<input type="checkbox" class="eif-venue-cb" name="job_venues[]" value="' . esc_attr($venue_key) . '"' . checked($current_venue_id, $venue_key, false) . '> ';
+        echo esc_html($venue_label);
+        echo '</label>';
+    }
+
+    // Orphan value: the stored venue_id no longer matches any venue (venue_slug
+    // changed or inconsistent). Keep it selectable so saving does not silently
+    // reassign or blank the venue, and surface the problem to the admin.
+    if ($current_venue_id !== '' && !array_key_exists($current_venue_id, $options)) {
+        echo '<label style="display:block;margin:4px 0;color:#b32d2e;">';
+        echo '<input type="checkbox" class="eif-venue-cb" name="job_venues[]" value="' . esc_attr($current_venue_id) . '" checked> ';
+        echo esc_html($current_venue_id) . ' ' . esc_html__('(⚠ introuvable dans les venues — corriger le champ « Venue ID/Slug » de la venue)', 'eatisfamily');
+        echo '</label>';
+    }
+
+    echo '</div>';
+
+    echo '<p class="description">' . esc_html__('Le premier site coché reste sur cette annonce. Chaque site supplémentaire coché créera une NOUVELLE annonce identique à l\'enregistrement. Aucun site coché = annonce visible sur tous les sites.', 'eatisfamily') . '</p>';
+    ?>
+    <script>
+    (function() {
+        var master = document.getElementById('eif-venues-all');
+        if (!master) return;
+        var boxes = Array.prototype.slice.call(document.querySelectorAll('.eif-venue-cb'));
+        function syncMaster() {
+            var checked = boxes.filter(function(b) { return b.checked; }).length;
+            master.checked = checked === boxes.length && boxes.length > 0;
+            master.indeterminate = checked > 0 && checked < boxes.length;
+        }
+        master.addEventListener('change', function() {
+            boxes.forEach(function(b) { b.checked = master.checked; });
+        });
+        boxes.forEach(function(b) { b.addEventListener('change', syncMaster); });
+        syncMaster();
+    })();
+    </script>
+    <?php
+}
+
+/**
  * Render a text field
  */
 function eatisfamily_render_text_field($name, $value, $placeholder = '', $description = '') {
@@ -504,11 +565,11 @@ function eatisfamily_job_meta_box_callback($post) {
     </style>
     
     <div class="eatisfamily-meta-box">
-        <!-- Venue Selection (Dynamic Dropdown) -->
+        <!-- Venue Selection (Checkbox list: one, several, or all venues) -->
         <div class="field-row">
-            <label for="venue_id"><?php _e('Venue', 'eatisfamily'); ?></label>
+            <label><?php _e('Sites (Venues)', 'eatisfamily'); ?></label>
             <div>
-                <?php eatisfamily_render_dropdown('venue_id', $venue_id, eatisfamily_get_venues_dropdown_options(), __('Select the venue where this job is located.', 'eatisfamily')); ?>
+                <?php eatisfamily_render_venue_checkboxes($venue_id); ?>
             </div>
         </div>
         
@@ -705,31 +766,23 @@ function eatisfamily_job_meta_box_callback($post) {
 /**
  * Save job meta box data
  */
-function eatisfamily_save_job_meta_box($post_id) {
-    // Verify nonce
-    if (!isset($_POST['eatisfamily_job_meta_box_nonce']) || !wp_verify_nonce($_POST['eatisfamily_job_meta_box_nonce'], 'eatisfamily_job_meta_box')) {
-        return;
-    }
-    
-    // Check autosave
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-        return;
-    }
-    
-    // Check permissions
-    if (!current_user_can('edit_post', $post_id)) {
-        return;
-    }
-    
-    // Save fields
-    $fields = array('venue_id', 'department', 'job_type', 'salary');
-    foreach ($fields as $field) {
+/**
+ * Collect and sanitize all job meta posted by the meta box form, EXCEPT venue_id
+ * (handled separately by the multi-venue save logic).
+ *
+ * @return array key => sanitized value
+ */
+function eatisfamily_collect_job_meta_from_post() {
+    $meta = array();
+
+    // Scalar fields
+    foreach (array('department', 'job_type', 'salary') as $field) {
         if (isset($_POST[$field])) {
-            update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
+            $meta[$field] = sanitize_text_field($_POST[$field]);
         }
     }
 
-    // Save per-job UI text overrides (sanitize_text_field; empty allowed = fall back to default)
+    // Per-job UI text overrides (sanitize_text_field; empty allowed = fall back to default)
     $text_override_fields = array(
         'positions',
         'cta_title',
@@ -753,35 +806,169 @@ function eatisfamily_save_job_meta_box($post_id) {
     );
     foreach ($text_override_fields as $field) {
         if (isset($_POST[$field])) {
-            update_post_meta($post_id, $field, sanitize_text_field(wp_unslash($_POST[$field])));
+            $meta[$field] = sanitize_text_field(wp_unslash($_POST[$field]));
         }
     }
-    
-    // Save arrays
-    if (isset($_POST['requirements'])) {
-        $requirements = array_filter(array_map('sanitize_text_field', $_POST['requirements']));
-        update_post_meta($post_id, 'requirements', $requirements);
+
+    // Repeater arrays
+    foreach (array('requirements', 'missions', 'benefits') as $field) {
+        if (isset($_POST[$field])) {
+            $meta[$field] = array_filter(array_map('sanitize_text_field', $_POST[$field]));
+        }
     }
-    
-    if (isset($_POST['missions'])) {
-        $missions = array_filter(array_map('sanitize_text_field', $_POST['missions']));
-        update_post_meta($post_id, 'missions', $missions);
-    }
-    
-    if (isset($_POST['benefits'])) {
-        $benefits = array_filter(array_map('sanitize_text_field', $_POST['benefits']));
-        update_post_meta($post_id, 'benefits', $benefits);
-    }
-    
-    // Save gallery images
+
+    // Gallery images (always set: absent = empty gallery, mirrors legacy behavior)
     if (isset($_POST['life_at_venue_images'])) {
-        $images = array_filter(array_map('esc_url_raw', $_POST['life_at_venue_images']));
-        update_post_meta($post_id, 'life_at_venue_images', $images);
+        $meta['life_at_venue_images'] = array_filter(array_map('esc_url_raw', $_POST['life_at_venue_images']));
     } else {
-        update_post_meta($post_id, 'life_at_venue_images', array());
+        $meta['life_at_venue_images'] = array();
+    }
+
+    return $meta;
+}
+
+/**
+ * Apply a sanitized meta set to a job post.
+ * Only form-posted keys are ever copied — raw DB meta (_edit_lock, etc.) never leaks.
+ */
+function eatisfamily_apply_job_meta($post_id, array $meta) {
+    foreach ($meta as $key => $value) {
+        update_post_meta($post_id, $key, $value);
+    }
+}
+
+/**
+ * Create a duplicate of a job post for an additional venue.
+ * Same title/content/excerpt/status; WP auto-suffixes the slug; the featured
+ * image attachment is shared (no file duplication).
+ *
+ * @return int New post ID, or 0 on failure.
+ */
+function eatisfamily_create_job_duplicate_for_venue($source_post_id, $venue_key, array $meta) {
+    $source = get_post($source_post_id);
+    if (!$source) {
+        return 0;
+    }
+
+    // get_post() returns unslashed data; wp_insert_post() expects slashed input.
+    $new_id = wp_insert_post(array(
+        'post_type'      => 'job',
+        'post_status'    => $source->post_status,
+        'post_author'    => $source->post_author,
+        'comment_status' => $source->comment_status,
+        'ping_status'    => $source->ping_status,
+        'post_title'     => wp_slash($source->post_title),
+        'post_content'   => wp_slash($source->post_content),
+        'post_excerpt'   => wp_slash($source->post_excerpt),
+    ), true);
+
+    if (is_wp_error($new_id) || !$new_id) {
+        return 0;
+    }
+
+    update_post_meta($new_id, 'venue_id', $venue_key);
+    eatisfamily_apply_job_meta($new_id, $meta);
+
+    $thumbnail_id = get_post_thumbnail_id($source_post_id);
+    if ($thumbnail_id) {
+        set_post_thumbnail($new_id, $thumbnail_id);
+    }
+
+    return $new_id;
+}
+
+function eatisfamily_save_job_meta_box($post_id) {
+    // Recursion guard: wp_insert_post() for a duplicate re-fires save_post_job
+    // with the same $_POST (valid nonce included) — without this, each duplicate
+    // would spawn its own duplicates.
+    static $processing = false;
+    if ($processing) {
+        return;
+    }
+
+    // Verify nonce
+    if (!isset($_POST['eatisfamily_job_meta_box_nonce']) || !wp_verify_nonce($_POST['eatisfamily_job_meta_box_nonce'], 'eatisfamily_job_meta_box')) {
+        return;
+    }
+
+    // Check autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    // Check permissions
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    // Selected venues (checkbox list). Empty = legacy "all sites" (venue_id = '').
+    $venues = array();
+    if (isset($_POST['job_venues'])) {
+        $venues = array_values(array_unique(array_filter(array_map('sanitize_text_field', (array) $_POST['job_venues']))));
+    }
+
+    // First selected venue stays on this post
+    update_post_meta($post_id, 'venue_id', isset($venues[0]) ? $venues[0] : '');
+
+    $meta = eatisfamily_collect_job_meta_from_post();
+    eatisfamily_apply_job_meta($post_id, $meta);
+
+    // Each additional venue generates its own independent announcement.
+    // Duplicates are NOT tracked: on re-save only the post's own venue is
+    // checked, so no re-duplication happens.
+    $extra_venues = array_slice($venues, 1);
+    if (empty($extra_venues) || get_post_status($post_id) === 'trash') {
+        return;
+    }
+
+    $post_type_object = get_post_type_object('job');
+    if (!$post_type_object || !current_user_can($post_type_object->cap->create_posts)) {
+        return;
+    }
+
+    $processing = true;
+    remove_action('save_post_job', 'eatisfamily_save_job_meta_box');
+
+    $created = 0;
+    foreach ($extra_venues as $venue_key) {
+        if (eatisfamily_create_job_duplicate_for_venue($post_id, $venue_key, $meta)) {
+            $created++;
+        }
+    }
+
+    add_action('save_post_job', 'eatisfamily_save_job_meta_box');
+    $processing = false;
+
+    if ($created > 0) {
+        set_transient('eatisfamily_job_dup_' . get_current_user_id(), $created, 60);
     }
 }
 add_action('save_post_job', 'eatisfamily_save_job_meta_box');
+
+/**
+ * Admin notice after per-venue duplication so the operation is visible
+ * from the edit screen.
+ */
+function eatisfamily_job_duplication_notice() {
+    $key = 'eatisfamily_job_dup_' . get_current_user_id();
+    $count = get_transient($key);
+    if (!$count) {
+        return;
+    }
+    delete_transient($key);
+    echo '<div class="notice notice-success is-dismissible"><p>';
+    printf(
+        esc_html(_n(
+            '%d annonce supplémentaire créée pour les autres sites sélectionnés.',
+            '%d annonces supplémentaires créées pour les autres sites sélectionnés.',
+            $count,
+            'eatisfamily'
+        )),
+        (int) $count
+    );
+    echo '</p></div>';
+}
+add_action('admin_notices', 'eatisfamily_job_duplication_notice');
 
 /**
  * Expose missions (and related array fields) in the WordPress REST API.

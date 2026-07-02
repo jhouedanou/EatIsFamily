@@ -262,9 +262,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
 
 // Hero Section
 .blog-hero {
-      background: url(/images/bBlog.svg);
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: #f9375b;
     max-width: 1400px;
     max-height: 266px;
     margin: 24px auto 0;
@@ -346,7 +344,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
   padding-bottom: 1rem;
   &:nth-of-type(1){
     .post-content{
-      background:#93cbff url(/images/bgFeatured1.svg);
+      background:#93cbff;
       border-radius: 10px;
       position: relative;
       isolation: isolate;
@@ -365,9 +363,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
         content: '';
         position: absolute;
         inset: 0;
-        background: #93cbff url(/images/bgFeatured1.svg);
-        background-size: inherit;
-        background-repeat: inherit;
+        background: #93cbff;
         border-radius: 10px;
         filter: url(#rough-border);
         z-index: -1;
@@ -376,7 +372,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
   }
   &:nth-of-type(2){
     .post-content{
-      background: url(/images/bgFeatured.svg) #d7a8ff;
+      background: #d7a8ff;
       border-radius: 10px;
       position: relative;
       isolation: isolate;
@@ -395,9 +391,7 @@ const allInsightsTitle = computed(() => blogContent.value?.sections?.all_insight
         content: '';
         position: absolute;
         inset: 0;
-        background: url(/images/bgFeatured.svg) #d7a8ff;
-        background-size: inherit;
-        background-repeat: inherit;
+        background: #d7a8ff;
         border-radius: 10px;
         filter: url(#rough-border);
         z-index: -1;
