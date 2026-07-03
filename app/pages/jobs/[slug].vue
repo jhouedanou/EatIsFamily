@@ -345,6 +345,7 @@ useHead(() => ({
         :job-title="getJobTitle(job)"
         :job-location="getVenueLocation(job)"
         :job-slug="job.slug"
+        :job-venue-id="job.venue_id"
         @close="closeApplyModal"
       />
     </div>

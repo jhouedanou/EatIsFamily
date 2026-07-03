@@ -1,26 +1,26 @@
 <template>
-  <div v-if="isOpen" class="modal-overlay" @click.self="close">
-    <div class="modal-container">
+  <div v-if="isOpen" class="job-modal-overlay" @click.self="close">
+    <div class="job-modal-container">
       <!-- Close Button -->
-      <button class="modal-close" @click="close" aria-label="Fermer">
+      <button class="job-modal-close" @click="close" aria-label="Fermer">
         <LucideX />
       </button>
 
       <!-- Modal Header -->
-      <div class="modal-header">
-        <div class="modal-icon">
+      <div class="job-modal-header">
+        <div class="job-modal-icon">
           <LucideBriefcase />
         </div>
-        <h2 class="modal-title">Postuler à cette offre</h2>
-        <p class="modal-subtitle">{{ jobTitle }}</p>
-        <span class="modal-location">
+        <h2 class="job-modal-title">Postuler à cette offre</h2>
+        <p class="job-modal-subtitle">{{ jobTitle }}</p>
+        <span class="job-modal-location">
           <LucideMapPin style="width: 1rem; height: 1rem;" />
           {{ jobLocation }}
         </span>
       </div>
 
       <!-- Modal Body -->
-      <div class="modal-body">
+      <div class="job-modal-body">
         <form v-if="!submitSuccess" @submit.prevent="handleSubmit" class="apply-form">
           <div class="form-row">
             <div class="form-group">
@@ -68,25 +68,25 @@
               </div>
 
               <!-- Site préféré -->
-              <div class="form-row" v-if="allVenues.length > 0 || allEvents.length > 0">
-                <div class="form-group" v-if="allVenues.length > 0">
-                  <label for="apply-venue">Site / Lieu souhaité</label>
-                  <select v-model="form.selectedVenueId" id="apply-venue">
-                    <option value="">— Tous les sites —</option>
-                    <option v-for="venue in allVenues" :key="venue.id" :value="venue.id">
-                      {{ venue.name }} — {{ venue.location }}
-                    </option>
-                  </select>
-                </div>
-                <div class="form-group" v-if="allEvents.length > 0">
-                  <label for="apply-event">Événement souhaité</label>
-                  <select v-model="form.selectedEventId" id="apply-event">
-                    <option value="">— Tous les événements —</option>
-                    <option v-for="event in allEvents" :key="event.id" :value="String(event.id)">
-                      {{ event.title }}
-                    </option>
-                  </select>
-                </div>
+              <div class="form-group" v-if="allVenues.length > 0">
+                <label for="apply-venue">Site / Lieu souhaité</label>
+                <select v-model="form.selectedVenueId" id="apply-venue">
+                  <option value="">— Tous les sites —</option>
+                  <option v-for="venue in allVenues" :key="venue.id" :value="venue.id">
+                    {{ venue.name }} — {{ venue.location }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Événement souhaité -->
+              <div class="form-group" v-if="allEvents.length > 0">
+                <label for="apply-event">Événement souhaité</label>
+                <select v-model="form.selectedEventId" id="apply-event">
+                  <option value="">— Tous les événements —</option>
+                  <option v-for="event in allEvents" :key="event.id" :value="String(event.id)">
+                    {{ event.title }}
+                  </option>
+                </select>
               </div>
 
               <div class="form-group">
@@ -190,18 +190,8 @@ const props = defineProps<{
   jobTitle: string
   jobLocation: string
   jobSlug: string
+  jobVenueId?: string
 }>()
-
-console.log('========== JobApplyModal COMPONENT LOADED ==========')
-console.log('Initial isOpen:', props.isOpen)
-console.log('jobTitle:', props.jobTitle)
-
-watch(() => props.isOpen, (newVal, oldVal) => {
-  console.log('>>> JobApplyModal isOpen CHANGED:', oldVal, '->', newVal)
-  if (newVal) {
-    console.log('MODAL SHOULD BE VISIBLE NOW!')
-  }
-}, { immediate: true })
 
 const emit = defineEmits(['close'])
 
@@ -218,6 +208,9 @@ onMounted(async () => {
   const [venues, events] = await Promise.all([getVenues(), getEvents()])
   allVenues.value = venues || []
   allEvents.value = events || []
+  if (props.isOpen && !form.value.selectedVenueId) {
+    form.value.selectedVenueId = defaultVenueId()
+  }
 })
 
 const form = ref({
@@ -321,6 +314,12 @@ const handleSubmit = async () => {
   }
 }
 
+// Le site de l'annonce, s'il est connu et présent dans la liste
+const defaultVenueId = () =>
+  props.jobVenueId && allVenues.value.some(v => v.id === props.jobVenueId)
+    ? props.jobVenueId
+    : ''
+
 // Reset form when modal opens
 watch(() => props.isOpen, (isOpen) => {
   if (isOpen) {
@@ -334,7 +333,7 @@ watch(() => props.isOpen, (isOpen) => {
       resumeFile: null,
       resumeName: '',
       coverLetter: '',
-      selectedVenueId: '',
+      selectedVenueId: defaultVenueId(),
       selectedEventId: '',
       consent: false,
       website: ''
