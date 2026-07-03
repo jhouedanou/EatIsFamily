@@ -42,7 +42,11 @@
       "Bash(powershell:*)",
       "Bash(grep -E \"\\\\.\\(json|ts|vue|js\\)$\")",
       "Bash(xargs ls -la)",
-      "Bash(grep \"\\\\.php$\")"
+      "Bash(grep \"\\\\.php$\")",
+      "Bash(php -l wordpress-theme/inc/meta-boxes.php)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m ' *)",
+      "Bash(npm run *)"
     ]
   }
 }

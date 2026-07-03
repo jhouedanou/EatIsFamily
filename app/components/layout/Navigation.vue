@@ -9,7 +9,8 @@
     <div :class="['nav-overlay', { open: isOpen }]">
       <div class="nav-content">
         <NuxtLink to="/careers" @click="closeMenu">{{ content.nav_links.careers }}</NuxtLink>
-        <NuxtLink to="/blog" @click="closeMenu">{{ content.nav_links.blogs }}</NuxtLink>
+        <!-- Blog masqué temporairement -->
+        <!-- <NuxtLink to="/blog" @click="closeMenu">{{ content.nav_links.blogs }}</NuxtLink> -->
         <NuxtLink to="/about" @click="closeMenu">{{ content.nav_links.about }}</NuxtLink>
         <NuxtLink to="/apply-activities" @click="closeMenu">{{ content.nav_links.activities }}</NuxtLink>
         <NuxtLink to="/events" @click="closeMenu">{{ content.nav_links.events }}</NuxtLink>

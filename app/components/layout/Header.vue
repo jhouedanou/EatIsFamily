@@ -21,7 +21,8 @@
         <!-- Right Navigation -->
         <nav class="nav-left desktop-only">
           <NuxtLink to="/careers" class="nav-link" :class="{ 'nav-active': isActiveLink('/careers') }">{{ content.nav_links.careers }}</NuxtLink>
-          <NuxtLink to="/blog" class="nav-link" :class="{ 'nav-active': isActiveLink('/blog') }">{{ content.nav_links.blogs }}</NuxtLink>
+          <!-- Blog masqué temporairement -->
+          <!-- <NuxtLink to="/blog" class="nav-link" :class="{ 'nav-active': isActiveLink('/blog') }">{{ content.nav_links.blogs }}</NuxtLink> -->
           <PillButton
             :color="getButton('header_cta').color"
             :to="getButton('header_cta').to"
