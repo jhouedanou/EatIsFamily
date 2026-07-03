@@ -107,16 +107,34 @@ function eatisfamily_get_venues_dropdown_options() {
     $options = array('' => __('-- Select a Venue --', 'eatisfamily'));
     
     foreach ($venues as $venue) {
-        $venue_slug = get_post_meta($venue->ID, 'venue_slug', true);
         $city = get_post_meta($venue->ID, 'city', true);
         $label = $venue->post_title;
         if ($city) {
             $label .= ' (' . $city . ')';
         }
-        $options[$venue_slug ?: $venue->post_name] = $label;
+        $options[eatisfamily_venue_public_id($venue)] = $label;
     }
-    
+
     return $options;
+}
+
+/**
+ * Identifiant public d'une venue — DOIT rester identique à celui exposé par
+ * l'endpoint REST /venues (champ `id`), sinon les venue_id stockés sur les
+ * annonces ne correspondent plus à aucune venue côté front.
+ *
+ * Règle : champ « Venue ID/Slug » (venue_slug) s'il est renseigné, sinon
+ * sanitize_title(titre). ATTENTION : ne PAS retomber sur $venue->post_name,
+ * qui est le slug WP figé à la création et diverge dès que la venue est
+ * renommée (ex : post_name « stade-abbe-deschamps » alors que le titre donne
+ * « stade-de-labbe-deschamps »).
+ *
+ * @param WP_Post $venue
+ * @return string
+ */
+function eatisfamily_venue_public_id($venue) {
+    $venue_slug = get_post_meta($venue->ID, 'venue_slug', true);
+    return $venue_slug ?: sanitize_title($venue->post_title);
 }
 
 /**
@@ -1258,7 +1276,16 @@ function eatisfamily_save_venue_meta_box($post_id) {
             update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
         }
     }
-    
+
+    // Freeze the public id: if « Venue ID/Slug » is left empty, persist
+    // sanitize_title(titre) as venue_slug now. Otherwise the id keeps deriving
+    // from the live title (via eatisfamily_venue_public_id) and drifts the day
+    // the venue is renamed, breaking every job that stored the old value.
+    $venue_slug = get_post_meta($post_id, 'venue_slug', true);
+    if (empty($venue_slug)) {
+        update_post_meta($post_id, 'venue_slug', sanitize_title(get_the_title($post_id)));
+    }
+
     // Save numeric fields
     if (isset($_POST['latitude'])) {
         update_post_meta($post_id, 'latitude', floatval($_POST['latitude']));
